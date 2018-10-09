@@ -1,5 +1,5 @@
 name: fogosmobile
-description: Fogos.pt new iOS&#x2F;Android app
+description: Fogos.pt new iOS and Android app
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,6 +19,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
+
+  # Redux 3 works with Dart 2. There are some changes on some stuff
+  # Some tutorials may be outdated
+  # Reference to this to check for changes
+  # https://pub.dartlang.org/packages/redux#-readme-tab-
+  redux: ^3.0.0
 
 dev_dependencies:
   flutter_test:

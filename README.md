@@ -74,13 +74,17 @@
 
 You're encouraged and more than welcome to contribute!
 
-## Run & Go
+### Setup
+
+This app is built with Flutter and Dart 2, using Redux for State Management.
+
+### Run & Go
 ```
-$ git clone https://github.com/FogosPT/flutterfogos
+$ git clone https://github.com/FogosPT/fogosmobile
 ```
 Make sure you have installed Flutter following [this instructions](https://flutter.io/get-started/install/).
 ```
-$ cd flutterfogos
+$ cd fogosmobile
 $ flutter doctor
 ```
 Fix anything `$ flutter doctor` asks. 

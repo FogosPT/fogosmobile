@@ -1,1 +1,1 @@
-class LoadFires {}
+class LoadFiresAction {}

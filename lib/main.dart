@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/store/app_store.dart';
+import 'package:fogosmobile/models/app_state.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return new StoreProvider(
+        store: store, // store comes from the app_store.dart import
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: new ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: new MyHomePage(title: 'Flutter Demo Home Page'),
+        ));
   }
 }
 
@@ -53,10 +61,18 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
+      floatingActionButton: new StoreConnector<AppState, VoidCallback>(
+        converter: (Store<AppState> store) {
+          return () {
+            store.dispatch(new LoadFiresAction());
+          };
+        },
+        builder: (BuildContext context, VoidCallback increase) {
+          return new FloatingActionButton(
+            onPressed: increase,
+            child: new Icon(Icons.add),
+          );
+        },
       ),
     );
   }

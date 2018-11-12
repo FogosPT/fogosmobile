@@ -12,14 +12,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreProvider(
-        store: store, // store comes from the app_store.dart import
-        child: MaterialApp(
-          title: 'Flutter Demo',
-          theme: new ThemeData(
-            primarySwatch: Colors.blue,
-          ),
-          home: new MyHomePage(title: 'Flutter Demo Home Page'),
-        ));
+      store: store, // store comes from the app_store.dart import
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: new ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
+    );
   }
 }
 
@@ -34,12 +35,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +62,9 @@ class _MyHomePageState extends State<MyHomePage> {
             store.dispatch(new LoadFiresAction());
           };
         },
-        builder: (BuildContext context, VoidCallback increase) {
+        builder: (BuildContext context, VoidCallback loadFiresAction) {
           return new FloatingActionButton(
-            onPressed: increase,
+            onPressed: loadFiresAction,
             child: new Icon(Icons.add),
           );
         },

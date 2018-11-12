@@ -25,6 +25,8 @@ dependencies:
   # Reference to this to check for changes
   # https://pub.dartlang.org/packages/redux#-readme-tab-
   redux: ^3.0.0
+  flutter_redux: ^0.5.2
+  redux_logging: ^0.3.0
 
 dev_dependencies:
   flutter_test:

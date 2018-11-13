@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
+import 'package:fogosmobile/styles/theme.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/models/app_state.dart';
@@ -16,9 +17,7 @@ class MyApp extends StatelessWidget {
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
         title: 'Fogos.pt',
-        theme: new ThemeData(
-          primarySwatch: Colors.red[50],
-        ),
+        theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         home: new Scaffold(
           appBar: new AppBar(

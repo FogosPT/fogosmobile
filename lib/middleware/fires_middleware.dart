@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 
 List<Middleware<AppState>> createFiresMiddleware() {
@@ -17,12 +18,10 @@ Middleware<AppState> _createLoadFires() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
 
-    http.Response response = await http.get(
-      Uri.encodeFull(
-          'http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1'),
-    );
-    List<dynamic> result = json.decode(response.body);
-
-    store.dispatch(new FiresLoadedAction(result));
+    String url = 'https://api-lb.fogos.pt/new/fires';
+    final response = await http.get(url);
+    final responseData = json.decode(response.body)['data'];
+    List<Fire> fires = responseData.map((model) => Fire.fromJson(model)).toList();
+    store.dispatch(new FiresLoadedAction(fires));
   };
 }

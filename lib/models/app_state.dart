@@ -1,6 +1,6 @@
 class AppState {
-  final List fires;
-  final bool isLoading;
+  List fires;
+  bool isLoading;
 
   AppState({this.fires, this.isLoading});
 
@@ -13,6 +13,6 @@ class AppState {
 
   @override
   String toString() {
-    return 'AppState{isLoading: $isLoading, fires count: $fires}';
+    return 'AppState{isLoading: $isLoading, fires count: ${fires.length}}';
   }
 }

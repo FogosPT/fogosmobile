@@ -27,6 +27,7 @@ dependencies:
   redux: ^3.0.0
   flutter_redux: ^0.5.2
   redux_logging: ^0.3.0
+  flutter_map: ^0.3.0
 
 dev_dependencies:
   flutter_test:

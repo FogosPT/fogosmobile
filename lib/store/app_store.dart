@@ -5,6 +5,10 @@ import 'package:fogosmobile/middleware/fires_middleware.dart';
 
 final store = new Store<AppState>(
   appReducer,
-  initialState: new AppState(),
+  initialState: new AppState(
+    fires: [],
+    isLoading: false,
+    hasFirstLoad: false,
+  ),
   middleware: createFiresMiddleware(),
 );

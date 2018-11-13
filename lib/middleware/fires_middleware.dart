@@ -18,10 +18,14 @@ Middleware<AppState> _createLoadFires() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
 
-    String url = 'https://api-lb.fogos.pt/new/fires';
-    final response = await http.get(url);
-    final responseData = json.decode(response.body)['data'];
-    List<Fire> fires = responseData.map((model) => Fire.fromJson(model)).toList();
-    store.dispatch(new FiresLoadedAction(fires));
+    try {
+      String url = 'https://api-lb.fogos.pt/new/fires';
+      final response = await http.get(url);
+      final responseData = json.decode(response.body)['data'];
+      List fires = responseData.map((model) => Fire.fromJson(model)).toList();
+      store.dispatch(new FiresLoadedAction(fires));
+    } catch (e) {
+      store.dispatch(new FiresLoadedAction([]));
+    }
   };
 }

@@ -17,28 +17,31 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, List>(
       converter: (Store<AppState> store) => store.state.fires,
-      builder: (BuildContext context, fires) {
-        for (final fire in fires) {
-          markers.add(
-            new Marker(
-              width: 50.0,
-              height: 50.0,
-              point: new LatLng(fire.lat, fire.lng),
-              builder: (_) => new Container(
-                child: new IconButton(
-                  icon: new Icon(
-                    Icons.pin_drop,
-                    size: 30.0,
-                    color: new Color(
-                      fire.statusColor == null ? 0xFF000000 : int.parse('0xFF${fire.statusColor}')
-                    ),
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          );
+      builder: (BuildContext context, List fires) {
+        if (fires != null) {
+          for (final fire in fires) {
+                    markers.add(
+                      new Marker(
+                        width: 50.0,
+                        height: 50.0,
+                        point: new LatLng(fire.lat, fire.lng),
+                        builder: (_) => new Container(
+                          child: new IconButton(
+                            icon: new Icon(
+                              Icons.pin_drop,
+                              size: 30.0,
+                              color: new Color(
+                                fire.statusColor == null ? 0xFF000000 : int.parse('0xFF${fire.statusColor}')
+                              ),
+                            ),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                    );
+                  }
         }
+        
 
         return new FlutterMap(
           mapController: mapController,

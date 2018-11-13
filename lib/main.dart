@@ -15,10 +15,11 @@ class MyApp extends StatelessWidget {
     return new StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Fogos.pt',
         theme: new ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.red[50],
         ),
+        debugShowCheckedModeBanner: false,
         home: new Scaffold(
           appBar: new AppBar(
             backgroundColor: Colors.redAccent,
@@ -35,10 +36,15 @@ class MyApp extends StatelessWidget {
                   };
                 },
                 builder: (BuildContext context, VoidCallback loadFiresAction) {
-                  return new StoreConnector<AppState, bool>(
-                    converter: (Store<AppState> store) => store.state.isLoading,
-                    builder: (BuildContext context, bool isLoading) {
-                      if (isLoading) {
+                  return new StoreConnector<AppState, AppState>(
+                    converter: (Store<AppState> store) => store.state,
+                    builder: (BuildContext context, AppState state) {
+                      print(state);
+                      if (!state.hasFirstLoad && !state.isLoading) {
+                        loadFiresAction();
+                      }
+
+                      if (state.isLoading) {
                         return Container(
                           width: 54.0,
                           child: Padding(

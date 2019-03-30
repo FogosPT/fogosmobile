@@ -1,0 +1,158 @@
+{
+  "project_info": {
+    "project_number": "726949968874",
+    "firebase_url": "https://admob-app-id-6663345165.firebaseio.com",
+    "project_id": "admob-app-id-6663345165",
+    "storage_bucket": "admob-app-id-6663345165.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726949968874:android:369b4a4723c999c2",
+        "android_client_info": {
+          "package_name": "com.tomahock.emergencias.pt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726949968874-8nsiku729870t5k68vhd0bvk2jmb17br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmdLV0Oy_YYGCic1P_F1Qj0leh2uwVLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726949968874:android:2bf7cffa850b2fe4",
+        "android_client_info": {
+          "package_name": "com.tomahock.emergenciaspt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726949968874-8nsiku729870t5k68vhd0bvk2jmb17br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmdLV0Oy_YYGCic1P_F1Qj0leh2uwVLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-1777722207022291~9164201565"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726949968874:android:210398e3c97918b9",
+        "android_client_info": {
+          "package_name": "com.tomahock.fogos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726949968874-q5tg737i0jgufn8rf3a1pjb2p5p6scfs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tomahock.fogos",
+            "certificate_hash": "973730a81fe5d1de9407aca9493ad9802d960223"
+          }
+        },
+        {
+          "client_id": "726949968874-8nsiku729870t5k68vhd0bvk2jmb17br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmdLV0Oy_YYGCic1P_F1Qj0leh2uwVLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726949968874-lk78tqqcn1hjmn6ae26857hrksi2bvj5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "726949968874-snhtfu7g2bnkshh3mhcq5c5me13d2u5q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tomahock.fogos",
+                "app_store_id": "1126944255"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726949968874:android:82d287f46a149de9",
+        "android_client_info": {
+          "package_name": "com.tomahock.fogospt"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726949968874-8nsiku729870t5k68vhd0bvk2jmb17br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmdLV0Oy_YYGCic1P_F1Qj0leh2uwVLA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      },
+      "admob_app_id": "ca-app-pub-1777722207022291~6663345165"
+    }
+  ],
+  "configuration_version": "1"
+}

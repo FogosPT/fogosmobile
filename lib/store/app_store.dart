@@ -10,5 +10,5 @@ final store = new Store<AppState>(
     isLoading: false,
     hasFirstLoad: false,
   ),
-  middleware: createFiresMiddleware(),
+  middleware: firesMiddleware(),
 );

@@ -1,5 +1,5 @@
 class Fire {
-  final String sadoId;
+  final String id;
   final int sharepointId;
 
   // Status
@@ -32,33 +32,34 @@ class Fire {
   final int dateTime;
   final String time;
 
-  Fire(
-      {this.sadoId,
-      this.sharepointId,
-      this.active,
-      this.important,
-      this.status,
-      this.statusCode,
-      this.statusColor,
-      this.nature,
-      this.natureCode,
-      this.aerial,
-      this.terrain,
-      this.human,
-      this.district,
-      this.city,
-      this.town,
-      this.local,
-      this.lat,
-      this.lng,
-      this.created,
-      this.date,
-      this.dateTime,
-      this.time});
+  Fire({
+    this.id,
+    this.sharepointId,
+    this.active,
+    this.important,
+    this.status,
+    this.statusCode,
+    this.statusColor,
+    this.nature,
+    this.natureCode,
+    this.aerial,
+    this.terrain,
+    this.human,
+    this.district,
+    this.city,
+    this.town,
+    this.local,
+    this.lat,
+    this.lng,
+    this.created,
+    this.date,
+    this.dateTime,
+    this.time
+  });
 
   factory Fire.fromJson(Map<String, dynamic> map) {
     return new Fire(
-        sadoId: map['sadoId'],
+        id: map['id'],
         sharepointId: map['sharepointId'],
         active: map['active'],
         important: map['important'],

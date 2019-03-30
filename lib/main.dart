@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:fogosmobile/styles/theme.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -17,7 +18,6 @@ class MyApp extends StatelessWidget {
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
         title: 'Fogos.pt',
-        theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         home: new Scaffold(
           appBar: new AppBar(
@@ -28,6 +28,12 @@ class MyApp extends StatelessWidget {
               style: new TextStyle(color: Colors.white),
             ),
             actions: [
+              new IconButton(
+                icon: Icon(
+                  Icons.settings,
+                ),
+                onPressed: () {},
+              ),
               new StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {
                   return () {
@@ -39,7 +45,7 @@ class MyApp extends StatelessWidget {
                     converter: (Store<AppState> store) => store.state,
                     builder: (BuildContext context, AppState state) {
                       print(state);
-                      if (!state.hasFirstLoad && !state.isLoading) {
+                      if ((state.hasFirstLoad == false || state.hasFirstLoad == null) && (state.isLoading == false || state.isLoading == null)) {
                         loadFiresAction();
                       }
 
@@ -71,52 +77,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//class MyHomePage extends StatefulWidget {
-//  MyHomePage({Key key, this.title}) : super(key: key);
-//
-//  final String title;
-//
-//  @override
-//  _MyHomePageState createState() => new _MyHomePageState();
-//}
-//
-//class _MyHomePageState extends State<MyHomePage> {
-//  int _counter = 0;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return new Scaffold(
-//      appBar: new AppBar(
-//        title: new Text(widget.title),
-//      ),
-//      body: new Center(
-//        child: new Column(
-//          mainAxisAlignment: MainAxisAlignment.center,
-//          children: <Widget>[
-//            new Text(
-//              'You have pushed the button this many times:',
-//            ),
-//            new Text(
-//              '$_counter',
-//              style: Theme.of(context).textTheme.display1,
-//            ),
-//          ],
-//        ),
-//      ),
-//  floatingActionButton: new StoreConnector<AppState, VoidCallback>(
-//    converter: (Store<AppState> store) {
-//      return () {
-//        store.dispatch(new LoadFiresAction());
-//      };
-//    },
-//    builder: (BuildContext context, VoidCallback loadFiresAction) {
-//      return new FloatingActionButton(
-//        onPressed: loadFiresAction,
-//        child: new Icon(Icons.add),
-//      );
-//    },
-//  ),
-//    );
-//  }
-//}

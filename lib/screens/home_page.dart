@@ -3,10 +3,12 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/screens/components/fire_details.dart';
 
 class HomePage extends StatelessWidget {
   MapController mapController;
@@ -20,28 +22,52 @@ class HomePage extends StatelessWidget {
       builder: (BuildContext context, List fires) {
         if (fires != null) {
           for (final fire in fires) {
-                    markers.add(
-                      new Marker(
-                        width: 50.0,
-                        height: 50.0,
-                        point: new LatLng(fire.lat, fire.lng),
-                        builder: (_) => new Container(
-                          child: new IconButton(
-                            icon: new Icon(
-                              Icons.pin_drop,
-                              size: 30.0,
-                              color: new Color(
-                                fire.statusColor == null ? 0xFF000000 : int.parse('0xFF${fire.statusColor}')
-                              ),
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ),
-                    );
-                  }
+            markers.add(
+              new Marker(
+                width: 50.0,
+                height: 50.0,
+                point: new LatLng(fire.lat, fire.lng),
+                builder: (_) => new StoreConnector<AppState, VoidCallback>(
+                      converter: (Store<AppState> store) {
+                        return () {
+                          store.dispatch(new LoadFireAction(fire.id));
+                        };
+                      },
+                      builder:
+                          (BuildContext context, VoidCallback loadFireAction) {
+                        return new StoreConnector<AppState, AppState>(
+                          converter: (Store<AppState> store) => store.state,
+                          builder: (BuildContext context, AppState state) {
+                            return new Container(
+                              child: new IconButton(
+                                  icon: new Icon(
+                                    FontAwesomeIcons.mapMarker,
+                                    size: 30.0,
+                                    color: new Color(
+                                      fire.statusColor == null
+                                          ? 0xFF000000
+                                          : int.parse(
+                                              '0xFF${fire.statusColor}'),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    loadFireAction();
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return new FireDetails();
+                                      },
+                                    );
+                                  }),
+                            );
+                          },
+                        );
+                      },
+                    ),
+              ),
+            );
+          }
         }
-        
 
         return new FlutterMap(
           mapController: mapController,

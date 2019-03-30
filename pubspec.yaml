@@ -29,6 +29,8 @@ dependencies:
   redux_logging: ^0.3.0
   flutter_map: ^0.3.0
   http: ^0.12.0
+  font_awesome_flutter: ^8.4.0
+
 
 dev_dependencies:
   flutter_test:

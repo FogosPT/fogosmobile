@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/home_page.dart';
@@ -20,8 +21,7 @@ class MyApp extends StatelessWidget {
     if (Platform.isIOS) iOSPermission();
 
     _firebaseMessaging.getToken().then((token) {
-      print('token');
-      print(token);
+      print('token: $token');
     });
   }
 
@@ -77,10 +77,9 @@ class FirstPage extends StatelessWidget {
               return new StoreConnector<AppState, AppState>(
                 converter: (Store<AppState> store) => store.state,
                 builder: (BuildContext context, AppState state) {
-                  print(state);
                   if ((state.hasFirstLoad == false ||
                           state.hasFirstLoad == null) &&
-                      (state.isLoading == false || state.isLoading == null)) {
+                      (state.isLoading == false || state.isLoading == null) && state.fires.length == 0) {
                     loadFiresAction();
                   }
 

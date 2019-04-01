@@ -8,23 +8,25 @@ class AppState {
   bool isLoading = false;
   bool hasFirstLoad = false;
   bool hasPreferences = false;
-  List preferences = [];
+  Map preferences = {};
 
-  AppState(
-      {this.fires,
-      this.fire,
-      this.isLoading,
-      this.hasFirstLoad,
-      this.hasPreferences,
-      this.preferences});
+  AppState({
+    this.fires,
+    this.fire,
+    this.isLoading,
+    this.hasFirstLoad,
+    this.hasPreferences,
+    this.preferences,
+  });
 
-  AppState copyWith(
-      {List fires,
-      Fire fire,
-      bool isLoading,
-      bool hasFirstLoad,
-      bool hasPreferences,
-      List preferences}) {
+  AppState copyWith({
+    List fires,
+    Fire fire,
+    bool isLoading,
+    bool hasFirstLoad,
+    bool hasPreferences,
+    Map preferences,
+  }) {
     return new AppState(
       fires: fires ?? this.fires,
       fire: fire ?? this.fires,

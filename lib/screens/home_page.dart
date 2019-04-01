@@ -6,14 +6,13 @@ import 'package:latlong/latlong.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 
 class HomePage extends StatelessWidget {
-  MapController mapController;
-  LatLng _center = new LatLng(39.806251, -8.088591);
-  List<Marker> markers = [];
+  final MapController mapController = new MapController();
+  final LatLng _center = new LatLng(39.806251, -8.088591);
+  final List<Marker> markers = [];
 
   @override
   Widget build(BuildContext context) {

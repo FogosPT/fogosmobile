@@ -5,14 +5,8 @@ preferencesReducer(dynamic preferences, action) {
     return preferences;
   } else if (action is AllPreferencesLoadedAction) {
     return action.preferences;
-  } else if (action is TurnOnNotificationAction) {
+  } else if (action is SetPreferenceAction) {
     return preferences;
-  } else if (action is TurnedOnNotificationAction) {
-    return action.key;
-  } else if (action is TurnOffNotificationAction) {
-    return preferences;
-  } else if (action is TurnedOffNotificationAction) {
-    return action.key;
   } else {
     return preferences;
   }

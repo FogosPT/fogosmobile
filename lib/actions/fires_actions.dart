@@ -13,20 +13,10 @@ class FiresLoadedAction {
   final List fires;
 
   FiresLoadedAction(this.fires);
-
-  @override
-  String toString() {
-    return 'Fires loaded {fires: $fires}';
-  }
 }
 
 class FireLoadedAction {
   final Fire fire;
 
   FireLoadedAction(this.fire);
-
-  @override
-  String toString() {
-    return 'Fire loaded: $fire';
-  }
 }

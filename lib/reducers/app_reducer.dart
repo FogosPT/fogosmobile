@@ -5,11 +5,11 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 
 AppState appReducer(AppState state, action) {
-  bool isLoading = false;
-  bool hasFirstLoad = false;
-  bool hasPreferences = false;
+  bool isLoading;
+  bool hasFirstLoad;
+  bool hasPreferences;
 
-  print('action is action $action');
+  // print('action is action $action');
 
   if (action is LoadFiresAction) {
     isLoading = true;
@@ -22,12 +22,18 @@ AppState appReducer(AppState state, action) {
     isLoading = false;
     hasFirstLoad = true;
   } else if (action is LoadAllPreferencesAction) {
+    hasPreferences = false;
     isLoading = true;
   } else if (action is AllPreferencesLoadedAction) {
     hasPreferences = true;
     isLoading = false;
+  } else if (action is SetPreferenceAction) {
+    hasPreferences = true;
+    isLoading = false;
   } else {
     isLoading = false;
+    hasFirstLoad = true;
+    hasPreferences = false;
   }
 
   return new AppState(

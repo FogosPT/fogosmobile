@@ -11,7 +11,7 @@ final store = new Store<AppState>(
     isLoading: false,
     hasFirstLoad: false,
     hasPreferences: false,
-    preferences: [],
+    preferences: {},
   ),
   middleware: firesMiddleware()..addAll(preferencesMiddleware()),
 );

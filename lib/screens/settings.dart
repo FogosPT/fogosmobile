@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'dart:convert' show utf8;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
@@ -13,26 +11,26 @@ import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 
+typedef SetPreferenceCallBack = Function(String key, int value);
+
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
 }
 
 class _SettingsState extends State<Settings> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   List locations = [];
+  TextEditingController controller = new TextEditingController();
+  String filter;
 
-  void firebaseCloudMessagingListeners() {
-    if (Platform.isIOS) iOSPermission();
-
-    _firebaseMessaging.getToken().then((token) {});
-  }
-
-  void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
+  @override
+  initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {
+        filter = controller.text;
+      });
+    });
   }
 
   getLocations() async {
@@ -42,12 +40,8 @@ class _SettingsState extends State<Settings> {
     return data['rows'];
   }
 
-  _changeSetting(String key, bool newState) {}
-
   @override
   Widget build(BuildContext context) {
-    firebaseCloudMessagingListeners();
-
     if (this.locations.length == 0) {
       getLocations().then((locs) {
         setState(() {
@@ -93,16 +87,44 @@ class _SettingsState extends State<Settings> {
             );
           }
 
-          return ListView.builder(
-            itemCount: this.locations.length,
-            itemBuilder: (BuildContext context, int index) {
-              final _location = this.locations[index];
-              return CheckboxListTile(
-                title: Text(_location['value']['name']),
-                value: true,
-                onChanged: (bool changed) {
-                  _changeSetting(_location['key'], changed);
-                },
+          return new StoreConnector<AppState, SetPreferenceCallBack>(
+            converter: (Store<AppState> store) {
+              return (String key, int value) {
+                store.dispatch(new SetPreferenceAction(key, value));
+              };
+            },
+            builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+              return new Column(
+                children: <Widget>[
+                  new Padding(
+                    padding: new EdgeInsets.only(top: 20.0),
+                  ),
+                  new ListTile(
+                    title: new TextField(
+                      decoration: new InputDecoration(labelText: "Concelho"),
+                      controller: controller,
+                    ),
+                  ),
+                  new Expanded(
+                    child: new ListView.builder(
+                      itemCount: this.locations.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final _location = this.locations[index];
+                        return filter == null ||
+                                filter == "" ||
+                                _location['value']['name'].toLowerCase().contains(filter.toLowerCase())
+                            ? CheckboxListTile(
+                                title: Text(_location['value']['name']),
+                                value: state.preferences['pref-${_location['key']}'] == 1,
+                                onChanged: (bool value) {
+                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
+                                },
+                              )
+                            : new Container();
+                      },
+                    ),
+                  ),
+                ],
               );
             },
           );

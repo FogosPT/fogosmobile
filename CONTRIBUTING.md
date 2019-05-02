@@ -53,6 +53,10 @@ If you want to know more about Dart and Flutter, follow this useful links:
 
 ----
 
+- About Redux - [Introduction to Redux in Flutter](https://blog.novoda.com/introduction-to-redux-in-flutter/)
+
+----
+
 - [Flutter Create: A back-end dev gets Flutter running for the first time](https://blog.goposse.com/flutter-create-a-back-end-dev-gets-flutter-running-for-the-first-time-3185041bf380)
 - [Flutter: How I built a simple app in under an hour from scratch. And how you can do it too.](https://proandroiddev.com/flutter-how-i-built-a-simple-app-in-under-an-hour-from-scratch-and-how-you-can-do-it-too-6d8e7fe6c91b)
 - [Flutter: Bookshelf App Part 2, Personal Notes and Database Integration](https://proandroiddev.com/flutter-bookshelf-app-part-2-personal-notes-and-database-integration-a3b47a84c57) (continuation of the previous article)

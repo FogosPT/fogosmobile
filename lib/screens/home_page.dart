@@ -28,8 +28,8 @@ class HomePage extends StatelessWidget {
           for (final fire in fires) {
             markers.add(
               new Marker(
-                width: fullPinSize,
-                height: fullPinSize,
+                width: fullPinSize * fire.scale,
+                height: fullPinSize * fire.scale,
                 point: new LatLng(fire.lat, fire.lng),
                 builder: (_) => new StoreConnector<AppState, VoidCallback>(
                       converter: (Store<AppState> store) {

@@ -10,7 +10,7 @@ class LoadFireAction {
 class ClearFireAction {}
 
 class FiresLoadedAction {
-  final List fires;
+  final List<Fire> fires;
 
   FiresLoadedAction(this.fires);
 }

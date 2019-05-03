@@ -31,3 +31,5 @@ flutter:
   uses-material-design: true
   assets:
   - assets/
+  - assets/icons/
+  - assets/partners/

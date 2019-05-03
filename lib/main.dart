@@ -5,10 +5,11 @@ import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/home_page.dart';
-import 'package:fogosmobile/screens/settings.dart';
+import 'package:fogosmobile/screens/settings/settings.dart';
 
 void main() => runApp(new MyApp());
 
@@ -60,16 +61,11 @@ class FirstPage extends StatelessWidget {
           style: new TextStyle(color: Colors.white),
         ),
         actions: [
-          new IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.of(context).pushNamed(SETTINGS_ROUTE);
-            },
-          ),
           new StoreConnector<AppState, VoidCallback>(
             converter: (Store<AppState> store) {
               return () {
                 store.dispatch(new LoadFiresAction());
+                store.dispatch(new LoadAllPreferencesAction());
               };
             },
             builder: (BuildContext context, VoidCallback loadFiresAction) {
@@ -78,7 +74,8 @@ class FirstPage extends StatelessWidget {
                 builder: (BuildContext context, AppState state) {
                   if ((state.hasFirstLoad == false ||
                           state.hasFirstLoad == null) &&
-                      (state.isLoading == false || state.isLoading == null) && state.fires.length == 0) {
+                      (state.isLoading == false || state.isLoading == null) &&
+                      state.fires.length == 0) {
                     loadFiresAction();
                   }
 
@@ -103,6 +100,28 @@ class FirstPage extends StatelessWidget {
             },
           ),
         ],
+      ),
+      drawer: new Drawer(
+        child: new ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            new DrawerHeader(
+              child: new Container(),
+              decoration: new BoxDecoration(
+                color: Colors.white,
+              ),
+            ),
+            new ListTile(
+              title: new Text('Notificações'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(SETTINGS_ROUTE);
+              },
+              leading: Icon(Icons.settings),
+            ),
+            new Divider(),
+          ],
+        ),
       ),
       body: new HomePage(),
     );

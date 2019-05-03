@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/screens/assets/images.dart';
+import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';

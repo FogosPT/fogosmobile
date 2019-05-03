@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:convert';
 import 'dart:convert' show utf8;
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 

@@ -1,3 +1,4 @@
+import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,6 +18,7 @@ List<Middleware<AppState>> firesMiddleware() {
   ];
 }
 
+/// Get list of fires
 Middleware<AppState> _createLoadFires() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
@@ -25,14 +27,20 @@ Middleware<AppState> _createLoadFires() {
       String url = endpoints['getFires'];
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
-      List fires = responseData.map((model) => Fire.fromJson(model)).toList();
+      List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model))
+          .toList();
+      print("load fires");
+      fires = calculateFireImportance(fires);
       store.dispatch(new FiresLoadedAction(fires));
     } catch (e) {
+      print(e);
+      print(e.stackTrace);
       store.dispatch(new FiresLoadedAction([]));
     }
   };
 }
 
+/// Get data for a single fire
 Middleware<AppState> _createLoadFire() {
   return (Store store, action, NextDispatcher next) async {
     next(action);

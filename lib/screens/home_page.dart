@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
+
+const fullPinSize = 50.0;
 
 class HomePage extends StatelessWidget {
   final MapController mapController = new MapController();
@@ -23,8 +26,8 @@ class HomePage extends StatelessWidget {
           for (final fire in fires) {
             markers.add(
               new Marker(
-                width: 50.0,
-                height: 50.0,
+                width: fullPinSize * fire.scale,
+                height: fullPinSize * fire.scale,
                 point: new LatLng(fire.lat, fire.lng),
                 builder: (_) => new StoreConnector<AppState, VoidCallback>(
                       converter: (Store<AppState> store) {
@@ -38,16 +41,19 @@ class HomePage extends StatelessWidget {
                           converter: (Store<AppState> store) => store.state,
                           builder: (BuildContext context, AppState state) {
                             return new Container(
+                              decoration: BoxDecoration(
+                                  color: new Color(
+                                    fire.statusColor == null
+                                        ? 0xFF000000
+                                        : int.parse(
+                                        '0xFF${fire.statusColor}'),
+                                  ),
+                                shape: BoxShape.circle
+                              ),
                               child: new IconButton(
-                                  icon: new Icon(
-                                    FontAwesomeIcons.mapMarker,
-                                    size: 30.0,
-                                    color: new Color(
-                                      fire.statusColor == null
-                                          ? 0xFF000000
-                                          : int.parse(
-                                              '0xFF${fire.statusColor}'),
-                                    ),
+                                  icon: new SvgPicture.asset(
+                                      getCorrectStatusImage(fire.statusCode, fire.important),
+                                      semanticsLabel: 'Acme Logo'
                                   ),
                                   onPressed: () {
                                     loadFireAction();
@@ -91,5 +97,35 @@ class HomePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  String getCorrectStatusImage(int statusId, bool important) {
+    var status = "status-";
+    if (important) {
+      status = status + "important";
+    } else {
+      status = status + statusId.toString();
+    }
+    switch(status) {
+      case "status-important":
+      case "status-5":
+      case "status-7":
+      case "status-99":
+      case "status-8":
+        return imgSvgIconFire;
+      case "status-3":
+      case "status-4":
+        return imgSvgIconAlarm;
+      case "status-9":
+        return imgSvgIconWatch;
+      case "status-6":
+      case "status-10":
+        return imgSvgIconPointer;
+      case "status-11":
+      case "status-12":
+        return imgSvgIconFake;
+      default:
+        return imgSvgIconFire;
+    }
   }
 }

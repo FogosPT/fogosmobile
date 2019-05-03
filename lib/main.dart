@@ -5,7 +5,6 @@ import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/home_page.dart';

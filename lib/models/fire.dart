@@ -32,6 +32,10 @@ class Fire {
   final int dateTime;
   final String time;
 
+  // Importance
+  double importance;
+  double scale;
+
   Fire({
     this.id,
     this.sharepointId,

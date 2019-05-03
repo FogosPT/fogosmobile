@@ -13,10 +13,12 @@ import 'package:fogosmobile/constants/endpoints.dart';
 List<Middleware<AppState>> preferencesMiddleware() {
   final loadPreferences = _createLoadPreferences();
   final setPreference = _createSetPreference();
+  final setNotification = _createSetNotification();
 
   return [
     TypedMiddleware<AppState, LoadAllPreferencesAction>(loadPreferences),
     TypedMiddleware<AppState, SetPreferenceAction>(setPreference),
+    TypedMiddleware<AppState, SetFireNotificationAction>(setNotification),
   ];
 }
 
@@ -35,6 +37,8 @@ Middleware<AppState> _createLoadPreferences() {
       for (Map location in locations) {
         data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
       }
+
+      data['subscribedFires'] = prefs.getStringList('subscribedFires') ?? [];
 
       store.dispatch(new AllPreferencesLoadedAction(data));
     } catch (e) {}
@@ -59,5 +63,32 @@ Middleware<AppState> _createSetPreference() {
       prefs.setInt(action.key, action.value);
       store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {}
+  };
+}
+
+Middleware<AppState> _createSetNotification() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
+      print(subscribedFires);
+      if (action.value == 1 && subscribedFires.contains(action.key) == false) {
+        subscribedFires.add(action.key);
+        _firebaseMessaging.subscribeToTopic(topic);
+      } else {
+        subscribedFires.remove(action.key);
+        _firebaseMessaging.unsubscribeFromTopic(topic);
+      }
+      print(subscribedFires);
+      prefs.setStringList('subscribedFires', subscribedFires);
+      store.dispatch(new LoadAllPreferencesAction());
+    } catch (e) {
+      print(e);
+    }
   };
 }

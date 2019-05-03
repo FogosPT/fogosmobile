@@ -12,3 +12,10 @@ class SetPreferenceAction {
 
   SetPreferenceAction(this.key, this.value);
 }
+
+class SetFireNotificationAction {
+  final String key;
+  final int value;
+
+  SetFireNotificationAction(this.key, this.value);
+}

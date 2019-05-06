@@ -23,8 +23,8 @@ class _SettingsState extends State<Settings> {
             ),
             bottom: TabBar(
               tabs: [
-                Tab(icon: Icon(Icons.notifications)),
                 Tab(icon: Icon(Icons.map)),
+                Tab(icon: Icon(Icons.notifications)),
               ],
             ),
           ),

@@ -7,6 +7,8 @@ preferencesReducer(dynamic preferences, action) {
     return action.preferences;
   } else if (action is SetPreferenceAction) {
     return preferences;
+  } else if (action is SetFireNotificationAction) {
+    return preferences;
   } else {
     return preferences;
   }

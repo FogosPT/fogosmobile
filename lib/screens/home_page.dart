@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -42,12 +43,7 @@ class HomePage extends StatelessWidget {
                           builder: (BuildContext context, AppState state) {
                             return new Container(
                               decoration: BoxDecoration(
-                                  color: new Color(
-                                    fire.statusColor == null
-                                        ? 0xFF000000
-                                        : int.parse(
-                                        '0xFF${fire.statusColor}'),
-                                  ),
+                                  color: getFireColor(fire.statusColor),
                                 shape: BoxShape.circle
                               ),
                               child: new IconButton(

@@ -20,6 +20,8 @@ dependencies:
   firebase_messaging: ^2.1.0
   shared_preferences: ^0.4.3
 
+  share: ^0.6.1+1
+
   #ui
   flutter_svg: ^0.12.4
 

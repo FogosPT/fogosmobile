@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/store/app_store.dart';
@@ -106,7 +108,9 @@ class FirstPage extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             new DrawerHeader(
-              child: new Container(),
+              child: new Center(
+                child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.redAccent),
+              ),
               decoration: new BoxDecoration(
                 color: Colors.white,
               ),

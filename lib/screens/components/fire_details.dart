@@ -73,13 +73,6 @@ class FireDetails extends StatelessWidget {
                                     },
                                   ),
                                   SizedBox(width: 8),
-                                  IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      clearFireAction();
-                                    },
-                                  ),
                                   new IconButton(
                                     icon: new Icon(isFireSubscribed
                                         ? Icons.notifications_active
@@ -87,6 +80,14 @@ class FireDetails extends StatelessWidget {
                                     onPressed: () {
                                       setPreferenceAction(
                                           fire.id, isFireSubscribed ? 0 : 1);
+                                    },
+                                  ),
+                                  SizedBox(width: 8),
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      clearFireAction();
                                     },
                                   ),
                                 ],
@@ -142,6 +143,7 @@ class FireDetails extends StatelessWidget {
                                   )
                                 ],
                               ),
+                              Padding(padding: EdgeInsets.only(top: 20.0),),
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -167,6 +169,7 @@ class FireDetails extends StatelessWidget {
                                   )
                                 ],
                               ),
+                              Padding(padding: EdgeInsets.only(top: 20.0),),
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -201,6 +204,7 @@ class FireDetails extends StatelessWidget {
                                   )
                                 ],
                               ),
+                              Padding(padding: EdgeInsets.only(top: 20.0),),
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,

@@ -27,7 +27,7 @@ class _FireNotificationsState extends State<FireNotifications> {
           );
         }
 
-        var subscribedFires = state.preferences['subscribedFires'];
+        var subscribedFires = state.preferences['subscribedFires'] ?? [];
 
         if (subscribedFires.length == 0) {
           return Center(

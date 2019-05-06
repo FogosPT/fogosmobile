@@ -53,12 +53,20 @@ class _FireNotificationsState extends State<FireNotifications> {
                     itemCount: subscribedFires.length,
                     itemBuilder: (BuildContext context, int index) {
                       final _subscribedFire = subscribedFires[index];
+                      String _title = _subscribedFire.town;
+
+                      if (_subscribedFire.town != _subscribedFire.local) {
+                        _title = '$_title, ${_subscribedFire.local}';
+                      }
+
                       return ListTile(
-                        title: Text(_subscribedFire.toString()),
+                        title: Text(_title),
+                        subtitle: Text('${_subscribedFire.city}, ${_subscribedFire.district}'),
+                        isThreeLine: true,
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            setPreferenceAction(_subscribedFire, 0);
+                            setPreferenceAction(_subscribedFire.id, 0);
                           },
                         ),
                       );

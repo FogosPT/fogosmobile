@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
@@ -38,7 +39,12 @@ Middleware<AppState> _createLoadPreferences() {
         data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
       }
 
-      data['subscribedFires'] = prefs.getStringList('subscribedFires') ?? [];
+      List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
+      List<Fire> fires = store.state.fires;
+
+      if (fires.length > 0) {
+        data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
+      }
 
       store.dispatch(new AllPreferencesLoadedAction(data));
     } catch (e) {}
@@ -76,7 +82,6 @@ Middleware<AppState> _createSetNotification() {
     try {
       final prefs = await SharedPreferences.getInstance();
       List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
-      print(subscribedFires);
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
         _firebaseMessaging.subscribeToTopic(topic);
@@ -84,7 +89,6 @@ Middleware<AppState> _createSetNotification() {
         subscribedFires.remove(action.key);
         _firebaseMessaging.unsubscribeFromTopic(topic);
       }
-      print(subscribedFires);
       prefs.setStringList('subscribedFires', subscribedFires);
       store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {

@@ -5,7 +5,7 @@ import 'package:redux/redux.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 
-typedef SetPreferenceCallBack = Function(String key, int value);
+typedef SetFireNotificationActionCallBack = Function(String key, int value);
 
 class FireNotifications extends StatefulWidget {
   @override
@@ -35,14 +35,15 @@ class _FireNotificationsState extends State<FireNotifications> {
           );
         }
 
-        return new StoreConnector<AppState, SetPreferenceCallBack>(
+        return new StoreConnector<AppState, SetFireNotificationActionCallBack>(
           converter: (Store<AppState> store) {
             return (String key, int value) {
-              store.dispatch(new SetPreferenceAction(key, value));
+              print('$key, ${value.toString()}');
+              store.dispatch(new SetFireNotificationAction(key, value));
             };
           },
           builder: (BuildContext context,
-              SetPreferenceCallBack setPreferenceAction) {
+              SetFireNotificationActionCallBack SetFireNotificationAction) {
             return new Column(
               children: <Widget>[
                 new Padding(
@@ -66,7 +67,7 @@ class _FireNotificationsState extends State<FireNotifications> {
                         trailing: IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            setPreferenceAction(_subscribedFire.id, 0);
+                            SetFireNotificationAction(_subscribedFire.id, 0);
                           },
                         ),
                       );

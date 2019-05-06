@@ -39,7 +39,7 @@ class FireDetails extends StatelessWidget {
               builder: (BuildContext context,
                   SetPreferenceCallBack setPreferenceAction) {
                 bool isFireSubscribed = false;
-                if (state.preferences['subscribedFires'].length > 0) {
+                if ((state.preferences['subscribedFires'] ?? []).length > 0) {
                   var subbedFire = state.preferences['subscribedFires']
                       .firstWhere((fs) => fs.id == fire.id, orElse: () {});
                   if (subbedFire != null) {

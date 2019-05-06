@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:redux/redux.dart';
 import 'package:share/share.dart';
@@ -62,23 +63,21 @@ class FireDetails extends StatelessWidget {
                           ),
                           Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: Icon(
                                   FontAwesomeIcons.map,
-                                  color: Colors.redAccent,
+                                  color: getFireColor(fire.statusColor),
                                 ),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(
                                     width: 275.0,
@@ -112,24 +111,21 @@ class FireDetails extends StatelessWidget {
                               )
                             ],
                           ),
-                          Divider(),
                           Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: Icon(FontAwesomeIcons.mapMarker,
-                                    color: Colors.redAccent),
+                                    color: getFireColor(fire.statusColor)),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     'Estado: ${fire.status}',
@@ -139,26 +135,22 @@ class FireDetails extends StatelessWidget {
                               )
                             ],
                           ),
-                          Divider(),
                           Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: Icon(
                                   FontAwesomeIcons.fighterJet,
-                                  color: Colors.redAccent,
+                                  color: getFireColor(fire.statusColor),
                                 ),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     'Meios humanos: ${fire.human}',
@@ -176,26 +168,23 @@ class FireDetails extends StatelessWidget {
                               )
                             ],
                           ),
-                          Divider(),
                           Row(
                             mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment:
-                                MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(right: 16.0),
                                 child: Icon(
                                   FontAwesomeIcons.clock,
-                                  color: Colors.redAccent,
+                                  color: getFireColor(fire.statusColor),
                                 ),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     '${fire.date} ${fire.time}',

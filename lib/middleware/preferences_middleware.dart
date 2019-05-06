@@ -44,6 +44,8 @@ Middleware<AppState> _createLoadPreferences() {
 
       if (fires.length > 0) {
         data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
+      } else {
+        data['subscribedFires'] = [];
       }
 
       store.dispatch(new AllPreferencesLoadedAction(data));

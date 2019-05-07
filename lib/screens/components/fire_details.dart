@@ -69,7 +69,7 @@ class FireDetails extends StatelessWidget {
                                     icon: Icon(Icons.share),
                                     onPressed: () {
                                       Share.share(
-                                          '[${fire.dateTime}] Incêndio em ${fire.city} https://fogos.pt/fogo/${fire.id}');
+                                          'Incêndio em ${fire.city} https://fogos.pt/fogo/${fire.id}');
                                     },
                                   ),
                                   SizedBox(width: 8),

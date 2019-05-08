@@ -11,6 +11,8 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 const fullPinSize = 50.0;
 
 class HomePage extends StatelessWidget {
@@ -70,29 +72,70 @@ class HomePage extends StatelessWidget {
           }
         }
 
-        return new FlutterMap(
-          mapController: mapController,
-          options: new MapOptions(
-            center: _center,
-            zoom: 7.0,
-          ),
-          layers: [
-            new TileLayerOptions(
-              urlTemplate:
+        return Stack(
+          children: <Widget>[
+            new FlutterMap(
+              mapController: mapController,
+              options: new MapOptions(
+                center: _center,
+                zoom: 7.0,
+              ),
+              layers: [
+                new TileLayerOptions(
+                  urlTemplate:
                   "https://api.mapbox.com/styles/v1/fogospt/cjgppvcdp00aa2spjclz9sjst/tiles/256/{z}/{x}/{y}?access_token={accessToken}",
-              additionalOptions: {
-                'accessToken':
+                  additionalOptions: {
+                    'accessToken':
                     'pk.eyJ1IjoiZm9nb3NwdCIsImEiOiJjamZ3Y2E5OTMyMjFnMnFxbjAxbmt3bmdtIn0.xg1X-A17WRBaDghhzsmjIA',
-                'id': 'mapbox.streets',
-              },
+                    'id': 'mapbox.streets',
+                  },
+                ),
+                new MarkerLayerOptions(
+                  markers: markers,
+                ),
+              ],
             ),
-            new MarkerLayerOptions(
-              markers: markers,
+            Positioned(
+              bottom: 12.0,
+              right: 0.0,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: Colors.grey[300],
+                ),
+                child: Row(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () => _launchUrl('https://www.mapbox.com/about/maps/'),
+                      child: Text(' © Mapbox '),
+                    ),
+                    InkWell(
+                      onTap: () => _launchUrl('http://www.openstreetmap.org/copyright'),
+                      child: Text('© OpenStreetMap '),
+                    ),
+                    InkWell(
+                      onTap: () => _launchUrl('https://www.mapbox.com/map-feedback/'),
+                      child: Text('© Improve this map'),
+                    ),
+                    SizedBox(
+                      width: 12.0,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         );
       },
     );
+  }
+
+  _launchUrl(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Não foi possível abrir: $url';
+    }
   }
 
   String getCorrectStatusImage(int statusId, bool important) {

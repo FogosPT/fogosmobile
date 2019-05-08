@@ -1,6 +1,8 @@
 
 # Fogos.pt iOS / Android App
 
+[![Codemagic build status](https://api.codemagic.io/apps/5cd2a6aec95918001358909f/5cd2a6aec95918001358909e/status_badge.svg)](https://codemagic.io/apps/5cd2a6aec95918001358909f/5cd2a6aec95918001358909e/latest_build)
+
 ```
       .,:cccccccccccccccccccccccccccccccccccccccccccccccccccc:,.      
     'dKWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWKd'    

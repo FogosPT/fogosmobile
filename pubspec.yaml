@@ -1,7 +1,7 @@
 name: fogosmobile
 description: Fogos.pt new iOS and Android app
 
-version: 1.0.0+1
+version: 3.0.4+30004
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

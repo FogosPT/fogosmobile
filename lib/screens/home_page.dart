@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,8 +11,6 @@ import 'package:latlong/latlong.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 
 const fullPinSize = 50.0;
 
@@ -95,47 +94,11 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              bottom: 12.0,
-              right: 0.0,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  color: Colors.grey[300],
-                ),
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () => _launchUrl('https://www.mapbox.com/about/maps/'),
-                      child: Text(' © Mapbox '),
-                    ),
-                    InkWell(
-                      onTap: () => _launchUrl('http://www.openstreetmap.org/copyright'),
-                      child: Text('© OpenStreetMap '),
-                    ),
-                    InkWell(
-                      onTap: () => _launchUrl('https://www.mapbox.com/map-feedback/'),
-                      child: Text('© Improve this map'),
-                    ),
-                    SizedBox(
-                      width: 12.0,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            MapboxCopyright(),
           ],
         );
       },
     );
-  }
-
-  _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Não foi possível abrir: $url';
-    }
   }
 
   String getCorrectStatusImage(int statusId, bool important) {

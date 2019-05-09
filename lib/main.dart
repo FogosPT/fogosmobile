@@ -12,6 +12,7 @@ import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(new MyApp());
 
@@ -54,6 +55,14 @@ class MyApp extends StatelessWidget {
 class FirstPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setApplicationSwitcherDescription(
+        ApplicationSwitcherDescription(
+          label: "Fogos.pt",
+          primaryColor: Colors.black.value
+        )
+    );
+
     return new Scaffold(
       appBar: new AppBar(
         backgroundColor: Colors.redAccent,

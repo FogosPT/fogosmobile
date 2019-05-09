@@ -17,21 +17,9 @@ class MapboxCopyright extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                InkWell(
-                  onTap: () => _launchUrl('https://www.mapbox.com/about/maps/',),
-                  child: Text('© Mapbox',
-                    style: TextStyle(decoration: TextDecoration.underline, fontSize: 12.0),),
-                ),
-                InkWell(
-                  onTap: () => _launchUrl('http://www.openstreetmap.org/copyright'),
-                  child: Text('© OpenStreetMap',
-                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12.0)),
-                ),
-                InkWell(
-                  onTap: () => _launchUrl('https://www.mapbox.com/map-feedback/'),
-                  child: Text('Improve this map',
-                      style: TextStyle(decoration: TextDecoration.underline, fontSize: 12.0)),
-                ),
+                _createCopyrightOption('© Mapbox', 'https://www.mapbox.com/about/maps/'),
+                _createCopyrightOption('© OpenStreetMap', 'http://www.openstreetmap.org/copyright'),
+                _createCopyrightOption('Improve this map', 'https://www.mapbox.com/map-feedback/'),
                 SizedBox(
                   width: 12.0,
                 ),
@@ -41,6 +29,14 @@ class MapboxCopyright extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  InkWell _createCopyrightOption(String title, String url) {
+    return InkWell(
+      onTap: () => _launchUrl(url),
+      child: Text(title,
+          style: TextStyle(decoration: TextDecoration.underline, fontSize: 12.0)),
     );
   }
 

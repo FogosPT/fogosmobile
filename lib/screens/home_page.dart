@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -70,25 +71,30 @@ class HomePage extends StatelessWidget {
           }
         }
 
-        return new FlutterMap(
-          mapController: mapController,
-          options: new MapOptions(
-            center: _center,
-            zoom: 7.0,
-          ),
-          layers: [
-            new TileLayerOptions(
-              urlTemplate:
+        return Stack(
+          children: <Widget>[
+            new FlutterMap(
+              mapController: mapController,
+              options: new MapOptions(
+                center: _center,
+                zoom: 7.0,
+              ),
+              layers: [
+                new TileLayerOptions(
+                  urlTemplate:
                   "https://api.mapbox.com/styles/v1/fogospt/cjgppvcdp00aa2spjclz9sjst/tiles/256/{z}/{x}/{y}?access_token={accessToken}",
-              additionalOptions: {
-                'accessToken':
+                  additionalOptions: {
+                    'accessToken':
                     'pk.eyJ1IjoiZm9nb3NwdCIsImEiOiJjamZ3Y2E5OTMyMjFnMnFxbjAxbmt3bmdtIn0.xg1X-A17WRBaDghhzsmjIA',
-                'id': 'mapbox.streets',
-              },
+                    'id': 'mapbox.streets',
+                  },
+                ),
+                new MarkerLayerOptions(
+                  markers: markers,
+                ),
+              ],
             ),
-            new MarkerLayerOptions(
-              markers: markers,
-            ),
+            MapboxCopyright(),
           ],
         );
       },

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:convert' show utf8;
+import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -92,9 +93,8 @@ class _NotificationsState extends State<Notifications> {
                       final _location = this.locations[index];
                       return filter == null ||
                               filter == "" ||
-                              _location['value']['name']
-                                  .toLowerCase()
-                                  .contains(filter.toLowerCase())
+                          transformStringToSearch(_location['value']['name'])
+                                  .contains(transformStringToSearch(filter))
                           ? CheckboxListTile(
                               title: Text(_location['value']['name']),
                               value: state.preferences[

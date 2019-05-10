@@ -14,7 +14,9 @@ import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:flutter/services.dart';
 
-void main() => runApp(new MyApp());
+import 'middleware/shared_preferences_manager.dart';
+
+void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 const SETTINGS_ROUTE = '/settings';
 

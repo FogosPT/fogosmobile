@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
@@ -33,7 +33,7 @@ Middleware<AppState> _createLoadPreferences() {
       final locations = json.decode(utf8.decode(response.bodyBytes))['rows'];
 
       Map data = {};
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = SharedPreferencesManager.preferences;
 
       for (Map location in locations) {
         data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
@@ -67,8 +67,8 @@ Middleware<AppState> _createSetPreference() {
     }
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.setInt(action.key, action.value);
+      final prefs = SharedPreferencesManager.preferences;
+      prefs.save(action.key, action.value);
       store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {}
   };
@@ -82,7 +82,7 @@ Middleware<AppState> _createSetNotification() {
     String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
 
     try {
-      final prefs = await SharedPreferences.getInstance();
+      final prefs = SharedPreferencesManager.preferences;
       List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
@@ -91,7 +91,7 @@ Middleware<AppState> _createSetNotification() {
         subscribedFires.remove(action.key);
         _firebaseMessaging.unsubscribeFromTopic(topic);
       }
-      prefs.setStringList('subscribedFires', subscribedFires);
+      prefs.save('subscribedFires', subscribedFires);
       store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {
       print(e);

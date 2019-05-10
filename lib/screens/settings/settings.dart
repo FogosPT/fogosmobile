@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 
 import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/fire_notifications.dart';
@@ -18,7 +19,7 @@ class _SettingsState extends State<Settings> {
             backgroundColor: Colors.redAccent,
             iconTheme: new IconThemeData(color: Colors.white),
             title: new Text(
-              'Notificações',
+              FogosLocalizations.of(context).textNotifications,
               style: new TextStyle(color: Colors.white),
             ),
             bottom: TabBar(

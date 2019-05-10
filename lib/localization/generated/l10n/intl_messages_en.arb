@@ -1,0 +1,52 @@
+{
+"@@locale": "en",
+  "@@last_modified": "2019-05-10T08:54:25.970182",
+  "appTitle": "Fogos.pt",
+  "@appTitle": {
+    "description": "App title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNotifications": "Notifications",
+  "@textNotifications": {
+    "description": "Texto de notificações - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textCounty": "County",
+  "@textCounty": {
+    "description": "County Text - List of Counties",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textEmptyNotifications": "You don't have any active notifications for Fires",
+  "@textEmptyNotifications": {
+    "description": "Empty Notifications Text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textStatus": "Status",
+  "@textStatus": {
+    "description": "Status label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHumanMeans": "Human means",
+    "@textHumanMeans": {
+      "description": "Human means label",
+      "type": "text",
+      "placeholders": {}
+    },
+  "textTerrainMeans": "Terrain means",
+  "@textTerrainMeans": {
+    "description": "Terrain means label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAerealMeans": "Aereal Means",
+  "@textAerealMeans": {
+    "description": "Aereal Means label",
+    "type": "text",
+    "placeholders": {}
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
@@ -31,7 +32,7 @@ class _FireNotificationsState extends State<FireNotifications> {
 
         if (subscribedFires.length == 0) {
           return Center(
-            child: Text('Não tem notificações ativas para fogos.'),
+            child: Text(FogosLocalizations.of(context).textEmptyNotifications),
           );
         }
 

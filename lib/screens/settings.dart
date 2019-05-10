@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:convert' show utf8;
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -52,7 +53,7 @@ class _SettingsState extends State<Settings> {
           backgroundColor: Colors.redAccent,
           iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
-            'Fogos.pt',
+            FogosLocalizations.of(context).appTitle,
             style: new TextStyle(color: Colors.white),
           ),
         ),
@@ -69,7 +70,7 @@ class _SettingsState extends State<Settings> {
         backgroundColor: Colors.redAccent,
         iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
-          'Fogos.pt',
+          FogosLocalizations.of(context).appTitle,
           style: new TextStyle(color: Colors.white),
         ),
       ),
@@ -99,7 +100,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   new ListTile(
                     title: new TextField(
-                      decoration: new InputDecoration(labelText: "Concelho"),
+                      decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
                       controller: controller,
                     ),
                   ),

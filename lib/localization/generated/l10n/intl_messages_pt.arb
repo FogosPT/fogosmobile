@@ -1,0 +1,53 @@
+{
+"@@locale": "pt",
+
+  "@@last_modified": "2019-05-10T08:56:10.766297",
+  "appTitle": "Fogos.pt",
+  "@appTitle": {
+    "description": "App title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNotifications": "Notificações",
+  "@textNotifications": {
+    "description": "Texto de notificações - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textCounty": "Concelho",
+  "@textCounty": {
+    "description": "County Text - List of Counties",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textEmptyNotifications": "Não tem notificações ativas para fogos",
+  "@textEmptyNotifications": {
+    "description": "Empty Notifications Text",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textStatus": "Estado",
+  "@textStatus": {
+    "description": "Status label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHumanMeans": "Meios humanos",
+  "@textHumanMeans": {
+    "description": "Human means label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTerrainMeans": "Meios terrestres",
+  "@textTerrainMeans": {
+    "description": "Terrain means label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAerealMeans": "Meios aéreos",
+  "@textAerealMeans": {
+    "description": "Aereal Means label",
+    "type": "text",
+    "placeholders": {}
+  }
+}

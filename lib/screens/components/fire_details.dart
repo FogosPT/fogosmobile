@@ -165,7 +165,7 @@ class FireDetails extends StatelessWidget {
                                           CrossAxisAlignment.stretch,
                                       children: <Widget>[
                                         Text(
-                                          'Estado: ${fire.status}',
+                                          '${FogosLocalizations.of(context).textStatus}: ${fire.status}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                       ],
@@ -197,15 +197,15 @@ class FireDetails extends StatelessWidget {
                                           CrossAxisAlignment.stretch,
                                       children: <Widget>[
                                         Text(
-                                          'Meios humanos: ${fire.human}',
+                                          '${FogosLocalizations.of(context).textHumanMeans}: ${fire.human}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                         Text(
-                                          'Meios terrestres: ${fire.terrain}',
+                                          '${FogosLocalizations.of(context).textTerrainMeans}: ${fire.terrain}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                         Text(
-                                          'Meios aéreos: ${fire.aerial}',
+                                          '${FogosLocalizations.of(context).textAerealMeans}: ${fire.aerial}',
                                           style: TextStyle(fontSize: 16.0),
                                         )
                                       ],

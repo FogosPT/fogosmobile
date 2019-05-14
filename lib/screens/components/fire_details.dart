@@ -13,8 +13,6 @@ import 'package:share/share.dart';
 typedef SetPreferenceCallBack = Function(String key, int value);
 
 class FireDetails extends StatelessWidget {
-  BoxConstraints constraints;
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, VoidCallback>(
@@ -81,7 +79,9 @@ class FireDetails extends StatelessWidget {
                                   SizedBox(width: 8),
                                   state.isLoading
                                       ? IconButton(
-                                          icon: CircularProgressIndicator())
+                                          icon: CircularProgressIndicator(),
+                                          onPressed: () {},
+                                        )
                                       : new IconButton(
                                           icon: new Icon(isFireSubscribed
                                               ? Icons.notifications_active

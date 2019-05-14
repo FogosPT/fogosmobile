@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
             return ModalProgressHUD(
               opacity: 0.75,
               color: Colors.black,
-              inAsyncCall: state.isLoading,
+              inAsyncCall: state.isLoading && state.fire == null,
               child: Stack(
                 children: <Widget>[
                   new FlutterMap(

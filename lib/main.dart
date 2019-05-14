@@ -12,7 +12,6 @@ import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
 
 import 'middleware/shared_preferences_manager.dart';

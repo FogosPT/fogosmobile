@@ -116,6 +116,12 @@ class FogosLocalizations {
         desc: 'Mapbox Improve Map Label',
       );
 
+  String get textWarnings => Intl.message(
+        "Avisos",
+        name: 'textWarnings',
+        desc: 'Texto de avisos - App Drawer',
+      );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

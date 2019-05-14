@@ -16,10 +16,12 @@ import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'localization/fogos_localizations_delegate.dart';
 import 'middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/screens/warnings.dart';
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 const SETTINGS_ROUTE = '/settings';
+const WARNINGS_ROUTE = '';
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
           '$SETTINGS_ROUTE': (_) => new Settings(),
+          '$WARNINGS_ROUTE': (_) => new Warnings(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -139,6 +142,14 @@ class FirstPage extends StatelessWidget {
                   decoration: new BoxDecoration(
                     color: Colors.white,
                   ),
+                ),
+                new ListTile(
+                  title: new Text('Avisos'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(WARNINGS_ROUTE);
+                  },
+                  leading: Icon(Icons.warning),
                 ),
                 new ListTile(
                   title: new Text('Notificações'),

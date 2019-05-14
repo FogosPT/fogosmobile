@@ -14,7 +14,6 @@ import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
-import 'localization/fogos_localizations.dart';
 import 'localization/fogos_localizations_delegate.dart';
 import 'middleware/shared_preferences_manager.dart';
 

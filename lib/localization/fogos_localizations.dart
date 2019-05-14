@@ -110,6 +110,12 @@ class FogosLocalizations {
         desc: 'Aereal Means label',
       );
 
+  String get textMapboxImprove => Intl.message(
+        "Melhorar este mapa",
+        name: 'textMapboxImprove',
+        desc: 'Mapbox Improve Map Label',
+      );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

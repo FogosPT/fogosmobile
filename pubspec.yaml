@@ -26,6 +26,7 @@ dependencies:
 
   #ui
   flutter_svg: ^0.12.4
+  modal_progress_hud: ^0.1.3
 
 dev_dependencies:
   flutter_test:

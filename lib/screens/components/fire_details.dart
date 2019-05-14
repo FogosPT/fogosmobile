@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
@@ -164,7 +165,7 @@ class FireDetails extends StatelessWidget {
                                           CrossAxisAlignment.stretch,
                                       children: <Widget>[
                                         Text(
-                                          'Estado: ${fire.status}',
+                                          '${FogosLocalizations.of(context).textStatus}: ${fire.status}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                       ],
@@ -196,15 +197,15 @@ class FireDetails extends StatelessWidget {
                                           CrossAxisAlignment.stretch,
                                       children: <Widget>[
                                         Text(
-                                          'Meios humanos: ${fire.human}',
+                                          '${FogosLocalizations.of(context).textHumanMeans}: ${fire.human}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                         Text(
-                                          'Meios terrestres: ${fire.terrain}',
+                                          '${FogosLocalizations.of(context).textTerrainMeans}: ${fire.terrain}',
                                           style: TextStyle(fontSize: 16.0),
                                         ),
                                         Text(
-                                          'Meios aéreos: ${fire.aerial}',
+                                          '${FogosLocalizations.of(context).textAerealMeans}: ${fire.aerial}',
                                           style: TextStyle(fontSize: 16.0),
                                         )
                                       ],

@@ -4,6 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -12,8 +14,7 @@ import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
-import 'package:redux/redux.dart';
-
+import 'localization/fogos_localizations_delegate.dart';
 import 'middleware/shared_preferences_manager.dart';
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
@@ -45,12 +46,23 @@ class MyApp extends StatelessWidget {
     return new StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
-          title: 'Fogos.pt',
-          debugShowCheckedModeBanner: false,
-          routes: <String, WidgetBuilder>{
-            '$SETTINGS_ROUTE': (_) => new Settings(),
-          },
-          home: FirstPage()),
+        title: 'Fogos.pt',
+        debugShowCheckedModeBanner: false,
+        routes: <String, WidgetBuilder>{
+          '$SETTINGS_ROUTE': (_) => new Settings(),
+        },
+        home: FirstPage(),
+        localizationsDelegates: [
+          const FogosLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('pt', 'PT'),
+          const Locale('en', 'US'),
+          // ... other locales the app supports
+        ],
+      ),
     );
   }
 }
@@ -63,8 +75,9 @@ class FirstPage extends StatelessWidget {
             label: "Fogos.pt", primaryColor: Colors.black.value));
 
     return new StoreConnector<AppState, AppState>(
-        converter: (Store<AppState> store) => store.state,
-        builder: (BuildContext context, AppState state) => Scaffold(
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState state) {
+        return Scaffold(
           appBar: new AppBar(
             backgroundColor: Colors.redAccent,
             iconTheme: new IconThemeData(color: Colors.white),
@@ -80,8 +93,7 @@ class FirstPage extends StatelessWidget {
                     store.dispatch(new LoadAllPreferencesAction());
                   };
                 },
-                builder:
-                    (BuildContext context, VoidCallback loadFiresAction) {
+                builder: (BuildContext context, VoidCallback loadFiresAction) {
                   return new StoreConnector<AppState, AppState>(
                     converter: (Store<AppState> store) => store.state,
                     builder: (BuildContext context, AppState state) {
@@ -141,6 +153,8 @@ class FirstPage extends StatelessWidget {
             ),
           ),
           body: new HomePage(),
-        ));
+        );
+      },
+    );
   }
 }

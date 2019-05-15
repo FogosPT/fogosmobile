@@ -16,6 +16,7 @@ import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'localization/fogos_localizations_delegate.dart';
 import 'middleware/shared_preferences_manager.dart';
+import 'screens/components/fire_gradient_app_bar.dart';
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
@@ -78,8 +79,7 @@ class FirstPage extends StatelessWidget {
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
         return Scaffold(
-          appBar: new AppBar(
-            backgroundColor: Colors.redAccent,
+          appBar: new FireGradientAppBar(
             iconTheme: new IconThemeData(color: Colors.white),
             title: new Text(
               'Fogos.pt',

@@ -68,6 +68,12 @@ class FogosLocalizations {
         desc: 'App title',
       );
 
+  String get textInformations => Intl.message(
+        "Informações",
+        name: 'textInformations',
+        desc: 'Texto de informações - App Drawer',
+      );
+
   String get textNotifications => Intl.message(
         "Notificações",
         name: 'textNotifications',

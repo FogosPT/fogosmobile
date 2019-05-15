@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("You don\'t have any active notifications for Fires"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Human means"),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notifications"),
+    "textInformations" : MessageLookupByLibrary.simpleMessage("Informations"),
     "textStatus" : MessageLookupByLibrary.simpleMessage("Status"),
     "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Terrain means")
   };

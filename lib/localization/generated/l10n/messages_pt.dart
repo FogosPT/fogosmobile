@@ -28,6 +28,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notificações"),
     "textPartners" : MessageLookupByLibrary.simpleMessage("Parcerias"),
+    "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
     "textStatus" : MessageLookupByLibrary.simpleMessage("Estado"),
     "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Meios terrestres")
   };

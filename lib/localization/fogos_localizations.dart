@@ -116,6 +116,11 @@ class FogosLocalizations {
         desc: 'Mapbox Improve Map Label',
       );
 
+  String get textPartners => Intl.message(
+        "Parcerias",
+        name: 'textPartners',
+        desc: 'Texto de Parcerias - App Drawer',
+      );
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

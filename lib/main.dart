@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fogosmobile/screens/partners.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -20,6 +21,7 @@ import 'middleware/shared_preferences_manager.dart';
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 const SETTINGS_ROUTE = '/settings';
+const PARTNERS_ROUTE = '/partners';
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -50,6 +52,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
           '$SETTINGS_ROUTE': (_) => new Settings(),
+          '$PARTNERS_ROUTE': (_) => new Partners(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -147,6 +150,14 @@ class FirstPage extends StatelessWidget {
                     Navigator.of(context).pushNamed(SETTINGS_ROUTE);
                   },
                   leading: Icon(Icons.settings),
+                ),
+                new ListTile(
+                  title: new Text("Parcerias"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(PARTNERS_ROUTE);
+                  },
+                  leading: Icon(Icons.business),
                 ),
                 new Divider(),
               ],

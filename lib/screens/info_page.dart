@@ -45,8 +45,7 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         appBar: new AppBar(
           backgroundColor: Colors.redAccent,
           iconTheme: new IconThemeData(color: Colors.white),
@@ -117,7 +116,6 @@ class InfoPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
     );
   }
 

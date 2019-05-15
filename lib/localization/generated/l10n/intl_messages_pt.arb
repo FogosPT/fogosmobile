@@ -1,10 +1,16 @@
 {
 "@@locale": "pt",
 
-  "@@last_modified": "2019-05-15T22:04:42.795609",
+  "@@last_modified": "2019-05-15T22:26:36.979983",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformations": "Informações",
+  "@textInformations": {
+    "description": "Texto de informações - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -53,6 +59,24 @@
   "textMapboxImprove": "Melhorar este mapa",
   "@textMapboxImprove": {
     "description": "Mapbox Improve Map Label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textWarnings": "Avisos",
+  "@textWarnings": {
+    "description": "Texto de avisos - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNoConnection": "Não foi possível fazer a ligação",
+  "@textNoConnection": {
+    "description": "Warning text for when working offline",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRefreshButton": "Refrescar",
+  "@textRefreshButton": {
+    "description": "Text for button refresh, when working offline",
     "type": "text",
     "placeholders": {}
   },

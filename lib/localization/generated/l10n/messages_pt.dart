@@ -25,11 +25,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "textCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
     "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("Não tem notificações ativas para fogos"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Meios humanos"),
+    "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
     "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
+    "textNoConnection" : MessageLookupByLibrary.simpleMessage("Não foi possível fazer a ligação"),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notificações"),
     "textPartners" : MessageLookupByLibrary.simpleMessage("Parcerias"),
-    "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
+    "textRefreshButton" : MessageLookupByLibrary.simpleMessage("Refrescar"),
     "textStatus" : MessageLookupByLibrary.simpleMessage("Estado"),
-    "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Meios terrestres")
+    "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Meios terrestres"),
+    "textWarnings" : MessageLookupByLibrary.simpleMessage("Avisos")
   };
 }

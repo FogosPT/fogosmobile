@@ -21,7 +21,7 @@ import 'package:fogosmobile/screens/warnings.dart';
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 const SETTINGS_ROUTE = '/settings';
-const WARNINGS_ROUTE = '';
+const WARNINGS_ROUTE = '/warnings';
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

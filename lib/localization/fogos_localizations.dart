@@ -122,6 +122,18 @@ class FogosLocalizations {
         desc: 'Texto de avisos - App Drawer',
       );
 
+  String get textNoConnection => Intl.message(
+        "Não foi possível fazer a ligação",
+        name: 'textNoConnection',
+        desc: 'Warning text for when working offline',
+      );
+
+  String get textRefreshButton => Intl.message(
+        "Refrescar",
+        name: 'textRefreshButton',
+        desc: 'Text for button refresh, when working offline',
+      );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

@@ -5,8 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
-typedef SetPreferenceCallBack = Function(String key, int value);
-
 class Warnings extends StatefulWidget {
   @override
   _WarningsState createState() => _WarningsState();
@@ -14,74 +12,110 @@ class Warnings extends StatefulWidget {
 
 class _WarningsState extends State<Warnings> {
   List warnings = [];
-  TextEditingController controller = new TextEditingController();
-  String filter;
+  bool connection = true;
 
   @override
   initState() {
     super.initState();
-    controller.addListener(() {
-      setState(() {
-        filter = controller.text;
-      });
-    });
+    this.getWarnigs();
   }
 
-  getLocations() async {
-    String url = endpoints['getWarnings'];
-    final response = await http.get(url);
-    final data = json.decode(utf8.decode(response.bodyBytes));
-    return data['data'];
+  Future<void> getWarnigs() async {
+    try {
+      String url = endpoints['getWarnings'];
+      final response = await http.get(url);
+      final data = json.decode(utf8.decode(response.bodyBytes));
+      setState(() {
+        connection = true;
+        warnings = data['data'];
+      });
+    } catch (e) {
+      setState(() {
+      connection = false;
+      });
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (this.warnings.length == 0) {
-      getLocations().then((locs) {
-        setState(() {
-          this.warnings = locs;
-        });
-      });
-
-      return Container(
-        child: Center(
-          child: CircularProgressIndicator(),
+    return new Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        iconTheme: new IconThemeData(color: Colors.white),
+        title: new Text(
+          FogosLocalizations.of(context).textWarnings,
+          style: new TextStyle(color: Colors.white),
         ),
-      );
-    }
-    return DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.redAccent,
-                iconTheme: new IconThemeData(color: Colors.white),
-                title: new Text(
-                  FogosLocalizations.of(context).textWarnings,
-                  style: new TextStyle(color: Colors.white),
-                ),
-              ),
-              body: 
+      ),
+      body: new Container(
+        child: warningsBuilder()
+        ),
+    );
+  }
 
-            new Column(
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
-                new Expanded(
-                  child: new ListView.builder(
-                    itemCount: this.warnings.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final _warning = this.warnings[index];
-                      return ListTile(
-                        leading: Text(_warning['label'], style: TextStyle(color: Colors.redAccent),),
-                        title: Text(_warning['text']),
-                        );
-                    },
+  Widget warningsBuilder() {
+    if (warnings.length != 0 && connection) {
+      return new Column(
+        children: <Widget>[
+          new Padding(
+            padding: new EdgeInsets.only(top: 20.0),
+          ),
+          new Expanded(
+            child: new ListView.builder(
+              itemCount: this.warnings.length,
+              itemBuilder: (BuildContext context, int index) {
+                final _warning = this.warnings[index];
+                return ListTile(
+                  leading: Text(
+                    _warning['label'],
+                    style: TextStyle(color: Colors.redAccent),
                   ),
-                ),
-              ],
+                  title: Text(_warning['text']),
+                );
+              },
             ),
-            ),
-        );
+          ),
+        ],
+      );
+    } else if (!connection) {
+      return Container(
+          padding: EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+              child: Row(children: <Widget>[
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 75.0),
+                        ),
+                        Container(
+                            child: RaisedButton(
+                          child: Text(FogosLocalizations.of(context).textRefreshButton),
+                          onPressed: this.getWarnigs,
+                        ))
+                      ]),
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(FogosLocalizations.of(context).textNoConnection,
+                            style: TextStyle(color: Colors.redAccent)),
+                      ]),
+                ],
+              ),
+            )
+          ])));
+    } else {
+      return Center(
+          child: CircularProgressIndicator(
+        strokeWidth: 4.0,
+        valueColor: AlwaysStoppedAnimation(Colors.redAccent),
+      ));
+    }
   }
 }

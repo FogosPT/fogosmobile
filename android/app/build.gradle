@@ -6,12 +6,6 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
@@ -49,15 +43,19 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                storeFile file(System.getenv()["FCI_BUILD_DIR"] + "/keystore.jks")
+                storePassword System.getenv()["FCI_KEYSTORE_PASSWORD"]
+                keyAlias System.getenv()["FCI_KEY_ALIAS"]
+                keyPassword System.getenv()["FCI_KEY_PASSWORD"]
+            }
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (System.getenv()["CI"]) {
+                signingConfig signingConfigs.release
+            }
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

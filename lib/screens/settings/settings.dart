@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/fire_notifications.dart';
@@ -15,8 +16,7 @@ class _SettingsState extends State<Settings> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.redAccent,
+          appBar: new FireGradientAppBar(
             iconTheme: new IconThemeData(color: Colors.white),
             title: new Text(
               FogosLocalizations.of(context).textNotifications,

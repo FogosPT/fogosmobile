@@ -8,7 +8,9 @@ You're more than welcome to contribute to the project. When contributing, please
 
 First of all, you should join [our Slack](https://communityinviter.com/apps/fogospt/fogos-pt), if you haven't already. Joining Slack is a great opportunity to meet the contributors of [FogosPT](https://github.com/FogosPT) projects and to discuss how you can help.
 
-If you already know us, take a look at the issues and take a stab at them. We'll try to make the issue as verbose as possible, so it is easy for you to help.
+When you decide to contribute, gives us a shout at Slack so we can add you to the contributors (it's easy for us to test and validate your contributions if you branch of our repo than forking to your own repo).
+
+If you already know us, take a look at the issues and take a stab at them. We'll try to make the issue as verbose as possible, so it is easy for you to help. When you're done, create a Pull Request (on the PR's description, you should include `closes #<issue-number>` so you know what issue you're fixing and to make sure the issue is closed when we merge your PR).
 
 If you have a suggestion of a feature or a thing that should be improved, speak with us on Slack. We'll be more than happy to listen to your thoughts.
 
@@ -41,6 +43,19 @@ $ flutter run
 ```
 
 You can set up [Visual Studio Code or IntelliJ IDEA/Android Studio](https://flutter.io/get-started/editor/) to do this for you.
+
+**ATENTION**: If you're thinking about working with an Android Simulator or building for Android, you'll need to do these extra steps:
+
+- create a file `key.properties` inside the `android/` folder and inside write:
+
+```
+FCI_KEYSTORE_PASSWORD=myKeystorePassword
+FCI_KEY_ALIAS=MyReleaseKey
+FCI_KEY_PASSWORD=myKeypassword
+```
+
+This file is on `.gitignore` so it shouldn't show up on `git status`. If it does, be sure to not commit that file.
+After that, everything should be working normally.
 
 ## Reading material
 

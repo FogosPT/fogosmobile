@@ -25,7 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "textCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
     "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("Não tem notificações ativas para fogos"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Meios humanos"),
+    "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notificações"),
+    "textPartners" : MessageLookupByLibrary.simpleMessage("Parcerias"),
+    "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
     "textStatus" : MessageLookupByLibrary.simpleMessage("Estado"),
     "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Meios terrestres")
   };

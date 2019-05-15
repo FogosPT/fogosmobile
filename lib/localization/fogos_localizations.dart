@@ -68,6 +68,12 @@ class FogosLocalizations {
         desc: 'App title',
       );
 
+  String get textInformations => Intl.message(
+        "Informações",
+        name: 'textInformations',
+        desc: 'Texto de informações - App Drawer',
+      );
+
   String get textNotifications => Intl.message(
         "Notificações",
         name: 'textNotifications',
@@ -134,6 +140,12 @@ class FogosLocalizations {
         desc: 'Text for button refresh, when working offline',
       );
 
+  String get textPartners => Intl.message(
+        "Parcerias",
+        name: 'textPartners',
+        desc: 'Texto de Parcerias - App Drawer',
+      );
+  
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

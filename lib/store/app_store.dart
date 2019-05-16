@@ -12,6 +12,7 @@ final store = new Store<AppState>(
     hasFirstLoad: false,
     hasPreferences: false,
     preferences: {},
+    activeFilters: []
   ),
   middleware: firesMiddleware()..addAll(preferencesMiddleware()),
 );

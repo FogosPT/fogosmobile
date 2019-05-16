@@ -22,3 +22,14 @@ fireReducer(Fire fire, action) {
     return fire;
   }
 }
+
+filtersReducer(List filters, action) {
+  if (action is SelectFireFiltersAction) {
+    filters.contains(action.filter)
+        ? filters.remove(action.filter)
+        : filters.add(action.filter);
+    return filters;
+  } else {
+    return filters;
+  }
+}

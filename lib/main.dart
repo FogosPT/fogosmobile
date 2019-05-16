@@ -16,10 +16,14 @@ import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
+import 'localization/fogos_localizations.dart';
 import 'localization/fogos_localizations_delegate.dart';
 import 'middleware/shared_preferences_manager.dart';
 import 'screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/warnings.dart';
+import 'models/fire.dart';
+
+typedef SetFiltersCallback = Function(FireStatus filter);
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
@@ -78,6 +82,55 @@ class MyApp extends StatelessWidget {
 }
 
 class FirstPage extends StatelessWidget {
+
+Widget _buildRefreshButton(AppState state, VoidCallback action) =>  state.isLoading ? 
+                        Container(
+                          width: 54.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: new CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                            ),
+                          ),
+                        ):
+                      
+                        new IconButton(
+                          onPressed: action,
+                          icon: new Icon(Icons.refresh),
+                        );
+                      
+
+  Widget _buildFiltersMenu(AppState state) =>
+     StoreConnector<AppState, SetFiltersCallback>(
+                          converter: (Store<AppState> store) {
+                        return (FireStatus filter) {
+                          store.dispatch(SelectFireFiltersAction(filter));
+                        };
+                      }, builder: (BuildContext context,
+                              SetFiltersCallback setFiltersAction) {
+                        return PopupMenuButton<FireStatus>(
+                          icon: Icon(Icons.filter_list),
+                          onSelected: (selectedStatus) =>
+                              setFiltersAction(selectedStatus),
+                          itemBuilder: (BuildContext context) => FireStatus
+                              .values
+                              .map((status) => PopupMenuItem<FireStatus>(
+                                  value: status,
+                                  child: ListTile(
+                                      dense: true,
+                                      trailing:
+                                          state.activeFilters.contains(status)
+                                              ? Icon(Icons.check)
+                                              : null,
+                                      title: Text(
+                                        FogosLocalizations.of(context)
+                                            .textFireStatus(status),
+                                      ))))
+                              .toList(),
+                        );
+                      });
+  
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setApplicationSwitcherDescription(
@@ -113,23 +166,7 @@ class FirstPage extends StatelessWidget {
                           state.fires.length == 0) {
                         loadFiresAction();
                       }
-
-                      if (state.isLoading) {
-                        return Container(
-                          width: 54.0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: new CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return new IconButton(
-                          onPressed: loadFiresAction,
-                          icon: new Icon(Icons.refresh),
-                        );
-                      }
+                      return Row(children: <Widget> [_buildFiltersMenu(state),_buildRefreshButton(state,loadFiresAction)]);
                     },
                   );
                 },
@@ -191,4 +228,5 @@ class FirstPage extends StatelessWidget {
       },
     );
   }
+
 }

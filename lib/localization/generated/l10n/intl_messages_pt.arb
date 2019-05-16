@@ -83,6 +83,69 @@
   "textPartners": "Parcerias",
   "@textPartners": {
     "description": "Texto de Parcerias - App Drawer",
+  "textFireStatusArrival": "Chegada ao TO",
+  "@textFireStatusArrival": {
+    "description": "Fire status: arrival",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusDone": "Encerrada",
+  "@textFireStatusDone": {
+    "description": "Fire status: done",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFirstAlert": "Despacho de 1º Alerta",
+  "@textFireStatusFirstAlert": {
+    "description": "Fire status: first alert dispatch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusConclusion": "Conclusão",
+  "@textFireStatusConclusion": {
+    "description": "Fire status: conclusion",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusResolution": "Em resolução",
+  "@textFireStatusResolution": {
+    "description": "Fire status: in resolution",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusOngoing": "Em curso",
+  "@textFireStatusOngoing": {
+    "description": "Fire status: ongoing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusVigilance": "Vigilância",
+  "@textFireStatusVigilance": {
+    "description": "Fire status: vigilance",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusSignificativeOcurrence": "Ocorrência Significativa",
+  "@textFireStatusSignificativeOcurrence": {
+    "description": "Fire status: Significative Ocurrence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFalseAlarm": "Falso Alarme",
+  "@textFireStatusFalseAlarm": {
+    "description": "Fire status: False Alarm",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFalseAlert": "Falso Alerta",
+  "@textFireStatusFalseAlert": {
+    "description": "Fire status: False Alert",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusDispatch": "Despacho",
+  "@textFireStatusDispatch": {
+    "description": "Fire status: Dispatch",
     "type": "text",
     "placeholders": {}
   }

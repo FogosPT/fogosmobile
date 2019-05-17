@@ -2,6 +2,8 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'components/fire_gradient_app_bar.dart';
+
 class Partners extends StatefulWidget {
   @override
   _PartnersState createState() => _PartnersState();
@@ -11,8 +13,7 @@ class _PartnersState extends State<Partners> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
+        appBar: FireGradientAppBar(
           iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).textPartners,

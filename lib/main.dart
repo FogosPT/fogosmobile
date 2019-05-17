@@ -157,6 +157,7 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.warning),
                 ),
+                new Divider(),
                 new ListTile(
                   title: new Text('Informações'),
                   onTap: () {
@@ -174,6 +175,7 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.settings),
                 ),
+                new Divider(),
                 new ListTile(
                   title: new Text("Parcerias"),
                   onTap: () {

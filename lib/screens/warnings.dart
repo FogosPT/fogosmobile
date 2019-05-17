@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
+import 'components/fire_gradient_app_bar.dart';
+
 class Warnings extends StatefulWidget {
   @override
   _WarningsState createState() => _WarningsState();
@@ -40,8 +42,7 @@ class _WarningsState extends State<Warnings> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.redAccent,
+      appBar: FireGradientAppBar(
         iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
           FogosLocalizations.of(context).textWarnings,

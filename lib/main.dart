@@ -201,6 +201,7 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.warning),
                 ),
+                new Divider(),
                 new ListTile(
                   title: new Text('Informações'),
                   onTap: () {

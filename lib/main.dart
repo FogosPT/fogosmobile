@@ -82,54 +82,48 @@ class MyApp extends StatelessWidget {
 }
 
 class FirstPage extends StatelessWidget {
-
-Widget _buildRefreshButton(AppState state, VoidCallback action) =>  state.isLoading ? 
-                        Container(
-                          width: 54.0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: new CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                            ),
-                          ),
-                        ):
-                      
-                        new IconButton(
-                          onPressed: action,
-                          icon: new Icon(Icons.refresh),
-                        );
-                      
+  Widget _buildRefreshButton(AppState state, VoidCallback action) =>
+      state.isLoading
+          ? Container(
+              width: 54.0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: new CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                ),
+              ),
+            )
+          : new IconButton(
+              onPressed: action,
+              icon: new Icon(Icons.refresh),
+            );
 
   Widget _buildFiltersMenu(AppState state) =>
-     StoreConnector<AppState, SetFiltersCallback>(
-                          converter: (Store<AppState> store) {
-                        return (FireStatus filter) {
-                          store.dispatch(SelectFireFiltersAction(filter));
-                        };
-                      }, builder: (BuildContext context,
-                              SetFiltersCallback setFiltersAction) {
-                        return PopupMenuButton<FireStatus>(
-                          icon: Icon(Icons.filter_list),
-                          onSelected: (selectedStatus) =>
-                              setFiltersAction(selectedStatus),
-                          itemBuilder: (BuildContext context) => FireStatus
-                              .values
-                              .map((status) => PopupMenuItem<FireStatus>(
-                                  value: status,
-                                  child: ListTile(
-                                      dense: true,
-                                      trailing:
-                                          state.activeFilters.contains(status)
-                                              ? Icon(Icons.check)
-                                              : null,
-                                      title: Text(
-                                        FogosLocalizations.of(context)
-                                            .textFireStatus(status),
-                                      ))))
-                              .toList(),
-                        );
-                      });
-  
+      StoreConnector<AppState, SetFiltersCallback>(
+          converter: (Store<AppState> store) {
+        return (FireStatus filter) {
+          store.dispatch(SelectFireFiltersAction(filter));
+        };
+      }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
+        return PopupMenuButton<FireStatus>(
+          icon: Icon(Icons.filter_list),
+          onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
+          itemBuilder: (BuildContext context) => FireStatus.values
+              .map((status) => PopupMenuItem<FireStatus>(
+                  value: status,
+                  child: ListTile(
+                      dense: true,
+                      contentPadding: const EdgeInsets.all(0.0),
+                      selected: state.activeFilters.contains(status),
+                      trailing: state.activeFilters.contains(status)
+                          ? Icon(Icons.check)
+                          : null,
+                      title: Text(
+                        FogosLocalizations.of(context).textFireStatus(status),
+                      ))))
+              .toList(),
+        );
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +160,10 @@ Widget _buildRefreshButton(AppState state, VoidCallback action) =>  state.isLoad
                           state.fires.length == 0) {
                         loadFiresAction();
                       }
-                      return Row(children: <Widget> [_buildFiltersMenu(state),_buildRefreshButton(state,loadFiresAction)]);
+                      return Row(children: <Widget>[
+                        _buildRefreshButton(state, loadFiresAction),
+                        _buildFiltersMenu(state),
+                      ]);
                     },
                   );
                 },
@@ -228,5 +225,4 @@ Widget _buildRefreshButton(AppState state, VoidCallback action) =>  state.isLoad
       },
     );
   }
-
 }

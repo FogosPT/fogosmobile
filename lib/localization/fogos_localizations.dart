@@ -81,6 +81,12 @@ class FogosLocalizations {
         desc: 'Texto de notificações - App Drawer',
       );
 
+  String get textStatistics => Intl.message(
+        "Estatísticas",
+        name: 'textStatistics',
+        desc: 'Texto de estatísticas - App Drawer',
+      );
+
   String get textCounty => Intl.message(
         "Concelho",
         name: 'textCounty',

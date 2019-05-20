@@ -52,203 +52,212 @@ class FireDetails extends StatelessWidget {
                   }
                 }
 
-                return Container(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 32.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  IconButton(
-                                    icon: Icon(Icons.share),
-                                    onPressed: () {
-                                      Share.share(
-                                          'Incêndio em ${fire.city} https://fogos.pt/fogo/${fire.id}');
-                                    },
-                                  ),
-                                  SizedBox(width: 8),
-                                  state.isLoading
-                                      ? IconButton(
-                                          icon: CircularProgressIndicator(),
-                                          onPressed: () {},
-                                        )
-                                      : new IconButton(
-                                          icon: new Icon(isFireSubscribed
-                                              ? Icons.notifications_active
-                                              : Icons.notifications_none),
-                                          onPressed: () {
-                                            setPreferenceAction(fire.id,
-                                                isFireSubscribed ? 0 : 1);
-                                          },
-                                        ),
-                                  SizedBox(width: 8),
-                                  IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      clearFireAction();
-                                    },
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: Icon(
-                                      FontAwesomeIcons.map,
-                                      color: getFireColor(fire.statusColor),
+                return SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 32.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(Icons.share),
+                                      onPressed: () {
+                                        Share.share(
+                                            'Incêndio em ${fire.city} https://fogos.pt/fogo/${fire.id}');
+                                      },
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                        Text(
-                                          fire.district,
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        Text(
-                                          fire.city,
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        Text(
-                                          fire.town,
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        Text(
-                                          fire.local,
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ],
+                                    SizedBox(width: 8),
+                                    state.isLoading
+                                        ? IconButton(
+                                            icon: CircularProgressIndicator(),
+                                            onPressed: () {},
+                                          )
+                                        : new IconButton(
+                                            icon: new Icon(isFireSubscribed
+                                                ? Icons.notifications_active
+                                                : Icons.notifications_none),
+                                            onPressed: () {
+                                              setPreferenceAction(fire.id,
+                                                  isFireSubscribed ? 0 : 1);
+                                            },
+                                          ),
+                                    SizedBox(width: 8),
+                                    IconButton(
+                                      icon: Icon(Icons.close),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        clearFireAction();
+                                      },
                                     ),
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: Icon(FontAwesomeIcons.mapMarker,
-                                        color: getFireColor(fire.statusColor)),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                        Text(
-                                          '${FogosLocalizations.of(context).textStatus}: ${fire.status}',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ],
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Icon(
+                                        FontAwesomeIcons.map,
+                                        color: getFireColor(fire.statusColor),
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: Icon(
-                                      FontAwesomeIcons.fighterJet,
-                                      color: getFireColor(fire.statusColor),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Text(
+                                            fire.district,
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          Text(
+                                            fire.city,
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          Text(
+                                            fire.town,
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          Text(
+                                            fire.local,
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Icon(FontAwesomeIcons.mapMarker,
+                                          color:
+                                              getFireColor(fire.statusColor)),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                        Text(
-                                          '${FogosLocalizations.of(context).textHumanMeans}: ${fire.human}',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        Text(
-                                          '${FogosLocalizations.of(context).textTerrainMeans}: ${fire.terrain}',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        Text(
-                                          '${FogosLocalizations.of(context).textAerealMeans}: ${fire.aerial}',
-                                          style: TextStyle(fontSize: 16.0),
-                                        )
-                                      ],
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Text(
+                                            '${FogosLocalizations.of(context).textStatus}: ${fire.status}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Icon(
+                                        FontAwesomeIcons.fighterJet,
+                                        color: getFireColor(fire.statusColor),
+                                      ),
                                     ),
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 20.0),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 16.0),
-                                    child: Icon(
-                                      FontAwesomeIcons.clock,
-                                      color: getFireColor(fire.statusColor),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Text(
+                                            '${FogosLocalizations.of(context).textHumanMeans}: ${fire.human}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          Text(
+                                            '${FogosLocalizations.of(context).textTerrainMeans}: ${fire.terrain}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                          Text(
+                                            '${FogosLocalizations.of(context).textAerealMeans}: ${fire.aerial}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Icon(
+                                        FontAwesomeIcons.clock,
+                                        color: getFireColor(fire.statusColor),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: <Widget>[
-                                        Text(
-                                          '${fire.date} ${fire.time}',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Text(
+                                            '${fire.date} ${fire.time}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 );

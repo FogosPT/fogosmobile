@@ -62,11 +62,11 @@ class YesterdayStatistics extends StatelessWidget {
               children: <Widget>[
                 Container(
                   child: intervalChart,
-                  height: 100,
+                  height: 50.0 * yesterdayStats.intervalStatsList.length,
                 ),
                 Container(
                   child: districtChart,
-                  height: 400,
+                  height: 35.0* yesterdayStats.districtList.length,
                 )
               ],
             ),

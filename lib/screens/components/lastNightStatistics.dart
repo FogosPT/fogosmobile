@@ -43,7 +43,7 @@ class LastNightStatistics extends StatelessWidget {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 8),
             child: districtChart,
-            height: 300,
+             height: 35.0* lastNightStats.districtList.length,
           );
         });
   }

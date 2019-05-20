@@ -174,16 +174,23 @@ class LastHour {
 
     int hour = int.parse(hourMinute.split(":")[0]);
     int minute = int.parse(hourMinute.split(":")[1]);
-
+    DateTime dateLabel;
     TimeOfDay t = TimeOfDay(hour: hour, minute: minute);
     final now = DateTime.now();
+
+    // We make this check to make sure data from the past day is displayed correctly
+    if (now.hour < t.hour) {
+      dateLabel = DateTime(now.year, now.month, now.day - 1, t.hour, t.minute);
+    } else {
+      dateLabel = DateTime(now.year, now.month, now.day, t.hour, t.minute);
+    }
 
     return LastHour(
       man: parsedJson['man'],
       aerial: parsedJson['aerial'],
       cars: parsedJson['cars'],
       total: parsedJson['total'],
-      label: DateTime(now.year, now.month, now.day, t.hour, t.minute),
+      label: dateLabel,
     );
   }
 }

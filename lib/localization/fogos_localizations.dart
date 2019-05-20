@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/models/fire.dart';
 import 'package:intl/intl.dart';
 
 import './generated/l10n/messages_all.dart';
@@ -145,7 +146,102 @@ class FogosLocalizations {
         name: 'textPartners',
         desc: 'Texto de Parcerias - App Drawer',
       );
-  
+
+  String get textFireStatusArrival => Intl.message(
+        'Chegada ao TO',
+        name: 'textFireStatusArrival',
+        desc: 'Fire status: arrival',
+      );
+
+  String get textFireStatusDone => Intl.message(
+        'Chegada ao TO',
+        name: 'textFireStatusDone',
+        desc: 'Fire status: done',
+      );
+
+  String get textFireStatusFirstAlert => Intl.message(
+        'Despacho de 1º Alerta',
+        name: 'textFireStatusFirstAlert',
+        desc: 'Fire status: first alert dispatch',
+      );
+
+  String get textFireStatusConclusion => Intl.message(
+        'Conclusão',
+        name: 'textFireStatusConclusion',
+        desc: 'Fire status: conclusion',
+      );
+
+  String get textFireStatusResolution => Intl.message(
+        'Em resolução',
+        name: 'textFireStatusResolution',
+        desc: 'Fire status: in resolution',
+      );
+
+  String get textFireStatusOngoing => Intl.message(
+        'Em curso',
+        name: 'textFireStatusOngoing',
+        desc: 'Fire status: ongoing',
+      );
+
+  String get textFireStatusVigilance => Intl.message(
+        'Vigilância',
+        name: 'textFireStatusVigilance',
+        desc: 'Fire status: vigilance',
+      );
+
+  String get textFireStatusSignificativeOcurrence => Intl.message(
+        'Ocorrência Significativa',
+        name: 'textFireStatusSignificativeOcurrence',
+        desc: 'Fire status: Significative Ocurrence',
+      );
+
+  String get textFireStatusFalseAlarm => Intl.message(
+        'Falso Alarme',
+        name: 'textFireStatusFalseAlarm',
+        desc: 'Fire status: False Alarm',
+      );
+
+  String get textFireStatusFalseAlert => Intl.message(
+        'Falso Alerta',
+        name: 'textFireStatusFalseAlert',
+        desc: 'Fire status: False Alert',
+      );
+
+  String get textFireStatusDispatch => Intl.message(
+        'Despacho',
+        name: 'textFireStatusDispatch',
+        desc: 'Fire status: Dispatch',
+      );
+
+  String textFireStatus(FireStatus status) {
+    switch (status) {
+      case FireStatus.arrival:
+        return textFireStatusArrival;
+      case FireStatus.done:
+        return textFireStatusDone;
+      case FireStatus.first_alert_dispatch:
+        return textFireStatusFirstAlert;
+      case FireStatus.in_conclusion:
+        return textFireStatusConclusion;
+      case FireStatus.in_resolution:
+        return textFireStatusResolution;
+      case FireStatus.ongoing:
+        return textFireStatusOngoing;
+      case FireStatus.vigilance:
+        return textFireStatusVigilance;
+      case FireStatus.significative_ocurrence:
+        return textFireStatusSignificativeOcurrence;
+      case FireStatus.false_alarm:
+        return textFireStatusFalseAlarm;
+      case FireStatus.false_alert:
+        return textFireStatusFalseAlert;
+      case FireStatus.dispatch:
+        return textFireStatusDispatch;
+      default:
+        throw Exception('Invalid status: $status');
+    }
+  }
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

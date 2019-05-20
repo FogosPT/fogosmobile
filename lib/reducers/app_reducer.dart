@@ -43,5 +43,6 @@ AppState appReducer(AppState state, action) {
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
     preferences: preferencesReducer(state.preferences, action),
+    activeFilters: filtersReducer(state.activeFilters, action),
   );
 }

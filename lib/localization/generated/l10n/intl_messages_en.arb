@@ -48,5 +48,77 @@
     "description": "Aereal Means label",
     "type": "text",
     "placeholders": {}
+  },
+  "textMapboxImprove": "Improve this map",
+  "@textMapboxImprove": {
+    "description": "Mapbox Improve Map Label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusArrival": "Ground arrival",
+  "@textFireStatusArrival": {
+    "description": "Fire status: arrival",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusDone": "Done",
+  "@textFireStatusDone": {
+    "description": "Fire status: done",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFirstAlert": "First alert dispatch",
+  "@textFireStatusFirstAlert": {
+    "description": "Fire status: first alert dispatch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusConclusion": "In conclusion",
+  "@textFireStatusConclusion": {
+    "description": "Fire status: conclusion",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusResolution": "In resolution",
+  "@textFireStatusResolution": {
+    "description": "Fire status: in resolution",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusOngoing": "Ongoing",
+  "@textFireStatusOngoing": {
+    "description": "Fire status: ongoing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusVigilance": "Vigilance",
+  "@textFireStatusVigilance": {
+    "description": "Fire status: vigilance",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusSignificativeOcurrence": "Significative Ocurrence",
+  "@textFireStatusSignificativeOcurrence": {
+    "description": "Fire status: Significative Ocurrence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFalseAlarm": "False Alarm",
+  "@textFireStatusFalseAlarm": {
+    "description": "Fire status: False Alarm",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusFalseAlert": "False Alert",
+  "@textFireStatusFalseAlert": {
+    "description": "Fire status: False Alert",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireStatusDispatch": "Dispatch",
+  "@textFireStatusDispatch": {
+    "description": "Fire status: Dispatch",
+    "type": "text",
+    "placeholders": {}
   }
 }

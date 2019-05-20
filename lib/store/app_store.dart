@@ -1,3 +1,4 @@
+import 'package:fogosmobile/models/fire.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/app_reducer.dart';
@@ -12,6 +13,7 @@ final store = new Store<AppState>(
     hasFirstLoad: false,
     hasPreferences: false,
     preferences: {},
+    activeFilters: List.from(FireStatus.values),
   ),
   middleware: firesMiddleware()..addAll(preferencesMiddleware()),
 );

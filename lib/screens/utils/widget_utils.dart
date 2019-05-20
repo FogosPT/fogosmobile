@@ -5,6 +5,6 @@ Color getFireColor(String fireStatus) {
     fireStatus == null
         ? 0xFF000000
         : int.parse(
-        '0xFF${fireStatus}'),
+        '0xFF$fireStatus'),
   );
 }

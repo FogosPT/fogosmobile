@@ -24,7 +24,7 @@ Middleware<AppState> _createLoadFires() {
     next(action);
 
     try {
-      String url = endpoints['getFires'];
+      String url = Endpoints.getFires;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model))
@@ -46,7 +46,7 @@ Middleware<AppState> _createLoadFire() {
     next(action);
 
     try {
-      String url = '${endpoints['getFire']}${action.fireId}';
+      String url = '${Endpoints.getFire}${action.fireId}';
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       Fire fire = Fire.fromJson(responseData);

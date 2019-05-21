@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fogosmobile/screens/about/about.dart';
 import 'package:fogosmobile/screens/partners.dart';
 import 'package:fogosmobile/screens/info_page.dart';
 import 'package:fogosmobile/screens/statistics_page.dart';
@@ -34,6 +35,7 @@ const WARNINGS_ROUTE = '/warnings';
 const PARTNERS_ROUTE = '/partners';
 const INFO_ROUTE = '/info';
 const STATISTICS_ROUTE = "/statistics";
+const ABOUT_ROUTE = '/about';
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -66,8 +68,9 @@ class MyApp extends StatelessWidget {
           '$SETTINGS_ROUTE': (_) => new Settings(),
           '$WARNINGS_ROUTE': (_) => new Warnings(),
           '$PARTNERS_ROUTE': (_) => new Partners(),
-          '$INFO_ROUTE': (_) => new InfoPage(),
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
+          '$INFO_ROUTE':     (_) => new InfoPage(),
+          '$ABOUT_ROUTE':    (_) => new About(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -164,7 +167,7 @@ class FirstPage extends StatelessWidget {
                     converter: (Store<AppState> store) => store.state,
                     builder: (BuildContext context, AppState state) {
                       if ((state.hasFirstLoad == false ||
-                              state.hasFirstLoad == null) &&
+                          state.hasFirstLoad == null) &&
                           (state.isLoading == false ||
                               state.isLoading == null) &&
                           state.fires.length == 0) {
@@ -226,6 +229,14 @@ class FirstPage extends StatelessWidget {
                     Navigator.of(context).pushNamed(PARTNERS_ROUTE);
                   },
                   leading: Icon(Icons.business),
+                ),
+                new ListTile(
+                  title: new Text("Sobre"),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(ABOUT_ROUTE);
+                  },
+                  leading: Icon(Icons.person),
                 ),
                 new Divider(),
                 new ListTile(

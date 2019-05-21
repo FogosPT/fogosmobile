@@ -1,5 +1,7 @@
 import 'package:fogosmobile/actions/statistics_actions.dart';
+import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/reducers/contributors_reducer.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -10,6 +12,7 @@ AppState appReducer(AppState state, action) {
   bool isLoading;
   bool hasFirstLoad;
   bool hasPreferences;
+  bool hasContributors;
 
   // print('action is action $action');
 
@@ -56,18 +59,26 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is LastHoursLoadedAction) {
     isLoading = false;
+  } else if (action is LoadContributorsAction) {
+    isLoading = true;
+  } else if (action is ContributorsLoadedAction) {
+    isLoading = false;
+    hasContributors = true;
   } else {
     isLoading = false;
     hasFirstLoad = true;
     hasPreferences = false;
+    hasContributors = false;
   }
 
   return new AppState(
     isLoading: isLoading,
     fires: firesReducer(state.fires, action),
     fire: fireReducer(state.fire, action),
+    contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
+    hasContributors: hasContributors,
     preferences: preferencesReducer(state.preferences, action),
     activeFilters: filtersReducer(state.activeFilters, action),
     nowStats: nowStatsReducer(state.nowStats, action),

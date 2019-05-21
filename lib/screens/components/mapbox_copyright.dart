@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 class MapboxCopyright extends StatelessWidget {
@@ -34,17 +35,10 @@ class MapboxCopyright extends StatelessWidget {
 
   InkWell _createCopyrightOption(String title, String url) {
     return InkWell(
-      onTap: () => _launchUrl(url),
+      onTap: () => launchURL(url),
       child: Text(title,
           style: TextStyle(decoration: TextDecoration.underline, fontSize: 12.0)),
     );
   }
 
-  _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Não foi possível abrir: $url';
-    }
-  }
 }

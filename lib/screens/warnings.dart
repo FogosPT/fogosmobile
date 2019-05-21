@@ -24,7 +24,7 @@ class _WarningsState extends State<Warnings> {
 
   Future<void> getWarnigs() async {
     try {
-      String url = endpoints['getWarnings'];
+      String url = Endpoints.getWarnings;
       final response = await http.get(url);
       final data = json.decode(utf8.decode(response.bodyBytes));
       setState(() {

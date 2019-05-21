@@ -35,7 +35,7 @@ class _SettingsState extends State<Settings> {
   }
 
   getLocations() async {
-    String url = endpoints['getLocations'];
+    String url = Endpoints.getLocations;
     final response = await http.get(url);
     final data = json.decode(utf8.decode(response.bodyBytes));
     return data['rows'];

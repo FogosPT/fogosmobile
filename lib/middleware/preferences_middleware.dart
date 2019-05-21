@@ -28,7 +28,7 @@ Middleware<AppState> _createLoadPreferences() {
     next(action);
 
     try {
-      String url = endpoints['getLocations'];
+      String url = Endpoints.getLocations;
       final response = await http.get(url);
       final locations = json.decode(utf8.decode(response.bodyBytes))['rows'];
 

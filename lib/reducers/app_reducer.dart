@@ -1,8 +1,10 @@
+import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/reducers/statistics_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   bool isLoading;
@@ -30,6 +32,30 @@ AppState appReducer(AppState state, action) {
   } else if (action is SetPreferenceAction) {
     hasPreferences = true;
     isLoading = false;
+  } else if (action is LoadNowStatsAction) {
+    isLoading = true;
+  } else if (action is NowStatsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadTodayStatsAction) {
+    isLoading = true;
+  } else if (action is TodayStatsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadYesterdayStatsAction) {
+    isLoading = true;
+  } else if (action is YesterdayStatsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadLastNightStatsAction) {
+    isLoading = true;
+  } else if (action is LastNightStatsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadWeekStatsAction) {
+    isLoading = true;
+  } else if (action is WeekStatsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadLastHoursAction) {
+    isLoading = true;
+  } else if (action is LastHoursLoadedAction) {
+    isLoading = false;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -43,5 +69,12 @@ AppState appReducer(AppState state, action) {
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
     preferences: preferencesReducer(state.preferences, action),
+    activeFilters: filtersReducer(state.activeFilters, action),
+    nowStats: nowStatsReducer(state.nowStats, action),
+    todayStats: todayStatsReducer(state.todayStats, action),
+    yesterdayStats: yesterdayStatsReducer(state.yesterdayStats, action),
+    lastNightStats: lastNightStatsReducer(state.lastNightStats, action),
+    weekStats: weekStatsReducer(state.weekStats, action),
+    lastHoursStats: lastHoursStatsReducer(state.lastHoursStats, action),
   );
 }

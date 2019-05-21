@@ -41,6 +41,22 @@ class MyApp extends StatelessWidget {
     _firebaseMessaging.getToken().then((token) {
       print('token: $token');
     });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+        // get fireId from notification
+        // print('on message ${message["fireId"]}');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+        // get fireId from notification
+        // print('on resume ${message["fireId"]}');
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
   }
 
   void iOSPermission() {
@@ -53,7 +69,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     firebaseCloudMessagingListeners();
-
     return new StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(

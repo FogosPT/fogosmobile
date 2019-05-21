@@ -30,7 +30,7 @@ Middleware<AppState> _createLoadNowStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getNowStats'];
+      String url = Endpoints.getNowStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       NowStats nowStats = NowStats.fromJson(responseData);
@@ -48,7 +48,7 @@ Middleware<AppState> _createTodayStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getTodayStats'];
+      String url = Endpoints.getTodayStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       TodayStats todayStats = TodayStats.fromJson(responseData);
@@ -66,7 +66,7 @@ Middleware<AppState> _createYesterdayStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getYesterdayStats'];
+      String url = Endpoints.getYesterdayStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
@@ -84,7 +84,7 @@ Middleware<AppState> _createLastNightStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getLastNightStats'];
+      String url = Endpoints.getLastNightStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
@@ -102,7 +102,7 @@ Middleware<AppState> _createWeekStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getWeekStats'];
+      String url = Endpoints.getWeekStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       WeekStats weekStats = WeekStats.fromJson(responseData);
@@ -120,7 +120,7 @@ Middleware<AppState> _createLastHoursStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = endpoints['getLastHoursStats'];
+      String url = Endpoints.getLastHoursStats;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);

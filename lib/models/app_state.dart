@@ -5,6 +5,7 @@ class AppState {
   List fires = [];
   Fire fire;
   List<FireStatus> activeFilters;
+  List fireMeansHistory;
   List contributors = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
@@ -25,6 +26,7 @@ class AppState {
     this.isLoading,
     this.hasFirstLoad,
     this.hasPreferences,
+    this.fireMeansHistory,
     this.hasContributors,
     this.preferences,
     this.activeFilters,
@@ -46,6 +48,7 @@ class AppState {
     bool hasContributors,
     Map preferences,
     List<FireStatus> activeFilters,
+    List fireMeansHistory,
     NowStats nowStats,
     TodayStats todayStats,
     YesterdayStats yesterdayStats,
@@ -62,6 +65,7 @@ class AppState {
       hasContributors: hasContributors ?? this.hasContributors,
       preferences: preferences ?? this.preferences,
       activeFilters: activeFilters ?? this.activeFilters,
+      fireMeansHistory: fireMeansHistory ?? this.fireMeansHistory,
       nowStats: nowStats ?? this.nowStats,
       todayStats: todayStats ?? this.todayStats,
       yesterdayStats: yesterdayStats ?? this.yesterdayStats,

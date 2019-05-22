@@ -75,6 +75,7 @@ AppState appReducer(AppState state, action) {
     isLoading: isLoading,
     fires: firesReducer(state.fires, action),
     fire: fireReducer(state.fire, action),
+    fireMeansHistory: fireMeansHistoryReducer(state.fireMeansHistory, action),
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,

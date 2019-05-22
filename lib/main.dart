@@ -24,6 +24,7 @@ import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/models/fire.dart';
 
@@ -63,8 +64,9 @@ class MyApp extends StatelessWidget {
           '$WARNINGS_ROUTE': (_) => new Warnings(),
           '$PARTNERS_ROUTE': (_) => new Partners(),
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
-          '$INFO_ROUTE':     (_) => new InfoPage(),
-          '$ABOUT_ROUTE':    (_) => new About(),
+          '$INFO_ROUTE': (_) => new InfoPage(),
+          '$ABOUT_ROUTE': (_) => new About(),
+          '$FIRE_DETAILS_ROUTE': (_) => new FireDetails(),
         },
         home: FirstPage(),
         localizationsDelegates: [

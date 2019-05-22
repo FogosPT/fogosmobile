@@ -11,10 +11,12 @@ import 'package:fogosmobile/constants/endpoints.dart';
 List<Middleware<AppState>> firesMiddleware() {
   final loadFires = _createLoadFires();
   final loadFire = _createLoadFire();
+  final loadFireMeansHistory = _createLoadFireMeansHistory();
 
   return [
     TypedMiddleware<AppState, LoadFiresAction>(loadFires),
     TypedMiddleware<AppState, LoadFireAction>(loadFire),
+    TypedMiddleware<AppState, LoadFireMeansHistoryAction>(loadFireMeansHistory),
   ];
 }
 
@@ -53,6 +55,21 @@ Middleware<AppState> _createLoadFire() {
       store.dispatch(new FireLoadedAction(fire));
     } catch (e) {
       store.dispatch(new FireLoadedAction(null));
+    }
+  };
+}
+
+Middleware<AppState> _createLoadFireMeansHistory() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    print('mw');
+    try {
+      String url = '${Endpoints.getFireMeansHistory}${action.fireId}';
+      final response = await http.get(url);
+      final List responseData = json.decode(response.body)['data'];
+      store.dispatch(new FireMeansHistoryLoadedAction(responseData));
+    } catch (e) {
+      store.dispatch(new FireMeansHistoryLoadedAction(null));
     }
   };
 }

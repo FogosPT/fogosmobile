@@ -5,6 +5,7 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -253,6 +254,22 @@ class FireDetails extends StatelessWidget {
                                     )
                                   ],
                                 ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      child: Text("MAIS INFO"), 
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed(FIRE_DETAILS_ROUTE);
+                                      },
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           )

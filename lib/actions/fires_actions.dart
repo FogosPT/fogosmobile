@@ -26,3 +26,15 @@ class SelectFireFiltersAction {
   final FireStatus filter;
   SelectFireFiltersAction(this.filter);
 }
+
+class LoadFireMeansHistoryAction {
+  final String fireId;
+
+  LoadFireMeansHistoryAction(this.fireId);
+}
+
+class FireMeansHistoryLoadedAction {
+  final List data;
+
+  FireMeansHistoryLoadedAction(this.data);
+}

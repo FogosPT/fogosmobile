@@ -23,6 +23,16 @@ fireReducer(Fire fire, action) {
   }
 }
 
+fireMeansHistoryReducer(List data, action) {
+  if (action is LoadFireMeansHistoryAction) {
+    return data;
+  } else if (action is FireMeansHistoryLoadedAction) {
+    return action.data;
+  } else {
+    return data;
+  }
+}
+
 filtersReducer(List filters, action) {
   if (action is SelectFireFiltersAction) {
     if (filters.contains(action.filter)) {

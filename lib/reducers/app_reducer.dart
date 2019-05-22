@@ -78,7 +78,7 @@ AppState appReducer(AppState state, action) {
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
-    hasContributors: hasContributors,
+    hasContributors: hasContributors ?? false,
     preferences: preferencesReducer(state.preferences, action),
     activeFilters: filtersReducer(state.activeFilters, action),
     nowStats: nowStatsReducer(state.nowStats, action),

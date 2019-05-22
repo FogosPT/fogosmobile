@@ -11,28 +11,20 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 
-class About extends StatefulWidget {
-  @override
-  _AboutState createState() => _AboutState();
-}
+class About extends StatelessWidget {
 
-class _AboutState extends State<About> {
-
-  List<Contributor> contributors = new List();
-
-  Widget contributorsWidget(List<Contributor> contributors) {
+  Widget contributorsWidget() {
     return new StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
         onInit: (store) {
           store.dispatch(LoadContributorsAction());
         },
         builder: (BuildContext context, AppState state) {
-          if (state.hasContributors == true){
+          if (state.hasContributors){
             return new StoreConnector<AppState, List>(
                 converter: (Store<AppState> store) => store.state.contributors,
                 builder: (BuildContext context, List contributors) {
                   if (contributors != null) {
-                    contributors = contributors;
                     return Scrollbar(
                         child: ListView.builder(
                           padding: EdgeInsets.only(top: 8.0),
@@ -52,12 +44,6 @@ class _AboutState extends State<About> {
         }
     );
 
-  }
-
-
-  @override
-  initState() {
-    super.initState();
   }
 
   @override
@@ -132,7 +118,7 @@ class _AboutState extends State<About> {
                   child: Text('Made with ♥ by:'),
                 ),
                 Flexible(
-                    child: contributorsWidget(contributors)
+                    child: contributorsWidget()
                 )
               ],
             ),

@@ -206,7 +206,6 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.info),
                 ),
-                new Divider(),
                 new ListTile(
                   title: new Text('Estatísticas'),
                   onTap: () {
@@ -217,13 +216,14 @@ class FirstPage extends StatelessWidget {
                 ),
                 new Divider(),
                 new ListTile(
-                  title: new Text("Parcerias"),
+                  title: new Text('Notificações'),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(PARTNERS_ROUTE);
+                    Navigator.of(context).pushNamed(SETTINGS_ROUTE);
                   },
-                  leading: Icon(Icons.business),
+                  leading: Icon(Icons.settings),
                 ),
+                new Divider(),
                 new ListTile(
                   title: new Text("Sobre"),
                   onTap: () {
@@ -232,14 +232,13 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.person),
                 ),
-                new Divider(),
                 new ListTile(
-                  title: new Text('Notificações'),
+                  title: new Text("Parcerias"),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(SETTINGS_ROUTE);
+                    Navigator.of(context).pushNamed(PARTNERS_ROUTE);
                   },
-                  leading: Icon(Icons.settings),
+                  leading: Icon(Icons.business),
                 ),
               ],
             ),

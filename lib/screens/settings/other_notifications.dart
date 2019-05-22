@@ -34,16 +34,16 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                 children: <Widget>[
                   CheckboxListTile(
                     title: Text("Ocorrências significativas"),
-                    value: state.preferences['pref-ocorrencia-significativa'] == 1,
+                    value: state.preferences['pref-important'] == 1,
                     onChanged: (bool value) {
-                      setPreferenceCallBack('ocorrencia-significativa', value == true ? 1 : 0);
+                      setPreferenceCallBack('important', value == true ? 1 : 0);
                     },
                   ),
                   CheckboxListTile(
                     title: Text("Avisos"),
-                    value: state.preferences['pref-avisos'] == 1,
+                    value: state.preferences['pref-warnings'] == 1,
                     onChanged: (bool value) {
-                      setPreferenceCallBack('avisos', value == true ? 1 : 0);
+                      setPreferenceCallBack('warnings', value == true ? 1 : 0);
                     },
                   )
                 ],

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/about/about.dart';
 import 'package:fogosmobile/screens/partners.dart';
 import 'package:fogosmobile/screens/info_page.dart';
@@ -29,13 +30,6 @@ import 'package:fogosmobile/models/fire.dart';
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
-
-const SETTINGS_ROUTE = '/settings';
-const WARNINGS_ROUTE = '/warnings';
-const PARTNERS_ROUTE = '/partners';
-const INFO_ROUTE = '/info';
-const STATISTICS_ROUTE = "/statistics";
-const ABOUT_ROUTE = '/about';
 
 class MyApp extends StatelessWidget {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();

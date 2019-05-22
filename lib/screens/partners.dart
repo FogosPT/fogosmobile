@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
-class Partners extends StatefulWidget {
-  @override
-  _PartnersState createState() => _PartnersState();
-}
-
-class _PartnersState extends State<Partners> {
+class Partners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(

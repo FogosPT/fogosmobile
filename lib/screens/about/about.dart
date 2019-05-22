@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';

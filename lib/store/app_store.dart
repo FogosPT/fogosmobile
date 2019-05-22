@@ -1,6 +1,6 @@
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/middleware/statistics_middleware.dart';
-import 'package:fogosmobile/middleware/Contributors_middleware.dart';
+import 'package:fogosmobile/middleware/contributors_middleware.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/app_reducer.dart';

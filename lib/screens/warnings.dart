@@ -4,8 +4,7 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
-
-import 'components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 class Warnings extends StatefulWidget {
   @override
@@ -24,7 +23,7 @@ class _WarningsState extends State<Warnings> {
 
   Future<void> getWarnigs() async {
     try {
-      String url = endpoints['getWarnings'];
+      String url = Endpoints.getWarnings;
       final response = await http.get(url);
       final data = json.decode(utf8.decode(response.bodyBytes));
       setState(() {
@@ -33,7 +32,7 @@ class _WarningsState extends State<Warnings> {
       });
     } catch (e) {
       setState(() {
-      connection = false;
+        connection = false;
       });
       print(e);
     }
@@ -49,9 +48,7 @@ class _WarningsState extends State<Warnings> {
           style: new TextStyle(color: Colors.white),
         ),
       ),
-      body: new Container(
-        child: warningsBuilder()
-        ),
+      body: new Container(child: warningsBuilder()),
     );
   }
 
@@ -96,7 +93,8 @@ class _WarningsState extends State<Warnings> {
                         ),
                         Container(
                             child: RaisedButton(
-                          child: Text(FogosLocalizations.of(context).textRefreshButton),
+                          child: Text(
+                              FogosLocalizations.of(context).textRefreshButton),
                           onPressed: this.getWarnigs,
                         ))
                       ]),

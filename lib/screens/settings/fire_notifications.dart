@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
-
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 
@@ -63,7 +62,8 @@ class _FireNotificationsState extends State<FireNotifications> {
 
                       return ListTile(
                         title: Text(_title),
-                        subtitle: Text('${_subscribedFire.city}, ${_subscribedFire.district}'),
+                        subtitle: Text(
+                            '${_subscribedFire.city}, ${_subscribedFire.district}'),
                         isThreeLine: true,
                         trailing: IconButton(
                           icon: Icon(Icons.delete),

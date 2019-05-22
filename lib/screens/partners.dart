@@ -1,15 +1,9 @@
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:fogosmobile/utils/uri_utils.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
-import 'components/fire_gradient_app_bar.dart';
-
-class Partners extends StatefulWidget {
-  @override
-  _PartnersState createState() => _PartnersState();
-}
-
-class _PartnersState extends State<Partners> {
+class Partners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -27,7 +21,7 @@ class _PartnersState extends State<Partners> {
               new FlatButton(
                   child: Image.asset("assets/partners/mapbox.png"),
                   onPressed: () {
-                    _launchUrl('https://www.mapbox.com/');
+                    launchURL('https://www.mapbox.com/');
                   }),
               Padding(
                 padding: EdgeInsets.only(
@@ -37,18 +31,10 @@ class _PartnersState extends State<Partners> {
               new FlatButton(
                   child: Image.asset("assets/partners/brpx.png"),
                   onPressed: () {
-                    _launchUrl('https://brpx.com/');
+                    launchURL('https://brpx.com/');
                   })
             ],
           ),
         ));
-  }
-
-  _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Não foi possível abrir: $url';
-    }
   }
 }

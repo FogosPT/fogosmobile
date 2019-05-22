@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-
 import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -35,7 +34,7 @@ class _SettingsState extends State<Settings> {
   }
 
   getLocations() async {
-    String url = endpoints['getLocations'];
+    String url = Endpoints.getLocations;
     final response = await http.get(url);
     final data = json.decode(utf8.decode(response.bodyBytes));
     return data['rows'];
@@ -92,7 +91,8 @@ class _SettingsState extends State<Settings> {
                 store.dispatch(new SetPreferenceAction(key, value));
               };
             },
-            builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+            builder: (BuildContext context,
+                SetPreferenceCallBack setPreferenceAction) {
               return new Column(
                 children: <Widget>[
                   new Padding(
@@ -100,7 +100,8 @@ class _SettingsState extends State<Settings> {
                   ),
                   new ListTile(
                     title: new TextField(
-                      decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
+                      decoration: new InputDecoration(
+                          labelText: FogosLocalizations.of(context).textCounty),
                       controller: controller,
                     ),
                   ),
@@ -111,12 +112,17 @@ class _SettingsState extends State<Settings> {
                         final _location = this.locations[index];
                         return filter == null ||
                                 filter == "" ||
-                                _location['value']['name'].toLowerCase().contains(filter.toLowerCase())
+                                _location['value']['name']
+                                    .toLowerCase()
+                                    .contains(filter.toLowerCase())
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
-                                value: state.preferences['pref-${_location['key']}'] == 1,
+                                value: state.preferences[
+                                        'pref-${_location['key']}'] ==
+                                    1,
                                 onChanged: (bool value) {
-                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
+                                  setPreferenceAction(
+                                      _location['key'], value == true ? 1 : 0);
                                 },
                               )
                             : new Container();

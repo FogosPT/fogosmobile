@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-
 import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -33,7 +32,7 @@ class _NotificationsState extends State<Notifications> {
   }
 
   getLocations() async {
-    String url = endpoints['getLocations'];
+    String url = Endpoints.getLocations;
     final response = await http.get(url);
     final data = json.decode(utf8.decode(response.bodyBytes));
     return data['rows'];
@@ -93,7 +92,8 @@ class _NotificationsState extends State<Notifications> {
                       final _location = this.locations[index];
                       return filter == null ||
                               filter == "" ||
-                          transformStringToSearch(_location['value']['name'])
+                              transformStringToSearch(
+                                      _location['value']['name'])
                                   .contains(transformStringToSearch(filter))
                           ? CheckboxListTile(
                               title: Text(_location['value']['name']),

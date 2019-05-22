@@ -5,9 +5,11 @@ class AppState {
   List fires = [];
   Fire fire;
   List<FireStatus> activeFilters;
+  List contributors = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
   bool hasPreferences = false;
+  bool hasContributors = false;
   Map preferences = {};
   NowStats nowStats;
   TodayStats todayStats;
@@ -19,9 +21,11 @@ class AppState {
   AppState({
     this.fires,
     this.fire,
+    this.contributors,
     this.isLoading,
     this.hasFirstLoad,
     this.hasPreferences,
+    this.hasContributors,
     this.preferences,
     this.activeFilters,
     this.nowStats,
@@ -35,9 +39,11 @@ class AppState {
   AppState copyWith({
     List fires,
     Fire fire,
+    List contributors,
     bool isLoading,
     bool hasFirstLoad,
     bool hasPreferences,
+    bool hasContributors,
     Map preferences,
     List<FireStatus> activeFilters,
     NowStats nowStats,
@@ -49,9 +55,11 @@ class AppState {
     return new AppState(
       fires: fires ?? this.fires,
       fire: fire ?? this.fires,
+      contributors: contributors ?? this.contributors,
       isLoading: isLoading ?? this.isLoading,
       hasFirstLoad: hasFirstLoad ?? this.hasFirstLoad,
       hasPreferences: hasPreferences ?? this.hasPreferences,
+      hasContributors: hasContributors ?? this.hasContributors,
       preferences: preferences ?? this.preferences,
       activeFilters: activeFilters ?? this.activeFilters,
       nowStats: nowStats ?? this.nowStats,
@@ -65,6 +73,6 @@ class AppState {
 
   @override
   String toString() {
-    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasPreferences: $hasPreferences, \nprefs: $preferences, \nactivefilters: $activeFilters, \nNow Statistics: $nowStats, \nToday Statistics: $todayStats}, \nYesterday Statistics: $yesterdayStats, \nLast Night Statistics: $lastNightStats, \nWeek Statistics: $weekStats, \nLast Hours Statistics: $lastHoursStats}';
+    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
   }
 }

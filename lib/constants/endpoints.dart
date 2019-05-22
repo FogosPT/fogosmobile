@@ -1,12 +1,16 @@
-Map endpoints = {
-  'getFires': 'https://api-lb.fogos.pt/new/fires',
-  'getFire': 'https://api-lb.fogos.pt/fires?id=',
-  'getLocations': 'https://fogos.pt/js/dico.json',
-  'getWarnings': 'https://api-lb.fogos.pt/v1/warnings',
-  'getYesterdayStats' : 'https://api-lb.fogos.pt/v1/stats/8hours/yesterday',
-  'getTodayStats' : 'https://api-lb.fogos.pt/v1/stats/8hours',
-  'getLastNightStats' : 'https://api-lb.fogos.pt/v1/stats/last-night',
-  'getNowStats' : 'https://api-lb.fogos.pt/v1/now',
-  'getWeekStats' : 'https://api-lb.fogos.pt/v1/stats/week',
-  'getLastHoursStats' : 'https://api-lb.fogos.pt/v1/now/data',
-};
+abstract class Endpoints {
+  Endpoints._();
+
+  static const String fogosBaseApi = "https://api-lb.fogos.pt";
+  static const String getFires = "$fogosBaseApi/new/fires";
+  static const String getFire = "$fogosBaseApi/fires?id=";
+  static const String getWarnings = "$fogosBaseApi/v1/warnings";
+  static const String getLocations = "https://fogos.pt/js/dico.json";
+  static const String getYesterdayStats = "$fogosBaseApi/v1/stats/8hours/yesterday";
+  static const String getTodayStats = "$fogosBaseApi/v1/stats/8hours";
+  static const String getLastNightStats = "$fogosBaseApi/v1/stats/last-night";
+  static const String getNowStats = "$fogosBaseApi/v1/now";
+  static const String getWeekStats = "$fogosBaseApi/v1/stats/week";
+  static const String getLastHoursStats = "$fogosBaseApi/v1/now/data";
+  static const String getMobileContributors = "https://fogos.pt/v1/mobile-contributors";
+}

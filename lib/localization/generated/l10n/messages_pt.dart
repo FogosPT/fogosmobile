@@ -19,31 +19,46 @@ class MessageLookup extends MessageLookupByLibrary {
   get localeName => 'pt';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static _notInlinedMessages(_) => <String, Function> {
-    "appTitle" : MessageLookupByLibrary.simpleMessage("Fogos.pt"),
-    "textAerealMeans" : MessageLookupByLibrary.simpleMessage("Meios aéreos"),
-    "textCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
-    "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("Não tem notificações ativas para fogos"),
-    "textFireStatusArrival" : MessageLookupByLibrary.simpleMessage("Chegada ao TO"),
-    "textFireStatusConclusion" : MessageLookupByLibrary.simpleMessage("Conclusão"),
-    "textFireStatusDispatch" : MessageLookupByLibrary.simpleMessage("Despacho"),
-    "textFireStatusDone" : MessageLookupByLibrary.simpleMessage("Encerrada"),
-    "textFireStatusFalseAlarm" : MessageLookupByLibrary.simpleMessage("Falso Alarme"),
-    "textFireStatusFalseAlert" : MessageLookupByLibrary.simpleMessage("Falso Alerta"),
-    "textFireStatusFirstAlert" : MessageLookupByLibrary.simpleMessage("Despacho de 1º Alerta"),
-    "textFireStatusOngoing" : MessageLookupByLibrary.simpleMessage("Em curso"),
-    "textFireStatusResolution" : MessageLookupByLibrary.simpleMessage("Em resolução"),
-    "textFireStatusSignificativeOcurrence" : MessageLookupByLibrary.simpleMessage("Ocorrência Significativa"),
-    "textFireStatusVigilance" : MessageLookupByLibrary.simpleMessage("Vigilância"),
-    "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Meios humanos"),
-    "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
-    "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
-    "textNoConnection" : MessageLookupByLibrary.simpleMessage("Não foi possível fazer a ligação"),
-    "textNotifications" : MessageLookupByLibrary.simpleMessage("Notificações"),
-    "textPartners" : MessageLookupByLibrary.simpleMessage("Parcerias"),
-    "textRefreshButton" : MessageLookupByLibrary.simpleMessage("Refrescar"),
-    "textStatus" : MessageLookupByLibrary.simpleMessage("Estado"),
-    "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Meios terrestres"),
-    "textWarnings" : MessageLookupByLibrary.simpleMessage("Avisos")
-  };
+  static _notInlinedMessages(_) => <String, Function>{
+        "appTitle": MessageLookupByLibrary.simpleMessage("Fogos.pt"),
+        "textAerealMeans": MessageLookupByLibrary.simpleMessage("Meios aéreos"),
+        "textCounty": MessageLookupByLibrary.simpleMessage("Concelho"),
+        "textEmptyNotifications": MessageLookupByLibrary.simpleMessage(
+            "Não tem notificações ativas para fogos"),
+        "textFireStatusArrival":
+            MessageLookupByLibrary.simpleMessage("Chegada ao TO"),
+        "textFireStatusConclusion":
+            MessageLookupByLibrary.simpleMessage("Conclusão"),
+        "textFireStatusDispatch":
+            MessageLookupByLibrary.simpleMessage("Despacho"),
+        "textFireStatusDone": MessageLookupByLibrary.simpleMessage("Encerrada"),
+        "textFireStatusFalseAlarm":
+            MessageLookupByLibrary.simpleMessage("Falso Alarme"),
+        "textFireStatusFalseAlert":
+            MessageLookupByLibrary.simpleMessage("Falso Alerta"),
+        "textFireStatusFirstAlert":
+            MessageLookupByLibrary.simpleMessage("Despacho de 1º Alerta"),
+        "textFireStatusOngoing":
+            MessageLookupByLibrary.simpleMessage("Em curso"),
+        "textFireStatusResolution":
+            MessageLookupByLibrary.simpleMessage("Em resolução"),
+        "textFireStatusSignificativeOcurrence":
+            MessageLookupByLibrary.simpleMessage("Ocorrência Significativa"),
+        "textFireStatusVigilance":
+            MessageLookupByLibrary.simpleMessage("Vigilância"),
+        "textHumanMeans": MessageLookupByLibrary.simpleMessage("Meios humanos"),
+        "textInformations": MessageLookupByLibrary.simpleMessage("Informações"),
+        "textMapboxImprove":
+            MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
+        "textNoConnection": MessageLookupByLibrary.simpleMessage(
+            "Não foi possível fazer a ligação"),
+        "textNotifications":
+            MessageLookupByLibrary.simpleMessage("Notificações"),
+        "textPartners": MessageLookupByLibrary.simpleMessage("Parcerias"),
+        "textRefreshButton": MessageLookupByLibrary.simpleMessage("Refrescar"),
+        "textStatus": MessageLookupByLibrary.simpleMessage("Estado"),
+        "textTerrainMeans":
+            MessageLookupByLibrary.simpleMessage("Meios terrestres"),
+        "textWarnings": MessageLookupByLibrary.simpleMessage("Avisos")
+      };
 }

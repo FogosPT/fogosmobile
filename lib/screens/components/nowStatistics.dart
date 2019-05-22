@@ -45,7 +45,9 @@ class NowStatistics extends StatelessWidget {
           height: height,
           color: color,
         ),
-        SizedBox(width: 5,),
+        SizedBox(
+          width: 5,
+        ),
         Text(text, style: _body),
       ],
     );

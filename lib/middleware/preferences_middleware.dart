@@ -28,7 +28,7 @@ Middleware<AppState> _createLoadPreferences() {
     next(action);
 
     try {
-      String url = endpoints['getLocations'];
+      String url = Endpoints.getLocations;
       final response = await http.get(url);
       final locations = json.decode(utf8.decode(response.bodyBytes))['rows'];
 
@@ -43,7 +43,8 @@ Middleware<AppState> _createLoadPreferences() {
       List<Fire> fires = store.state.fires;
 
       if (fires.length > 0) {
-        data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
+        data['subscribedFires'] =
+            fires.where((f) => subbedFires.contains(f.id)).toList();
       } else {
         data['subscribedFires'] = [];
       }
@@ -58,7 +59,9 @@ Middleware<AppState> _createSetPreference() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
       _firebaseMessaging.subscribeToTopic(topic);
@@ -79,11 +82,14 @@ Middleware<AppState> _createSetNotification() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     try {
       final prefs = SharedPreferencesManager.preferences;
-      List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
+      List<String> subscribedFires =
+          prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
         _firebaseMessaging.subscribeToTopic(topic);

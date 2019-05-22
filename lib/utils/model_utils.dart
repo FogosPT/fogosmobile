@@ -8,16 +8,14 @@ const topImportance = "topImportance";
 const average = "average";
 
 List<Fire> calculateFireImportance(List<Fire> fires) {
-  var firesStatus = {
-    numberOfFires: 0,
-    topImportance: 0.0,
-    average: 0.0
-  };
+  var firesStatus = {numberOfFires: 0, topImportance: 0.0, average: 0.0};
   for (var fire in fires) {
     fire.importance = _calculateImportanceValue(fire, firesStatus);
   }
   for (var fire in fires) {
-    fire.scale = _getPonderatedImportanceFactor(fire.importance, fire.statusCode, firesStatus) / 1.5;
+    fire.scale = _getPonderatedImportanceFactor(
+            fire.importance, fire.statusCode, firesStatus) /
+        1.5;
   }
 
   return fires;
@@ -28,7 +26,8 @@ double _calculateImportanceValue(Fire data, Map<String, dynamic> status) {
   var terrainFactor = 3.0;
   var aerialFactor = 7.0;
 
-  var importance = data.human * manFactor + data.terrain * terrainFactor +
+  var importance = data.human * manFactor +
+      data.terrain * terrainFactor +
       data.aerial * aerialFactor;
 
   status[numberOfFires] += 1;
@@ -43,7 +42,8 @@ double _calculateImportanceValue(Fire data, Map<String, dynamic> status) {
   return importance;
 }
 
-double _getPonderatedImportanceFactor(double importance, statusCode, Map<String, dynamic> status) {
+double _getPonderatedImportanceFactor(
+    double importance, statusCode, Map<String, dynamic> status) {
   var importanceScale = 0.0;
 
   // check for fake alarm's or calls

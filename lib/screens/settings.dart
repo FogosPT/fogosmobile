@@ -10,6 +10,8 @@ import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 
+import 'components/fire_gradient_app_bar.dart';
+
 typedef SetPreferenceCallBack = Function(String key, int value);
 
 class Settings extends StatefulWidget {
@@ -49,8 +51,7 @@ class _SettingsState extends State<Settings> {
       });
 
       return new Scaffold(
-        appBar: new AppBar(
-          backgroundColor: Colors.redAccent,
+        appBar: new FireGradientAppBar(
           iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).appTitle,
@@ -66,8 +67,7 @@ class _SettingsState extends State<Settings> {
     }
 
     return new Scaffold(
-      appBar: new AppBar(
-        backgroundColor: Colors.redAccent,
+      appBar: new FireGradientAppBar(
         iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
           FogosLocalizations.of(context).appTitle,

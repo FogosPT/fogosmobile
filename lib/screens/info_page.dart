@@ -4,6 +4,7 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
 import 'assets/icons.dart';
+import 'components/fire_gradient_app_bar.dart';
 
 const String _infoMarkdownData = """# MEIOS
 # 
@@ -46,8 +47,7 @@ class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-          backgroundColor: Colors.redAccent,
+        appBar: new FireGradientAppBar(
           iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).textInformations,

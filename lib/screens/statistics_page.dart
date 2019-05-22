@@ -4,11 +4,10 @@ import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/components/todayStatistics.dart';
 import 'package:fogosmobile/screens/components/weekStatistics.dart';
-
-import 'components/lastHoursStatistics.dart';
-import 'components/lastNightStatistics.dart';
-import 'components/nowStatistics.dart';
-import 'components/yesterdayStatistics.dart';
+import 'package:fogosmobile/screens/components/lastHoursStatistics.dart';
+import 'package:fogosmobile/screens/components/lastNightStatistics.dart';
+import 'package:fogosmobile/screens/components/nowStatistics.dart';
+import 'package:fogosmobile/screens/components/yesterdayStatistics.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override

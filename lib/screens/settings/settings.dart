@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
-
 import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/fire_notifications.dart';
 

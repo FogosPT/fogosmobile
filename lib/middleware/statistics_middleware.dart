@@ -3,7 +3,6 @@ import 'package:fogosmobile/models/statistics.dart';
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 

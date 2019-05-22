@@ -1,9 +1,7 @@
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 class Partners extends StatefulWidget {
   @override

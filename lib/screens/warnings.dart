@@ -4,8 +4,7 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
-
-import 'components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 class Warnings extends StatefulWidget {
   @override

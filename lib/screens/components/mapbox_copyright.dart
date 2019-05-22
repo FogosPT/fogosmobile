@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 
 class MapboxCopyright extends StatelessWidget {

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-
-import 'assets/icons.dart';
-import 'components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 const String _infoMarkdownData = """# MEIOS
 # 

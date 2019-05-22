@@ -66,7 +66,7 @@ class YesterdayStatistics extends StatelessWidget {
                 ),
                 Container(
                   child: districtChart,
-                  height: 35.0* yesterdayStats.districtList.length,
+                  height: 35.0 * yesterdayStats.districtList.length,
                 )
               ],
             ),

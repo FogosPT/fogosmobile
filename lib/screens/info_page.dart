@@ -47,75 +47,75 @@ class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new FireGradientAppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
-          title: new Text(
-            FogosLocalizations.of(context).textInformations,
-            style: new TextStyle(color: Colors.white),
+      appBar: new FireGradientAppBar(
+        iconTheme: new IconThemeData(color: Colors.white),
+        title: new Text(
+          FogosLocalizations.of(context).textInformations,
+          style: new TextStyle(color: Colors.white),
+        ),
+      ),
+      body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        children: <Widget>[
+          ListTile(
+            title: Text("ESTADOS DAS OCORRÊNCIAS", style: _header),
+            contentPadding: EdgeInsets.symmetric(horizontal: 0),
           ),
-        ),
-        body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          children: <Widget>[
-            ListTile(
-              title: Text("ESTADOS DAS OCORRÊNCIAS", style: _header),
-              contentPadding: EdgeInsets.symmetric(horizontal: 0),
+          _occurencyBulletPoint(
+              "Despacho de 1º alerta – Meios em trânsito para o teatro de operações.",
+              imgSvgIconAlarm,
+              Color(0xffff6e02)),
+          _occurencyBulletPoint(
+            "Chegada ao TO – chegada ao teatro de operações.",
+            imgSvgIconPointer,
+            Color(0xffb81e1f),
+          ),
+          _occurencyBulletPoint(
+            "Em curso - Incêndio em evolução sem limitação de área",
+            imgSvgIconFire,
+            Color(0xffb81e1f),
+          ),
+          _occurencyBulletPoint(
+            "Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido",
+            imgSvgIconFire,
+            Color(0xff65c4ed),
+          ),
+          _occurencyBulletPoint(
+            "Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio",
+            imgSvgIconFire,
+            Color(0xff8e7e7d),
+          ),
+          _occurencyBulletPoint(
+            "Vigilância – Meios no local para actuar em caso de necessidade",
+            imgSvgIconWatch,
+            Color(0xff65c4ed),
+          ),
+          _occurencyBulletPoint(
+            "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos​",
+            imgSvgIconPointer,
+            Color(0xff6abf59),
+          ),
+          _occurencyBulletPoint(
+            "Falso alarme",
+            imgSvgIconFake,
+            Color(0xffbdbdbd),
+          ),
+          _occurencyBulletPoint(
+            "Falso alerta",
+            imgSvgIconFake,
+            Color(0xffbdbdbd),
+          ),
+          SizedBox(height: 20),
+          MarkdownBody(
+            data: _infoMarkdownData,
+            styleSheet:
+                MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+              h1: _header,
+              p: _body,
             ),
-            _occurencyBulletPoint(
-                "Despacho de 1º alerta – Meios em trânsito para o teatro de operações.",
-                imgSvgIconAlarm,
-                Color(0xffff6e02)),
-            _occurencyBulletPoint(
-              "Chegada ao TO – chegada ao teatro de operações.",
-              imgSvgIconPointer,
-              Color(0xffb81e1f),
-            ),
-            _occurencyBulletPoint(
-              "Em curso - Incêndio em evolução sem limitação de área",
-              imgSvgIconFire,
-              Color(0xffb81e1f),
-            ),
-            _occurencyBulletPoint(
-              "Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido",
-              imgSvgIconFire,
-              Color(0xff65c4ed),
-            ),
-            _occurencyBulletPoint(
-              "Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio",
-              imgSvgIconFire,
-              Color(0xff8e7e7d),
-            ),
-            _occurencyBulletPoint(
-              "Vigilância – Meios no local para actuar em caso de necessidade",
-              imgSvgIconWatch,
-              Color(0xff65c4ed),
-            ),
-            _occurencyBulletPoint(
-              "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos​",
-              imgSvgIconPointer,
-              Color(0xff6abf59),
-            ),
-            _occurencyBulletPoint(
-              "Falso alarme",
-              imgSvgIconFake,
-              Color(0xffbdbdbd),
-            ),
-            _occurencyBulletPoint(
-              "Falso alerta",
-              imgSvgIconFake,
-              Color(0xffbdbdbd),
-            ),
-            SizedBox(height: 20),
-            MarkdownBody(
-              data: _infoMarkdownData,
-              styleSheet:
-                  MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-                h1: _header,
-                p: _body,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 

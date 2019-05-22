@@ -14,28 +14,28 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: new FireGradientAppBar(
-            iconTheme: new IconThemeData(color: Colors.white),
-            title: new Text(
-              FogosLocalizations.of(context).textNotifications,
-              style: new TextStyle(color: Colors.white),
-            ),
-            bottom: TabBar(
-              tabs: [
-                Tab(icon: Icon(Icons.map)),
-                Tab(icon: Icon(Icons.notifications)),
-              ],
-            ),
+      length: 2,
+      child: Scaffold(
+        appBar: new FireGradientAppBar(
+          iconTheme: new IconThemeData(color: Colors.white),
+          title: new Text(
+            FogosLocalizations.of(context).textNotifications,
+            style: new TextStyle(color: Colors.white),
           ),
-          body: TabBarView(
-            children: [
-              Notifications(),
-              FireNotifications(),
+          bottom: TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.map)),
+              Tab(icon: Icon(Icons.notifications)),
             ],
           ),
         ),
+        body: TabBarView(
+          children: [
+            Notifications(),
+            FireNotifications(),
+          ],
+        ),
+      ),
     );
   }
 }

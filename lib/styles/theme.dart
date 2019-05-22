@@ -9,10 +9,9 @@ class FogosTheme {
   ThemeData get themeData => _themeData;
 
   static final ThemeData _themeData = ThemeData(
-    brightness: Brightness.light,
-    primaryColor: _primaryColor,
-    primaryColorBrightness: Brightness.dark,
-    accentColor: _accentColor,
-    accentColorBrightness: Brightness.dark
-  );
+      brightness: Brightness.light,
+      primaryColor: _primaryColor,
+      primaryColorBrightness: Brightness.dark,
+      accentColor: _accentColor,
+      accentColorBrightness: Brightness.dark);
 }

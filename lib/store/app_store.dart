@@ -20,5 +20,8 @@ final store = new Store<AppState>(
     preferences: {},
     activeFilters: List.from(FireStatus.values),
   ),
-  middleware: firesMiddleware()..addAll(preferencesMiddleware())..addAll(statisticsMiddleware())..addAll(contributorsMiddleware()),
+  middleware: firesMiddleware()
+    ..addAll(preferencesMiddleware())
+    ..addAll(statisticsMiddleware())
+    ..addAll(contributorsMiddleware()),
 );

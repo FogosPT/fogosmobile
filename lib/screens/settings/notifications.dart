@@ -93,7 +93,8 @@ class _NotificationsState extends State<Notifications> {
                       final _location = this.locations[index];
                       return filter == null ||
                               filter == "" ||
-                          transformStringToSearch(_location['value']['name'])
+                              transformStringToSearch(
+                                      _location['value']['name'])
                                   .contains(transformStringToSearch(filter))
                           ? CheckboxListTile(
                               title: Text(_location['value']['name']),

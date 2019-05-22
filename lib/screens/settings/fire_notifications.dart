@@ -63,7 +63,8 @@ class _FireNotificationsState extends State<FireNotifications> {
 
                       return ListTile(
                         title: Text(_title),
-                        subtitle: Text('${_subscribedFire.city}, ${_subscribedFire.district}'),
+                        subtitle: Text(
+                            '${_subscribedFire.city}, ${_subscribedFire.district}'),
                         isThreeLine: true,
                         trailing: IconButton(
                           icon: Icon(Icons.delete),

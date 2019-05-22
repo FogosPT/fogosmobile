@@ -2,12 +2,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesManager {
   static final String _tag = 'SharedPreferencesManager';
-  static final SharedPreferencesManager preferences = SharedPreferencesManager._();
+  static final SharedPreferencesManager preferences =
+      SharedPreferencesManager._();
   static SharedPreferences _instance;
   static bool _showLogs;
 
   SharedPreferencesManager._();
-  _throwError() => throw Exception('Preferences not available. Make sure to call init() before using any other method');
+  _throwError() => throw Exception(
+      'Preferences not available. Make sure to call init() before using any other method');
 
   /// Loads the shared preferences so they are immediately available to use.
   /// This should be called before accessing `preferences`.
@@ -18,7 +20,8 @@ class SharedPreferencesManager {
     if (_instance == null) {
       _showLogs = withLogs;
       _instance = await SharedPreferences.getInstance().catchError((error) {
-        print('$_tag: Couldn\'t get the local preferences, operation failed with error: $error');
+        print(
+            '$_tag: Couldn\'t get the local preferences, operation failed with error: $error');
       });
       print('$_tag: Preferences loaded.');
     }
@@ -74,7 +77,8 @@ class SharedPreferencesManager {
     if (_showLogs) print('$_tag: Removing value for key [$key].');
 
     return _instance.remove(key).catchError((error) {
-      print('$_tag: Couldn\'t get remove the value for the key [$key]. Operation failed with the error: $error');
+      print(
+          '$_tag: Couldn\'t get remove the value for the key [$key]. Operation failed with the error: $error');
     });
   }
 }

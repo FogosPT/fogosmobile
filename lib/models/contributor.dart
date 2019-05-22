@@ -6,15 +6,13 @@ class Contributor {
   final String websiteUrl;
   final String location;
 
-  Contributor({
-    this.avatarUrl,
-    this.name,
-    this.login,
-    this.bio,
-    this.websiteUrl,
-    this.location
-  });
-
+  Contributor(
+      {this.avatarUrl,
+      this.name,
+      this.login,
+      this.bio,
+      this.websiteUrl,
+      this.location});
 
   factory Contributor.map(Map<String, dynamic> obj) {
     if (obj == null) {
@@ -26,20 +24,15 @@ class Contributor {
         login: obj["login"],
         bio: obj["bio"],
         websiteUrl: obj["blog"],
-        location: obj["location"]
-    );
+        location: obj["location"]);
   }
-
 
   static Contributor fromMap(Map<String, dynamic> obj) => Contributor.map(obj);
   static List<Contributor> fromList(List<dynamic> obj) {
     if (obj == null) {
       return [];
     }
-    return obj
-        .cast<Map<String, dynamic>>()
-        .map(Contributor.fromMap)
-        .toList();
+    return obj.cast<Map<String, dynamic>>().map(Contributor.fromMap).toList();
   }
 
   Map<String, dynamic> toMap() {

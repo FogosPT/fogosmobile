@@ -33,7 +33,7 @@ class _WarningsState extends State<Warnings> {
       });
     } catch (e) {
       setState(() {
-      connection = false;
+        connection = false;
       });
       print(e);
     }
@@ -49,9 +49,7 @@ class _WarningsState extends State<Warnings> {
           style: new TextStyle(color: Colors.white),
         ),
       ),
-      body: new Container(
-        child: warningsBuilder()
-        ),
+      body: new Container(child: warningsBuilder()),
     );
   }
 
@@ -96,7 +94,8 @@ class _WarningsState extends State<Warnings> {
                         ),
                         Container(
                             child: RaisedButton(
-                          child: Text(FogosLocalizations.of(context).textRefreshButton),
+                          child: Text(
+                              FogosLocalizations.of(context).textRefreshButton),
                           onPressed: this.getWarnigs,
                         ))
                       ]),

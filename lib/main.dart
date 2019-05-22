@@ -18,13 +18,13 @@ import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
-import 'localization/fogos_localizations.dart';
-import 'actions/statistics_actions.dart';
-import 'localization/fogos_localizations_delegate.dart';
-import 'middleware/shared_preferences_manager.dart';
-import 'screens/components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/actions/statistics_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
+import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/warnings.dart';
-import 'models/fire.dart';
+import 'package:fogosmobile/models/fire.dart';
 
 typedef SetFiltersCallback = Function(FireStatus filter);
 
@@ -167,7 +167,7 @@ class FirstPage extends StatelessWidget {
                     converter: (Store<AppState> store) => store.state,
                     builder: (BuildContext context, AppState state) {
                       if ((state.hasFirstLoad == false ||
-                          state.hasFirstLoad == null) &&
+                              state.hasFirstLoad == null) &&
                           (state.isLoading == false ||
                               state.isLoading == null) &&
                           state.fires.length == 0) {

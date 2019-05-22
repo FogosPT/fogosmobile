@@ -52,7 +52,6 @@ class AppState {
     WeekStats weekStats,
     LastHoursStats lastHoursStats,
   }) {
-
     return new AppState(
       fires: fires ?? this.fires,
       fire: fire ?? this.fires,

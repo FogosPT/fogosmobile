@@ -44,5 +44,4 @@ class _PartnersState extends State<Partners> {
           ),
         ));
   }
-
 }

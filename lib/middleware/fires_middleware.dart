@@ -27,8 +27,8 @@ Middleware<AppState> _createLoadFires() {
       String url = Endpoints.getFires;
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
-      List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model))
-          .toList();
+      List<Fire> fires =
+          responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       print("load fires");
       fires = calculateFireImportance(fires);
       store.dispatch(new FiresLoadedAction(fires));

@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,8 +63,8 @@ class MyApp extends StatelessWidget {
           '$WARNINGS_ROUTE': (_) => new Warnings(),
           '$PARTNERS_ROUTE': (_) => new Partners(),
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
-          '$INFO_ROUTE':     (_) => new InfoPage(),
-          '$ABOUT_ROUTE':    (_) => new About(),
+          '$INFO_ROUTE': (_) => new InfoPage(),
+          '$ABOUT_ROUTE': (_) => new About(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -82,7 +82,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FirstPage extends StatelessWidget {
+class FirstPage extends StatefulWidget {
+  @override
+  _FirstPageState createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   Widget _buildRefreshButton(AppState state, VoidCallback action) =>
       state.isLoading
           ? Container(
@@ -125,6 +130,26 @@ class FirstPage extends StatelessWidget {
               .toList(),
         );
       });
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(LoadFiresAction());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

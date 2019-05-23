@@ -187,7 +187,7 @@ class FirstPage extends StatelessWidget {
                         color: Colors.redAccent),
                   ),
                   decoration: new BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xff883333),
                   ),
                 ),
                 new ListTile(

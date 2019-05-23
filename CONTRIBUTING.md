@@ -44,7 +44,7 @@ $ flutter run
 
 You can set up [Visual Studio Code or IntelliJ IDEA/Android Studio](https://flutter.io/get-started/editor/) to do this for you.
 
-**ATENTION**: If you're thinking about working with an Android Simulator or building for Android, you'll need to do these extra steps:
+**ATTENTION**: If you're thinking about working with an Android Simulator or building for Android, you'll need to do these extra steps:
 
 - create a file `key.properties` inside the `android/` folder and inside write:
 

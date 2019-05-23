@@ -27,48 +27,14 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/models/fire.dart';
-
+import 'package:fogosmobile/screens/components/fire_details.dart';
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 class MyApp extends StatelessWidget {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  void firebaseCloudMessagingListeners() {
-    if (Platform.isIOS) iOSPermission();
-
-    _firebaseMessaging.getToken().then((token) {
-      print('token: $token');
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-        // get fireId from notification
-        // print('on message ${message["fireId"]}');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-        // get fireId from notification
-        // print('on resume ${message["fireId"]}');
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
-    );
-  }
-
-  void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    firebaseCloudMessagingListeners();
     return new StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
@@ -106,6 +72,23 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  void firebaseCloudMessagingListeners() {
+    if (Platform.isIOS) iOSPermission();
+
+    _firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+    });
+  }
+
+  void iOSPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {});
+  }
+
+
   Widget _buildRefreshButton(AppState state, VoidCallback action) =>
       state.isLoading
           ? Container(
@@ -171,6 +154,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    firebaseCloudMessagingListeners();
+
     SystemChrome.setApplicationSwitcherDescription(
         ApplicationSwitcherDescription(
             label: "Fogos.pt", primaryColor: Colors.black.value));

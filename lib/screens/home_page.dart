@@ -11,6 +11,7 @@ import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 const fullPinSize = 50.0;
 
@@ -18,9 +19,34 @@ class HomePage extends StatelessWidget {
   final MapController mapController = new MapController();
   final LatLng _center = new LatLng(39.806251, -8.088591);
   final List<Marker> markers = [];
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  _openModalSheet(context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => FireDetails(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('on message $message');
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('on resume $message');
+        String fireId = message["fireId"];
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(LoadFireAction(fireId));
+        _openModalSheet(context);
+        store.dispatch(ClearFireAction());
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('on launch $message');
+      },
+    );
+
     return new StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
@@ -49,28 +75,23 @@ class HomePage extends StatelessWidget {
                                     color: getFireColor(fire.statusColor),
                                     shape: BoxShape.circle),
                                 child: StoreConnector<AppState, VoidCallback>(
-                                  converter: (Store<AppState> store) => () {
-                                        store.dispatch(ClearFireAction());
-                                      },
-                                  builder: (BuildContext context,
-                                      VoidCallback clearFireAction) {
-                                    return new IconButton(
-                                      icon: new SvgPicture.asset(
-                                          getCorrectStatusImage(
-                                              fire.statusCode, fire.important),
-                                          semanticsLabel: 'Acme Logo'),
-                                      onPressed: () async {
-                                        loadFireAction();
-                                        await showModalBottomSheet<void>(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              FireDetails(),
-                                        );
-                                        clearFireAction();
-                                      },
-                                    );
-                                  },
-                                ),
+                                    converter: (Store<AppState> store) => () {
+                                          store.dispatch(ClearFireAction());
+                                        },
+                                    builder: (BuildContext context,
+                                        VoidCallback clearFireAction) {
+                                      return new IconButton(
+                                          icon: new SvgPicture.asset(
+                                              getCorrectStatusImage(
+                                                  fire.statusCode,
+                                                  fire.important),
+                                              semanticsLabel: 'Acme Logo'),
+                                          onPressed: () async {
+                                            loadFireAction();
+                                            _openModalSheet(context);
+                                            clearFireAction();
+                                          });
+                                    }),
                               );
                             },
                           );

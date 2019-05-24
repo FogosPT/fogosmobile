@@ -33,27 +33,8 @@ typedef SetFiltersCallback = Function(FireStatus filter);
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
 
 class MyApp extends StatelessWidget {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  void firebaseCloudMessagingListeners() {
-    if (Platform.isIOS) iOSPermission();
-
-    _firebaseMessaging.getToken().then((token) {
-      print('token: $token');
-    });
-  }
-
-  void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    firebaseCloudMessagingListeners();
-
     return new StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
@@ -66,7 +47,7 @@ class MyApp extends StatelessWidget {
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
           '$INFO_ROUTE': (_) => new InfoPage(),
           '$ABOUT_ROUTE': (_) => new About(),
-          '$FIRE_DETAILS_ROUTE': (_) => new FireDetails(),
+          '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
 
         },
         home: FirstPage(),
@@ -91,6 +72,23 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  void firebaseCloudMessagingListeners() {
+    if (Platform.isIOS) iOSPermission();
+
+    _firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+    });
+  }
+
+  void iOSPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {});
+  }
+
+
   Widget _buildRefreshButton(AppState state, VoidCallback action) =>
       state.isLoading
           ? Container(
@@ -156,6 +154,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    firebaseCloudMessagingListeners();
+
     SystemChrome.setApplicationSwitcherDescription(
         ApplicationSwitcherDescription(
             label: "Fogos.pt", primaryColor: Colors.black.value));

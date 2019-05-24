@@ -1,4 +1,5 @@
 {
+  "@@locale": "pt",
   "@@last_modified": "2019-05-24T15:49:27.430395",
   "appTitle": "Fogos.pt",
   "@appTitle": {
@@ -385,7 +386,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textCivilProtection": "Página da Protecção Civil Portuguesa.",
+  "textCivilProtection": " Página da Protecção Civil Portuguesa.",
   "@textCivilProtection": {
     "description": "Portuguese Civil Protection Agency website.",
     "type": "text",
@@ -403,7 +404,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textBugs": "Sugestões / Bugs -",
+  "textBugs": "Sugestões/Bugs -",
   "@textBugs": {
     "description": "Suggestions / Bug reporting -",
     "type": "text",

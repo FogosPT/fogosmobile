@@ -1,4 +1,5 @@
 {
+  "@@locale": "en",
   "@@last_modified": "2019-05-24T15:49:27.430395",
   "appTitle": "Fogos.pt",
   "@appTitle": {
@@ -387,7 +388,7 @@
   },
   "textCivilProtection": "Portuguese Civil Protection Agency website",
   "@textCivilProtection": {
-    "description": "Portuguese Civil Protection Agency website.",
+    "description": " Portuguese Civil Protection Agency website.",
     "type": "text",
     "placeholders": {}
   },
@@ -403,7 +404,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textBugs": "Suggestions / Bug reporting -",
+  "textBugs": "Suggestions/Bug reporting -",
   "@textBugs": {
     "description": "Suggestions / Bug reporting -",
     "type": "text",

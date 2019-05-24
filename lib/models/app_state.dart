@@ -1,11 +1,15 @@
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/statistics.dart';
 
+import 'fire_details.dart';
+
 class AppState {
   List fires = [];
   Fire fire;
   List<FireStatus> activeFilters;
-  List fireMeansHistory;
+  MeansHistory fireMeansHistory;
+  DetailsHistory fireDetailsHistory;
+  String fireRisk;
   List contributors = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
@@ -27,6 +31,8 @@ class AppState {
     this.hasFirstLoad,
     this.hasPreferences,
     this.fireMeansHistory,
+    this.fireDetailsHistory,
+    this.fireRisk,
     this.hasContributors,
     this.preferences,
     this.activeFilters,
@@ -48,7 +54,9 @@ class AppState {
     bool hasContributors,
     Map preferences,
     List<FireStatus> activeFilters,
-    List fireMeansHistory,
+    MeansHistory fireMeansHistory,
+    DetailsHistory fireDetailsHistory,
+    String fireRisk,
     NowStats nowStats,
     TodayStats todayStats,
     YesterdayStats yesterdayStats,
@@ -66,6 +74,8 @@ class AppState {
       preferences: preferences ?? this.preferences,
       activeFilters: activeFilters ?? this.activeFilters,
       fireMeansHistory: fireMeansHistory ?? this.fireMeansHistory,
+      fireDetailsHistory: fireDetailsHistory ?? this.fireDetailsHistory,
+      fireRisk: fireRisk ?? fireRisk,
       nowStats: nowStats ?? this.nowStats,
       todayStats: todayStats ?? this.todayStats,
       yesterdayStats: yesterdayStats ?? this.yesterdayStats,

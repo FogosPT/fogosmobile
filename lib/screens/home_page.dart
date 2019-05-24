@@ -5,7 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
@@ -50,27 +49,28 @@ class HomePage extends StatelessWidget {
                                     color: getFireColor(fire.statusColor),
                                     shape: BoxShape.circle),
                                 child: StoreConnector<AppState, VoidCallback>(
-                                    converter: (Store<AppState> store) => () {
-                                          store.dispatch(ClearFireAction());
-                                        },
-                                    builder: (BuildContext context,
-                                        VoidCallback clearFireAction) {
-                                      return new IconButton(
-                                          icon: new SvgPicture.asset(
-                                              getCorrectStatusImage(
-                                                  fire.statusCode,
-                                                  fire.important),
-                                              semanticsLabel: 'Acme Logo'),
-                                          onPressed: () async {
-                                            loadFireAction();
-                                            await showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) =>
-                                                  FireDetails(),
-                                            );
-                                            clearFireAction();
-                                          });
-                                    }),
+                                  converter: (Store<AppState> store) => () {
+                                        store.dispatch(ClearFireAction());
+                                      },
+                                  builder: (BuildContext context,
+                                      VoidCallback clearFireAction) {
+                                    return new IconButton(
+                                      icon: new SvgPicture.asset(
+                                          getCorrectStatusImage(
+                                              fire.statusCode, fire.important),
+                                          semanticsLabel: 'Acme Logo'),
+                                      onPressed: () async {
+                                        loadFireAction();
+                                        await showModalBottomSheet<void>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              FireDetails(),
+                                        );
+                                        clearFireAction();
+                                      },
+                                    );
+                                  },
+                                ),
                               );
                             },
                           );
@@ -119,35 +119,5 @@ class HomePage extends StatelessWidget {
             });
       },
     );
-  }
-
-  String getCorrectStatusImage(int statusId, bool important) {
-    var status = "status-";
-    if (important) {
-      status = status + "important";
-    } else {
-      status = status + statusId.toString();
-    }
-    switch (status) {
-      case "status-important":
-      case "status-5":
-      case "status-7":
-      case "status-99":
-      case "status-8":
-        return imgSvgIconFire;
-      case "status-3":
-      case "status-4":
-        return imgSvgIconAlarm;
-      case "status-9":
-        return imgSvgIconWatch;
-      case "status-6":
-      case "status-10":
-        return imgSvgIconPointer;
-      case "status-11":
-      case "status-12":
-        return imgSvgIconFake;
-      default:
-        return imgSvgIconFire;
-    }
   }
 }

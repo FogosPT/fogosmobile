@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -21,21 +22,21 @@ class MeansStatistics extends StatelessWidget {
         List<charts.Series<Means, DateTime>> _createSampleData() {
           return [
             charts.Series<Means, DateTime>(
-              id: 'Humanos',
+              id: FogosLocalizations.of(context).textFireman,
               colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
               domainFn: (Means stats, _) => stats.label,
               measureFn: (Means stats, _) => stats.man,
               data: stats.means,
             ),
             charts.Series<Means, DateTime>(
-              id: 'Terrestres',
+              id: FogosLocalizations.of(context).textVehicles,
               colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
               domainFn: (Means stats, _) => stats.label,
               measureFn: (Means stats, _) => stats.terrain,
               data: stats.means,
             ),
             charts.Series<Means, DateTime>(
-              id: 'Aéreos',
+              id: FogosLocalizations.of(context).textAerial,
               colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
               domainFn: (Means stats, _) => stats.label,
               measureFn: (Means stats, _) => stats.aerial,

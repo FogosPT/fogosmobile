@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a en locale. All the
+// This is a library that provides messages for a messages_en locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -16,7 +16,7 @@ final _keepAnalysisHappy = Intl.defaultLocale;
 typedef MessageIfAbsent(String message_str, List args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  get localeName => 'en';
+  get localeName => 'messages_en';
 
   static m0(city, id) => "Fire in ${city} https://fogos.pt/fogo/${id}";
 
@@ -26,7 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textAbout" : MessageLookupByLibrary.simpleMessage("About"),
     "textAerealMeans" : MessageLookupByLibrary.simpleMessage("Aerial Resources"),
     "textAerial" : MessageLookupByLibrary.simpleMessage("Aerial"),
-    "textBugs" : MessageLookupByLibrary.simpleMessage("Suggestions/Bug reporting -"),
+    "textBugs" : MessageLookupByLibrary.simpleMessage("Suggestions / Bug reporting -"),
     "textCivilProtection" : MessageLookupByLibrary.simpleMessage("Portuguese Civil Protection Agency website"),
     "textCounty" : MessageLookupByLibrary.simpleMessage("County"),
     "textDataUpdate" : MessageLookupByLibrary.simpleMessage("Data is updated in 2 minute intervals."),

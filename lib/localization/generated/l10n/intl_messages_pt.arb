@@ -1,7 +1,6 @@
 {
-"@@locale": "pt",
-
-  "@@last_modified": "2019-05-15T22:26:36.979983",
+  "@@locale": "pt",
+  "@@last_modified": "2019-05-24T15:49:27.430395",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -17,6 +16,18 @@
   "textNotifications": "Notificações",
   "@textNotifications": {
     "description": "Texto de notificações - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textStatistics": "Estatísticas",
+  "@textStatistics": {
+    "description": "Texto de estatísticas - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAbout": "Sobre",
+  "@textAbout": {
+    "description": "Texto de about - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -38,13 +49,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "textHumanMeans": "Meios humanos",
+  "textHumanMeans": "Bombeiros",
   "@textHumanMeans": {
     "description": "Human means label",
     "type": "text",
     "placeholders": {}
   },
-  "textTerrainMeans": "Meios terrestres",
+  "textTerrainMeans": "Viaturas",
   "@textTerrainMeans": {
     "description": "Terrain means label",
     "type": "text",
@@ -83,13 +94,16 @@
   "textPartners": "Parcerias",
   "@textPartners": {
     "description": "Texto de Parcerias - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
   "textFireStatusArrival": "Chegada ao TO",
   "@textFireStatusArrival": {
     "description": "Fire status: arrival",
     "type": "text",
     "placeholders": {}
   },
-  "textFireStatusDone": "Encerrada",
+  "textFireStatusDone": "Chegada ao TO",
   "@textFireStatusDone": {
     "description": "Fire status: done",
     "type": "text",
@@ -146,6 +160,253 @@
   "textFireStatusDispatch": "Despacho",
   "@textFireStatusDispatch": {
     "description": "Fire status: Dispatch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationIncidentStatus": "Estado das Ocorrências",
+  "@textInformationIncidentStatus": {
+    "description": "Incident Status",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationFirstOrderDispatch": "Despacho de 1º alerta – Meios em trânsito para o teatro de operações.",
+  "@textInformationFirstOrderDispatch": {
+    "description": "Information Screen - First Order Dispatch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationArrival": "Chegada ao TO – chegada ao teatro de operações.",
+  "@textInformationArrival": {
+    "description": "Information Screen - Arrival",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationOngoing": "Em curso - Incêndio em evolução sem limitação de área",
+  "@textInformationOngoing": {
+    "description": "Information Screen - Ongoing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationSettling": "Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido",
+  "@textInformationSettling": {
+    "description": "Information Screen - Settling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationClosing": "Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio",
+  "@textInformationClosing": {
+    "description": "Information Screen - Closing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationSupervision": "Vigilância – Meios no local para actuar em caso de necessidade",
+  "@textInformationSupervision": {
+    "description": "InformationScreen - Supervision",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationClosed": "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos",
+  "@textInformationClosed": {
+    "description": "Information Screen - Closed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFalseAlarm": "Falso alarme",
+  "@textFalseAlarm": {
+    "description": "False alarm",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFalseAlert": "Falso alerta",
+  "@textFalseAlert": {
+    "description": "False Alert",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textShare": "Incêndio em {city} https://fogos.pt/fogo/{id}",
+  "@textShare": {
+    "description": "Share Text",
+    "type": "text",
+    "placeholders": {
+      "city": {
+        "example": "Grândola"
+      },
+      "id": {
+        "example": "1"
+      }
+    }
+  },
+  "textRiskReduced": "Reduzido",
+  "@textRiskReduced": {
+    "description": "Risk reduzed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskModerate": "Moderado",
+  "@textRiskModerate": {
+    "description": "Risk Moderate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskHigh": "Elevado",
+  "@textRiskHigh": {
+    "description": "High Risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskVeryHigh": "Muito Elevado",
+  "@textRiskVeryHigh": {
+    "description": "Very high risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textMaximumRisk": "Máximo",
+  "@textMaximumRisk": {
+    "description": "Maximum Risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFires": "Incêndios",
+  "@textFires": {
+    "description": "Text Fires",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireman": "Bombeiros",
+  "@textFireman": {
+    "description": "Fireman",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textVehicles": "Veículos",
+  "@textVehicles": {
+    "description": "Vehicles",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAerial": "Aéreos",
+  "@textAerial": {
+    "description": "Text Aerial",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLastNightStatistics": "Estatísticas da última noite",
+  "@textLastNightStatistics": {
+    "description": "Last Night Statísticas",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTodayInterval": "Intervalo do dia",
+  "@textTodayInterval": {
+    "description": "Text today Interval",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTodayDistricts": "Distritos do dia",
+  "@textTodayDistricts": {
+    "description": "Text today Districts",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTotal": "Total",
+  "@textTotal": {
+    "description": "Total",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterdayInterval": "Intervalo de ontem",
+  "@textYesterdayInterval": {
+    "description": "Text Yesterday Interval",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterdayDistricts": "Distritos de ontem",
+  "@textYesterdayDistricts": {
+    "description": "Text Yesterday Districts",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textSignificatOccurences": "Ocorrências significativas",
+  "@textSignificatOccurences": {
+    "description": "Significant Occurences",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textOther": "Outras",
+  "@textOther": {
+    "description": "Other",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textResources": "Meios",
+  "@textResources": {
+    "description": "Resources",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskOfFire": "Risco de Incêndio",
+  "@textRiskOfFire": {
+    "description": "Risk of Fire",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNow": "Agora",
+  "@textNow": {
+    "description": "Now",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textToday": "Hoje",
+  "@textToday": {
+    "description": "Today",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterday": "Ontem",
+  "@textYesterday": {
+    "description": "Yesterday",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLastNight": "Última Noite",
+  "@textLastNight": {
+    "description": "Last Night",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPreviousDays": "Últimos Dias",
+  "@textPreviousDays": {
+    "description": "Last Few Days",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRecordsFrom": "Registos retirados da",
+  "@textRecordsFrom": {
+    "description": "Data collected From",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textCivilProtection": " Página da Protecção Civil Portuguesa.",
+  "@textCivilProtection": {
+    "description": "Portuguese Civil Protection Agency website.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataUpdate": "Actualizações de 2 em 2 minutos.",
+  "@textDataUpdate": {
+    "description": "Data is updated in 2 minute intervals.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLocationApproximate": "Localização aproximada.",
+  "@textLocationApproximate": {
+    "description": "Location may not be exact.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBugs": "Sugestões/Bugs -",
+  "@textBugs": {
+    "description": "Suggestions / Bug reporting -",
     "type": "text",
     "placeholders": {}
   }

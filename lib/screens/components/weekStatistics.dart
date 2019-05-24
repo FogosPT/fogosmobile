@@ -1,6 +1,7 @@
 import 'package:charts_common/common.dart' as c;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -19,7 +20,7 @@ class WeekStatistics extends StatelessWidget {
           List<charts.Series<Day, String>> _createSampleData() {
             return [
               charts.Series<Day, String>(
-                id: 'Total',
+                id: FogosLocalizations.of(context).textTotal,
                 colorFn: (_, __) => c.Color.fromHex(code: "#ff512f"),
                 domainFn: (Day stats, _) => stats.label,
                 measureFn: (Day stats, _) => stats.total,
@@ -27,7 +28,7 @@ class WeekStatistics extends StatelessWidget {
                 data: weekStats.days,
               ),
               charts.Series<Day, String>(
-                id: 'Falsos Alarmes',
+                id: FogosLocalizations.of(context).textFalseAlarm,
                 colorFn: (_, __) => c.Color.black,
                 domainFn: (Day stats, _) => stats.label,
                 measureFn: (Day stats, _) => stats.fake,

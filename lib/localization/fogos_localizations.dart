@@ -87,6 +87,12 @@ class FogosLocalizations {
         desc: 'Texto de estatísticas - App Drawer',
       );
 
+  String get textAbout => Intl.message(
+        "Sobre",
+        name: 'textAbout',
+        desc: 'Texto de about - App Drawer',
+      );
+
   String get textCounty => Intl.message(
         "Concelho",
         name: 'textCounty',
@@ -106,13 +112,13 @@ class FogosLocalizations {
       );
 
   String get textHumanMeans => Intl.message(
-        "Meios humanos",
+        "Bombeiros",
         name: 'textHumanMeans',
         desc: 'Human means label',
       );
 
   String get textTerrainMeans => Intl.message(
-        "Meios terrestres",
+        "Viaturas",
         name: 'textTerrainMeans',
         desc: 'Terrain means label',
       );
@@ -219,6 +225,264 @@ class FogosLocalizations {
         desc: 'Fire status: Dispatch',
       );
 
+  String get textInformationIncidentStatus => Intl.message(
+    "Estado das Ocorrências",
+    name: 'textInformationIncidentStatus',
+    desc: 'Incident Status',
+  );
+
+  String get textInformationFirstOrderDispatch => Intl.message(
+    "Despacho de 1º alerta – Meios em trânsito para o teatro de operações.",
+    name: 'textInformationFirstOrderDispatch',
+    desc: 'Information Screen - First Order Dispatch',
+  );
+
+  String get textInformationArrival => Intl.message(
+    "Chegada ao TO – chegada ao teatro de operações.",
+    name: 'textInformationArrival',
+    desc: 'Information Screen - Arrival',
+  );
+
+  String get textInformationOngoing => Intl.message(
+    "Em curso - Incêndio em evolução sem limitação de área",
+    name: 'textInformationOngoing',
+    desc: 'Information Screen - Ongoing',
+  );
+
+  String get textInformationSettling => Intl.message(
+    "Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido",
+    name: 'textInformationSettling',
+    desc: 'Information Screen - Settling',
+  );
+
+  String get textInformationClosing => Intl.message(
+    "Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio",
+    name: 'textInformationClosing',
+    desc: 'Information Screen - Closing',
+  );
+
+  String get textInformationSupervision => Intl.message(
+    "Vigilância – Meios no local para actuar em caso de necessidade",
+    name: 'textInformationSupervision',
+    desc: 'InformationScreen - Supervision',
+  );
+
+  String get textInformationClosed => Intl.message(
+    "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos",
+    name: 'textInformationClosed',
+    desc: 'Information Screen - Closed',
+  );
+
+  String get textFalseAlarm => Intl.message(
+    "Falso alarme",
+    name: 'textFalseAlarm',
+    desc: 'False alarm',
+  );
+
+  String get textFalseAlert => Intl.message(
+    "Falso alerta",
+    name: 'textFalseAlert',
+    desc: 'False Alert',
+  );
+
+  String textShare(String city, String id) => Intl.message(
+      'Incêndio em $city https://fogos.pt/fogo/$id',
+      name: 'textShare',
+      args: [city, id],
+      desc: 'Share Text',
+      examples: const {'city' : 'Grândola', 'id' : '1'}
+  );
+
+  String get textRiskReduced =>
+      Intl.message(
+        "Reduzido",
+        name: 'textRiskReduced',
+        desc: 'Risk reduzed',
+      );
+
+  String get textRiskModerate =>
+      Intl.message(
+        "Moderado",
+        name: 'textRiskModerate',
+        desc: 'Risk Moderate',
+      );
+
+  String get textRiskHigh =>
+      Intl.message(
+        "Elevado",
+        name: 'textRiskHigh',
+        desc: 'High Risk',
+      );
+
+  String get textRiskVeryHigh =>
+      Intl.message(
+        "Muito Elevado",
+        name: 'textRiskVeryHigh',
+        desc: 'Very high risk',
+      );
+
+  String get textMaximumRisk =>
+      Intl.message(
+        "Máximo",
+        name: 'textMaximumRisk',
+        desc: 'Maximum Risk',
+      );
+
+  String get textFires =>
+      Intl.message(
+        "Incêndios",
+        name: 'textFires',
+        desc: 'Text Fires',
+      );
+
+  String get textFireman =>
+      Intl.message(
+        "Bombeiros",
+        name: 'textFireman',
+        desc: 'Fireman',
+      );
+
+  String get textVehicles =>
+      Intl.message(
+        "Veículos",
+        name: 'textVehicles',
+        desc: 'Vehicles',
+      );
+
+  String get textAerial =>
+      Intl.message(
+        "Aéreos",
+        name: 'textAerial',
+        desc: 'Text Aerial',
+      );
+
+  String get textLastNightStatistics =>
+      Intl.message(
+        "Estatísticas da última noite",
+        name: 'textLastNightStatistics',
+        desc: 'Last Night Statísticas',
+      );
+
+  String get textTodayInterval =>
+      Intl.message(
+        "Intervalo do dia",
+        name: 'textTodayInterval',
+        desc: 'Text today Interval',
+      );
+
+  String get textTodayDistricts =>
+      Intl.message(
+        "Distritos do dia",
+        name: 'textTodayDistricts',
+        desc: 'Text today Districts',
+      );
+
+  String get textTotal =>
+      Intl.message(
+        "Total",
+        name: 'textTotal',
+        desc: 'Total',
+      );
+
+  String get textYesterdayInterval =>
+      Intl.message(
+        "Intervalo de ontem",
+        name: 'textYesterdayInterval',
+        desc: 'Text Yesterday Interval',
+      );
+
+  String get textYesterdayDistricts =>
+      Intl.message(
+        "Distritos de ontem",
+        name: 'textYesterdayDistricts',
+        desc: 'Text Yesterday Districts',
+      );
+
+  String get textSignificatOccurences => Intl.message(
+      "Ocorrências significativas",
+      name: 'textSignificatOccurences',
+      desc: 'Significant Occurences',
+  );
+
+  String get textOther => Intl.message(
+      "Outras",
+      name: 'textOther',
+      desc: 'Other',
+  );
+
+  String get textResources => Intl.message(
+      "Meios",
+      name: 'textResources',
+      desc: 'Resources',
+  );
+
+  String get textRiskOfFire => Intl.message(
+      "Risco de Incêndio",
+      name: 'textRiskOfFire',
+      desc: 'Risk of Fire',
+  );
+
+  String get textNow => Intl.message(
+      "Agora",
+      name: 'textNow',
+      desc: 'Now',
+  );
+
+  String get textToday => Intl.message(
+      "Hoje",
+      name: 'textToday',
+      desc: 'Today',
+  );
+
+  String get textYesterday => Intl.message(
+      "Ontem",
+      name: 'textYesterday',
+      desc: 'Yesterday',
+  );
+
+  String get textLastNight => Intl.message(
+      "Última Noite",
+      name: 'textLastNight',
+      desc: 'Last Night',
+  );
+
+  String get textPreviousDays => Intl.message(
+      "Últimos Dias",
+      name: 'textPreviousDays',
+      desc: 'Last Few Days',
+  );
+
+  String get textRecordsFrom => Intl.message(
+      "Registos retirados da",
+      name: 'textRecordsFrom',
+      desc: 'Data collected From',
+  );
+
+  String get textCivilProtection => Intl.message(
+      "Página da Protecção Civil Portuguesa.",
+      name: 'textCivilProtection',
+      desc: 'Portuguese Civil Protection Agency website.',
+  );
+
+  String get textDataUpdate => Intl.message(
+      "Actualizações de 2 em 2 minutos.",
+      name: 'textDataUpdate',
+      desc: 'Data is updated in 2 minute intervals.',
+  );
+
+  String get textLocationApproximate => Intl.message(
+      "Localização aproximada.",
+      name: 'textLocationApproximate',
+      desc: 'Location may not be exact.',
+  );
+  
+  String get textBugs => Intl.message(
+      "Sugestões / Bugs -",
+      name: 'textBugs',
+      desc: 'Suggestions / Bug reporting -',
+  );
+  
+
   String textFireStatus(FireStatus status) {
     switch (status) {
       case FireStatus.arrival:
@@ -253,3 +517,4 @@ class FogosLocalizations {
   static FogosLocalizations of(BuildContext context) =>
       Localizations.of<FogosLocalizations>(context, FogosLocalizations);
 }
+

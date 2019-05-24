@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class FireRisk extends StatelessWidget {
   final TextStyle _body = TextStyle(color: Colors.white, fontSize: 20);
 
-  final List<FireRiskStruct> _riskList = [
-    FireRiskStruct('Reduzidos', Color(0xff6ABF59)),
-    FireRiskStruct('Moderado', Color(0xffFFB202)),
-    FireRiskStruct('Elevado', Color(0xffFF6E02)),
-    FireRiskStruct('Muito Elevado', Color(0xffB81E1F)),
-    FireRiskStruct('Maximo ', Color(0xff711313)),
-  ];
+  List<FireRiskStruct> _riskList;
+  
+  List<FireRiskStruct> generateStruct(BuildContext context) {
+    return [
+      FireRiskStruct(FogosLocalizations.of(context).textRiskReduced, Color(0xff6ABF59)),
+      FireRiskStruct(FogosLocalizations.of(context).textRiskModerate, Color(0xffFFB202)),
+      FireRiskStruct(FogosLocalizations.of(context).textRiskHigh, Color(0xffFF6E02)),
+      FireRiskStruct(FogosLocalizations.of(context).textRiskVeryHigh, Color(0xffB81E1F)),
+      FireRiskStruct(FogosLocalizations.of(context).textMaximumRisk, Color(0xff711313)),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_riskList == null) {
+      _riskList = generateStruct(context);
+    }
+    
     return StoreConnector<AppState, String>(
       converter: (Store<AppState> store) => store.state.fireRisk,
       builder: (BuildContext context, String stats) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:convert' show utf8;
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -81,7 +82,7 @@ class _NotificationsState extends State<Notifications> {
                 ),
                 new ListTile(
                   title: new TextField(
-                    decoration: new InputDecoration(labelText: "Concelho"),
+                    decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
                     controller: controller,
                   ),
                 ),

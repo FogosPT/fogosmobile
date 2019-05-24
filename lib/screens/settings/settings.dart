@@ -26,7 +26,7 @@ class _SettingsState extends State<Settings> {
             tabs: [
               Tab(icon: Icon(Icons.map)),
               Tab(icon: Icon(Icons.notifications)),
-              Tab(text: "Outras"),
+              Tab(text: FogosLocalizations.of(context).textOther),
             ],
           ),
         ),

@@ -1,15 +1,33 @@
 {
-"@@locale": "en",
-  "@@last_modified": "2019-05-10T08:54:25.970182",
+  "@@locale": "en",
+  "@@last_modified": "2019-05-24T15:49:27.430395",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
     "type": "text",
     "placeholders": {}
   },
+  "textInformations": "Informations",
+  "@textInformations": {
+    "description": "Texto de informações - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
   "textNotifications": "Notifications",
   "@textNotifications": {
     "description": "Texto de notificações - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textStatistics": "Statistics",
+  "@textStatistics": {
+    "description": "Texto de estatísticas - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAbout": "About",
+  "@textAbout": {
+    "description": "Texto de about - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -31,19 +49,19 @@
     "type": "text",
     "placeholders": {}
   },
-  "textHumanMeans": "Human means",
+  "textHumanMeans": "Firemen",
     "@textHumanMeans": {
       "description": "Human means label",
       "type": "text",
       "placeholders": {}
     },
-  "textTerrainMeans": "Terrain means",
+  "textTerrainMeans": "Vehicles",
   "@textTerrainMeans": {
     "description": "Terrain means label",
     "type": "text",
     "placeholders": {}
   },
-  "textAerealMeans": "Aereal Means",
+  "textAerealMeans": "Aerial Resources",
   "@textAerealMeans": {
     "description": "Aereal Means label",
     "type": "text",
@@ -52,6 +70,30 @@
   "textMapboxImprove": "Improve this map",
   "@textMapboxImprove": {
     "description": "Mapbox Improve Map Label",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textWarnings": "Warnings",
+  "@textWarnings": {
+    "description": "Texto de avisos - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNoConnection": "We were unnable to connect to the server",
+  "@textNoConnection": {
+    "description": "Warning text for when working offline",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRefreshButton": "Refresh",
+  "@textRefreshButton": {
+    "description": "Text for button refresh, when working offline",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPartners": "Partners",
+  "@textPartners": {
+    "description": "Texto de Parcerias - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -120,5 +162,252 @@
     "description": "Fire status: Dispatch",
     "type": "text",
     "placeholders": {}
-  }
+  },
+  "textInformationIncidentStatus": "Incident Status",
+  "@textInformationIncidentStatus": {
+    "description": "Incident Status",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationFirstOrderDispatch": "First alert dispatch - Resources are moving to incident location.",
+  "@textInformationFirstOrderDispatch": {
+    "description": "Information Screen - First Order Dispatch",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationArrival": "Arrival to Incident Scene - Resources arrived at incidient location.",
+  "@textInformationArrival": {
+    "description": "Information Screen - Arrival",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationOngoing": "Ongoing - Fire is ongoing without boundaries",
+  "@textInformationOngoing": {
+    "description": "Information Screen - Ongoing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationSettling": "Settling - Fire without risk of propagation beyond boundaries",
+  "@textInformationSettling": {
+    "description": "Information Screen - Settling",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationClosing": "Closing - Fire is extinguished, while there could be still some fire spots within incident boundaries",
+  "@textInformationClosing": {
+    "description": "Information Screen - Closing",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationSupervision": "Supervision - Resources at incident location to act if needed",
+  "@textInformationSupervision": {
+    "description": "InformationScreen - Supervision",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInformationClosed": "Closed - All resources are back at their headquarters.",
+  "@textInformationClosed": {
+    "description": "Information Screen - Closed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFalseAlarm": "False alarm",
+  "@textFalseAlarm": {
+    "description": "False alarm",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFalseAlert": "False Alert",
+  "@textFalseAlert": {
+    "description": "False Alert",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textShare": "Fire in {city} https://fogos.pt/fogo/{id}",
+  "@textShare": {
+    "description": "Share Text",
+    "type": "text",
+    "placeholders": {
+      "city": {
+        "example": "Grândola"
+      },
+      "id": {
+        "example": "1"
+      }
+    }
+  },
+  "textRiskReduced": "Reduced",
+  "@textRiskReduced": {
+    "description": "Risk reduzed",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskModerate": "Moderate",
+  "@textRiskModerate": {
+    "description": "Risk Moderate",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskHigh": "High",
+  "@textRiskHigh": {
+    "description": "High Risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskVeryHigh": "Very High",
+  "@textRiskVeryHigh": {
+    "description": "Very high risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textMaximumRisk": "Maximum",
+  "@textMaximumRisk": {
+    "description": "Maximum Risk",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFires": "Fires",
+  "@textFires": {
+    "description": "Text Fires",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFireman": "Firemen",
+  "@textFireman": {
+    "description": "Fireman",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textVehicles": "Vehicles",
+  "@textVehicles": {
+    "description": "Vehicles",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textAerial": "Aerial",
+  "@textAerial": {
+    "description": "Text Aerial",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLastNightStatistics": "Last Night Statistics",
+  "@textLastNightStatistics": {
+    "description": "Last Night Statísticas",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTodayInterval": "Today's Interval",
+  "@textTodayInterval": {
+    "description": "Text today Interval",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTodayDistricts": "Today's District",
+  "@textTodayDistricts": {
+    "description": "Text today Districts",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textTotal": "Total",
+  "@textTotal": {
+    "description": "Total",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterdayInterval": "Yesterday's Interval",
+  "@textYesterdayInterval": {
+    "description": "Text Yesterday Interval",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterdayDistricts": "Yesterday's Districts",
+  "@textYesterdayDistricts": {
+    "description": "Text Yesterday Districts",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textSignificatOccurences": "Significant Occurrences",
+  "@textSignificatOccurences": {
+    "description": "Significant Occurences",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textOther": "Other",
+  "@textOther": {
+    "description": "Other",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textResources": "Resources",
+  "@textResources": {
+    "description": "Resources",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRiskOfFire": "Risk of Fire",
+  "@textRiskOfFire": {
+    "description": "Risk of Fire",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNow": "Now",
+  "@textNow": {
+    "description": "Now",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textToday": "Today",
+  "@textToday": {
+    "description": "Today",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textYesterday": "Yesterday",
+  "@textYesterday": {
+    "description": "Yesterday",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLastNight": "Last Night",
+  "@textLastNight": {
+    "description": "Last Night",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPreviousDays": "Last Few Days",
+  "@textPreviousDays": {
+    "description": "Last Few Days",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textRecordsFrom": "Data collected from",
+  "@textRecordsFrom": {
+    "description": "Data collected From",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textCivilProtection": "Portuguese Civil Protection Agency website",
+  "@textCivilProtection": {
+    "description": " Portuguese Civil Protection Agency website.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataUpdate": "Data is updated in 2 minute intervals.",
+  "@textDataUpdate": {
+    "description": "Data is updated in 2 minute intervals.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLocationApproximate": "Location may not be exact.",
+  "@textLocationApproximate": {
+    "description": "Location may not be exact.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBugs": "Suggestions/Bug reporting -",
+  "@textBugs": {
+    "description": "Suggestions / Bug reporting -",
+    "type": "text",
+    "placeholders": {}
+    }
 }

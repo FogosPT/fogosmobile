@@ -106,7 +106,7 @@ class FireDetails extends StatelessWidget {
                                                   icon: Icon(Icons.share),
                                                   onPressed: () {
                                                     Share.share(
-                                                        'Incêndio em ${fire.city} https://fogos.pt/fogo/${fire.id}');
+                                                        FogosLocalizations.of(context).textShare(fire.city, fire.id));
                                                   },
                                                 ),
                                                 SizedBox(width: 8),
@@ -230,7 +230,7 @@ class FireDetails extends StatelessWidget {
                                                             .stretch,
                                                     children: <Widget>[
                                                       Text(
-                                                        '${FogosLocalizations.of(context).textStatus}: ${fire.status}',
+                                                        '${FogosLocalizations.of(context).textStatus}: ${FogosLocalizations.of(context).textFireStatus(fire.status)}',
                                                         style: TextStyle(
                                                             fontSize: 16.0),
                                                       ),

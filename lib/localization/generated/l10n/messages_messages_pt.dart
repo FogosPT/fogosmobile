@@ -1,5 +1,5 @@
 // DO NOT EDIT. This is code generated via package:intl/generate_localized.dart
-// This is a library that provides messages for a pt locale. All the
+// This is a library that provides messages for a messages_pt locale. All the
 // messages from the main program should be duplicated here with the same
 // function name.
 
@@ -16,7 +16,7 @@ final _keepAnalysisHappy = Intl.defaultLocale;
 typedef MessageIfAbsent(String message_str, List args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  get localeName => 'pt';
+  get localeName => 'messages_pt';
 
   static m0(city, id) => "Incêndio em ${city} https://fogos.pt/fogo/${id}";
 
@@ -26,8 +26,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "textAbout" : MessageLookupByLibrary.simpleMessage("Sobre"),
     "textAerealMeans" : MessageLookupByLibrary.simpleMessage("Meios aéreos"),
     "textAerial" : MessageLookupByLibrary.simpleMessage("Aéreos"),
-    "textBugs" : MessageLookupByLibrary.simpleMessage("Sugestões/Bugs -"),
-    "textCivilProtection" : MessageLookupByLibrary.simpleMessage(" Página da Protecção Civil Portuguesa."),
+    "textBugs" : MessageLookupByLibrary.simpleMessage("Sugestões / Bugs -"),
+    "textCivilProtection" : MessageLookupByLibrary.simpleMessage("Página da Protecção Civil Portuguesa."),
     "textCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
     "textDataUpdate" : MessageLookupByLibrary.simpleMessage("Actualizações de 2 em 2 minutos."),
     "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("Não tem notificações ativas para fogos"),

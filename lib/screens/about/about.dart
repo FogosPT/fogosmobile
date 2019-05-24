@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/about/contributor_item.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
@@ -63,11 +64,11 @@ class About extends StatelessWidget {
                     text: new TextSpan(
                       children: [
                         new TextSpan(
-                          text: 'Registos retirados da ',
+                          text: FogosLocalizations.of(context).textRecordsFrom,
                           style: new TextStyle(color: Colors.black),
                         ),
                         new TextSpan(
-                          text: 'Página da Protecção Civil Portuguesa.',
+                          text: FogosLocalizations.of(context).textCivilProtection,
                           style: new TextStyle(color: Colors.blue),
                           recognizer: new TapGestureRecognizer()
                             ..onTap = () => launchURL('http://www.prociv.pt/'),
@@ -78,11 +79,11 @@ class About extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text('Actualizações de 2 em 2 minutos.'),
+                  child: Text(FogosLocalizations.of(context).textDataUpdate),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text('Localização aproximada.'),
+                  child: Text(FogosLocalizations.of(context).textLocationApproximate),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
@@ -90,7 +91,7 @@ class About extends StatelessWidget {
                     text: new TextSpan(
                       children: [
                         new TextSpan(
-                          text: 'Sugestões / Bugs - ',
+                          text: FogosLocalizations.of(context).textBugs,
                           style: new TextStyle(color: Colors.black),
                         ),
                         new TextSpan(

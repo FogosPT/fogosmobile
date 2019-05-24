@@ -3,6 +3,7 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/fire_notifications.dart';
+import 'package:fogosmobile/screens/settings/other_notifications.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: new FireGradientAppBar(
           iconTheme: new IconThemeData(color: Colors.white),
@@ -25,6 +26,7 @@ class _SettingsState extends State<Settings> {
             tabs: [
               Tab(icon: Icon(Icons.map)),
               Tab(icon: Icon(Icons.notifications)),
+              Tab(text: "Outras"),
             ],
           ),
         ),
@@ -32,6 +34,7 @@ class _SettingsState extends State<Settings> {
           children: [
             Notifications(),
             FireNotifications(),
+            OtherNotifications()
           ],
         ),
       ),

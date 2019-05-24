@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:flutter/widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,6 +67,7 @@ class MyApp extends StatelessWidget {
           '$INFO_ROUTE': (_) => new InfoPage(),
           '$ABOUT_ROUTE': (_) => new About(),
           '$FIRE_DETAILS_ROUTE': (_) => new FireDetails(),
+
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -84,7 +85,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FirstPage extends StatelessWidget {
+class FirstPage extends StatefulWidget {
+  @override
+  _FirstPageState createState() => _FirstPageState();
+}
+
+class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   Widget _buildRefreshButton(AppState state, VoidCallback action) =>
       state.isLoading
           ? Container(
@@ -127,6 +133,26 @@ class FirstPage extends StatelessWidget {
               .toList(),
         );
       });
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(LoadFiresAction());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +215,7 @@ class FirstPage extends StatelessWidget {
                         color: Colors.redAccent),
                   ),
                   decoration: new BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xff883333),
                   ),
                 ),
                 new ListTile(
@@ -208,7 +234,6 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.info),
                 ),
-                new Divider(),
                 new ListTile(
                   title: new Text('Estatísticas'),
                   onTap: () {
@@ -219,13 +244,14 @@ class FirstPage extends StatelessWidget {
                 ),
                 new Divider(),
                 new ListTile(
-                  title: new Text("Parcerias"),
+                  title: new Text('Notificações'),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(PARTNERS_ROUTE);
+                    Navigator.of(context).pushNamed(SETTINGS_ROUTE);
                   },
-                  leading: Icon(Icons.business),
+                  leading: Icon(Icons.settings),
                 ),
+                new Divider(),
                 new ListTile(
                   title: new Text("Sobre"),
                   onTap: () {
@@ -234,14 +260,13 @@ class FirstPage extends StatelessWidget {
                   },
                   leading: Icon(Icons.person),
                 ),
-                new Divider(),
                 new ListTile(
-                  title: new Text('Notificações'),
+                  title: new Text("Parcerias"),
                   onTap: () {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(SETTINGS_ROUTE);
+                    Navigator.of(context).pushNamed(PARTNERS_ROUTE);
                   },
-                  leading: Icon(Icons.settings),
+                  leading: Icon(Icons.business),
                 ),
               ],
             ),

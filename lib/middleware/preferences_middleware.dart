@@ -49,6 +49,9 @@ Middleware<AppState> _createLoadPreferences() {
         data['subscribedFires'] = [];
       }
 
+      data['pref-important'] = prefs.getInt('important') ?? 0;
+      data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
+
       store.dispatch(new AllPreferencesLoadedAction(data));
     } catch (e) {}
   };

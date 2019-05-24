@@ -53,6 +53,8 @@ Middleware<AppState> _createLoadFire() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
 
+    print(action.fireId);
+
     try {
       String url = '${Endpoints.getFire}${action.fireId}';
       final response = await http.get(url);

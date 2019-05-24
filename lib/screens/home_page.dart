@@ -50,6 +50,8 @@ class HomePage extends StatelessWidget {
     return new StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
+        final store = StoreProvider.of<AppState>(context);
+
         if (state.fires != null) {
           for (final Fire fire in state.fires) {
             if (state.activeFilters.isEmpty ||
@@ -59,44 +61,24 @@ class HomePage extends StatelessWidget {
                   width: fullPinSize * fire.scale,
                   height: fullPinSize * fire.scale,
                   point: new LatLng(fire.lat, fire.lng),
-                  builder: (_) => new StoreConnector<AppState, VoidCallback>(
-                        converter: (Store<AppState> store) {
-                          return () {
-                            store.dispatch(new LoadFireAction(fire.id));
-                          };
-                        },
-                        builder: (BuildContext context,
-                            VoidCallback loadFireAction) {
-                          return new StoreConnector<AppState, AppState>(
-                            converter: (Store<AppState> store) => store.state,
-                            builder: (BuildContext context, AppState state) {
-                              return new Container(
-                                decoration: BoxDecoration(
-                                    color: getFireColor(fire.statusColor),
-                                    shape: BoxShape.circle),
-                                child: StoreConnector<AppState, VoidCallback>(
-                                    converter: (Store<AppState> store) => () {
-                                          store.dispatch(ClearFireAction());
-                                        },
-                                    builder: (BuildContext context,
-                                        VoidCallback clearFireAction) {
-                                      return new IconButton(
-                                          icon: new SvgPicture.asset(
-                                              getCorrectStatusImage(
-                                                  fire.statusCode,
-                                                  fire.important),
-                                              semanticsLabel: 'Acme Logo'),
-                                          onPressed: () async {
-                                            loadFireAction();
-                                            _openModalSheet(context);
-                                            clearFireAction();
-                                          });
-                                    }),
-                              );
-                            },
-                          );
+                  builder: (BuildContext context) {
+                    return new Container(
+                      decoration: BoxDecoration(
+                          color: getFireColor(fire.statusColor),
+                          shape: BoxShape.circle),
+                      child: IconButton(
+                        icon: new SvgPicture.asset(
+                            getCorrectStatusImage(
+                                fire.statusCode, fire.important),
+                            semanticsLabel: 'Acme Logo'),
+                        onPressed: () async {
+                          store.dispatch(LoadFireAction(fire.id));
+                          _openModalSheet(context);
+                          store.dispatch(ClearFireAction());
                         },
                       ),
+                    );
+                  },
                 ),
               );
             }

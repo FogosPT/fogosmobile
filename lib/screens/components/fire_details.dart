@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -7,6 +8,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -206,11 +208,15 @@ class FireDetails extends StatelessWidget {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           right: 16.0),
-                                                  child: Icon(
-                                                      FontAwesomeIcons
-                                                          .mapMarker,
-                                                      color: getFireColor(
-                                                          fire.statusColor)),
+                                                  child: SvgPicture.asset(
+                                                    getCorrectStatusImage(
+                                                      fire.statusCode,
+                                                      fire.important,
+                                                    ),
+                                                    width: 25.0,
+                                                    height: 25.0,
+                                                    color: getFireColor(fire.statusColor),
+                                                  ),
                                                 ),
                                                 Expanded(
                                                   child: Column(
@@ -248,10 +254,11 @@ class FireDetails extends StatelessWidget {
                                                   padding:
                                                       const EdgeInsets.only(
                                                           right: 16.0),
-                                                  child: Icon(
-                                                    FontAwesomeIcons.fighterJet,
-                                                    color: getFireColor(
-                                                        fire.statusColor),
+                                                  child: SvgPicture.asset(
+                                                    imgSvgFireman,
+                                                    width: 35.0,
+                                                    height: 35.0,
+                                                    color: getFireColor(fire.statusColor),
                                                   ),
                                                 ),
                                                 Expanded(

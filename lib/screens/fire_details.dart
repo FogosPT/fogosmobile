@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
@@ -46,15 +47,15 @@ class FireDetailsPage extends StatelessWidget {
               body: Container(
                 child: ListView(
                   children: <Widget>[
-                    ListTile(title: Text("MEIOS", style: _header)),
+                    ListTile(title: Text(FogosLocalizations.of(context).textResources.toUpperCase(), style: _header)),
                     SizedBox(height: 15),
                     MeansStatistics(),
                     SizedBox(height: 25),
-                    ListTile(title: Text("ESTADO", style: _header)),
+                    ListTile(title: Text(FogosLocalizations.of(context).textStatus.toUpperCase(), style: _header)),
                     SizedBox(height: 15),
                     DetailsHistoryStats(),
                     SizedBox(height: 25),
-                    ListTile(title: Text("RISCO DE INCÊNDIO", style: _header)),
+                    ListTile(title: Text(FogosLocalizations.of(context).textRiskOfFire.toUpperCase(), style: _header)),
                     SizedBox(height: 15),
                     FireRisk(),
                     SizedBox(height: 25),

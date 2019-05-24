@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -33,14 +34,14 @@ class _OtherNotificationsState extends State<OtherNotifications> {
               child: new ListView(
                 children: <Widget>[
                   CheckboxListTile(
-                    title: Text("Ocorrências significativas"),
+                    title: Text(FogosLocalizations.of(context).textSignificatOccurences),
                     value: state.preferences['pref-important'] == 1,
                     onChanged: (bool value) {
                       setPreferenceCallBack('important', value == true ? 1 : 0);
                     },
                   ),
                   CheckboxListTile(
-                    title: Text("Avisos"),
+                    title: Text(FogosLocalizations.of(context).textWarnings),
                     value: state.preferences['pref-warnings'] == 1,
                     onChanged: (bool value) {
                       setPreferenceCallBack('warnings', value == true ? 1 : 0);

@@ -1,6 +1,7 @@
 import 'package:charts_common/common.dart' as c;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -18,7 +19,7 @@ class LastNightStatistics extends StatelessWidget {
 
           var districtSeries = [
             new charts.Series<District, String>(
-              id: "Last Night Districts",
+              id: FogosLocalizations.of(context).textLastNightStatistics,
               colorFn: (District stats, _) => c.Color(
                     r: (25 * stats.fires).clamp(0, 255),
                     g: 0,

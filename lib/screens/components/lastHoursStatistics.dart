@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -18,28 +19,28 @@ class LastHoursStatistics extends StatelessWidget {
           List<charts.Series<LastHour, DateTime>> _createSampleData() {
             return [
               charts.Series<LastHour, DateTime>(
-                id: 'Incêndios',
+                id: FogosLocalizations.of(context).textFires,
                 colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
                 domainFn: (LastHour stats, _) => stats.label,
                 measureFn: (LastHour stats, _) => stats.total,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
-                id: 'Humanos',
+                id: FogosLocalizations.of(context).textFireman,
                 colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
                 domainFn: (LastHour stats, _) => stats.label,
                 measureFn: (LastHour stats, _) => stats.man,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
-                id: 'Terrestres',
+                id: FogosLocalizations.of(context).textVehicles,
                 colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
                 domainFn: (LastHour stats, _) => stats.label,
                 measureFn: (LastHour stats, _) => stats.cars,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
-                id: 'Aéreos',
+                id: FogosLocalizations.of(context).textAerial,
                 colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
                 domainFn: (LastHour stats, _) => stats.label,
                 measureFn: (LastHour stats, _) => stats.aerial,

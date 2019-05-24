@@ -57,50 +57,50 @@ class InfoPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10),
         children: <Widget>[
           ListTile(
-            title: Text("ESTADOS DAS OCORRÊNCIAS", style: _header),
+            title: Text(FogosLocalizations.of(context).textInformationIncidentStatus.toUpperCase(), style: _header),
             contentPadding: EdgeInsets.symmetric(horizontal: 0),
           ),
           _occurencyBulletPoint(
-              "Despacho de 1º alerta – Meios em trânsito para o teatro de operações.",
+              FogosLocalizations.of(context).textInformationFirstOrderDispatch,
               imgSvgIconAlarm,
               Color(0xffff6e02)),
           _occurencyBulletPoint(
-            "Chegada ao TO – chegada ao teatro de operações.",
+            FogosLocalizations.of(context).textInformationArrival,
             imgSvgIconPointer,
             Color(0xffb81e1f),
           ),
           _occurencyBulletPoint(
-            "Em curso - Incêndio em evolução sem limitação de área",
+            FogosLocalizations.of(context).textInformationOngoing,
             imgSvgIconFire,
             Color(0xffb81e1f),
           ),
           _occurencyBulletPoint(
-            "Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido",
+            FogosLocalizations.of(context).textInformationSettling,
             imgSvgIconFire,
             Color(0xff65c4ed),
           ),
           _occurencyBulletPoint(
-            "Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio",
+            FogosLocalizations.of(context).textInformationClosing,
             imgSvgIconFire,
             Color(0xff8e7e7d),
           ),
           _occurencyBulletPoint(
-            "Vigilância – Meios no local para actuar em caso de necessidade",
+            FogosLocalizations.of(context).textInformationSupervision,
             imgSvgIconWatch,
             Color(0xff65c4ed),
           ),
           _occurencyBulletPoint(
-            "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos​",
+            FogosLocalizations.of(context).textInformationClosed,
             imgSvgIconPointer,
             Color(0xff6abf59),
           ),
           _occurencyBulletPoint(
-            "Falso alarme",
+            FogosLocalizations.of(context).textFalseAlarm,
             imgSvgIconFake,
             Color(0xffbdbdbd),
           ),
           _occurencyBulletPoint(
-            "Falso alerta",
+            FogosLocalizations.of(context).textFalseAlert,
             imgSvgIconFake,
             Color(0xffbdbdbd),
           ),

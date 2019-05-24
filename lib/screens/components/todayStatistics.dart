@@ -1,6 +1,7 @@
 import 'package:charts_common/common.dart' as c;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
@@ -17,7 +18,7 @@ class TodayStatistics extends StatelessWidget {
           }
           var intervalSeries = [
             charts.Series<IntervalStats, String>(
-              id: 'Today Interval',
+              id: FogosLocalizations.of(context).textTodayInterval,
               colorFn: (_, __) => c.Color.fromHex(code: "#ff512f"),
               domainFn: (IntervalStats stats, _) => stats.label,
               measureFn: (IntervalStats stats, _) => stats.total,
@@ -35,7 +36,7 @@ class TodayStatistics extends StatelessWidget {
 
           var districtSeries = [
             new charts.Series<District, String>(
-              id: "Today Districts",
+              id: FogosLocalizations.of(context).textTodayDistricts,
               colorFn: (District stats, _) => c.Color(
                     r: (25 * stats.fires).clamp(0, 255),
                     g: 0,

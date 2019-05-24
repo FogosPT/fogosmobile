@@ -9,7 +9,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 
-class FireDetails extends StatelessWidget {
+class FireDetailsPage extends StatelessWidget {
   final TextStyle _header = TextStyle(
     color: Color(0xffff512f),
     fontSize: 20,

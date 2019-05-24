@@ -27,7 +27,7 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/screens/components/fire_details.dart';
+
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
           '$INFO_ROUTE': (_) => new InfoPage(),
           '$ABOUT_ROUTE': (_) => new About(),
-          '$FIRE_DETAILS_ROUTE': (_) => new FireDetails(),
+          '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
 
         },
         home: FirstPage(),

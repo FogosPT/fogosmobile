@@ -1,7 +1,5 @@
 import 'dart:collection';
 
-import 'package:flutter/material.dart';
-
 class NowStats {
   final String man;
   final String aerial;
@@ -170,20 +168,8 @@ class LastHour {
   LastHour({this.man, this.aerial, this.cars, this.total, this.label});
 
   factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
-    String hourMinute = parsedJson['label'];
-
-    int hour = int.parse(hourMinute.split(":")[0]);
-    int minute = int.parse(hourMinute.split(":")[1]);
-    DateTime dateLabel;
-    TimeOfDay t = TimeOfDay(hour: hour, minute: minute);
-    final now = DateTime.now();
-
-    // We make this check to make sure data from the past day is displayed correctly
-    if (now.hour < t.hour) {
-      dateLabel = DateTime(now.year, now.month, now.day - 1, t.hour, t.minute);
-    } else {
-      dateLabel = DateTime(now.year, now.month, now.day, t.hour, t.minute);
-    }
+    DateTime dateLabel =
+        DateTime.fromMillisecondsSinceEpoch(parsedJson['created'] * 1000);
 
     return LastHour(
       man: parsedJson['man'],

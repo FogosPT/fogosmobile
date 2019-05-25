@@ -7,24 +7,16 @@ import 'package:redux/redux.dart';
 class FireRisk extends StatelessWidget {
   final TextStyle _body = TextStyle(color: Colors.white, fontSize: 20);
 
-  List<FireRiskStruct> _riskList;
-  
-  List<FireRiskStruct> generateStruct(BuildContext context) {
-    return [
-      FireRiskStruct(FogosLocalizations.of(context).textRiskReduced, Color(0xff6ABF59)),
-      FireRiskStruct(FogosLocalizations.of(context).textRiskModerate, Color(0xffFFB202)),
-      FireRiskStruct(FogosLocalizations.of(context).textRiskHigh, Color(0xffFF6E02)),
-      FireRiskStruct(FogosLocalizations.of(context).textRiskVeryHigh, Color(0xffB81E1F)),
-      FireRiskStruct(FogosLocalizations.of(context).textMaximumRisk, Color(0xff711313)),
-    ];
-  }
+  List<FireRiskStruct> _riskList = [
+    FireRiskStruct('Reduzidos', Color(0xff6ABF59)),
+    FireRiskStruct('Moderado', Color(0xffFFB202)),
+    FireRiskStruct('Elevado', Color(0xffFF6E02)),
+    FireRiskStruct('Muito Elevado', Color(0xffB81E1F)),
+    FireRiskStruct('Maximo ', Color(0xff711313)),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    if (_riskList == null) {
-      _riskList = generateStruct(context);
-    }
-    
     return StoreConnector<AppState, String>(
       converter: (Store<AppState> store) => store.state.fireRisk,
       builder: (BuildContext context, String stats) {
@@ -38,7 +30,7 @@ class FireRisk extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              for (var risk in _riskList) _buildRisk(risk, stats),
+              for (var risk in _riskList) _buildRisk(risk, stats, context),
             ],
           ),
         );
@@ -46,17 +38,24 @@ class FireRisk extends StatelessWidget {
     );
   }
 
-  Widget _buildRisk(FireRiskStruct fireRisk, String currentRisk) {
+  Widget _buildRisk(FireRiskStruct fireRisk, String currentRisk, context) {
+    final Map riskTranslations = {
+      "Reduzidos": FogosLocalizations.of(context).textRiskReduced,
+      "Moderado": FogosLocalizations.of(context).textRiskModerate,
+      "Elevado": FogosLocalizations.of(context).textRiskHigh,
+      "Muito Elevado": FogosLocalizations.of(context).textRiskVeryHigh,
+      "Maximo": FogosLocalizations.of(context).textMaximumRisk,
+    };
+
     return Expanded(
       flex: currentRisk == fireRisk.risk ? 20 : 1,
       child: Container(
         height: 80,
         margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: fireRisk.color),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: fireRisk.color),
         child: Center(
           child: Text(
-            currentRisk == fireRisk.risk ? currentRisk.toUpperCase() : "",
+            currentRisk == fireRisk.risk ? riskTranslations[currentRisk].toUpperCase() : "",
             style: _body,
           ),
         ),

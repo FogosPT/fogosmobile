@@ -38,9 +38,9 @@ class HomePage extends StatelessWidget {
         print('on resume $message');
         String fireId = message["fireId"];
         final store = StoreProvider.of<AppState>(context);
+        store.dispatch(ClearFireAction());
         store.dispatch(LoadFireAction(fireId));
         _openModalSheet(context);
-        store.dispatch(ClearFireAction());
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('on launch $message');
@@ -72,9 +72,9 @@ class HomePage extends StatelessWidget {
                                 fire.statusCode, fire.important),
                             semanticsLabel: 'Acme Logo'),
                         onPressed: () async {
+                          store.dispatch(ClearFireAction());
                           store.dispatch(LoadFireAction(fire.id));
                           _openModalSheet(context);
-                          store.dispatch(ClearFireAction());
                         },
                       ),
                     );

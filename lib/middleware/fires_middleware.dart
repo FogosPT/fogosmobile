@@ -41,9 +41,8 @@ Middleware<AppState> _createLoadFires() {
       fires = calculateFireImportance(fires);
       store.dispatch(new FiresLoadedAction(fires));
     } catch (e) {
-      print(e);
-      print(e.stackTrace);
       store.dispatch(new FiresLoadedAction([]));
+      throw e;
     }
   };
 }

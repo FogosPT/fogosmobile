@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:sentry/sentry.dart';
+import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fogosmobile/constants/routes.dart';
+import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/screens/about/about.dart';
 import 'package:fogosmobile/screens/partners.dart';
 import 'package:fogosmobile/screens/info_page.dart';
@@ -29,9 +32,72 @@ import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/models/fire.dart';
 
+final SentryClient _sentry = new SentryClient(dsn: SENTRY_DSN);
+
 typedef SetFiltersCallback = Function(FireStatus filter);
 
-void main() => SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
+bool get isInDebugMode {
+  // Assume you're in production mode
+  bool inDebugMode = false;
+
+  // Assert expressions are only evaluated during development. They are ignored
+  // in production. Therefore, this code only sets `inDebugMode` to true
+  // in a development environment.
+  assert(inDebugMode = true);
+
+  return inDebugMode;
+}
+
+Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
+  print('Caught error: $error');
+
+  // Errors thrown in development mode are unlikely to be interesting. You can
+  // check if you are running in dev mode using an assertion and omit sending
+  // the report.
+  if (isInDebugMode) {
+    print(stackTrace);
+    print('In dev mode. Not sending report to Sentry.io.');
+    return;
+  }
+
+  print('Reporting to Sentry.io...');
+
+  final SentryResponse response = await _sentry.captureException(
+    exception: error,
+    stackTrace: stackTrace,
+  );
+
+  if (response.isSuccessful) {
+    print('Success! Event ID: ${response.eventId}');
+  } else {
+    print('Failed to report to Sentry.io: ${response.error}');
+  }
+}
+
+void main() {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (isInDebugMode) {
+      // In development mode, simply print to console.
+      FlutterError.dumpErrorToConsole(details);
+    } else {
+      // In production mode, report to the application zone to report to
+      // Sentry.
+      Zone.current.handleUncaughtError(details.exception, details.stack);
+    }
+  };
+  
+  runZoned<Future<void>>(() async {
+    try {
+      SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
+    } catch (error, stackTrace) {
+      _reportError(error, stackTrace);
+    }
+  }, onError: (error, stackTrace) {
+    // Whenever an error occurs, call the `_reportError` function. This sends
+    // Dart errors to the dev console or Sentry depending on the environment.
+    _reportError(error, stackTrace);
+  });
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -181,12 +247,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 builder: (BuildContext context, VoidCallback loadFiresAction) {
                   return new StoreConnector<AppState, AppState>(
                     converter: (Store<AppState> store) => store.state,
+                    onInit: (Store<AppState> store) {
+                      store.dispatch(LoadFiresAction());
+                    },
                     builder: (BuildContext context, AppState state) {
-                      if ((state.hasFirstLoad == false || state.hasFirstLoad == null) &&
-                          (state.isLoading == false || state.isLoading == null) &&
-                          state.fires.length == 0) {
-                        loadFiresAction();
-                      }
                       return Row(children: <Widget>[
                         _buildRefreshButton(state, loadFiresAction),
                         _buildFiltersMenu(state),

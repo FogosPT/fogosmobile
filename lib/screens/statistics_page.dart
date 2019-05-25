@@ -28,7 +28,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new FireGradientAppBar(
-        iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
           FogosLocalizations.of(context).textStatistics,
           style: new TextStyle(color: Colors.white),

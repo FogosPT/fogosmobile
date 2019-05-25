@@ -8,7 +8,6 @@ class Partners extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: FireGradientAppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).textPartners,
             style: new TextStyle(color: Colors.white),

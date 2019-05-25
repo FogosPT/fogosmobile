@@ -10,6 +10,7 @@ import 'package:fogosmobile/screens/about/about.dart';
 import 'package:fogosmobile/screens/partners.dart';
 import 'package:fogosmobile/screens/info_page.dart';
 import 'package:fogosmobile/screens/statistics_page.dart';
+import 'package:fogosmobile/styles/theme.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
         title: 'Fogos.pt',
+        theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
           '$SETTINGS_ROUTE': (_) => new Settings(),
@@ -48,7 +50,6 @@ class MyApp extends StatelessWidget {
           '$INFO_ROUTE': (_) => new InfoPage(),
           '$ABOUT_ROUTE': (_) => new About(),
           '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
-
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -82,32 +83,26 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
+    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {});
   }
 
+  Widget _buildRefreshButton(AppState state, VoidCallback action) => state.isLoading
+      ? Container(
+          width: 54.0,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: new CircularProgressIndicator(
+              strokeWidth: 2.0,
+            ),
+          ),
+        )
+      : new IconButton(
+          onPressed: action,
+          icon: new Icon(Icons.refresh),
+        );
 
-  Widget _buildRefreshButton(AppState state, VoidCallback action) =>
-      state.isLoading
-          ? Container(
-              width: 54.0,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: new CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                ),
-              ),
-            )
-          : new IconButton(
-              onPressed: action,
-              icon: new Icon(Icons.refresh),
-            );
-
-  Widget _buildFiltersMenu(AppState state) =>
-      StoreConnector<AppState, SetFiltersCallback>(
-          converter: (Store<AppState> store) {
+  Widget _buildFiltersMenu(AppState state) => StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
         return (FireStatus filter) {
           store.dispatch(SelectFireFiltersAction(filter));
         };
@@ -118,16 +113,18 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
           itemBuilder: (BuildContext context) => FireStatus.values
               .map((status) => PopupMenuItem<FireStatus>(
                   value: status,
-                  child: ListTile(
-                      dense: true,
-                      contentPadding: const EdgeInsets.all(0.0),
-                      selected: state.activeFilters.contains(status),
-                      trailing: state.activeFilters.contains(status)
-                          ? Icon(Icons.check)
-                          : null,
-                      title: Text(
-                        FogosLocalizations.of(context).textFireStatus(status),
-                      ))))
+                  child: ListTileTheme(
+                    style: ListTileStyle.drawer,
+                    selectedColor: Theme.of(context).accentColor,
+                    child: ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.all(0.0),
+                        selected: state.activeFilters.contains(status),
+                        trailing: state.activeFilters.contains(status) ? Icon(Icons.check) : null,
+                        title: Text(
+                          FogosLocalizations.of(context).textFireStatus(status),
+                        )),
+                  )))
               .toList(),
         );
       });
@@ -156,16 +153,13 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     firebaseCloudMessagingListeners();
 
-    SystemChrome.setApplicationSwitcherDescription(
-        ApplicationSwitcherDescription(
-            label: "Fogos.pt", primaryColor: Colors.black.value));
+    SystemChrome.setApplicationSwitcherDescription(ApplicationSwitcherDescription(label: "Fogos.pt", primaryColor: Colors.black.value));
 
     return new StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: new FireGradientAppBar(
-            iconTheme: new IconThemeData(color: Colors.white),
             title: new Text(
               'Fogos.pt',
               style: new TextStyle(color: Colors.white),
@@ -188,10 +182,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   return new StoreConnector<AppState, AppState>(
                     converter: (Store<AppState> store) => store.state,
                     builder: (BuildContext context, AppState state) {
-                      if ((state.hasFirstLoad == false ||
-                              state.hasFirstLoad == null) &&
-                          (state.isLoading == false ||
-                              state.isLoading == null) &&
+                      if ((state.hasFirstLoad == false || state.hasFirstLoad == null) &&
+                          (state.isLoading == false || state.isLoading == null) &&
                           state.fires.length == 0) {
                         loadFiresAction();
                       }
@@ -211,8 +203,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 new DrawerHeader(
                   child: new Center(
-                    child: SvgPicture.asset(imgSvgLogoFlame,
-                        color: Colors.redAccent),
+                    child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.redAccent),
                   ),
                   decoration: new BoxDecoration(
                     color: Color(0xff883333),

@@ -51,7 +51,6 @@ class _SettingsState extends State<Settings> {
 
       return new Scaffold(
         appBar: new FireGradientAppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).appTitle,
             style: new TextStyle(color: Colors.white),
@@ -67,7 +66,6 @@ class _SettingsState extends State<Settings> {
 
     return new Scaffold(
       appBar: new FireGradientAppBar(
-        iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
           FogosLocalizations.of(context).appTitle,
           style: new TextStyle(color: Colors.white),
@@ -91,8 +89,7 @@ class _SettingsState extends State<Settings> {
                 store.dispatch(new SetPreferenceAction(key, value));
               };
             },
-            builder: (BuildContext context,
-                SetPreferenceCallBack setPreferenceAction) {
+            builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
               return new Column(
                 children: <Widget>[
                   new Padding(
@@ -100,8 +97,7 @@ class _SettingsState extends State<Settings> {
                   ),
                   new ListTile(
                     title: new TextField(
-                      decoration: new InputDecoration(
-                          labelText: FogosLocalizations.of(context).textCounty),
+                      decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
                       controller: controller,
                     ),
                   ),
@@ -110,19 +106,12 @@ class _SettingsState extends State<Settings> {
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
-                        return filter == null ||
-                                filter == "" ||
-                                _location['value']['name']
-                                    .toLowerCase()
-                                    .contains(filter.toLowerCase())
+                        return filter == null || filter == "" || _location['value']['name'].toLowerCase().contains(filter.toLowerCase())
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
-                                value: state.preferences[
-                                        'pref-${_location['key']}'] ==
-                                    1,
+                                value: state.preferences['pref-${_location['key']}'] == 1,
                                 onChanged: (bool value) {
-                                  setPreferenceAction(
-                                      _location['key'], value == true ? 1 : 0);
+                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
                                 },
                               )
                             : new Container();

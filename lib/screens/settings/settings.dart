@@ -17,7 +17,6 @@ class _SettingsState extends State<Settings> {
       length: 3,
       child: Scaffold(
         appBar: new FireGradientAppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             FogosLocalizations.of(context).textNotifications,
             style: new TextStyle(color: Colors.white),
@@ -31,11 +30,7 @@ class _SettingsState extends State<Settings> {
           ),
         ),
         body: TabBarView(
-          children: [
-            Notifications(),
-            FireNotifications(),
-            OtherNotifications()
-          ],
+          children: [Notifications(), FireNotifications(), OtherNotifications()],
         ),
       ),
     );

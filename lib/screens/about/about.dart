@@ -25,8 +25,7 @@ class About extends StatelessWidget {
                     return Scrollbar(
                         child: ListView.builder(
                       padding: EdgeInsets.only(top: 8.0),
-                      itemBuilder: (_, int i) =>
-                          ContributorItem(contributor: contributors[i]),
+                      itemBuilder: (_, int i) => ContributorItem(contributor: contributors[i]),
                       itemCount: contributors.length,
                     ));
                   }
@@ -43,7 +42,6 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new FireGradientAppBar(
-          iconTheme: new IconThemeData(color: Colors.white),
           title: new Text(
             'Sobre',
             style: new TextStyle(color: Colors.white),
@@ -70,8 +68,7 @@ class About extends StatelessWidget {
                         new TextSpan(
                           text: FogosLocalizations.of(context).textCivilProtection,
                           style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () => launchURL('http://www.prociv.pt/'),
+                          recognizer: new TapGestureRecognizer()..onTap = () => launchURL('http://www.prociv.pt/'),
                         ),
                       ],
                     ),
@@ -97,8 +94,7 @@ class About extends StatelessWidget {
                         new TextSpan(
                           text: 'mail@fogos.pt.',
                           style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () => launchURL('mailto:mail@fogos.pt'),
+                          recognizer: new TapGestureRecognizer()..onTap = () => launchURL('mailto:mail@fogos.pt'),
                         ),
                       ],
                     ),

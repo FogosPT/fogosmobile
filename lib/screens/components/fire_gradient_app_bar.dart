@@ -3,13 +3,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/models/app_state.dart';
 
 class FireGradientAppBar extends AppBar {
-  FireGradientAppBar(
-      {IconThemeData iconTheme,
-      Text title,
-      List<StoreConnector<AppState, VoidCallback>> actions,
-      TabBar bottom})
+  FireGradientAppBar({Text title, List<StoreConnector<AppState, VoidCallback>> actions, TabBar bottom})
       : super(
-          iconTheme: iconTheme,
           title: title,
           backgroundColor: Colors.white,
           elevation: 0.5,

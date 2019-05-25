@@ -42,7 +42,6 @@ class _WarningsState extends State<Warnings> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: FireGradientAppBar(
-        iconTheme: new IconThemeData(color: Colors.white),
         title: new Text(
           FogosLocalizations.of(context).textWarnings,
           style: new TextStyle(color: Colors.white),
@@ -98,8 +97,7 @@ class _WarningsState extends State<Warnings> {
                         ),
                         Container(
                           child: RaisedButton(
-                            child: Text(FogosLocalizations.of(context)
-                                .textRefreshButton),
+                            child: Text(FogosLocalizations.of(context).textRefreshButton),
                             onPressed: this.getWarnigs,
                           ),
                         )

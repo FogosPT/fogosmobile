@@ -38,7 +38,6 @@ class FireDetailsPage extends StatelessWidget {
             }
             return Scaffold(
               appBar: FireGradientAppBar(
-                iconTheme: IconThemeData(color: Colors.white),
                 title: Text(
                   _title,
                   style: TextStyle(color: Colors.white),

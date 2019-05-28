@@ -10,7 +10,7 @@ class FogosTheme {
 
   static final ThemeData _themeData = ThemeData(
       brightness: Brightness.light,
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: IconThemeData(color: Colors.black),
       indicatorColor: Colors.white,
       primaryColor: _primaryColor,
       primaryColorBrightness: Brightness.dark,

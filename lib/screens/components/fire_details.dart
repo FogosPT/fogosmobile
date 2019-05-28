@@ -31,6 +31,10 @@ class FireDetails extends StatelessWidget {
           builder: (BuildContext context, AppState state) {
             Fire fire = state.fire;
             if (fire == null) {
+              if (state.errors != null && state.errors.contains('fire')) {
+                return Center(child: Text('There was an error loading this info.'));
+              }
+
               return ModalProgressHUD(
                 opacity: 0.75,
                 color: Colors.black,

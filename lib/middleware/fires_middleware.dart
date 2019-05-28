@@ -61,6 +61,8 @@ Middleware<AppState> _createLoadFire() {
       store.dispatch(new FireLoadedAction(fire));
     } catch (e) {
       store.dispatch(new FireLoadedAction(null));
+      store.dispatch(new AddErrorAction('fire'));
+      throw e;
     }
   };
 }
@@ -79,6 +81,7 @@ Middleware<AppState> _createLoadFireMeansHistory() {
     } catch (e) {
       store.dispatch(new FireMeansHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireMeansHistory'));
+      throw e;
     }
   };
 }
@@ -97,6 +100,7 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
     } catch (e) {
       store.dispatch(new FireDetailsHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireDetailsHistory'));
+      throw e;
     }
   };
 }
@@ -115,6 +119,7 @@ Middleware<AppState> _createLoadFireRisk() {
     } catch (e) {
       store.dispatch(new FireRiskLoadedAction(null));
       store.dispatch(new AddErrorAction('fireRisk'));
+      throw e;
     }
   };
 }

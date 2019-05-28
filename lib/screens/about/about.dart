@@ -13,7 +13,7 @@ class About extends StatelessWidget {
   Widget contributorsWidget() {
     return new StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
-        onInit: (store) {
+        onInit: (Store<AppState> store) {
           if(!store.state.hasContributors)
             store.dispatch(LoadContributorsAction());
         },

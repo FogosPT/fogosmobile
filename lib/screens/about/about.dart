@@ -13,8 +13,10 @@ class About extends StatelessWidget {
   Widget contributorsWidget() {
     return new StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
-        onInit: (store) {
-          store.dispatch(LoadContributorsAction());
+        onInit: (Store<AppState> store) {
+          if(!store.state.hasContributors) {
+            store.dispatch(LoadContributorsAction());
+          }
         },
         builder: (BuildContext context, AppState state) {
           if (state.hasContributors) {
@@ -24,10 +26,10 @@ class About extends StatelessWidget {
                   if (contributors != null) {
                     return Scrollbar(
                         child: ListView.builder(
-                      padding: EdgeInsets.only(top: 8.0),
-                      itemBuilder: (_, int i) => ContributorItem(contributor: contributors[i]),
-                      itemCount: contributors.length,
-                    ));
+                          padding: EdgeInsets.only(top: 8.0),
+                          itemBuilder: (_, int i) => ContributorItem(contributor: contributors[i]),
+                          itemCount: contributors.length,
+                        ));
                   }
                 });
           } else {

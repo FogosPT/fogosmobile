@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/styles/theme.dart';
 
 class FireGradientAppBar extends AppBar {
   FireGradientAppBar({Text title, List<Widget> actions, TabBar bottom})
@@ -12,8 +13,8 @@ class FireGradientAppBar extends AppBar {
             decoration: new BoxDecoration(
               gradient: new LinearGradient(
                   colors: [
-                    Colors.orange,
-                    Colors.red,
+                    FogosTheme().accentColor,
+                    FogosTheme().primaryColor,
                   ],
                   begin: const FractionalOffset(0.0, 0.0),
                   end: const FractionalOffset(1.0, 0.0),

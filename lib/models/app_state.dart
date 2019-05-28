@@ -22,6 +22,7 @@ class AppState {
   LastNightStats lastNightStats;
   WeekStats weekStats;
   LastHoursStats lastHoursStats;
+  List errors = [];
 
   AppState({
     this.fires,
@@ -42,6 +43,7 @@ class AppState {
     this.lastNightStats,
     this.weekStats,
     this.lastHoursStats,
+    this.errors,
   });
 
   AppState copyWith({
@@ -62,6 +64,7 @@ class AppState {
     YesterdayStats yesterdayStats,
     WeekStats weekStats,
     LastHoursStats lastHoursStats,
+    List errors,
   }) {
     return new AppState(
       fires: fires ?? this.fires,
@@ -82,11 +85,16 @@ class AppState {
       lastNightStats: lastNightStats ?? this.lastNightStats,
       weekStats: weekStats ?? this.weekStats,
       lastHoursStats: lastHoursStats ?? this.lastHoursStats,
+      errors: errors ?? this.errors,
     );
   }
 
   @override
   String toString() {
     return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
+  }
+
+  String getErrors() {
+    return this.errors.toString();
   }
 }

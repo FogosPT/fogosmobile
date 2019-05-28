@@ -7,6 +7,7 @@ import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/reducers/statistics_reducer.dart';
+import 'package:fogosmobile/reducers/errors_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   bool isLoading;
@@ -76,8 +77,7 @@ AppState appReducer(AppState state, action) {
     fires: firesReducer(state.fires, action),
     fire: fireReducer(state.fire, action),
     fireMeansHistory: fireMeansHistoryReducer(state.fireMeansHistory, action),
-    fireDetailsHistory:
-        fireDetailsHistoryReducer(state.fireDetailsHistory, action),
+    fireDetailsHistory: fireDetailsHistoryReducer(state.fireDetailsHistory, action),
     fireRisk: fireRiskReducer(state.fireRisk, action),
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
@@ -91,5 +91,6 @@ AppState appReducer(AppState state, action) {
     lastNightStats: lastNightStatsReducer(state.lastNightStats, action),
     weekStats: weekStatsReducer(state.weekStats, action),
     lastHoursStats: lastHoursStatsReducer(state.lastHoursStats, action),
+    errors: errorsReducer(state.errors, action),
   );
 }

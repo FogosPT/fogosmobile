@@ -12,8 +12,7 @@ import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-const fullPinSize = 50.0;
+import 'package:fogosmobile/constants/variables.dart';
 
 class HomePage extends StatelessWidget {
   final MapController mapController = new MapController();

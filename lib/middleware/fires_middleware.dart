@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/errors_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
 List<Middleware<AppState>> firesMiddleware() {
@@ -52,8 +53,6 @@ Middleware<AppState> _createLoadFire() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
 
-    print(action.fireId);
-
     try {
       String url = '${Endpoints.getFire}${action.fireId}';
       final response = await http.get(url);
@@ -75,9 +74,11 @@ Middleware<AppState> _createLoadFireMeansHistory() {
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       MeansHistory data = MeansHistory.fromJson(responseData);
+      store.dispatch(new RemoveErrorAction('fireMeansHistory'));
       store.dispatch(new FireMeansHistoryLoadedAction(data));
     } catch (e) {
       store.dispatch(new FireMeansHistoryLoadedAction(null));
+      store.dispatch(new AddErrorAction('fireMeansHistory'));
     }
   };
 }
@@ -91,9 +92,11 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       DetailsHistory data = DetailsHistory.fromJson(responseData);
+      store.dispatch(new RemoveErrorAction('fireDetailsHistory'));
       store.dispatch(new FireDetailsHistoryLoadedAction(data));
     } catch (e) {
       store.dispatch(new FireDetailsHistoryLoadedAction(null));
+      store.dispatch(new AddErrorAction('fireDetailsHistory'));
     }
   };
 }
@@ -107,9 +110,11 @@ Middleware<AppState> _createLoadFireRisk() {
       final response = await http.get(url);
       String responseData = json.decode(response.body)['data'][0]['hoje'];
       print(responseData);
+      store.dispatch(new RemoveErrorAction('fireRisk'));
       store.dispatch(new FireRiskLoadedAction(responseData));
     } catch (e) {
       store.dispatch(new FireRiskLoadedAction(null));
+      store.dispatch(new AddErrorAction('fireRisk'));
     }
   };
 }

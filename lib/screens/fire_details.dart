@@ -18,51 +18,65 @@ class FireDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, VoidCallback>(
-      converter: (Store<AppState> store) {
-        return () {
-          store.dispatch(ClearFireMeansAction());
-          store.dispatch(ClearFireRiskAction());
-          store.dispatch(ClearFireDetailsAction());
-        };
+    return StoreConnector<AppState, AppState>(
+      onDispose: (Store<AppState> store) {
+        store.dispatch(ClearFireMeansAction());
+        store.dispatch(ClearFireRiskAction());
+        store.dispatch(ClearFireDetailsAction());
       },
-      builder: (BuildContext context, VoidCallback clearFireMeanAction) {
-        return StoreConnector<AppState, AppState>(
-          converter: (Store<AppState> store) => store.state,
-          builder: (BuildContext context, AppState state) {
-            Fire fire = state.fire;
-            String _title = fire.town;
+      onInit: (Store<AppState> store) {
+        Fire fire = store.state.fire;
+        store.dispatch(LoadFireMeansHistoryAction(fire.id));
+        store.dispatch(LoadFireDetailsHistoryAction(fire.id));
+        store.dispatch(LoadFireRiskAction(fire.id));
+      },
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState state) {
+        Fire fire = state.fire;
+        String _title = fire.town;
 
-            if (fire.town != fire.local) {
-              _title = '$_title, ${fire.local}';
-            }
-            return Scaffold(
-              appBar: FireGradientAppBar(
-                title: Text(
-                  _title,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              body: Container(
-                child: ListView(
-                  children: <Widget>[
-                    ListTile(title: Text(FogosLocalizations.of(context).textResources.toUpperCase(), style: _header)),
-                    SizedBox(height: 15),
-                    MeansStatistics(),
-                    SizedBox(height: 25),
-                    ListTile(title: Text(FogosLocalizations.of(context).textStatus.toUpperCase(), style: _header)),
-                    SizedBox(height: 15),
-                    DetailsHistoryStats(),
-                    SizedBox(height: 25),
-                    ListTile(title: Text(FogosLocalizations.of(context).textRiskOfFire.toUpperCase(), style: _header)),
-                    SizedBox(height: 15),
-                    FireRisk(),
-                    SizedBox(height: 25),
-                  ],
-                ),
-              ),
-            );
-          },
+        if (fire.town != fire.local) {
+          _title = '$_title, ${fire.local}';
+        }
+
+        return Scaffold(
+          appBar: FireGradientAppBar(
+            title: Text(
+              _title,
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          body: Container(
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                    title: Text(
+                        FogosLocalizations.of(context)
+                            .textResources
+                            .toUpperCase(),
+                        style: _header)),
+                SizedBox(height: 15),
+                MeansStatistics(),
+                SizedBox(height: 25),
+                ListTile(
+                    title: Text(
+                        FogosLocalizations.of(context).textStatus.toUpperCase(),
+                        style: _header)),
+                SizedBox(height: 15),
+                DetailsHistoryStats(),
+                SizedBox(height: 25),
+                ListTile(
+                    title: Text(
+                        FogosLocalizations.of(context)
+                            .textRiskOfFire
+                            .toUpperCase(),
+                        style: _header)),
+                SizedBox(height: 15),
+                FireRisk(),
+                SizedBox(height: 25),
+              ],
+            ),
+          ),
         );
       },
     );

@@ -13,12 +13,18 @@ class MeansStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, MeansHistory>(
-      converter: (Store<AppState> store) => store.state.fireMeansHistory,
-      builder: (BuildContext context, MeansHistory stats) {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState state) {
+        MeansHistory stats = state.fireMeansHistory;
+
         if (stats == null) {
+          if (state.errors != null && state.errors.contains('fireMeansHistory')) {
+            return Center(child: Text('There was an error loading this chart.'));
+          }
           return Center(child: CircularProgressIndicator());
         }
+
         List<charts.Series<Means, DateTime>> _createSampleData() {
           return [
             charts.Series<Means, DateTime>(

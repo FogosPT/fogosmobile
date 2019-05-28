@@ -10,12 +10,18 @@ import 'package:redux/redux.dart';
 class DetailsHistoryStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, DetailsHistory>(
-      converter: (Store<AppState> store) => store.state.fireDetailsHistory,
-      builder: (BuildContext context, DetailsHistory stats) {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState state) {
+        DetailsHistory stats = state.fireDetailsHistory;
+
         if (stats == null) {
+          if (state.errors != null && state.errors.contains('fireDetailsHistory')) {
+            return Center(child: Text('There was an error loading this chart.'));
+          }
           return Center(child: CircularProgressIndicator());
         }
+
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 70),
           child: Column(

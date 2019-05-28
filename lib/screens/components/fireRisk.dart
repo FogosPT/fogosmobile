@@ -17,10 +17,15 @@ class FireRisk extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, String>(
-      converter: (Store<AppState> store) => store.state.fireRisk,
-      builder: (BuildContext context, String stats) {
+    return StoreConnector<AppState, AppState>(
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState state) {
+        String stats = state.fireRisk;
+
         if (stats == null) {
+          if (state.errors != null && state.errors.contains('fireRisk')) {
+            return Center(child: Text('There was an error loading this chart.'));
+          }
           return Center(child: CircularProgressIndicator());
         }
 

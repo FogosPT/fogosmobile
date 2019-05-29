@@ -18,6 +18,7 @@ class NowStatistics extends StatelessWidget {
         if (stats == null) {
           return Center(child: CircularProgressIndicator());
         }
+
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Row(

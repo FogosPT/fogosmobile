@@ -85,7 +85,7 @@ void main() {
       Zone.current.handleUncaughtError(details.exception, details.stack);
     }
   };
-  
+
   runZoned<Future<void>>(() async {
     try {
       SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
@@ -169,7 +169,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
           icon: new Icon(Icons.refresh),
         );
 
-  Widget _buildFiltersMenu(AppState state) => StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
+  Widget _buildFiltersMenu(AppState state) =>
+      StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
         return (FireStatus filter) {
           store.dispatch(SelectFireFiltersAction(filter));
         };
@@ -220,7 +221,12 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     firebaseCloudMessagingListeners();
 
-    SystemChrome.setApplicationSwitcherDescription(ApplicationSwitcherDescription(label: "Fogos.pt", primaryColor: Colors.black.value));
+    SystemChrome.setApplicationSwitcherDescription(
+      ApplicationSwitcherDescription(
+        label: "Fogos.pt",
+        primaryColor: Colors.black.value,
+      ),
+    );
 
     return new StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,

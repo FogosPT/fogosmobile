@@ -16,6 +16,7 @@ import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:share/share.dart';
 
+import 'assets/icons.dart';
 import 'assets/images.dart';
 
 class FireList extends StatelessWidget {
@@ -29,6 +30,15 @@ class FireList extends StatelessWidget {
           FogosLocalizations.of(context).textFiresList,
           style: new TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              final store = StoreProvider.of<AppState>(context);
+              store.dispatch(LoadFiresAction());
+            },
+          ),
+        ],
       ),
       body: new Container(
           child: new StoreConnector<AppState, AppState>(
@@ -39,6 +49,30 @@ class FireList extends StatelessWidget {
         converter: (Store<AppState> store) => store.state,
         builder: (BuildContext context, AppState state) {
           List<Fire> fires = state.fires;
+          bool isLoading = state.isLoading;
+
+          if (isLoading) {
+            return ListView.builder(
+              itemCount: 3,
+              itemBuilder: (BuildContext context, int index) {
+                return Card(
+                  elevation: 8.0,
+                  margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 504.0,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+
           return ListView.builder(
             itemCount: fires.length,
             itemBuilder: (BuildContext context, int index) {
@@ -256,7 +290,8 @@ class FireList extends StatelessWidget {
                                                 ? Icons.notifications_active
                                                 : Icons.notifications_none),
                                             onPressed: () {
-                                              store.dispatch(SetFireNotificationAction(fire.id, isFireSubscribed ? 0 : 1));
+                                              store.dispatch(
+                                                  SetFireNotificationAction(fire.id, isFireSubscribed ? 0 : 1));
                                             },
                                           ),
                                     SizedBox(width: 8),

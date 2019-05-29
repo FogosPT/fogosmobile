@@ -481,6 +481,12 @@ class FogosLocalizations {
       name: 'textBugs',
       desc: 'Suggestions / Bug reporting -',
   );
+
+  String get textFiresList => Intl.message(
+      "Lista de Fogos",
+      name: 'textFiresList',
+      desc: 'Fires List',
+  );
   
 
   String textFireStatus(FireStatus status) {

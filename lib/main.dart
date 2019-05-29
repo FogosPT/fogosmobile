@@ -24,12 +24,12 @@ import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
+import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 
 final SentryClient _sentry = new SentryClient(dsn: SENTRY_DSN);
@@ -116,6 +116,7 @@ class MyApp extends StatelessWidget {
           '$INFO_ROUTE': (_) => new InfoPage(),
           '$ABOUT_ROUTE': (_) => new About(),
           '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
+          '$FIRES_ROUTE': (_) => new FireList(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -223,6 +224,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
     return new StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
+      onInit: (Store<AppState> store) {
+        store.dispatch(LoadFiresAction());
+        store.dispatch(new LoadAllPreferencesAction());
+      },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: new FireGradientAppBar(
@@ -236,12 +241,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   return () {
                     store.dispatch(new LoadFiresAction());
                     store.dispatch(new LoadAllPreferencesAction());
-                    store.dispatch(new LoadNowStatsAction());
-                    store.dispatch(new LoadTodayStatsAction());
-                    store.dispatch(new LoadYesterdayStatsAction());
-                    store.dispatch(new LoadLastNightStatsAction());
-                    store.dispatch(new LoadWeekStatsAction());
-                    store.dispatch(new LoadLastHoursAction());
                   };
                 },
                 builder: (BuildContext context, VoidCallback loadFiresAction) {
@@ -252,8 +251,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[
-                        _buildRefreshButton(state, loadFiresAction),
                         _buildFiltersMenu(state),
+                        _buildRefreshButton(state, loadFiresAction),
                       ]);
                     },
                   );
@@ -272,6 +271,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   decoration: new BoxDecoration(
                     color: Color(0xff883333),
                   ),
+                ),
+                new ListTile(
+                  title: new Text(FogosLocalizations.of(context).textFiresList),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(FIRES_ROUTE);
+                  },
+                  leading: Icon(Icons.list),
                 ),
                 new ListTile(
                   title: new Text(FogosLocalizations.of(context).textWarnings),
@@ -295,7 +302,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
                   },
-                  leading: Icon(Icons.graphic_eq),
+                  leading: Icon(Icons.insert_chart),
                 ),
                 new Divider(),
                 new ListTile(

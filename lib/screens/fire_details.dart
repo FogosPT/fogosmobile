@@ -24,15 +24,24 @@ class FireDetailsPage extends StatelessWidget {
         store.dispatch(ClearFireRiskAction());
         store.dispatch(ClearFireDetailsAction());
       },
-      onInit: (Store<AppState> store) {
-        Fire fire = store.state.fire;
-        store.dispatch(LoadFireMeansHistoryAction(fire.id));
-        store.dispatch(LoadFireDetailsHistoryAction(fire.id));
-        store.dispatch(LoadFireRiskAction(fire.id));
-      },
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
         Fire fire = state.fire;
+
+        if (fire == null) {
+          return Scaffold(
+            appBar: FireGradientAppBar(
+              title: Text(
+                "",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            body: Container(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
         String _title = fire.town;
 
         if (fire.town != fire.local) {
@@ -49,28 +58,15 @@ class FireDetailsPage extends StatelessWidget {
           body: Container(
             child: ListView(
               children: <Widget>[
-                ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context)
-                            .textResources
-                            .toUpperCase(),
-                        style: _header)),
+                ListTile(title: Text(FogosLocalizations.of(context).textResources.toUpperCase(), style: _header)),
                 SizedBox(height: 15),
                 MeansStatistics(),
                 SizedBox(height: 25),
-                ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context).textStatus.toUpperCase(),
-                        style: _header)),
+                ListTile(title: Text(FogosLocalizations.of(context).textStatus.toUpperCase(), style: _header)),
                 SizedBox(height: 15),
                 DetailsHistoryStats(),
                 SizedBox(height: 25),
-                ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context)
-                            .textRiskOfFire
-                            .toUpperCase(),
-                        style: _header)),
+                ListTile(title: Text(FogosLocalizations.of(context).textRiskOfFire.toUpperCase(), style: _header)),
                 SizedBox(height: 15),
                 FireRisk(),
                 SizedBox(height: 25),

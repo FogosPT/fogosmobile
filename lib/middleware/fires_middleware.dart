@@ -55,6 +55,7 @@ Middleware<AppState> _createLoadFire() {
 
     try {
       String url = '${Endpoints.getFire}${action.fireId}';
+      print(url);
       final response = await http.get(url);
       final responseData = json.decode(response.body)['data'];
       Fire fire = Fire.fromJson(responseData);
@@ -111,6 +112,7 @@ Middleware<AppState> _createLoadFireRisk() {
     print('create risk');
     try {
       String url = '${Endpoints.getFireRisk}${action.fireId}';
+      print(url);
       final response = await http.get(url);
       String responseData = json.decode(response.body)['data'][0]['hoje'];
       print(responseData);

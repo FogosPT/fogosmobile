@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire_details.dart';
@@ -15,6 +16,9 @@ class MeansStatistics extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
+      onInit: (Store<AppState> store) {
+        store.dispatch(LoadFireMeansHistoryAction(store.state.fire.id));
+      },
       builder: (BuildContext context, AppState state) {
         MeansHistory stats = state.fireMeansHistory;
 

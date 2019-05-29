@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
@@ -8,17 +9,20 @@ class FireRisk extends StatelessWidget {
   final TextStyle _body = TextStyle(color: Colors.white, fontSize: 20);
 
   List<FireRiskStruct> _riskList = [
-    FireRiskStruct('Reduzidos', Color(0xff6ABF59)),
+    FireRiskStruct('Reduzido', Color(0xff6ABF59)),
     FireRiskStruct('Moderado', Color(0xffFFB202)),
     FireRiskStruct('Elevado', Color(0xffFF6E02)),
     FireRiskStruct('Muito Elevado', Color(0xffB81E1F)),
-    FireRiskStruct('Maximo ', Color(0xff711313)),
+    FireRiskStruct('Máximo ', Color(0xff711313)),
   ];
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
+      onInit: (Store<AppState> store) {
+          store.dispatch(LoadFireRiskAction(store.state.fire.id));
+      },
       builder: (BuildContext context, AppState state) {
         String stats = state.fireRisk;
 
@@ -45,11 +49,11 @@ class FireRisk extends StatelessWidget {
 
   Widget _buildRisk(FireRiskStruct fireRisk, String currentRisk, context) {
     final Map riskTranslations = {
-      "Reduzidos": FogosLocalizations.of(context).textRiskReduced,
+      "Reduzido": FogosLocalizations.of(context).textRiskReduced,
       "Moderado": FogosLocalizations.of(context).textRiskModerate,
       "Elevado": FogosLocalizations.of(context).textRiskHigh,
       "Muito Elevado": FogosLocalizations.of(context).textRiskVeryHigh,
-      "Maximo": FogosLocalizations.of(context).textMaximumRisk,
+      "Máximo": FogosLocalizations.of(context).textMaximumRisk,
     };
 
     return Expanded(

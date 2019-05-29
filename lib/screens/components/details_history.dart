@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
@@ -12,6 +13,9 @@ class DetailsHistoryStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
+      onInit: (Store<AppState> store) {
+        store.dispatch(LoadFireDetailsHistoryAction(store.state.fire.id));
+      },
       builder: (BuildContext context, AppState state) {
         DetailsHistory stats = state.fireDetailsHistory;
 

@@ -101,12 +101,10 @@ class HomePage extends StatelessWidget {
                       ),
                       layers: [
                         new TileLayerOptions(
-                          urlTemplate:
-                              "https://api.mapbox.com/styles/v1/fogospt/cjgppvcdp00aa2spjclz9sjst/tiles/256/{z}/{x}/{y}?access_token={accessToken}",
+                          urlTemplate: MAPBOX_URL_TEMPLATE,
                           additionalOptions: {
-                            'accessToken':
-                                'pk.eyJ1IjoiZm9nb3NwdCIsImEiOiJjamZ3Y2E5OTMyMjFnMnFxbjAxbmt3bmdtIn0.xg1X-A17WRBaDghhzsmjIA',
-                            'id': 'mapbox.streets',
+                            'accessToken': MAPBOX_ACCESS_TOKEN,
+                            'id': MAPBOX_ID,
                           },
                         ),
                         new MarkerLayerOptions(

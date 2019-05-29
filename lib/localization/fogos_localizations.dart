@@ -144,7 +144,7 @@ class FogosLocalizations {
   String get textWarningsMadeira => Intl.message(
     "Avisos Madeira",
     name: 'textWarningsMadeira',
-    desc: 'Texto de avisos - App Drawer',
+    desc: 'Texto de avisos da Madeira - App Drawer',
   );
 
   String get textNoConnection => Intl.message(

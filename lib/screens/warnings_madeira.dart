@@ -18,12 +18,20 @@ class WarningsMadeira extends StatelessWidget {
         ),
       ),
       body: new Container(
-        child: StoreConnector<AppState, List>(
-          converter: (Store<AppState> store) => store.state.warningsMadeira,
+        child: StoreConnector<AppState, AppState>(
+          converter: (Store<AppState> store) => store.state,
           onInit: (Store<AppState> store) {
             store.dispatch(LoadWarningsMadeiraAction());
           },
-          builder: (BuildContext context, List warnings) {
+          builder: (BuildContext context, AppState state) {
+            List<WarningMadeira> warnings = state.warningsMadeira;
+            if (warnings == null) {
+              if (state.errors != null && state.errors.contains('warningsMadeira')) {
+                return Center(child: Text('There was an error loading this info.'));
+              }
+
+              return Center(child: CircularProgressIndicator());
+            }
             return new Column(
               children: <Widget>[
                 new Padding(

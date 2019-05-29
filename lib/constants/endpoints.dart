@@ -8,6 +8,7 @@ abstract class Endpoints {
   static const String getFireDetailsHistory = "$fogosBaseApi/fires/status?id=";
   static const String getFireRisk = "$fogosBaseApi/fires/danger?id=";
   static const String getWarnings = "$fogosBaseApi/v1/warnings";
+  static const String getWarningsMadeira = "$fogosBaseApi/v1/madeira/warnings";
   static const String getLocations = "https://fogos.pt/js/dico.json";
   static const String getYesterdayStats = "$fogosBaseApi/v1/stats/8hours/yesterday";
   static const String getTodayStats = "$fogosBaseApi/v1/stats/8hours";

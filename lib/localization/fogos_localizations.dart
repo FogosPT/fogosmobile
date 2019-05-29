@@ -141,6 +141,12 @@ class FogosLocalizations {
         desc: 'Texto de avisos - App Drawer',
       );
 
+  String get textWarningsMadeira => Intl.message(
+    "Avisos Madeira",
+    name: 'textWarningsMadeira',
+    desc: 'Texto de avisos - App Drawer',
+  );
+
   String get textNoConnection => Intl.message(
         "Não foi possível fazer a ligação",
         name: 'textNoConnection',

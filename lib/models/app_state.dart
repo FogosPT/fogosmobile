@@ -23,6 +23,7 @@ class AppState {
   WeekStats weekStats;
   LastHoursStats lastHoursStats;
   List errors = [];
+  List warningsMadeira = [];
 
   AppState({
     this.fires,
@@ -44,6 +45,7 @@ class AppState {
     this.weekStats,
     this.lastHoursStats,
     this.errors,
+    this.warningsMadeira,
   });
 
   AppState copyWith({
@@ -65,6 +67,7 @@ class AppState {
     WeekStats weekStats,
     LastHoursStats lastHoursStats,
     List errors,
+    List warningsMadeira,
   }) {
     return new AppState(
       fires: fires ?? this.fires,
@@ -86,6 +89,7 @@ class AppState {
       weekStats: weekStats ?? this.weekStats,
       lastHoursStats: lastHoursStats ?? this.lastHoursStats,
       errors: errors ?? this.errors,
+      warningsMadeira: warningsMadeira ?? this.warningsMadeira,
     );
   }
 

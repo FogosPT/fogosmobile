@@ -341,11 +341,11 @@ class FogosLocalizations {
         desc: 'Text Fires',
       );
 
-  String get textFireman =>
+  String get textFirefighters =>
       Intl.message(
         "Bombeiros",
-        name: 'textFireman',
-        desc: 'Fireman',
+        name: 'textFirefighters',
+        desc: 'Firefighters',
       );
 
   String get textVehicles =>

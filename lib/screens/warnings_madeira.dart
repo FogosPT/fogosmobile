@@ -24,7 +24,7 @@ class WarningsMadeira extends StatelessWidget {
             store.dispatch(LoadWarningsMadeiraAction());
           },
           builder: (BuildContext context, AppState state) {
-            List<WarningMadeira> warnings = state.warningsMadeira;
+            List warnings = state.warningsMadeira;
             if (warnings == null) {
               if (state.errors != null && state.errors.contains('warningsMadeira')) {
                 return Center(child: Text('There was an error loading this info.'));

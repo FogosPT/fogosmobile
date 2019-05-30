@@ -26,7 +26,7 @@ class LastHoursStatistics extends StatelessWidget {
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
-                id: FogosLocalizations.of(context).textFireman,
+                id: FogosLocalizations.of(context).textFirefighters,
                 colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
                 domainFn: (LastHour stats, _) => stats.label,
                 measureFn: (LastHour stats, _) => stats.man,

@@ -32,7 +32,7 @@ class MeansStatistics extends StatelessWidget {
         List<charts.Series<Means, DateTime>> _createSampleData() {
           return [
             charts.Series<Means, DateTime>(
-              id: FogosLocalizations.of(context).textFireman,
+              id: FogosLocalizations.of(context).textFirefighters,
               colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
               domainFn: (Means stats, _) => stats.label,
               measureFn: (Means stats, _) => stats.man,

@@ -13,7 +13,7 @@ class WarningsMadeira extends StatelessWidget {
     return new Scaffold(
       appBar: FireGradientAppBar(
         title: new Text(
-          FogosLocalizations.of(context).textWarnings,
+          FogosLocalizations.of(context).textWarningsMadeira,
           style: new TextStyle(color: Colors.white),
         ),
       ),

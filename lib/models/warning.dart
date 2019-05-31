@@ -10,7 +10,7 @@ class Warning {
   factory Warning.fromJson(Map<String, dynamic> map) {
     return new Warning(
       title: map['label'],
-      description: map['description'],
+      description: map['text'],
     );
   }
 }

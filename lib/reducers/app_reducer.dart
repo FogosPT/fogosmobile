@@ -67,6 +67,10 @@ AppState appReducer(AppState state, action) {
   } else if (action is ContributorsLoadedAction) {
     isLoading = false;
     hasContributors = true;
+  } else if (action is LoadWarningsAction) {
+    isLoading = true;
+  } else if (action is WarningsLoadedAction) {
+    isLoading = false;
   } else if (action is LoadWarningsMadeiraAction) {
     isLoading = true;
   } else if (action is WarningsMadeiraLoadedAction) {
@@ -97,6 +101,7 @@ AppState appReducer(AppState state, action) {
     weekStats: weekStatsReducer(state.weekStats, action),
     lastHoursStats: lastHoursStatsReducer(state.lastHoursStats, action),
     errors: errorsReducer(state.errors, action),
-    warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action)
+    warnings: warningsReducer(state.warnings, action),
+    warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
   );
 }

@@ -23,6 +23,7 @@ class AppState {
   WeekStats weekStats;
   LastHoursStats lastHoursStats;
   List errors = [];
+  List warnings = [];
   List warningsMadeira = [];
 
   AppState({
@@ -45,6 +46,7 @@ class AppState {
     this.weekStats,
     this.lastHoursStats,
     this.errors,
+    this.warnings,
     this.warningsMadeira,
   });
 
@@ -67,6 +69,7 @@ class AppState {
     WeekStats weekStats,
     LastHoursStats lastHoursStats,
     List errors,
+    List warnings,
     List warningsMadeira,
   }) {
     return new AppState(
@@ -89,13 +92,14 @@ class AppState {
       weekStats: weekStats ?? this.weekStats,
       lastHoursStats: lastHoursStats ?? this.lastHoursStats,
       errors: errors ?? this.errors,
+      warnings: warnings ?? this.warnings,
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
     );
   }
 
   @override
   String toString() {
-    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
+    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nwarnings count: ${warnings?.length}, \nwarnings Madeira count: ${warningsMadeira?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
   }
 
   String getErrors() {

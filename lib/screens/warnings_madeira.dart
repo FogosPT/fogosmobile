@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fogosmobile/actions/warnings_actions.dart';
 import 'package:redux/redux.dart';
+
+import 'package:fogosmobile/actions/warnings_actions.dart';
+import 'package:fogosmobile/models/warning.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
-import 'package:fogosmobile/models/warning.dart';
 
 class WarningsMadeira extends StatelessWidget {
   @override

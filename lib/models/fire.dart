@@ -89,7 +89,7 @@ class Fire {
       sharepointId: map['sharepointId'],
       active: map['active'],
       important: map['important'],
-      status: _statusFromJson(map['status']),
+      status: statusFromJson(map['status']),
       statusCode: map['statusCode'],
       statusColor: map['statusColor'],
       nature: map['natureza'],
@@ -113,7 +113,7 @@ class Fire {
     );
   }
 
-  static FireStatus _statusFromJson(String status) {
+  static FireStatus statusFromJson(String status) {
     switch (status) {
       case 'Ocorrência Significativa':
         return FireStatus.significative_ocurrence;
@@ -141,6 +141,37 @@ class Fire {
         throw Exception('Unknown fire state: $status');
     }
   }
+
+
+  static String statusToJson(FireStatus status) {
+    switch (status) {
+      case FireStatus.significative_ocurrence:
+        return 'Ocorrência Significativa';
+      case FireStatus.vigilance:
+        return 'Vigilância';
+      case FireStatus.dispatch:
+        return 'Despacho';
+      case FireStatus.first_alert_dispatch:
+        return 'Despacho de 1º Alerta';
+      case FireStatus.arrival:
+        return 'Chegada ao TO';
+      case FireStatus.ongoing:
+        return 'Em Curso';
+      case  FireStatus.in_resolution:
+        return 'Em Resolução';
+      case FireStatus.in_conclusion:
+        return 'Conclusão';
+      case FireStatus.done:
+        return 'Encerrada';
+      case FireStatus.false_alarm:
+        return 'Falso Alarme';
+      case FireStatus.false_alert:
+        return 'Falso Alerta';
+      default:
+        throw Exception('Unknown fire state: $status');
+    }
+  }
+
 
   String get fullAddress => '$district, $city, $town, $local';
 }

@@ -53,8 +53,7 @@ class HomePage extends StatelessWidget {
 
         if (state.fires != null) {
           for (final Fire fire in state.fires) {
-            if (state.activeFilters.isEmpty ||
-                state.activeFilters.contains(fire.status)) {
+            if (state.activeFilters.contains(fire.status)) {
               markers.add(
                 new Marker(
                   width: fullPinSize * fire.scale,

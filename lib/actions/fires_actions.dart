@@ -28,6 +28,11 @@ class SelectFireFiltersAction {
   SelectFireFiltersAction(this.filter);
 }
 
+class SavedFireFiltersAction {
+  final List<FireStatus> filters;
+  SavedFireFiltersAction(this.filters);
+}
+
 class LoadFireMeansHistoryAction {
   final String fireId;
 

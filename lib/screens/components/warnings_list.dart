@@ -10,7 +10,7 @@ class WarningsList extends StatelessWidget {
     return Column(
       children: <Widget>[
         new Padding(
-          padding: new EdgeInsets.only(top: 20.0),
+          padding: new EdgeInsets.only(top: 10.0),
         ),
         new Expanded(
           child: new ListView.builder(
@@ -18,20 +18,45 @@ class WarningsList extends StatelessWidget {
             itemBuilder: (BuildContext context, int index) {
               var warning = warnings[index];
               return Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: ListTile(
-                  title: Text(
-                    warning.title,
-                    style: TextStyle(color: Colors.redAccent),
-                  ),
-                  subtitle: Text(warning.description),
-                  isThreeLine: false,
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2.5), color: Color(0xfff45e29)
+                      ),
+                      child: Text(warning.timestamp, style: TextStyle(color: Colors.white), textAlign: TextAlign.left)
+                    ),
+                    _buildWarningBody(warning),
+                  ],
                 ),
               );
             },
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildWarningBody(var warning) {
+    if(warning.title != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
+            child: Text(warning.title, style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+          ),
+          Text(warning.description),
+        ],
+      );
+    }
+    return Container(
+      padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
+      child: Text(warning.description)
     );
   }
 }

@@ -18,16 +18,12 @@ class Warning {
   }
 }
 
-class WarningMadeira {
-  final String timestamp;
-  final String title;
-  final String description;
-
+class WarningMadeira extends Warning {
   WarningMadeira({
-    this.timestamp,
-    this.title,
-    this.description,
-  });
+    timestamp,
+    title,
+    description
+  }) : super(timestamp: timestamp, title: title, description: description);
 
   factory WarningMadeira.fromJson(Map<String, dynamic> parsedJson) {
     return new WarningMadeira(

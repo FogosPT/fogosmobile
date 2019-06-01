@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/models/warning.dart';
 
 class WarningsList extends StatelessWidget {
   final List warnings;
@@ -16,7 +17,7 @@ class WarningsList extends StatelessWidget {
           child: new ListView.builder(
             itemCount: warnings.length,
             itemBuilder: (BuildContext context, int index) {
-              var warning = warnings[index];
+              Warning warning = warnings[index];
               return Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(

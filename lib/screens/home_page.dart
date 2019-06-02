@@ -117,6 +117,8 @@ class HomePage extends StatelessWidget {
                       options: new MapOptions(
                         center: _center,
                         zoom: 7.0,
+                        minZoom: 1.0,
+                        maxZoom: 20.0,
                       ),
                       layers: [
                         new TileLayerOptions(

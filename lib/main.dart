@@ -274,10 +274,18 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 new DrawerHeader(
                   child: new Center(
-                    child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.redAccent),
+                    child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
                   ),
                   decoration: new BoxDecoration(
-                    color: Color(0xff883333),
+                    gradient: new LinearGradient(
+                        colors: [
+                          FogosTheme().accentColor,
+                          FogosTheme().primaryColor,
+                        ],
+                        begin: const FractionalOffset(0.0, 0.0),
+                        end: const FractionalOffset(1.0, 0.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
                   ),
                 ),
                 new ListTile(

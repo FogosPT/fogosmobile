@@ -31,6 +31,7 @@ import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/warnings_madeira.dart';
 
 final SentryClient _sentry = new SentryClient(dsn: SENTRY_DSN);
 
@@ -111,6 +112,7 @@ class MyApp extends StatelessWidget {
         routes: <String, WidgetBuilder>{
           '$SETTINGS_ROUTE': (_) => new Settings(),
           '$WARNINGS_ROUTE': (_) => new Warnings(),
+          '$WARNINGS_MADEIRA_ROUTE': (_) => new WarningsMadeira(),
           '$PARTNERS_ROUTE': (_) => new Partners(),
           '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
           '$INFO_ROUTE': (_) => new InfoPage(),
@@ -291,6 +293,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(WARNINGS_ROUTE);
+                  },
+                  leading: Icon(Icons.warning),
+                ),
+                new ListTile(
+                  title: new Text(FogosLocalizations.of(context).textWarningsMadeira),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
                   },
                   leading: Icon(Icons.warning),
                 ),

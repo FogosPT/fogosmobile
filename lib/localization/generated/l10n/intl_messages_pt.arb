@@ -1,6 +1,6 @@
 {
   "@@locale": "pt",
-  "@@last_modified": "2019-05-24T15:49:27.430395",
+  "@@last_modified": "2019-05-30T09:56:25.562305",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -76,6 +76,12 @@
   "textWarnings": "Avisos",
   "@textWarnings": {
     "description": "Texto de avisos - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textWarningsMadeira": "Avisos Madeira",
+  "@textWarningsMadeira": {
+    "description": "Texto de avisos da Madeira - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -272,9 +278,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "textFireman": "Bombeiros",
-  "@textFireman": {
-    "description": "Fireman",
+  "textFirefighters": "Bombeiros",
+  "@textFirefighters": {
+    "description": "Firefighters",
     "type": "text",
     "placeholders": {}
   },
@@ -386,7 +392,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textCivilProtection": " Página da Protecção Civil Portuguesa.",
+  "textCivilProtection": "Página da Protecção Civil Portuguesa.",
   "@textCivilProtection": {
     "description": "Portuguese Civil Protection Agency website.",
     "type": "text",
@@ -404,9 +410,15 @@
     "type": "text",
     "placeholders": {}
   },
-  "textBugs": "Sugestões/Bugs -",
+  "textBugs": "Sugestões / Bugs -",
   "@textBugs": {
     "description": "Suggestions / Bug reporting -",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFiresList": "Lista de Fogos",
+  "@textFiresList": {
+    "description": "Fires List",
     "type": "text",
     "placeholders": {}
   }

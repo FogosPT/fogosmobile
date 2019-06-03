@@ -8,13 +8,13 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/components/warnings_list.dart';
 
-class Warnings extends StatelessWidget {
+class WarningsMadeira extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: FireGradientAppBar(
         title: new Text(
-          FogosLocalizations.of(context).textWarnings,
+          FogosLocalizations.of(context).textWarningsMadeira,
           style: new TextStyle(color: Colors.white),
         ),
       ),
@@ -22,12 +22,12 @@ class Warnings extends StatelessWidget {
         child: StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           onInit: (Store<AppState> store) {
-            store.dispatch(LoadWarningsAction());
+            store.dispatch(LoadWarningsMadeiraAction());
           },
           builder: (BuildContext context, AppState state) {
-            List warnings = state.warnings;
+            List warnings = state.warningsMadeira;
             if (warnings == null) {
-              if (state.errors != null && state.errors.contains('warnings')) {
+              if (state.errors != null && state.errors.contains('warningsMadeira')) {
                 return Center(child: Text('There was an error loading this info.'));
               }
 

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2019-05-24T15:49:27.430395",
+  "@@last_modified": "2019-05-30T09:56:25.562305",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -49,12 +49,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "textHumanMeans": "Firemen",
-    "@textHumanMeans": {
-      "description": "Human means label",
-      "type": "text",
-      "placeholders": {}
-    },
+  "textHumanMeans": "Firefighters",
+  "@textHumanMeans": {
+    "description": "Human means label",
+    "type": "text",
+    "placeholders": {}
+  },
   "textTerrainMeans": "Vehicles",
   "@textTerrainMeans": {
     "description": "Terrain means label",
@@ -76,6 +76,12 @@
   "textWarnings": "Warnings",
   "@textWarnings": {
     "description": "Texto de avisos - App Drawer",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textWarningsMadeira": "Warnings Madeira",
+  "@textWarningsMadeira": {
+    "description": "Texto de avisos da Madeira - App Drawer",
     "type": "text",
     "placeholders": {}
   },
@@ -272,9 +278,9 @@
     "type": "text",
     "placeholders": {}
   },
-  "textFireman": "Firemen",
-  "@textFireman": {
-    "description": "Fireman",
+  "textFirefighters": "Firefighters",
+  "@textFirefighters": {
+    "description": "Firefighters",
     "type": "text",
     "placeholders": {}
   },
@@ -388,7 +394,7 @@
   },
   "textCivilProtection": "Portuguese Civil Protection Agency website",
   "@textCivilProtection": {
-    "description": " Portuguese Civil Protection Agency website.",
+    "description": "Portuguese Civil Protection Agency website.",
     "type": "text",
     "placeholders": {}
   },
@@ -404,10 +410,16 @@
     "type": "text",
     "placeholders": {}
   },
-  "textBugs": "Suggestions/Bug reporting -",
+  "textBugs": "Suggestions / Bug reporting -",
   "@textBugs": {
     "description": "Suggestions / Bug reporting -",
     "type": "text",
     "placeholders": {}
-    }
+  },
+  "textFiresList": "Fires List",
+  "@textFiresList": {
+    "description": "Fires List",
+    "type": "text",
+    "placeholders": {}
+  }
 }

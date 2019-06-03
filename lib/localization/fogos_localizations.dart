@@ -141,6 +141,12 @@ class FogosLocalizations {
         desc: 'Texto de avisos - App Drawer',
       );
 
+  String get textWarningsMadeira => Intl.message(
+    "Avisos Madeira",
+    name: 'textWarningsMadeira',
+    desc: 'Texto de avisos da Madeira - App Drawer',
+  );
+
   String get textNoConnection => Intl.message(
         "Não foi possível fazer a ligação",
         name: 'textNoConnection',
@@ -335,11 +341,11 @@ class FogosLocalizations {
         desc: 'Text Fires',
       );
 
-  String get textFireman =>
+  String get textFirefighters =>
       Intl.message(
         "Bombeiros",
-        name: 'textFireman',
-        desc: 'Fireman',
+        name: 'textFirefighters',
+        desc: 'Firefighters',
       );
 
   String get textVehicles =>

@@ -8,6 +8,8 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/reducers/statistics_reducer.dart';
 import 'package:fogosmobile/reducers/errors_reducer.dart';
+import 'package:fogosmobile/actions/warnings_actions.dart';
+import 'package:fogosmobile/reducers/warnings_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   bool isLoading;
@@ -65,6 +67,14 @@ AppState appReducer(AppState state, action) {
   } else if (action is ContributorsLoadedAction) {
     isLoading = false;
     hasContributors = true;
+  } else if (action is LoadWarningsAction) {
+    isLoading = true;
+  } else if (action is WarningsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadWarningsMadeiraAction) {
+    isLoading = true;
+  } else if (action is WarningsMadeiraLoadedAction) {
+    isLoading = false;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -91,5 +101,7 @@ AppState appReducer(AppState state, action) {
     weekStats: weekStatsReducer(state.weekStats, action),
     lastHoursStats: lastHoursStatsReducer(state.lastHoursStats, action),
     errors: errorsReducer(state.errors, action),
+    warnings: warningsReducer(state.warnings, action),
+    warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
   );
 }

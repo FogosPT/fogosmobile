@@ -63,7 +63,7 @@ class HomePage extends StatelessWidget {
                   builder: (BuildContext context) {
                     return new Container(
                       decoration: BoxDecoration(
-                          color: getFireColor(fire.statusColor),
+                          color: getFireColor(fire),
                           shape: BoxShape.circle),
                       child: IconButton(
                         icon: new SvgPicture.asset(

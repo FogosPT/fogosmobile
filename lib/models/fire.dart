@@ -50,6 +50,11 @@ class Fire {
   double importance;
   double scale;
 
+  // extra
+  String extra;
+  String cos;
+  String pco;
+
   Fire({
     this.id,
     this.sharepointId,
@@ -73,6 +78,9 @@ class Fire {
     this.date,
     this.dateTime,
     this.time,
+    this.extra,
+    this.cos,
+    this.pco,
   });
 
   factory Fire.fromJson(Map<String, dynamic> map) {
@@ -99,6 +107,9 @@ class Fire {
       date: map['date'],
       dateTime: map['dateTime']['sec'],
       time: map['hour'],
+      extra: map['extra'],
+      cos: map['cos'],
+      pco: map['pco'],
     );
   }
 

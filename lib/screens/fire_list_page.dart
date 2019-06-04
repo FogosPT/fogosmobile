@@ -8,6 +8,7 @@ import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -141,8 +142,8 @@ class FireList extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(right: 16.0),
                                       child: Icon(
-                                        FontAwesomeIcons.map,
-                                        color: getFireColor(fire.statusColor),
+                                        Icons.map,
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -177,7 +178,7 @@ class FireList extends StatelessWidget {
                                         ),
                                         width: 25.0,
                                         height: 25.0,
-                                        color: getFireColor(fire.statusColor),
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -209,7 +210,7 @@ class FireList extends StatelessWidget {
                                         imgSvgFireman,
                                         width: 35.0,
                                         height: 35.0,
-                                        color: getFireColor(fire.statusColor),
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -246,8 +247,8 @@ class FireList extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.only(right: 16.0),
                                       child: Icon(
-                                        FontAwesomeIcons.clock,
-                                        color: getFireColor(fire.statusColor),
+                                        Icons.access_time,
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -268,6 +269,7 @@ class FireList extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.only(top: 20.0),
                                 ),
+                                ImportantFireExtra(fire),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.end,

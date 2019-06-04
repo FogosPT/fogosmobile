@@ -38,7 +38,6 @@ class _FireNotificationsState extends State<FireNotifications> {
         return new StoreConnector<AppState, SetFireNotificationActionCallBack>(
           converter: (Store<AppState> store) {
             return (String key, int value) {
-              print('$key, ${value.toString()}');
               store.dispatch(new SetFireNotificationAction(key, value));
             };
           },

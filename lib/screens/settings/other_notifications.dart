@@ -24,7 +24,6 @@ class _OtherNotificationsState extends State<OtherNotifications> {
         return new StoreConnector<AppState, SetPreferenceCallBack>(
           converter: (Store<AppState> store) {
             return (String key, int value) {
-              print('$key, ${value.toString()}');
               store.dispatch(new SetPreferenceAction(key, value));
             };
           },

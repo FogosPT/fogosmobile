@@ -1,8 +1,15 @@
 import 'dart:ui';
 
+import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
 
-Color getFireColor(String fireStatus) {
+Color getFireColor(Fire fire) {
+  String fireStatus = fire.statusColor;
+
+  if (fire.important == true) {
+    fireStatus = 'FF0000';
+  }
+  
   return Color(
     fireStatus == null ? 0xFF000000 : int.parse('0xFF$fireStatus'),
   );

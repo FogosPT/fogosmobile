@@ -9,6 +9,7 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
+import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -63,7 +64,7 @@ class FireDetails extends StatelessWidget {
                   child: Container(
                     child: Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 32.0),
+                          const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,8 +123,8 @@ class FireDetails extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
                                       child: Icon(
-                                        FontAwesomeIcons.map,
-                                        color: getFireColor(fire.statusColor),
+                                        Icons.map,
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -173,7 +174,7 @@ class FireDetails extends StatelessWidget {
                                         ),
                                         width: 25.0,
                                         height: 25.0,
-                                        color: getFireColor(fire.statusColor),
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -208,7 +209,7 @@ class FireDetails extends StatelessWidget {
                                         imgSvgFireman,
                                         width: 35.0,
                                         height: 35.0,
-                                        color: getFireColor(fire.statusColor),
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -248,8 +249,8 @@ class FireDetails extends StatelessWidget {
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
                                       child: Icon(
-                                        FontAwesomeIcons.clock,
-                                        color: getFireColor(fire.statusColor),
+                                        Icons.access_time,
+                                        color: getFireColor(fire),
                                       ),
                                     ),
                                     Expanded(
@@ -269,9 +270,10 @@ class FireDetails extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                Padding(
+                                 Padding(
                                   padding: EdgeInsets.only(top: 20.0),
                                 ),
+                                ImportantFireExtra(fire),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -285,7 +287,7 @@ class FireDetails extends StatelessWidget {
                                               .pushNamed(FIRE_DETAILS_ROUTE);
                                         }),
                                   ],
-                                )
+                                ),
                               ],
                             ),
                           )

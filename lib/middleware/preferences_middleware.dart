@@ -43,7 +43,7 @@ Middleware<AppState> _createLoadPreferences() {
       }
 
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
-      List<Fire> fires = List.from(store.state.fires);
+      List<Fire> fires = store.state.fires;
 
       List<FireStatus> saveFilters = prefs.getStringList('active_filters')
           ?.map((filter)=>Fire.statusFromJson(filter))

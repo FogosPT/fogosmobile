@@ -19,7 +19,6 @@ dependencies:
   redux_logging: ^0.3.0
   flutter_map: ^0.5.0
   http: ^0.12.0
-  font_awesome_flutter: ^8.4.0
   firebase_messaging: ^2.1.0
   shared_preferences: ^0.4.3
   diacritic: ^0.1.1

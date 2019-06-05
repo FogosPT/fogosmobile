@@ -11,14 +11,11 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:share/share.dart';
-
-import 'assets/icons.dart';
-import 'assets/images.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 
 class FireList extends StatelessWidget {
   final MapController mapController = new MapController();

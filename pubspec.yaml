@@ -18,7 +18,9 @@ dependencies:
   flutter_redux: ^0.5.2
   redux_logging: ^0.3.0
   flutter_map:
-    git: https://github.com/slightfoot/flutter_map.git
+    git:
+      url: https://github.com/slightfoot/flutter_map.git
+      ref: f25ea8938f3a016f9cbbc295446ad3e4af3a0e15
   http: ^0.12.0
   dio: ^2.1.7
   firebase_messaging: ^2.1.0

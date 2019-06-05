@@ -77,7 +77,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textRiskReduced" : MessageLookupByLibrary.simpleMessage("Reduced"),
     "textRiskVeryHigh" : MessageLookupByLibrary.simpleMessage("Very High"),
     "textShare" : m0,
-    "textSignificatOccurences" : MessageLookupByLibrary.simpleMessage("Significant Occurrences"),
+    "textSignificatOccurences" : MessageLookupByLibrary.simpleMessage("Significant Incidents"),
     "textStatistics" : MessageLookupByLibrary.simpleMessage("Statistics"),
     "textStatus" : MessageLookupByLibrary.simpleMessage("Status"),
     "textTerrainMeans" : MessageLookupByLibrary.simpleMessage("Vehicles"),

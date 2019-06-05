@@ -332,7 +332,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textSignificatOccurences": "Significant Occurrences",
+  "textSignificatOccurences": "Significant Incidents",
   "@textSignificatOccurences": {
     "description": "Significant Occurences",
     "type": "text",

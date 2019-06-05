@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:redux/redux.dart';
@@ -43,7 +45,9 @@ Middleware<AppState> _createLoadFires() {
       store.dispatch(new FiresLoadedAction(fires));
     } catch (e) {
       store.dispatch(new FiresLoadedAction([]));
-      throw e;
+      if (!(e is SocketException)) {
+        throw e;
+      }
     }
   };
 }
@@ -62,7 +66,9 @@ Middleware<AppState> _createLoadFire() {
     } catch (e) {
       store.dispatch(new FireLoadedAction(null));
       store.dispatch(new AddErrorAction('fire'));
-      throw e;
+      if (!(e is SocketException)) {
+        throw e;
+      }
     }
   };
 }
@@ -81,7 +87,9 @@ Middleware<AppState> _createLoadFireMeansHistory() {
     } catch (e) {
       store.dispatch(new FireMeansHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireMeansHistory'));
-      throw e;
+      if (!(e is SocketException)) {
+        throw e;
+      }
     }
   };
 }
@@ -100,7 +108,9 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
     } catch (e) {
       store.dispatch(new FireDetailsHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireDetailsHistory'));
-      throw e;
+      if (!(e is SocketException)) {
+        throw e;
+      }
     }
   };
 }
@@ -118,7 +128,9 @@ Middleware<AppState> _createLoadFireRisk() {
     } catch (e) {
       store.dispatch(new FireRiskLoadedAction(null));
       store.dispatch(new AddErrorAction('fireRisk'));
-      throw e;
+      if (!(e is SocketException)) {
+        throw e;
+      }
     }
   };
 }

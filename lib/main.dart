@@ -259,8 +259,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[
-                        _buildRefreshButton(state, loadFiresAction),
                         _buildFiltersMenu(state),
+                        _buildRefreshButton(state, loadFiresAction),
                       ]);
                     },
                   );

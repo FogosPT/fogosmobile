@@ -1,8 +1,7 @@
 import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/statistics.dart';
-
-import 'fire_details.dart';
+import 'package:fogosmobile/models/fire_details.dart';
 
 class AppState {
   List<Fire> fires = [];

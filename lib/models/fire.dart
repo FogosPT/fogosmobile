@@ -89,7 +89,7 @@ class Fire {
       sharepointId: map['sharepointId'],
       active: map['active'],
       important: map['important'],
-      status: statusFromJson(map['status']),
+      status: _statusFromJson(map['status']),
       statusCode: map['statusCode'],
       statusColor: map['statusColor'],
       nature: map['natureza'],
@@ -113,7 +113,7 @@ class Fire {
     );
   }
 
-  static FireStatus statusFromJson(String status) {
+  static FireStatus _statusFromJson(String status) {
     switch (status) {
       case 'Ocorrência Significativa':
         return FireStatus.significative_ocurrence;
@@ -142,8 +142,7 @@ class Fire {
     }
   }
 
-
-  static String statusToJson(FireStatus status) {
+  static String _statusToJson(FireStatus status) {
     switch (status) {
       case FireStatus.significative_ocurrence:
         return 'Ocorrência Significativa';
@@ -157,7 +156,7 @@ class Fire {
         return 'Chegada ao TO';
       case FireStatus.ongoing:
         return 'Em Curso';
-      case  FireStatus.in_resolution:
+      case FireStatus.in_resolution:
         return 'Em Resolução';
       case FireStatus.in_conclusion:
         return 'Conclusão';
@@ -172,6 +171,13 @@ class Fire {
     }
   }
 
+  static List<String> activeFiltersToList(List<FireStatus> statusList) {
+    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ?? [];
+  }
+
+  static List<FireStatus> listFromActiveFilters(List<String> statusList) {
+    return statusList?.map((filter) => Fire._statusFromJson(filter))?.toList() ?? List.from(FireStatus.values);
+  }
 
   String get fullAddress => '$district, $city, $town, $local';
 }

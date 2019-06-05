@@ -1,16 +1,17 @@
+import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/statistics.dart';
 
 import 'fire_details.dart';
 
 class AppState {
-  List fires = [];
+  List<Fire> fires = [];
   Fire fire;
   List<FireStatus> activeFilters;
   MeansHistory fireMeansHistory;
   DetailsHistory fireDetailsHistory;
   String fireRisk;
-  List contributors = [];
+  List<Contributor> contributors = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
   bool hasPreferences = false;

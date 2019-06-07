@@ -142,5 +142,42 @@ class Fire {
     }
   }
 
+  static String _statusToJson(FireStatus status) {
+    switch (status) {
+      case FireStatus.significative_ocurrence:
+        return 'Ocorrência Significativa';
+      case FireStatus.vigilance:
+        return 'Vigilância';
+      case FireStatus.dispatch:
+        return 'Despacho';
+      case FireStatus.first_alert_dispatch:
+        return 'Despacho de 1º Alerta';
+      case FireStatus.arrival:
+        return 'Chegada ao TO';
+      case FireStatus.ongoing:
+        return 'Em Curso';
+      case FireStatus.in_resolution:
+        return 'Em Resolução';
+      case FireStatus.in_conclusion:
+        return 'Conclusão';
+      case FireStatus.done:
+        return 'Encerrada';
+      case FireStatus.false_alarm:
+        return 'Falso Alarme';
+      case FireStatus.false_alert:
+        return 'Falso Alerta';
+      default:
+        throw Exception('Unknown fire state: $status');
+    }
+  }
+
+  static List<String> activeFiltersToList(List<FireStatus> statusList) {
+    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ?? [];
+  }
+
+  static List<FireStatus> listFromActiveFilters(List<String> statusList) {
+    return statusList?.map((filter) => Fire._statusFromJson(filter))?.toList() ?? List.from(FireStatus.values);
+  }
+
   String get fullAddress => '$district, $city, $town, $local';
 }

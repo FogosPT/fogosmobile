@@ -61,13 +61,8 @@ fireRiskReducer(String data, action) {
 }
 
 filtersReducer(List filters, action) {
-  if (action is SelectFireFiltersAction) {
-    if (filters.contains(action.filter)) {
-      if (filters.length > 1) filters.remove(action.filter);
-    } else {
-      filters.add(action.filter);
-    }
-    return filters;
+  if (action is SavedFireFiltersAction) {
+    return action.filters;
   } else {
     return filters;
   }

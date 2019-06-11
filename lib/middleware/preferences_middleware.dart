@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:redux/redux.dart';
 import 'package:http/http.dart' as http;
@@ -16,13 +15,11 @@ List<Middleware<AppState>> preferencesMiddleware() {
   final loadPreferences = _createLoadPreferences();
   final setPreference = _createSetPreference();
   final setNotification = _createSetNotification();
-  final selectFireFilters = _createSelectFireFilters();
 
   return [
     TypedMiddleware<AppState, LoadAllPreferencesAction>(loadPreferences),
     TypedMiddleware<AppState, SetPreferenceAction>(setPreference),
     TypedMiddleware<AppState, SetFireNotificationAction>(setNotification),
-    TypedMiddleware<AppState, SelectFireFiltersAction>(selectFireFilters),
   ];
 }
 
@@ -45,8 +42,6 @@ Middleware<AppState> _createLoadPreferences() {
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
       List<Fire> fires = store.state.fires;
 
-      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
-
       if (fires.length > 0) {
         data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
       } else {
@@ -58,7 +53,6 @@ Middleware<AppState> _createLoadPreferences() {
       data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
 
       store.dispatch(new AllPreferencesLoadedAction(data));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
     } catch (e) {
       print(e);
     }
@@ -105,28 +99,6 @@ Middleware<AppState> _createSetNotification() {
       }
       prefs.save('subscribedFires', subscribedFires);
       store.dispatch(new LoadAllPreferencesAction());
-    } catch (e) {
-      print(e);
-    }
-  };
-}
-
-Middleware<AppState> _createSelectFireFilters() {
-  return (Store store, action, NextDispatcher next) async {
-    next(action);
-    try {
-      final prefs = SharedPreferencesManager.preferences;
-      FireStatus filter = action.filter;
-      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
-
-      if (saveFilters.contains(filter)) {
-        saveFilters.remove(filter);
-      } else {
-        saveFilters.add(filter);
-      }
-
-      prefs.save('active_filters', Fire.activeFiltersToList(saveFilters));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
     } catch (e) {
       print(e);
     }

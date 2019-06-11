@@ -35,6 +35,8 @@ AppState appReducer(AppState state, action) {
   } else if (action is AllPreferencesLoadedAction) {
     hasPreferences = true;
     isLoading = false;
+  } else if (action is SavedFireFiltersAction) {
+    isLoading = false;
   } else if (action is SetPreferenceAction) {
     hasPreferences = true;
     isLoading = false;

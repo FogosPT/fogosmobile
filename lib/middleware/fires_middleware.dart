@@ -1,3 +1,4 @@
+import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:redux/redux.dart';
@@ -16,6 +17,7 @@ List<Middleware<AppState>> firesMiddleware() {
   final loadFireMeansHistory = _createLoadFireMeansHistory();
   final loadFireDetailsHistory = _createLoadFireDetailsHistory();
   final loadFireRisk = _createLoadFireRisk();
+  final selectFireFilters = _createSelectFireFilters();
 
   return [
     TypedMiddleware<AppState, LoadFiresAction>(loadFires),
@@ -23,6 +25,7 @@ List<Middleware<AppState>> firesMiddleware() {
     TypedMiddleware<AppState, LoadFireMeansHistoryAction>(loadFireMeansHistory),
     TypedMiddleware<AppState, LoadFireDetailsHistoryAction>(loadFireDetailsHistory),
     TypedMiddleware<AppState, LoadFireRiskAction>(loadFireRisk),
+    TypedMiddleware<AppState, SelectFireFiltersAction>(selectFireFilters),
   ];
 }
 
@@ -38,6 +41,10 @@ Middleware<AppState> _createLoadFires() {
       List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
       store.dispatch(new FiresLoadedAction(fires));
+
+      final prefs = SharedPreferencesManager.preferences;
+      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
+      store.dispatch(new SavedFireFiltersAction(saveFilters));
     } catch (e) {
       store.dispatch(new FiresLoadedAction([]));
       store.dispatch(new AddErrorAction('fires'));
@@ -173,6 +180,28 @@ Middleware<AppState> _createLoadFireRisk() {
         print('throwing error');
         throw e;
       }
+    }
+  };
+}
+
+Middleware<AppState> _createSelectFireFilters() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    try {
+      final prefs = SharedPreferencesManager.preferences;
+      FireStatus filter = action.filter;
+      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
+
+      if (saveFilters.contains(filter)) {
+        saveFilters.remove(filter);
+      } else {
+        saveFilters.add(filter);
+      }
+
+      prefs.save('active_filters', Fire.activeFiltersToList(saveFilters));
+      store.dispatch(new SavedFireFiltersAction(saveFilters));
+    } catch (e) {
+      print(e);
     }
   };
 }

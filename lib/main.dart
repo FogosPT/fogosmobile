@@ -156,48 +156,54 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {});
   }
 
-  Widget _buildRefreshButton(AppState state, VoidCallback action) => state.isLoading
-      ? Container(
-          width: 54.0,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: new CircularProgressIndicator(
-              strokeWidth: 2.0,
+  Widget _buildRefreshButton(AppState state, VoidCallback action) {
+    return state.isLoading
+        ? Container(
+            width: 48,
+            height: 48,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: new CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
             ),
-          ),
-        )
-      : new IconButton(
-          onPressed: action,
-          icon: new Icon(Icons.refresh),
-        );
+          )
+        : new IconButton(
+            onPressed: action,
+            icon: new Icon(Icons.refresh),
+          );
+  }
 
-  Widget _buildFiltersMenu(AppState state) =>
-      StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
-        return (FireStatus filter) {
-          store.dispatch(SelectFireFiltersAction(filter));
-        };
-      }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
-        return PopupMenuButton<FireStatus>(
-          icon: Icon(Icons.filter_list),
-          onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
-          itemBuilder: (BuildContext context) => FireStatus.values
-              .map((status) => PopupMenuItem<FireStatus>(
-                  value: status,
-                  child: ListTileTheme(
-                    style: ListTileStyle.drawer,
-                    selectedColor: Theme.of(context).accentColor,
-                    child: ListTile(
+  Widget _buildFiltersMenu(AppState state) {
+    return StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
+      return (FireStatus filter) {
+        store.dispatch(SelectFireFiltersAction(filter));
+      };
+    }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
+      return PopupMenuButton<FireStatus>(
+        icon: Icon(Icons.filter_list),
+        onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
+        itemBuilder: (BuildContext context) => FireStatus.values
+            .map(
+              (status) => PopupMenuItem<FireStatus>(
+                    value: status,
+                    child: ListTileTheme(
+                      style: ListTileStyle.drawer,
+                      selectedColor: Theme.of(context).accentColor,
+                      child: ListTile(
                         dense: true,
                         contentPadding: const EdgeInsets.all(0.0),
                         selected: state.activeFilters.contains(status),
                         trailing: state.activeFilters.contains(status) ? Icon(Icons.check) : null,
-                        title: Text(
-                          FogosLocalizations.of(context).textFireStatus(status),
-                        )),
-                  )))
-              .toList(),
-        );
-      });
+                        title: Text(FogosLocalizations.of(context).textFireStatus(status)),
+                      ),
+                    ),
+                  ),
+            )
+            .toList(),
+      );
+    });
+  }
 
   @override
   void initState() {

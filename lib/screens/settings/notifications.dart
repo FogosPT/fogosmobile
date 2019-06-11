@@ -61,7 +61,7 @@ class _NotificationsState extends State<Notifications> {
         store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
-        if (!state.hasPreferences && !state.isLoading) {
+        if (state.hasPreferences == false && state.isLoading == false) {
           return new Center(
             child: CircularProgressIndicator(),
           );

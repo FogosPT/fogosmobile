@@ -28,7 +28,7 @@ class FireRisk extends StatelessWidget {
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireRisk')) {
-            return Center(child: Text('There was an error loading this chart.'));
+            return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
           }
           return Center(child: CircularProgressIndicator());
         }

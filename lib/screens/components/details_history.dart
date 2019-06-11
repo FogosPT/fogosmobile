@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
@@ -21,7 +22,7 @@ class DetailsHistoryStats extends StatelessWidget {
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireDetailsHistory')) {
-            return Center(child: Text('There was an error loading this chart.'));
+            return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
           }
           return Center(child: CircularProgressIndicator());
         }

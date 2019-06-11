@@ -493,8 +493,19 @@ class FogosLocalizations {
       name: 'textFiresList',
       desc: 'Fires List',
   );
-  
 
+  String get textProblemLoadingData => Intl.message(
+      "Houve um problema a carregar a informação.",
+      name: 'textProblemLoadingData',
+      desc: 'There was a problem loading data.',
+  );
+
+   String get textInternetConnection => Intl.message(
+      "Certifique-se que está ligado à Internet.",
+      name: 'textInternetConnection',
+      desc: 'Make sure you are connected to the Internet',
+  );
+  
   String textFireStatus(FireStatus status) {
     switch (status) {
       case FireStatus.arrival:

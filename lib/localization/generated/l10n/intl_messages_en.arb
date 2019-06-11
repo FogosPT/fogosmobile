@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2019-05-30T09:56:25.562305",
+  "@@last_modified": "2019-06-11T11:18:27.773623",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -419,6 +419,18 @@
   "textFiresList": "Fires List",
   "@textFiresList": {
     "description": "Fires List",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textProblemLoadingData": "There was a problem loading data.",
+  "@textProblemLoadingData": {
+    "description": "There was a problem loading data.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textInternetConnection": "Make sure you are connected to the Internet.",
+  "@textInternetConnection": {
+    "description": "Make sure you are connected to the Internet",
     "type": "text",
     "placeholders": {}
   }

@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'dart:convert';
 
 import 'package:fogosmobile/models/app_state.dart';
@@ -23,8 +21,7 @@ List<Middleware<AppState>> firesMiddleware() {
     TypedMiddleware<AppState, LoadFiresAction>(loadFires),
     TypedMiddleware<AppState, LoadFireAction>(loadFire),
     TypedMiddleware<AppState, LoadFireMeansHistoryAction>(loadFireMeansHistory),
-    TypedMiddleware<AppState, LoadFireDetailsHistoryAction>(
-        loadFireDetailsHistory),
+    TypedMiddleware<AppState, LoadFireDetailsHistoryAction>(loadFireDetailsHistory),
     TypedMiddleware<AppState, LoadFireRiskAction>(loadFireRisk),
   ];
 }
@@ -36,16 +33,16 @@ Middleware<AppState> _createLoadFires() {
 
     try {
       String url = Endpoints.getFires;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
-      List<Fire> fires =
-          responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
-      print("load fires");
+      Response response = await Dio().get(url);
+      final responseData = json.decode(response.data)["data"];
+      List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
       store.dispatch(new FiresLoadedAction(fires));
     } catch (e) {
       store.dispatch(new FiresLoadedAction([]));
-      if (!(e is SocketException)) {
+      store.dispatch(new AddErrorAction('fires'));
+      if (!(e is DioError)) {
+        print('throwing error');
         throw e;
       }
     }
@@ -57,16 +54,28 @@ Middleware<AppState> _createLoadFire() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
 
+    String url = '${Endpoints.getFire}${action.fireId}';
+
     try {
-      String url = '${Endpoints.getFire}${action.fireId}';
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      Response response = await Dio().get(url);
+      final responseData = json.decode(response.data)["data"];
+      if (responseData == null) {
+        throw new StateError('No fire data could be loaded: $url');
+      }
+
       Fire fire = Fire.fromJson(responseData);
       store.dispatch(new FireLoadedAction(fire));
     } catch (e) {
       store.dispatch(new FireLoadedAction(null));
       store.dispatch(new AddErrorAction('fire'));
-      if (!(e is SocketException)) {
+      if (e is DioError) {
+        if (e.response != null) {
+          if (e.response.statusCode >= 400) {
+            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+          }
+        }
+      } else {
+        print('throwing error');
         throw e;
       }
     }
@@ -76,18 +85,28 @@ Middleware<AppState> _createLoadFire() {
 Middleware<AppState> _createLoadFireMeansHistory() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    print('create means history');
+    String url = '${Endpoints.getFireMeansHistory}${action.fireId}';
+
     try {
-      String url = '${Endpoints.getFireMeansHistory}${action.fireId}';
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      Response response = await Dio().get(url);
+      final responseData = json.decode(response.data)["data"];
+      if (responseData == null) {
+        throw new StateError('No getFireMeansHistory could be loaded: $url');
+      }
       MeansHistory data = MeansHistory.fromJson(responseData);
       store.dispatch(new RemoveErrorAction('fireMeansHistory'));
       store.dispatch(new FireMeansHistoryLoadedAction(data));
     } catch (e) {
       store.dispatch(new FireMeansHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireMeansHistory'));
-      if (!(e is SocketException)) {
+      if (e is DioError) {
+        if (e.response != null) {
+          if (e.response.statusCode >= 400) {
+            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+          }
+        }
+      } else {
+        print('throwing error');
         throw e;
       }
     }
@@ -97,18 +116,28 @@ Middleware<AppState> _createLoadFireMeansHistory() {
 Middleware<AppState> _createLoadFireDetailsHistory() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    print('create details history');
+    String url = '${Endpoints.getFireDetailsHistory}${action.fireId}';
+
     try {
-      String url = '${Endpoints.getFireDetailsHistory}${action.fireId}';
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      Response response = await Dio().get(url);
+      final responseData = json.decode(response.data)["data"];
+      if (responseData == null) {
+        throw new StateError('No getFireDetailsHistory could be loaded: $url');
+      }
       DetailsHistory data = DetailsHistory.fromJson(responseData);
       store.dispatch(new RemoveErrorAction('fireDetailsHistory'));
       store.dispatch(new FireDetailsHistoryLoadedAction(data));
     } catch (e) {
       store.dispatch(new FireDetailsHistoryLoadedAction(null));
       store.dispatch(new AddErrorAction('fireDetailsHistory'));
-      if (!(e is SocketException)) {
+      if (e is DioError) {
+        if (e.response != null) {
+          if (e.response.statusCode >= 400) {
+            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+          }
+        }
+      } else {
+        print('throwing error');
         throw e;
       }
     }
@@ -118,17 +147,30 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
 Middleware<AppState> _createLoadFireRisk() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    print('create risk');
+    
+    String url = '${Endpoints.getFireRisk}${action.fireId}';
+
     try {
-      String url = '${Endpoints.getFireRisk}${action.fireId}';
-      final response = await http.get(url);
-      String responseData = json.decode(response.body)['data'][0]['hoje'];
+      Response response = await Dio().get(url);
+      final responseData = json.decode(response.data)["data"][0]['hoje'];
+
+      if (responseData == null) {
+        throw new StateError('No getFireRisk could be loaded: $url');
+      }
+
       store.dispatch(new RemoveErrorAction('fireRisk'));
       store.dispatch(new FireRiskLoadedAction(responseData));
     } catch (e) {
       store.dispatch(new FireRiskLoadedAction(null));
       store.dispatch(new AddErrorAction('fireRisk'));
-      if (!(e is SocketException)) {
+      if (e is DioError) {
+        if (e.response != null) {
+          if (e.response.statusCode >= 400) {
+            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+          }
+        }
+      } else {
+        print('throwing error');
         throw e;
       }
     }

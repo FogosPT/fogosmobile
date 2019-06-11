@@ -28,7 +28,7 @@ class WarningsMadeira extends StatelessWidget {
             List warnings = state.warningsMadeira;
             if (warnings == null) {
               if (state.errors != null && state.errors.contains('warningsMadeira')) {
-                return Center(child: Text('There was an error loading this info.'));
+                return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
               }
 
               return Center(child: CircularProgressIndicator());

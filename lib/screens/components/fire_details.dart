@@ -32,7 +32,7 @@ class FireDetails extends StatelessWidget {
             Fire fire = state.fire;
             if (fire == null) {
               if (state.errors != null && state.errors.contains('fire')) {
-                return Center(child: Text('There was an error loading this info.'));
+                return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
               }
 
               return ModalProgressHUD(

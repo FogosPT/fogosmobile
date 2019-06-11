@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
@@ -136,9 +137,50 @@ class HomePage extends StatelessWidget {
           }
         }
 
+        Widget _getSatelliteButton(state, context) {
+          List<Widget> widgets = [
+            IconButton(
+              icon: Icon(Icons.satellite),
+              onPressed: () {
+                final store = StoreProvider.of<AppState>(context);
+                store.dispatch(SetPreferenceAction('satellite', state.preferences['pref-satellite'] == 1 ? 0 : 1));
+              },
+            ),
+          ];
+
+          if (state.preferences['pref-satellite'] == 1) {
+            widgets.add(
+              Positioned(
+                bottom: 5,
+                right: 5,
+                child: Icon(
+                  Icons.check_circle,
+                  size: 18,
+                  color: Colors.green,
+                ),
+              )
+            );
+          }
+
+          return Stack(
+            children: widgets,
+          );
+        }
+
         return StoreConnector<AppState, AppState>(
             converter: (Store<AppState> store) => store.state,
             builder: (BuildContext context, AppState state) {
+              String mapboxUrlTemplate;
+              String mapboxId;
+
+              if (state.preferences['pref-satellite'] == 1) {
+                mapboxUrlTemplate = MAPBOX_URL_SATTELITE_TEMPLATE;
+                mapboxId = MAPBOX_SATTELITE_ID;
+              } else {
+                mapboxUrlTemplate = MAPBOX_URL_TEMPLATE;
+                mapboxId = MAPBOX_ID;
+              }
+
               return ModalProgressHUD(
                 opacity: 0.75,
                 color: Colors.black,
@@ -155,10 +197,10 @@ class HomePage extends StatelessWidget {
                       ),
                       layers: [
                         new TileLayerOptions(
-                          urlTemplate: MAPBOX_URL_TEMPLATE,
+                          urlTemplate: mapboxUrlTemplate,
                           additionalOptions: {
                             'accessToken': MAPBOX_ACCESS_TOKEN,
-                            'id': MAPBOX_ID,
+                            'id': mapboxId,
                           },
                         ),
                         new MarkerLayerOptions(
@@ -167,6 +209,22 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     MapboxCopyright(),
+                    Positioned(
+                      right: 0.0,
+                      top: 0.0,
+                      child: SafeArea(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14.0)),
+                            color: Colors.white54,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: _getSatelliteButton(state, context),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               );

@@ -55,6 +55,7 @@ Middleware<AppState> _createLoadPreferences() {
 
       data['pref-important'] = prefs.getInt('important') ?? 0;
       data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
+      data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
 
       store.dispatch(new AllPreferencesLoadedAction(data));
       store.dispatch(new SavedFireFiltersAction(saveFilters));

@@ -52,63 +52,65 @@ class InfoPage extends StatelessWidget {
           style: new TextStyle(color: Colors.white),
         ),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        children: <Widget>[
-          ListTile(
-            title: Text(FogosLocalizations.of(context).textInformationIncidentStatus.toUpperCase(), style: _header),
-            contentPadding: EdgeInsets.symmetric(horizontal: 0),
-          ),
-          _occurencyBulletPoint(FogosLocalizations.of(context).textInformationFirstOrderDispatch, imgSvgIconAlarm, Color(0xffff6e02)),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationArrival,
-            imgSvgIconPointer,
-            Color(0xffb81e1f),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationOngoing,
-            imgSvgIconFire,
-            Color(0xffb81e1f),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationSettling,
-            imgSvgIconFire,
-            Color(0xff65c4ed),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationClosing,
-            imgSvgIconFire,
-            Color(0xff8e7e7d),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationSupervision,
-            imgSvgIconWatch,
-            Color(0xff65c4ed),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textInformationClosed,
-            imgSvgIconPointer,
-            Color(0xff6abf59),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textFalseAlarm,
-            imgSvgIconFake,
-            Color(0xffbdbdbd),
-          ),
-          _occurencyBulletPoint(
-            FogosLocalizations.of(context).textFalseAlert,
-            imgSvgIconFake,
-            Color(0xffbdbdbd),
-          ),
-          SizedBox(height: 20),
-          MarkdownBody(
-            data: _infoMarkdownData,
-            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-              h1: _header,
-              p: _body,
+      body: Scrollbar(
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          children: <Widget>[
+            ListTile(
+              title: Text(FogosLocalizations.of(context).textInformationIncidentStatus.toUpperCase(), style: _header),
+              contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-          ),
-        ],
+            _occurencyBulletPoint(FogosLocalizations.of(context).textInformationFirstOrderDispatch, imgSvgIconAlarm, Color(0xffff6e02)),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationArrival,
+              imgSvgIconPointer,
+              Color(0xffb81e1f),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationOngoing,
+              imgSvgIconFire,
+              Color(0xffb81e1f),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationSettling,
+              imgSvgIconFire,
+              Color(0xff65c4ed),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationClosing,
+              imgSvgIconFire,
+              Color(0xff8e7e7d),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationSupervision,
+              imgSvgIconWatch,
+              Color(0xff65c4ed),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationClosed,
+              imgSvgIconPointer,
+              Color(0xff6abf59),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textFalseAlarm,
+              imgSvgIconFake,
+              Color(0xffbdbdbd),
+            ),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textFalseAlert,
+              imgSvgIconFake,
+              Color(0xffbdbdbd),
+            ),
+            SizedBox(height: 20),
+            MarkdownBody(
+              data: _infoMarkdownData,
+              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+                h1: _header,
+                p: _body,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

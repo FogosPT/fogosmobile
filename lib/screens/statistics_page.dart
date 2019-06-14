@@ -49,57 +49,47 @@ class _StatisticsPageState extends State<StatisticsPage> {
           store.dispatch(new LoadLastHoursAction());
         },
         builder: (BuildContext context, AppState state) {
-          return ListView(
-            children: <Widget>[
-              ListTile(
-                title: Text(
-                    FogosLocalizations.of(context).textNow.toUpperCase(),
-                    style: _header),
-              ),
-              SizedBox(height: 10),
-              NowStatistics(),
-              SizedBox(height: 25),
-              LastHoursStatistics(),
-              SizedBox(height: 15),
-              Divider(color: Color(0xffff512f)),
-              SizedBox(height: 15),
-              ListTile(
-                title: Text(
-                    FogosLocalizations.of(context).textToday.toUpperCase(),
-                    style: _header),
-              ),
-              TodayStatistics(),
-              SizedBox(height: 15),
-              Divider(color: Color(0xffff512f)),
-              SizedBox(height: 15),
-              ListTile(
-                title: Text(
-                    FogosLocalizations.of(context).textYesterday.toUpperCase(),
-                    style: _header),
-              ),
-              YesterdayStatistics(),
-              SizedBox(height: 15),
-              Divider(color: Color(0xffff512f)),
-              SizedBox(height: 15),
-              ListTile(
-                title: Text(
-                    FogosLocalizations.of(context).textLastNight.toUpperCase(),
-                    style: _header),
-              ),
-              LastNightStatistics(),
-              SizedBox(height: 15),
-              Divider(color: Color(0xffff512f)),
-              SizedBox(height: 15),
-              ListTile(
-                title: Text(
-                    FogosLocalizations.of(context)
-                        .textPreviousDays
-                        .toUpperCase(),
-                    style: _header),
-              ),
-              WeekStatistics(),
-              SizedBox(height: 25),
-            ],
+          return Scrollbar(
+            child: ListView(
+              children: <Widget>[
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textNow.toUpperCase(), style: _header),
+                ),
+                SizedBox(height: 10),
+                NowStatistics(),
+                SizedBox(height: 25),
+                LastHoursStatistics(),
+                SizedBox(height: 15),
+                Divider(color: Color(0xffff512f)),
+                SizedBox(height: 15),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textToday.toUpperCase(), style: _header),
+                ),
+                TodayStatistics(),
+                SizedBox(height: 15),
+                Divider(color: Color(0xffff512f)),
+                SizedBox(height: 15),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textYesterday.toUpperCase(), style: _header),
+                ),
+                YesterdayStatistics(),
+                SizedBox(height: 15),
+                Divider(color: Color(0xffff512f)),
+                SizedBox(height: 15),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textLastNight.toUpperCase(), style: _header),
+                ),
+                LastNightStatistics(),
+                SizedBox(height: 15),
+                Divider(color: Color(0xffff512f)),
+                SizedBox(height: 15),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textPreviousDays.toUpperCase(), style: _header),
+                ),
+                WeekStatistics(),
+                SizedBox(height: 25),
+              ],
+            ),
           );
         },
       ),

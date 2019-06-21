@@ -73,8 +73,7 @@ class _NotificationsState extends State<Notifications> {
               store.dispatch(new SetPreferenceAction(key, value));
             };
           },
-          builder: (BuildContext context,
-              SetPreferenceCallBack setPreferenceAction) {
+          builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
             return new Column(
               children: <Widget>[
                 new Padding(
@@ -87,27 +86,24 @@ class _NotificationsState extends State<Notifications> {
                   ),
                 ),
                 new Expanded(
-                  child: new ListView.builder(
-                    itemCount: this.locations.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final _location = this.locations[index];
-                      return filter == null ||
-                              filter == "" ||
-                              transformStringToSearch(
-                                      _location['value']['name'])
-                                  .contains(transformStringToSearch(filter))
-                          ? CheckboxListTile(
-                              title: Text(_location['value']['name']),
-                              value: state.preferences[
-                                      'pref-${_location['key']}'] ==
-                                  1,
-                              onChanged: (bool value) {
-                                setPreferenceAction(
-                                    _location['key'], value == true ? 1 : 0);
-                              },
-                            )
-                          : new Container();
-                    },
+                  child: Scrollbar(
+                    child: new ListView.builder(
+                      itemCount: this.locations.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final _location = this.locations[index];
+                        return filter == null ||
+                                filter == "" ||
+                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter))
+                            ? CheckboxListTile(
+                                title: Text(_location['value']['name']),
+                                value: state.preferences['pref-${_location['key']}'] == 1,
+                                onChanged: (bool value) {
+                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
+                                },
+                              )
+                            : new Container();
+                      },
+                    ),
                   ),
                 ),
               ],

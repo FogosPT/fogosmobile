@@ -24,18 +24,23 @@ This app is built with Flutter and Dart 2, follwing Redux's design Pattern.
 
 ### Run & Go
 
-```
-$ git clone https://github.com/FogosPT/fogosmobile
-```
-
 Make sure you have installed Flutter following [these instructions](https://flutter.io/get-started/install/).
 
+**Important**: We use the `stable` Flutter channel. Make sure you are on the same channel running
+
 ```
+$ flutter channel stable
+```
+
+Clone our repo and check `flutter doctor`
+
+```
+$ git clone https://github.com/FogosPT/fogosmobile
 $ cd fogosmobile
 $ flutter doctor
 ```
 
-Fix anything `$ flutter doctor` asks. 
+Fix anything `flutter doctor` asks.
 Make sure you have a device connected (Simulator or Emulator or a real device connected) and then run
 
 ```

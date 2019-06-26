@@ -1,6 +1,7 @@
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/utils/model_utils.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert';
@@ -36,7 +37,7 @@ Middleware<AppState> _createLoadFires() {
 
     try {
       String url = Endpoints.getFires;
-      Response response = await Dio().get(url);
+      final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
@@ -64,7 +65,7 @@ Middleware<AppState> _createLoadFire() {
     String url = '${Endpoints.getFire}${action.fireId}';
 
     try {
-      Response response = await Dio().get(url);
+      final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
         throw new StateError('No fire data could be loaded: $url');
@@ -95,7 +96,7 @@ Middleware<AppState> _createLoadFireMeansHistory() {
     String url = '${Endpoints.getFireMeansHistory}${action.fireId}';
 
     try {
-      Response response = await Dio().get(url);
+      final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
         throw new StateError('No getFireMeansHistory could be loaded: $url');
@@ -126,7 +127,7 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
     String url = '${Endpoints.getFireDetailsHistory}${action.fireId}';
 
     try {
-      Response response = await Dio().get(url);
+      final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
         throw new StateError('No getFireDetailsHistory could be loaded: $url');
@@ -154,11 +155,11 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
 Middleware<AppState> _createLoadFireRisk() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    
+
     String url = '${Endpoints.getFireRisk}${action.fireId}';
 
     try {
-      Response response = await Dio().get(url);
+      final response = await get(url);
       final responseData = json.decode(response.data)["data"][0]['hoje'];
 
       if (responseData == null) {

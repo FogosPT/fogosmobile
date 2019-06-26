@@ -1,5 +1,5 @@
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:fogosmobile/models/warning.dart';
@@ -24,10 +24,9 @@ Middleware<AppState> _createLoadWarnings() {
 
     try {
       String url = Endpoints.getWarnings;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
-      List<Warning> warnings =
-      responseData.map<Warning>((model) => Warning.fromJson(model)).toList();
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
+      List<Warning> warnings = responseData.map<Warning>((model) => Warning.fromJson(model)).toList();
       store.dispatch(new WarningsLoadedAction(warnings));
     } catch (e) {
       store.dispatch(new WarningsLoadedAction(null));
@@ -43,10 +42,9 @@ Middleware<AppState> _createLoadWarningsMadeira() {
 
     try {
       String url = Endpoints.getWarningsMadeira;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
-      List<WarningMadeira> warnings =
-        responseData.map<WarningMadeira>((model) => WarningMadeira.fromJson(model)).toList();
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
+      List<WarningMadeira> warnings = responseData.map<WarningMadeira>((model) => WarningMadeira.fromJson(model)).toList();
       store.dispatch(new WarningsMadeiraLoadedAction(warnings));
     } catch (e) {
       store.dispatch(new WarningsMadeiraLoadedAction(null));

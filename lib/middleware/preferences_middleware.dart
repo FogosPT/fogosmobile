@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -29,8 +29,8 @@ Middleware<AppState> _createLoadPreferences() {
 
     try {
       String url = Endpoints.getLocations;
-      final response = await http.get(url);
-      final locations = json.decode(utf8.decode(response.bodyBytes))['rows'];
+      final response = await get(url);
+      final locations = response.data['rows'];
 
       Map data = {};
       final prefs = SharedPreferencesManager.preferences;

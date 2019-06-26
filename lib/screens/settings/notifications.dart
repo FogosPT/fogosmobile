@@ -1,10 +1,8 @@
-import 'dart:convert';
-import 'dart:convert' show utf8;
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/utils/text_utils.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/models/app_state.dart';
@@ -34,9 +32,8 @@ class _NotificationsState extends State<Notifications> {
 
   getLocations() async {
     String url = Endpoints.getLocations;
-    final response = await http.get(url);
-    final data = json.decode(utf8.decode(response.bodyBytes));
-    return data['rows'];
+    final response = await get(url);
+    return response.data['rows'];
   }
 
   @override

@@ -1,7 +1,7 @@
 import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/models/contributor.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
@@ -21,8 +21,8 @@ Middleware<AppState> _createLoadContributors() {
 
     try {
       String url = Endpoints.getMobileContributors;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body);
+      final response = await get(url);
+      final responseData = json.decode(response.data);
       List<Contributor> contributors = Contributor.fromList(responseData);
       print("load contributors");
       store.dispatch(new ContributorsLoadedAction(contributors));

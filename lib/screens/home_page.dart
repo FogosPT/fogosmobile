@@ -188,6 +188,7 @@ class HomePage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     new FlutterMap(
+                      key: Key(mapboxId),
                       mapController: mapController,
                       options: new MapOptions(
                         center: _center,

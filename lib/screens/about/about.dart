@@ -14,7 +14,7 @@ class About extends StatelessWidget {
     return new StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
         onInit: (Store<AppState> store) {
-          if(!store.state.hasContributors) {
+          if (!store.state.hasContributors) {
             store.dispatch(LoadContributorsAction());
           }
         },
@@ -25,11 +25,13 @@ class About extends StatelessWidget {
                 builder: (BuildContext context, List contributors) {
                   if (contributors != null) {
                     return Scrollbar(
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(top: 8.0),
-                          itemBuilder: (_, int i) => ContributorItem(contributor: contributors[i]),
-                          itemCount: contributors.length,
-                        ));
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(top: 8.0),
+                        itemBuilder: (_, int i) =>
+                            ContributorItem(contributor: contributors[i]),
+                        itemCount: contributors.length,
+                      ),
+                    );
                   }
                 });
           } else {
@@ -64,13 +66,15 @@ class About extends StatelessWidget {
                     text: new TextSpan(
                       children: [
                         new TextSpan(
-                          text: FogosLocalizations.of(context).textRecordsFrom,
+                          text: '${FogosLocalizations.of(context).textRecordsFrom} ',
                           style: new TextStyle(color: Colors.black),
                         ),
                         new TextSpan(
-                          text: FogosLocalizations.of(context).textCivilProtection,
+                          text: FogosLocalizations.of(context)
+                              .textCivilProtection,
                           style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()..onTap = () => launchURL('http://www.prociv.pt/'),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () => launchURL('http://www.prociv.pt/'),
                         ),
                       ],
                     ),
@@ -82,7 +86,8 @@ class About extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
-                  child: Text(FogosLocalizations.of(context).textLocationApproximate),
+                  child: Text(
+                      FogosLocalizations.of(context).textLocationApproximate),
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
@@ -94,9 +99,10 @@ class About extends StatelessWidget {
                           style: new TextStyle(color: Colors.black),
                         ),
                         new TextSpan(
-                          text: 'mail@fogos.pt.',
+                          text: ' mail@fogos.pt.',
                           style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()..onTap = () => launchURL('mailto:mail@fogos.pt'),
+                          recognizer: new TapGestureRecognizer()
+                            ..onTap = () => launchURL('mailto:mail@fogos.pt'),
                         ),
                       ],
                     ),

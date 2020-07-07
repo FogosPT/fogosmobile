@@ -112,10 +112,16 @@ class HomePage extends StatelessWidget {
         if (state.fires != null) {
           for (final Fire fire in state.fires) {
             if (state.activeFilters.contains(fire.status)) {
+              double pinSize = fullPinSize * fire.scale;
+
+              if (pinSize == 0) {
+                pinSize = fullPinSize;
+              }
+
               markers.add(
                 new Marker(
-                  width: fullPinSize * fire.scale,
-                  height: fullPinSize * fire.scale,
+                  width: pinSize,
+                  height: pinSize,
                   point: new LatLng(fire.lat, fire.lng),
                   builder: (BuildContext context) {
                     return new Container(

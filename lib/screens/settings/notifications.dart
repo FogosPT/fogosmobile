@@ -68,6 +68,7 @@ class _NotificationsState extends State<Notifications> {
           converter: (Store<AppState> store) {
             return (String key, int value) {
               store.dispatch(new SetPreferenceAction(key, value));
+              store.dispatch(new LoadAllPreferencesAction());
             };
           },
           builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {

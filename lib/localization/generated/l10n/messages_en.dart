@@ -3,20 +3,21 @@
 // messages from the main program should be duplicated here with the same
 // function name.
 
+// Ignore issues from commonly used lints in this file.
+// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
+// ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
+// ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
+// ignore_for_file:unused_import, file_names
+
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
-// ignore: unnecessary_new
 final messages = new MessageLookup();
 
-// ignore: unused_element
-final _keepAnalysisHappy = Intl.defaultLocale;
-
-// ignore: non_constant_identifier_names
-typedef MessageIfAbsent(String message_str, List args);
+typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  get localeName => 'en';
+  String get localeName => 'en';
 
   static m0(city, id) => "Fire in ${city} https://fogos.pt/fogo/${id}";
 
@@ -57,19 +58,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "textInformationSettling" : MessageLookupByLibrary.simpleMessage("Settling - Fire without risk of propagation beyond boundaries"),
     "textInformationSupervision" : MessageLookupByLibrary.simpleMessage("Supervision - Resources at incident location to act if needed"),
     "textInformations" : MessageLookupByLibrary.simpleMessage("Informations"),
+    "textInternetConnection" : MessageLookupByLibrary.simpleMessage("Make sure you are connected to the Internet."),
     "textLastNight" : MessageLookupByLibrary.simpleMessage("Last Night"),
     "textLastNightStatistics" : MessageLookupByLibrary.simpleMessage("Last Night Statistics"),
     "textLocationApproximate" : MessageLookupByLibrary.simpleMessage("Location may not be exact."),
     "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Improve this map"),
     "textMaximumRisk" : MessageLookupByLibrary.simpleMessage("Maximum"),
     "textNoConnection" : MessageLookupByLibrary.simpleMessage("We were unnable to connect to the server"),
+    "textNotificationProblems" : MessageLookupByLibrary.simpleMessage("If you are having problems receiving notifications, click the button below."),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notifications"),
     "textNow" : MessageLookupByLibrary.simpleMessage("Now"),
     "textOther" : MessageLookupByLibrary.simpleMessage("Other"),
     "textPartners" : MessageLookupByLibrary.simpleMessage("Partners"),
     "textPreviousDays" : MessageLookupByLibrary.simpleMessage("Last Few Days"),
+    "textProblemLoadingData" : MessageLookupByLibrary.simpleMessage("There was a problem loading data."),
     "textRecordsFrom" : MessageLookupByLibrary.simpleMessage("Data collected from"),
     "textRefreshButton" : MessageLookupByLibrary.simpleMessage("Refresh"),
+    "textResetNotifications" : MessageLookupByLibrary.simpleMessage("Reset notifications"),
     "textResources" : MessageLookupByLibrary.simpleMessage("Resources"),
     "textRiskHigh" : MessageLookupByLibrary.simpleMessage("High"),
     "textRiskModerate" : MessageLookupByLibrary.simpleMessage("Moderate"),

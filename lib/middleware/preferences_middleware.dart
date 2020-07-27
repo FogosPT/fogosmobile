@@ -75,7 +75,6 @@ Middleware<AppState> _createSetPreference() {
     try {
       final prefs = SharedPreferencesManager.preferences;
       prefs.save(action.key, action.value);
-      store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {}
   };
 }

@@ -2,6 +2,12 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 
 typedef SetPreferenceCallBack = Function(String key, int value);
 
@@ -16,6 +22,12 @@ class _ResetNotificationsState extends State<ResetNotifications> {
   bool isSuccess = false;
   bool hasRequestRun = false;
 
+  getLocations() async {
+    String url = Endpoints.getLocations;
+    final response = await get(url);
+    return response.data['rows'];
+  }
+
   void iOSPermission() {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
@@ -23,7 +35,11 @@ class _ResetNotificationsState extends State<ResetNotifications> {
         .listen((IosNotificationSettings settings) {});
   }
 
-  void _resetFirebaseNotifications() {
+  void _resetFirebaseNotifications() async {
+    final store = StoreProvider.of<AppState>(context);
+    AppState state = store.state;
+    final _locations = await getLocations();
+
     setState(() {
       hasRequestRun = true;
       isLoading = true;
@@ -40,6 +56,16 @@ class _ResetNotificationsState extends State<ResetNotifications> {
           isLoading = false;
           isSuccess = true;
         });
+
+        for (var _location in _locations) {
+          String key = _location['key'];
+          num value = state.preferences['pref-$key'];
+          bool isLocationTurnedOn = value != 0;
+
+          if (isLocationTurnedOn) {
+            store.dispatch(SetPreferenceAction(key, value));
+          }
+        }
       });
     }).catchError((error) {
       setState(() {
@@ -56,8 +82,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
         padding: const EdgeInsets.all(8.0),
         child: new ListView(
           children: <Widget>[
-            Text(
-                'Se está com problemas em receber notificações, clique no botão abaixo.'),
+            Text(FogosLocalizations.of(context).textNotificationProblems),
             if (isLoading)
               Center(
                   child: Padding(
@@ -79,7 +104,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
             else
               MaterialButton(
                 textTheme: ButtonTextTheme.normal,
-                child: Text('Reset notifications'),
+                child: Text(FogosLocalizations.of(context).textResetNotifications),
                 onPressed: () {
                   _resetFirebaseNotifications();
                 },

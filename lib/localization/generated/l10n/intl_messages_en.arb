@@ -433,5 +433,17 @@
     "description": "Make sure you are connected to the Internet",
     "type": "text",
     "placeholders": {}
+  },
+  "textNotificationProblems": "If you are having problems receiving notifications, click the button below.",
+  "@textNotificationProblems": {
+    "description": "If you are having problems receiving notifications, click the button below.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textResetNotifications": "Reset notifications",
+  "@textResetNotifications": {
+    "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
   }
 }

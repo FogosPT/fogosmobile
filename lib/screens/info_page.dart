@@ -14,7 +14,7 @@ const String _infoMarkdownData = """# MEIOS
 # 
 Os números disponibilizados são os totais de meios accionados. O número pode diferir do que se encontra no terreno, uma vez que os meios accionados podem ainda estar em trânsito.
 # 
-As horas indicadas tanto no gráfico de meios como na linha do tempo dos estados do incêndios, são as horas que o nosso sistema detetou uma mudança de dados por parte da ANPC podendo não corresponder ao momento exato em que essa alteração ocorreu.
+As horas indicadas tanto no gráfico de meios como na linha do tempo dos estados do incêndios, são as horas que o nosso sistema detetou uma mudança de dados por parte da ANEPC podendo não corresponder ao momento exato em que essa alteração ocorreu.
 # 
 _Risco de incêndio recolhido do IPMA_.
 # 

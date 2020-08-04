@@ -1,5 +1,6 @@
 import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 
@@ -11,6 +12,7 @@ class AppState {
   DetailsHistory fireDetailsHistory;
   String fireRisk;
   List<Contributor> contributors = [];
+  List<Lightning> lightnings = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
   bool hasPreferences = false;
@@ -48,6 +50,7 @@ class AppState {
     this.errors,
     this.warnings,
     this.warningsMadeira,
+    this.lightnings,
   });
 
   AppState copyWith({
@@ -71,6 +74,7 @@ class AppState {
     List errors,
     List warnings,
     List warningsMadeira,
+    List<Lightning> lightnings,
   }) {
     return new AppState(
       fires: fires ?? this.fires,
@@ -94,6 +98,7 @@ class AppState {
       errors: errors ?? this.errors,
       warnings: warnings ?? this.warnings,
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
+      lightnings: lightnings ?? this.lightnings,
     );
   }
 

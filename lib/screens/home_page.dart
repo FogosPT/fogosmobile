@@ -7,9 +7,11 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -90,12 +92,14 @@ class HomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            FogosLocalizations.of(context).textProblemLoadingData,
+                            FogosLocalizations.of(context)
+                                .textProblemLoadingData,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            FogosLocalizations.of(context).textInternetConnection,
+                            FogosLocalizations.of(context)
+                                .textInternetConnection,
                             style: TextStyle(color: Colors.white),
                             textAlign: TextAlign.center,
                           ),
@@ -125,10 +129,13 @@ class HomePage extends StatelessWidget {
                   point: new LatLng(fire.lat, fire.lng),
                   builder: (BuildContext context) {
                     return new Container(
-                      decoration: BoxDecoration(color: getFireColor(fire), shape: BoxShape.circle),
+                      decoration: BoxDecoration(
+                          color: getFireColor(fire), shape: BoxShape.circle),
                       child: IconButton(
-                        icon: new SvgPicture.asset(getCorrectStatusImage(fire.statusCode, fire.important),
-                            semanticsLabel: 'Acme Logo'),
+                        icon: new SvgPicture.asset(
+                            getCorrectStatusImage(
+                                fire.statusCode, fire.important),
+                            semanticsLabel: 'Fire Logo'),
                         onPressed: () async {
                           store.dispatch(ClearFireAction());
                           store.dispatch(LoadFireAction(fire.id));
@@ -143,29 +150,61 @@ class HomePage extends StatelessWidget {
           }
         }
 
+        if (state.lightnings?.isNotEmpty ?? false) {
+          for (final Lightning lightning in state.lightnings) {
+            print(
+                "Adding lightning on ${lightning.payload.latitude}, ${lightning.payload.longitude}");
+            markers.add(
+              new Marker(
+                width: fullPinSize * 0.65,
+                height: fullPinSize * 0.65,
+                point: new LatLng(
+                    lightning.payload.latitude, lightning.payload.longitude),
+                builder: (BuildContext context) {
+                  return new Container(
+                    decoration: BoxDecoration(
+                        color: Colors.purpleAccent, shape: BoxShape.circle),
+                    child: IconButton(
+                      icon: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.bolt,
+                          size: fullPinSize * 0.33,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        // todo: Add the action
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+        }
+
         Widget _getSatelliteButton(state, context) {
           List<Widget> widgets = [
             IconButton(
               icon: Icon(Icons.satellite),
               onPressed: () {
                 final store = StoreProvider.of<AppState>(context);
-                store.dispatch(SetPreferenceAction('satellite', state.preferences['pref-satellite'] == 1 ? 0 : 1));
+                store.dispatch(SetPreferenceAction('satellite',
+                    state.preferences['pref-satellite'] == 1 ? 0 : 1));
               },
             ),
           ];
 
           if (state.preferences['pref-satellite'] == 1) {
-            widgets.add(
-              Positioned(
-                bottom: 5,
-                right: 5,
-                child: Icon(
-                  Icons.check_circle,
-                  size: 18,
-                  color: Colors.green,
-                ),
-              )
-            );
+            widgets.add(Positioned(
+              bottom: 5,
+              right: 5,
+              child: Icon(
+                Icons.check_circle,
+                size: 18,
+                color: Colors.green,
+              ),
+            ));
           }
 
           return Stack(
@@ -222,7 +261,8 @@ class HomePage extends StatelessWidget {
                       child: SafeArea(
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14.0)),
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(14.0)),
                             color: Colors.white54,
                           ),
                           child: Padding(

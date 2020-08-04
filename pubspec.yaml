@@ -28,6 +28,8 @@ dependencies:
   flutter_markdown: ^0.4.1
   auto_size_text: ^2.1.0
 
+  font_awesome_flutter: 8.8.1
+
   share: ^0.6.4+3
 
   #ui

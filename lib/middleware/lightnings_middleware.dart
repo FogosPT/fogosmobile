@@ -13,7 +13,7 @@ List<Middleware<AppState>> lightningMiddleware() {
   ];
 }
 
-/// Get list of contributors
+/// Get list of lightnings
 Middleware<AppState> _createLightningStrikes() {
   return (Store store, action, NextDispatcher next) async {
     next(action);

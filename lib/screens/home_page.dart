@@ -15,6 +15,7 @@ import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -583,5 +584,7 @@ class ModisModal extends StatelessWidget {
 
 
 String getDate(DateTime time) {
-  return "${time.day}/${time.month}/${time.year} - ${time.hour}:${time.minute}";
+  String date = "${time.day}/${time.month}/${time.year}";
+  String hours = DateFormat.Hm().format(time);
+  return "$date - $hours";
 }

@@ -1,6 +1,5 @@
 {
-  "@@locale": "pt",
-  "@@last_modified": "2019-06-11T11:18:27.773623",
+  "@@last_modified": "2020-08-12T12:24:12.539317",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -436,13 +435,73 @@
   },
   "textNotificationProblems": "Se está com problemas em receber notificações, clique no botão abaixo.",
   "@textNotificationProblems": {
-    "description": "Se está com problemas em receber notificações, clique no botão abaixo.",
+    "description": "If you are having problems receiving notifications, click the button below.",
     "type": "text",
     "placeholders": {}
   },
   "textResetNotifications": "Reiniciar notificações",
   "@textResetNotifications": {
-    "description": "Reiniciar notificações",
+    "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDate": "Data",
+  "@textDate": {
+    "description": "Data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi4": "Bright Ti4",
+  "@textBrightTi4": {
+    "description": "Bright Ti 4",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi5": "Bright Ti5",
+  "@textBrightTi5": {
+    "description": "Bright Ti 5",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFrp": "Frp",
+  "@textFrp": {
+    "description": "Frp",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textConfidence": "Confiança",
+  "@textConfidence": {
+    "description": "Confidence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightness": "Luminosidade",
+  "@textBrightness": {
+    "description": "Brightness",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightT31": "Bright T31",
+  "@textBrightT31": {
+    "description": "Bright T31",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLowConfidence": "Baixa",
+  "@textLowConfidence": {
+    "description": "Low",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNominalConfidence": "Normal",
+  "@textNominalConfidence": {
+    "description": "Nominal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHighConfidence": "Alta",
+  "@textHighConfidence": {
+    "description": "High",
     "type": "text",
     "placeholders": {}
   }

@@ -445,5 +445,65 @@
     "description": "Reset notifications",
     "type": "text",
     "placeholders": {}
+  },
+  "textDate": "Date",
+  "@textDate": {
+    "description": "Data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi4": "Bright Ti4",
+  "@textBrightTi4": {
+    "description": "Bright Ti 4",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi5": "Bright Ti5",
+  "@textBrightTi5": {
+    "description": "Bright Ti 5",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFrp": "Frp",
+  "@textFrp": {
+    "description": "Frp",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textConfidence": "Confidence",
+  "@textConfidence": {
+    "description": "Confidence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightness": "Brightness",
+  "@textBrightness": {
+    "description": "Brightness",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightT31": "Bright T31",
+  "@textBrightT31": {
+    "description": "Bright T31",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLowConfidence": "Low",
+  "@textLowConfidence": {
+    "description": "Low",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNominalConfidence": "Nominal",
+  "@textNominalConfidence": {
+    "description": "Nominal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHighConfidence": "High",
+  "@textHighConfidence": {
+    "description": "High",
+    "type": "text",
+    "placeholders": {}
   }
 }

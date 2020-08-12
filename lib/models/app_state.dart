@@ -25,6 +25,10 @@ class AppState {
   List errors = [];
   List warnings = [];
   List warningsMadeira = [];
+  List viirs = [];
+  List modis = [];
+  bool showModis = false;
+  bool showViirs = false;
 
   AppState({
     this.fires,
@@ -48,6 +52,10 @@ class AppState {
     this.errors,
     this.warnings,
     this.warningsMadeira,
+    this.viirs,
+    this.modis,
+    this.showModis,
+    this.showViirs,
   });
 
   AppState copyWith({
@@ -71,6 +79,10 @@ class AppState {
     List errors,
     List warnings,
     List warningsMadeira,
+    List viirs,
+    List modis,
+    bool showModis,
+    bool showViirs,
   }) {
     return new AppState(
       fires: fires ?? this.fires,
@@ -94,6 +106,10 @@ class AppState {
       errors: errors ?? this.errors,
       warnings: warnings ?? this.warnings,
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
+      viirs: viirs ?? this.viirs,
+      modis: modis ?? this.modis,
+      showModis: showModis ?? this.showModis,
+      showViirs: showViirs ?? this.showViirs,
     );
   }
 

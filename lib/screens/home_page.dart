@@ -421,7 +421,7 @@ class ViirsModal extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
-                      text: viirs.acqDate.toIso8601String(),
+                      text: getDate(viirs.acqDate),
                       style: TextStyle(color: Colors.black)),
                 ],
               ),
@@ -516,7 +516,7 @@ class ModisModal extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
-                      text: modis.acqDate.toIso8601String(),
+                      text: getDate(modis.acqDate),
                       style: TextStyle(color: Colors.black)),
                 ],
               ),
@@ -579,4 +579,9 @@ class ModisModal extends StatelessWidget {
       ),
     );
   }
+}
+
+
+String getDate(DateTime time) {
+  return "${time.day}/${time.month}/${time.year} - ${time.hour}:${time.minute}";
 }

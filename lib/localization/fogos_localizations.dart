@@ -502,6 +502,12 @@ class FogosLocalizations {
     desc: 'Reset notifications',
   );
 
+  String get textPlanes => Intl.message(
+    "Aviões",
+    name: 'textPlanes',
+    desc: 'Notification Text Planes',
+  );
+
   String textFireStatus(FireStatus status) {
     switch (status) {
       case FireStatus.arrival:

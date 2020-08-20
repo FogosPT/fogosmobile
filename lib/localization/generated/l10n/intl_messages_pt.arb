@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-04T18:58:35.260665",
+  "@@last_modified": "2020-08-04T18:51:08.698006",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -442,6 +442,12 @@
   "textResetNotifications": "Reiniciar notificações",
   "@textResetNotifications": {
     "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPlanes": "Aviões",
+  "@textPlanes": {
+    "description": "Notification Text Planes",
     "type": "text",
     "placeholders": {}
   }

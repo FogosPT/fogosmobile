@@ -8,9 +8,11 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -27,6 +29,35 @@ class HomePage extends StatelessWidget {
     await showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) => FireDetails(),
+    );
+  }
+
+  Widget _getSatelliteButton(state, context) {
+    List<Widget> widgets = [
+      IconButton(
+        icon: Icon(Icons.satellite),
+        onPressed: () {
+          final store = StoreProvider.of<AppState>(context);
+          store.dispatch(SetPreferenceAction(
+              'satellite', state.preferences['pref-satellite'] == 1 ? 0 : 1));
+        },
+      ),
+    ];
+
+    if (state.preferences['pref-satellite'] == 1) {
+      widgets.add(Positioned(
+        bottom: 5,
+        right: 5,
+        child: Icon(
+          Icons.check_circle,
+          size: 18,
+          color: Colors.green,
+        ),
+      ));
+    }
+
+    return Stack(
+      children: widgets,
     );
   }
 
@@ -126,6 +157,39 @@ class HomePage extends StatelessWidget {
           }
         }
 
+        if (state.lightnings?.isNotEmpty ?? false) {
+          for (final Lightning lightning in state.lightnings) {
+            print(
+                "Adding lightning on ${lightning.payload.latitude}, ${lightning.payload.longitude}");
+            markers.add(
+              new Marker(
+                width: fullPinSize * 0.65,
+                height: fullPinSize * 0.65,
+                point: new LatLng(
+                    lightning.payload.latitude, lightning.payload.longitude),
+                builder: (BuildContext context) {
+                  return new Container(
+                    decoration: BoxDecoration(
+                        color: Colors.purpleAccent, shape: BoxShape.circle),
+                    child: IconButton(
+                      icon: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.bolt,
+                          size: fullPinSize * 0.33,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        // todo: Add the action
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+        }
+
         String mapboxUrlTemplate;
         String mapboxId;
 
@@ -143,16 +207,17 @@ class HomePage extends StatelessWidget {
           inAsyncCall: state.isLoading && state.fire == null,
           child: Stack(
             children: <Widget>[
-              FlutterMap(
+              new FlutterMap(
+                key: Key(mapboxId),
                 mapController: mapController,
-                options: MapOptions(
+                options: new MapOptions(
                   center: _center,
                   zoom: 7.0,
                   minZoom: 1.0,
                   maxZoom: 20.0,
                 ),
                 layers: [
-                  TileLayerOptions(
+                  new TileLayerOptions(
                     urlTemplate: mapboxUrlTemplate,
                     additionalOptions: {
                       'accessToken': MAPBOX_ACCESS_TOKEN,
@@ -182,38 +247,11 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              overlayWidget,
+              overlayWidget
             ],
           ),
         );
       },
-    );
-  }
-
-  Widget _getSatelliteButton(state, context) {
-     var currentPreferenceState = state.preferences[preferenceSatellite];
-    return Stack(
-      children: [
-        IconButton(
-          icon: Icon(Icons.satellite),
-          onPressed: () {
-            print("Current ${currentPreferenceState}");
-            print("Pressed the button to dispatch ${currentPreferenceState == 1 ? 0 : 1}");
-            StoreProvider.of<AppState>(context).dispatch(SetPreferenceAction(
-                preferenceSatellite, currentPreferenceState == 1 ? 0 : 1));
-          },
-        ),
-        if (currentPreferenceState == 1)
-          Positioned(
-            bottom: 5,
-            right: 5,
-            child: Icon(
-              Icons.check_circle,
-              size: 18,
-              color: Colors.green,
-            ),
-          )
-      ],
     );
   }
 }

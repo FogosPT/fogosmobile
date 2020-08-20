@@ -11,6 +11,8 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
+const String preferenceSatellite = "satellite";
+
 List<Middleware<AppState>> preferencesMiddleware() {
   final loadPreferences = _createLoadPreferences();
   final setPreference = _createSetPreference();
@@ -51,6 +53,7 @@ Middleware<AppState> _createLoadPreferences() {
       data['pref-important'] = prefs.getInt('important') ?? 0;
       data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
       data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
+      data['pref-planes'] = prefs.getInt('planes') ?? 0;
 
       store.dispatch(new AllPreferencesLoadedAction(data));
     } catch (e) {

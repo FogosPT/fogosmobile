@@ -76,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textNow" : MessageLookupByLibrary.simpleMessage("Now"),
     "textOther" : MessageLookupByLibrary.simpleMessage("Other"),
     "textPartners" : MessageLookupByLibrary.simpleMessage("Partners"),
+    "textPlanes" : MessageLookupByLibrary.simpleMessage("Planes"),
     "textPreviousDays" : MessageLookupByLibrary.simpleMessage("Last Few Days"),
     "textProblemLoadingData" : MessageLookupByLibrary.simpleMessage("There was a problem loading data."),
     "textRecordsFrom" : MessageLookupByLibrary.simpleMessage("Data collected from"),

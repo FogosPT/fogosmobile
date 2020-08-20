@@ -1,8 +1,10 @@
+import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/contributors_reducer.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
+import 'package:fogosmobile/reducers/lightning_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -77,6 +79,10 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is WarningsMadeiraLoadedAction) {
     isLoading = false;
+  } else if (action is LoadLightningsAction) {
+    isLoading = true;
+  } else if (action is LightningsLoadedAction) {
+    isLoading = false;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -88,7 +94,8 @@ AppState appReducer(AppState state, action) {
     fires: firesReducer(state.fires, action),
     fire: fireReducer(state.fire, action),
     fireMeansHistory: fireMeansHistoryReducer(state.fireMeansHistory, action),
-    fireDetailsHistory: fireDetailsHistoryReducer(state.fireDetailsHistory, action),
+    fireDetailsHistory:
+        fireDetailsHistoryReducer(state.fireDetailsHistory, action),
     fireRisk: fireRiskReducer(state.fireRisk, action),
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
@@ -105,5 +112,6 @@ AppState appReducer(AppState state, action) {
     errors: errorsReducer(state.errors, action),
     warnings: warningsReducer(state.warnings, action),
     warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
+    lightnings: lightningsReducer(state.lightnings, action),
   );
 }

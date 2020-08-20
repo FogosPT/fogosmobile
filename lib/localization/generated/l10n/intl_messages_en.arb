@@ -481,5 +481,11 @@
     "description": "DataTable Status",
     "type": "text",
     "placeholders": {}
+  },
+  "textPlanes": "Planes",
+  "@textPlanes": {
+    "description": "Notification Text Planes",
+    "type": "text",
+    "placeholders": {}
   }
 }

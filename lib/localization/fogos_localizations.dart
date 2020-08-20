@@ -112,7 +112,7 @@ class FogosLocalizations {
       );
 
   String get textHumanMeans => Intl.message(
-        "Bombeiros",
+        "Operacionais",
         name: 'textHumanMeans',
         desc: 'Human means label',
       );
@@ -335,7 +335,7 @@ class FogosLocalizations {
       );
 
   String get textFirefighters => Intl.message(
-        "Bombeiros",
+        "Operacionais",
         name: 'textFirefighters',
         desc: 'Firefighters',
       );
@@ -506,6 +506,12 @@ class FogosLocalizations {
     "Reiniciar notificações",
     name: 'textResetNotifications',
     desc: 'Reset notifications',
+  );
+
+  String get textPlanes => Intl.message(
+    "Aviões",
+    name: 'textPlanes',
+    desc: 'Notification Text Planes',
   );
 
 String get textDataTableStart => Intl.message(

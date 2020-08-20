@@ -53,6 +53,7 @@ Middleware<AppState> _createLoadPreferences() {
       data['pref-important'] = prefs.getInt('important') ?? 0;
       data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
       data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
+      data['pref-planes'] = prefs.getInt('planes') ?? 0;
 
       store.dispatch(new AllPreferencesLoadedAction(data));
     } catch (e) {

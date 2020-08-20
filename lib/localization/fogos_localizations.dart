@@ -478,6 +478,12 @@ class FogosLocalizations {
         desc: 'Fires List',
       );
 
+  String get textFiresTable => Intl.message(
+        "Tabela de Fogos",
+        name: 'textFiresList',
+        desc: 'Fires List',
+      );
+
   String get textProblemLoadingData => Intl.message(
         "Houve um problema a carregar a informação.",
         name: 'textProblemLoadingData',
@@ -506,6 +512,42 @@ class FogosLocalizations {
     "Aviões",
     name: 'textPlanes',
     desc: 'Notification Text Planes',
+  );
+
+String get textDataTableStart => Intl.message(
+    "Início",
+    name: 'textDataTableStart',
+    desc: 'DataTable Start',
+  );
+
+  String get textDataTableDistrict => Intl.message(
+    "Distrito",
+    name: 'textDataTableDistrict',
+    desc: 'DataTable District',
+  );
+
+  String get textDataTableCounty => Intl.message(
+    "Concelho",
+    name: 'textDataTableCounty',
+    desc: 'DataTable Country',
+  );
+
+  String get textDataTableParish => Intl.message(
+    "Freguesia",
+    name: 'textDataTableParish',
+    desc: 'DataTable Parish',
+  );
+
+  String get textDataTableLocality => Intl.message(
+    "Localidade",
+    name: 'textDataTableLocality',
+    desc: 'DataTable Locality',
+  );
+
+  String get textDataTableStatus => Intl.message(
+    "Estado",
+    name: 'textDataTableStatus',
+    desc: 'DataTable Status',
   );
 
   String textFireStatus(FireStatus status) {

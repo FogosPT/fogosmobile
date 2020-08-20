@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-04T18:51:08.698006",
+  "@@last_modified": "2020-08-11T19:39:23.484025",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -442,6 +442,42 @@
   "textResetNotifications": "Reiniciar notificações",
   "@textResetNotifications": {
     "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStart": "Início",
+  "@textDataTableStart": {
+    "description": "DataTable Start",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableDistrict": "Distrito",
+  "@textDataTableDistrict": {
+    "description": "DataTable District",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableCounty": "Concelho",
+  "@textDataTableCounty": {
+    "description": "DataTable Country",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableParish": "Freguesia",
+  "@textDataTableParish": {
+    "description": "DataTable Parish",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableLocality": "Localidade",
+  "@textDataTableLocality": {
+    "description": "DataTable Locality",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStatus": "Estado",
+  "@textDataTableStatus": {
+    "description": "DataTable Status",
     "type": "text",
     "placeholders": {}
   },

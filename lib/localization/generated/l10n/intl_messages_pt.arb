@@ -48,7 +48,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textHumanMeans": "Bombeiros",
+  "textHumanMeans": "Operacionais",
   "@textHumanMeans": {
     "description": "Human means label",
     "type": "text",
@@ -277,7 +277,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textFirefighters": "Bombeiros",
+  "textFirefighters": "Operacionais",
   "@textFirefighters": {
     "description": "Firefighters",
     "type": "text",

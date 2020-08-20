@@ -36,7 +36,7 @@ final store = new Store<AppState>(
     ..addAll(contributorsMiddleware())
     ..addAll(viirsMiddleware())
     ..addAll(modisMiddleware())
-    ..addAll(warningsMiddleware()),
     ..addAll(warningsMiddleware())
-    ..addAll(lightningMiddleware()),
+    ..addAll(warningsMiddleware())
+    ..addAll(lightningMiddleware())
 );

@@ -45,7 +45,14 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                     onChanged: (bool value) {
                       setPreferenceCallBack('warnings', value == true ? 1 : 0);
                     },
-                  )
+                  ),
+                  CheckboxListTile(
+                    title: Text(FogosLocalizations.of(context).textPlanes),
+                    value: state.preferences['pref-planes'] == 1,
+                    onChanged: (bool value) {
+                      setPreferenceCallBack('planes', value == true ? 1 : 0);
+                    },
+                  ),
                 ],
               ),
             );

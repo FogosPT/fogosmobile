@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
+import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
+import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -112,15 +114,16 @@ class MyApp extends StatelessWidget {
         theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
-          '$SETTINGS_ROUTE': (_) => new Settings(),
-          '$WARNINGS_ROUTE': (_) => new Warnings(),
-          '$WARNINGS_MADEIRA_ROUTE': (_) => new WarningsMadeira(),
-          '$PARTNERS_ROUTE': (_) => new Partners(),
-          '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
-          '$INFO_ROUTE': (_) => new InfoPage(),
-          '$ABOUT_ROUTE': (_) => new About(),
-          '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
-          '$FIRES_ROUTE': (_) => new FireList(),
+          SETTINGS_ROUTE: (_) => new Settings(),
+          WARNINGS_ROUTE: (_) => new Warnings(),
+          WARNINGS_MADEIRA_ROUTE: (_) => new WarningsMadeira(),
+          PARTNERS_ROUTE: (_) => new Partners(),
+          STATISTICS_ROUTE: (_) => new StatisticsPage(),
+          INFO_ROUTE: (_) => new InfoPage(),
+          ABOUT_ROUTE: (_) => new About(),
+          FIRE_DETAILS_ROUTE: (_) => new FireDetailsPage(),
+          FIRES_ROUTE: (_) => new FireList(),
+          FIRES_TABLES_ROUTE: (_) => FiresTablePage(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -226,6 +229,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       store.dispatch(LoadFiresAction());
       store.dispatch(LoadModisAction());
       store.dispatch(LoadViirsAction());
+      store.dispatch(LoadLightningsAction());
     }
   }
 
@@ -244,6 +248,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
         store.dispatch(LoadFiresAction());
+        store.dispatch(LoadLightningsAction());
         store.dispatch(LoadModisAction());
         store.dispatch(LoadViirsAction());
         store.dispatch(new LoadAllPreferencesAction());
@@ -260,6 +265,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 converter: (Store<AppState> store) {
                   return () {
                     store.dispatch(new LoadFiresAction());
+                    store.dispatch(LoadLightningsAction());
                     store.dispatch(LoadModisAction());
                     store.dispatch(LoadViirsAction());
                     store.dispatch(new LoadAllPreferencesAction());
@@ -311,6 +317,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pushNamed(FIRES_ROUTE);
                   },
                   leading: Icon(Icons.list),
+                ),
+                new ListTile(
+                  title: new Text(FogosLocalizations.of(context).textFiresTable),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
+                  },
+                  leading: Icon(Icons.table_chart),
                 ),
                 new ListTile(
                   title: new Text(FogosLocalizations.of(context).textWarnings),

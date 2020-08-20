@@ -19,4 +19,5 @@ abstract class Endpoints {
   static const String getMobileContributors = "https://fogos.pt/v1/mobile-contributors";
   static const String getModis = "https://fogos.pt/v1/modis";
   static const String getViirs = "https://fogos.pt/v1/viirs";
+  static const String getLightnings = "https://fogos.pt/lightnings";
 }

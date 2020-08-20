@@ -48,7 +48,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textHumanMeans": "Bombeiros",
+  "textHumanMeans": "Operacionais",
   "@textHumanMeans": {
     "description": "Human means label",
     "type": "text",
@@ -277,7 +277,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textFirefighters": "Bombeiros",
+  "textFirefighters": "Operacionais",
   "@textFirefighters": {
     "description": "Firefighters",
     "type": "text",
@@ -442,6 +442,48 @@
   "textResetNotifications": "Reiniciar notificações",
   "@textResetNotifications": {
     "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStart": "Início",
+  "@textDataTableStart": {
+    "description": "DataTable Start",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableDistrict": "Distrito",
+  "@textDataTableDistrict": {
+    "description": "DataTable District",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableCounty": "Concelho",
+  "@textDataTableCounty": {
+    "description": "DataTable Country",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableParish": "Freguesia",
+  "@textDataTableParish": {
+    "description": "DataTable Parish",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableLocality": "Localidade",
+  "@textDataTableLocality": {
+    "description": "DataTable Locality",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStatus": "Estado",
+  "@textDataTableStatus": {
+    "description": "DataTable Status",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPlanes": "Aviões",
+  "@textPlanes": {
+    "description": "Notification Text Planes",
     "type": "text",
     "placeholders": {}
   },

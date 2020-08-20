@@ -1,4 +1,5 @@
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
@@ -6,6 +7,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/contributors_reducer.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
 import 'package:fogosmobile/reducers/modis_reducer.dart';
+import 'package:fogosmobile/reducers/lightning_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -83,6 +85,10 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is WarningsMadeiraLoadedAction) {
     isLoading = false;
+  } else if (action is LoadLightningsAction) {
+    isLoading = true;
+  } else if (action is LightningsLoadedAction) {
+    isLoading = false;
   } else if (action is ViirsLoadedAction) {
     isLoading = false;
   } else if (action is LoadViirsAction) {
@@ -130,5 +136,6 @@ AppState appReducer(AppState state, action) {
     viirs: viirsReducer(state.viirs, action),
     showModis: showModis,
     showViirs: showViirs,
+    lightnings: lightningsReducer(state.lightnings, action),
   );
 }

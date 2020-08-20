@@ -505,5 +505,47 @@
     "description": "High",
     "type": "text",
     "placeholders": {}
+  },
+  "textDataTableStart": "Start",
+  "@textDataTableStart": {
+    "description": "DataTable Start",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableDistrict": "District",
+  "@textDataTableDistrict": {
+    "description": "DataTable District",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableCounty": "County",
+  "@textDataTableCounty": {
+    "description": "DataTable Country",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableParish": "Parish",
+  "@textDataTableParish": {
+    "description": "DataTable Parish",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableLocality": "Locality",
+  "@textDataTableLocality": {
+    "description": "DataTable Locality",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStatus": "Status",
+  "@textDataTableStatus": {
+    "description": "DataTable Status",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPlanes": "Planes",
+  "@textPlanes": {
+    "description": "Notification Text Planes",
+    "type": "text",
+    "placeholders": {}
   }
 }

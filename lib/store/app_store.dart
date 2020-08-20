@@ -1,3 +1,5 @@
+import 'package:fogosmobile/middleware/modis_middleware.dart';
+import 'package:fogosmobile/middleware/viirs_middleware.dart';
 import 'package:fogosmobile/middleware/lightnings_middleware.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/middleware/statistics_middleware.dart';
@@ -22,12 +24,19 @@ final store = new Store<AppState>(
     preferences: {},
     activeFilters: List.from(FireStatus.values),
     warningsMadeira: [],
+    modis: [],
+    viirs: [],
+    showModis: false,
+    showViirs: false,
     lightnings: [],
   ),
   middleware: firesMiddleware()
     ..addAll(preferencesMiddleware())
     ..addAll(statisticsMiddleware())
     ..addAll(contributorsMiddleware())
+    ..addAll(viirsMiddleware())
+    ..addAll(modisMiddleware())
+    ..addAll(warningsMiddleware()),
     ..addAll(warningsMiddleware())
     ..addAll(lightningMiddleware()),
 );

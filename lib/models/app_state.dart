@@ -27,6 +27,10 @@ class AppState {
   List errors = [];
   List warnings = [];
   List warningsMadeira = [];
+  List viirs = [];
+  List modis = [];
+  bool showModis = false;
+  bool showViirs = false;
 
   AppState({
     this.fires,
@@ -50,6 +54,10 @@ class AppState {
     this.errors,
     this.warnings,
     this.warningsMadeira,
+    this.viirs,
+    this.modis,
+    this.showModis,
+    this.showViirs,
     this.lightnings,
   });
 
@@ -74,6 +82,10 @@ class AppState {
     List errors,
     List warnings,
     List warningsMadeira,
+    List viirs,
+    List modis,
+    bool showModis,
+    bool showViirs,
     List<Lightning> lightnings,
   }) {
     return new AppState(
@@ -98,6 +110,10 @@ class AppState {
       errors: errors ?? this.errors,
       warnings: warnings ?? this.warnings,
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
+      viirs: viirs ?? this.viirs,
+      modis: modis ?? this.modis,
+      showModis: showModis ?? this.showModis,
+      showViirs: showViirs ?? this.showViirs,
       lightnings: lightnings ?? this.lightnings,
     );
   }

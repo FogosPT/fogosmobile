@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2020-08-11T19:39:23.484025",
+  "@@last_modified": "2020-08-12T12:24:12.539317",
   "appTitle": "Fogos.pt",
   "@appTitle": {
     "description": "App title",
@@ -484,6 +484,66 @@
   "textPlanes": "Aviões",
   "@textPlanes": {
     "description": "Notification Text Planes",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDate": "Data",
+  "@textDate": {
+    "description": "Data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi4": "Bright Ti4",
+  "@textBrightTi4": {
+    "description": "Bright Ti 4",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi5": "Bright Ti5",
+  "@textBrightTi5": {
+    "description": "Bright Ti 5",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFrp": "Frp",
+  "@textFrp": {
+    "description": "Frp",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textConfidence": "Confiança",
+  "@textConfidence": {
+    "description": "Confidence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightness": "Luminosidade",
+  "@textBrightness": {
+    "description": "Brightness",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightT31": "Bright T31",
+  "@textBrightT31": {
+    "description": "Bright T31",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLowConfidence": "Baixa",
+  "@textLowConfidence": {
+    "description": "Low",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNominalConfidence": "Normal",
+  "@textNominalConfidence": {
+    "description": "Nominal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHighConfidence": "Alta",
+  "@textHighConfidence": {
+    "description": "High",
     "type": "text",
     "placeholders": {}
   }

@@ -508,6 +508,66 @@ class FogosLocalizations {
     desc: 'Reset notifications',
   );
 
+  String get textDate => Intl.message(
+    "Data",
+    name: 'textDate',
+    desc: 'Data',
+  );
+
+  String get textBrightTi4 => Intl.message(
+    "Bright Ti4",
+    name: 'textBrightTi4',
+    desc: 'Bright Ti 4',
+  );
+
+  String get textBrightTi5 => Intl.message(
+    "Bright Ti5",
+    name: 'textBrightTi5',
+    desc: 'Bright Ti 5',
+  );
+
+  String get textFrp => Intl.message(
+    "Frp",
+    name: 'textFrp',
+    desc: "Frp",
+  );
+
+  String get textConfidence => Intl.message(
+    "Confiança",
+    name: 'textConfidence',
+    desc: "Confidence",
+  );
+
+  String get textBrightness => Intl.message(
+    "Luminosidade",
+    name: 'textBrightness',
+    desc: "Brightness",
+  );
+
+  String get textBrightT31 => Intl.message(
+    "Bright T31",
+    name: 'textBrightT31',
+    desc: "Bright T31",
+  );
+
+  String get textLowConfidence => Intl.message(
+    "Baixa",
+    name: 'textLowConfidence',
+    desc: "Low",
+  );
+
+  String get textNominalConfidence => Intl.message(
+    "Normal",
+    name: 'textNominalConfidence',
+    desc: "Nominal",
+  );
+
+  String get textHighConfidence => Intl.message(
+    "Alta",
+    name: 'textHighConfidence',
+    desc: "High",
+  );
+
   String get textPlanes => Intl.message(
     "Aviões",
     name: 'textPlanes',

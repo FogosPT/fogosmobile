@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:sentry/sentry.dart';
@@ -225,6 +227,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       final store = StoreProvider.of<AppState>(context);
       store.dispatch(LoadFiresAction());
+      store.dispatch(LoadModisAction());
+      store.dispatch(LoadViirsAction());
       store.dispatch(LoadLightningsAction());
     }
   }
@@ -245,6 +249,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       onInit: (Store<AppState> store) {
         store.dispatch(LoadFiresAction());
         store.dispatch(LoadLightningsAction());
+        store.dispatch(LoadModisAction());
+        store.dispatch(LoadViirsAction());
         store.dispatch(new LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
@@ -260,6 +266,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   return () {
                     store.dispatch(new LoadFiresAction());
                     store.dispatch(LoadLightningsAction());
+                    store.dispatch(LoadModisAction());
+                    store.dispatch(LoadViirsAction());
                     store.dispatch(new LoadAllPreferencesAction());
                   };
                 },
@@ -268,6 +276,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     converter: (Store<AppState> store) => store.state,
                     onInit: (Store<AppState> store) {
                       store.dispatch(LoadFiresAction());
+                      store.dispatch(LoadModisAction());
+                      store.dispatch(LoadViirsAction());
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[

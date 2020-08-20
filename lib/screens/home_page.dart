@@ -3,15 +3,20 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/modis.dart';
+import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -29,6 +34,20 @@ class HomePage extends StatelessWidget {
     await showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) => FireDetails(),
+    );
+  }
+
+  _openModisModal(BuildContext context, Modis modis) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => ModisModal(modis: modis),
+    );
+  }
+
+  _openViirsModal(BuildContext context, Viirs viirs) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => ViirsModal(viirs: viirs),
     );
   }
 
@@ -157,6 +176,74 @@ class HomePage extends StatelessWidget {
           }
         }
 
+        if (state.modis != null && (state.showModis ?? false)) {
+          for (final Modis modis in state.modis) {
+            if (modis.latitude == null || modis.longitude == null) {
+              continue;
+            }
+            markers.add(
+              new Marker(
+                point: new LatLng(modis.latitude, modis.longitude),
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () => _openModisModal(context, modis),
+                    child: new Container(
+                        decoration: BoxDecoration(
+                            color: Colors.amberAccent, shape: BoxShape.circle),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "M",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                          ),
+                        )),
+                  );
+                },
+              ),
+            );
+          }
+        }
+
+        if (state.viirs != null && (state.showViirs ?? false)) {
+          for (final Viirs viirs in state.viirs) {
+            if (viirs.latitude == null || viirs.longitude == null) {
+              continue;
+            }
+            markers.add(
+              new Marker(
+                point: new LatLng(viirs.latitude, viirs.longitude),
+                builder: (BuildContext context) {
+                  return GestureDetector(
+                    onTap: () => _openViirsModal(context, viirs),
+                    child: new Container(
+                        decoration: BoxDecoration(
+                            color: Colors.amberAccent, shape: BoxShape.circle),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              "V",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
+                            ),
+                          ),
+                        )),
+                  );
+                },
+              ),
+            );
+          }
+        }
+
         if (state.lightnings?.isNotEmpty ?? false) {
           for (final Lightning lightning in state.lightnings) {
             print(
@@ -234,24 +321,307 @@ class HomePage extends StatelessWidget {
                 right: 0.0,
                 top: 0.0,
                 child: SafeArea(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(14.0)),
-                      color: Colors.white54,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: _getSatelliteButton(state, context),
-                    ),
+                  child: Column(
+                    children: [
+                      _getBackground(
+                        _getSatelliteButton(state, context),
+                      ),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      _getBackground(_getViirsButton(state, context)),
+                      SizedBox(
+                        height: 24,
+                      ),
+                      _getBackground(_getModisButton(state, context)),
+                    ],
                   ),
                 ),
               ),
-              overlayWidget
+              overlayWidget,
             ],
           ),
         );
       },
     );
   }
+
+  Widget _getBackground(Widget child) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14.0)),
+        color: Colors.white54,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: child,
+      ),
+    );
+  }
+
+  Widget _getViirsButton(AppState state, context) {
+    return InkWell(
+      onTap: () =>
+          StoreProvider.of<AppState>(context).dispatch(ShowViirsAction()),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 8.0,
+            ),
+            child: Text('Viirs'),
+          ),
+          if (state.showViirs ?? false)
+            Positioned(
+              top: 5,
+              right: 5,
+              child: Icon(
+                Icons.check_circle,
+                size: 18,
+                color: Colors.green,
+              ),
+            )
+        ],
+      ),
+    );
+  }
+
+  Widget _getModisButton(AppState state, context) {
+    return InkWell(
+      onTap: () =>
+          StoreProvider.of<AppState>(context).dispatch(ShowModisAction()),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 8.0,
+            ),
+            child: Text('Modis'),
+          ),
+          if (state.showModis ?? false)
+            Positioned(
+              top: 5,
+              right: 5,
+              child: Icon(
+                Icons.check_circle,
+                size: 18,
+                color: Colors.green,
+              ),
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class ViirsModal extends StatelessWidget {
+  final Viirs viirs;
+
+  const ViirsModal({Key key, this.viirs}) : super(key: key);
+
+  String getConfidence (BuildContext context, String confidence) {
+    if (confidence == 'nominal') {
+        return FogosLocalizations.of(context).textNominalConfidence;
+    } else if (confidence == 'low') {
+        return FogosLocalizations.of(context).textLowConfidence;
+    } else if (confidence == 'high') {
+        return FogosLocalizations.of(context).textHighConfidence;
+    } else {
+        return confidence;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textDate}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: getDate(viirs.acqDate),
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textBrightTi4}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: viirs.brightTi4,
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textBrightTi5}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: viirs.brightTi5,
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textFrp}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: viirs.frp, style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text:
+                          "${FogosLocalizations.of(context).textConfidence}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: getConfidence(context, viirs.confidence),
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ModisModal extends StatelessWidget {
+  final Modis modis;
+
+  const ModisModal({Key key, this.modis}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.all(12.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textDate}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: getDate(modis.acqDate),
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textBrightT31}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: modis.brightT31,
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text:
+                          "${FogosLocalizations.of(context).textBrightness}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: modis.brightness,
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text: "${FogosLocalizations.of(context).textFrp}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: modis.frp, style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+            RichText(
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                      text:
+                          "${FogosLocalizations.of(context).textConfidence}: ",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black)),
+                  TextSpan(
+                      text: "${modis.confidence}%",
+                      style: TextStyle(color: Colors.black)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+String getDate(DateTime time) {
+  String date = "${time.day}/${time.month}/${time.year}";
+  String hours = DateFormat.Hm().format(time);
+  return "$date - $hours";
 }

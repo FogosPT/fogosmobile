@@ -89,9 +89,11 @@ class HomePage extends StatelessWidget {
       onResume: (Map<String, dynamic> message) async {
         print('on resume $message');
         String fireId = message["fireId"];
+        bool isWarning = message["warning"] ?? false;
+
         final store = StoreProvider.of<AppState>(context);
         store.dispatch(ClearFireAction());
-        store.dispatch(LoadFireAction(fireId));
+        store.dispatch(isWarning ? LoadWarningsAction() : LoadFireAction(fireId));
         _openModalSheet(context);
       },
       onLaunch: (Map<String, dynamic> message) async {

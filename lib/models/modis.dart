@@ -20,7 +20,6 @@ class ModisResult {
       };
 
   static List<Modis> fromMap(Map<String, dynamic> obj) {
-    print("[VK] : obj: ${obj}");
     if (obj == null || obj.values == null) {
       return [];
     }

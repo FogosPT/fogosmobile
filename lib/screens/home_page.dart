@@ -88,15 +88,15 @@ class HomePage extends StatelessWidget {
       },
       onResume: (Map<String, dynamic> message) async {
         print('on resume $message');
-        String fireId = message["fireId"];
-        final store = StoreProvider.of<AppState>(context);
-        store.dispatch(ClearFireAction());
-        store.dispatch(LoadFireAction(fireId));
-        _openModalSheet(context);
+        String fireId = message["data"]["fireId"];
+        if (fireId != null) {
+          final store = StoreProvider.of<AppState>(context);
+          store.dispatch(ClearFireAction());
+          store.dispatch(LoadFireAction(fireId));
+          _openModalSheet(context);
+        }
       },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
-      },
+      onLaunch: (Map<String, dynamic> message) async {},
     );
 
     return new StoreConnector<AppState, AppState>(

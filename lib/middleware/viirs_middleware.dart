@@ -22,7 +22,6 @@ Middleware<AppState> _loadViirs() {
       String url = Endpoints.getViirs;
       final response = await get(url);
       List<Viirs> viirs = ViirsResult.fromMap(response.data).toList();
-      print("load contributors");
       store.dispatch(new ViirsLoadedAction(viirs));
     } catch (e) {
       print(e);

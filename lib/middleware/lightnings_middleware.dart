@@ -21,9 +21,10 @@ Middleware<AppState> _createLightningStrikes() {
     try {
       String url = Endpoints.getLightnings;
       final response = await get(url);
-      List<Lightning> lightnings = LightningRemote.fromJson(response.data).data;
-      print("load contributors");
-      store.dispatch(new LightningsLoadedAction(lightnings));
+      if (response.data != [] && response.data != null) {
+        List<Lightning> lightnings = LightningRemote.fromJson(response.data).data;
+        store.dispatch(new LightningsLoadedAction(lightnings));
+      }
     } catch (e) {
       print(e);
       print(e.stackTrace);

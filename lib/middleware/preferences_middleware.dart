@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
@@ -45,7 +44,8 @@ Middleware<AppState> _createLoadPreferences() {
       List<Fire> fires = store.state.fires;
 
       if (fires.length > 0) {
-        data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
+        data['subscribedFires'] =
+            fires.where((f) => subbedFires.contains(f.id)).toList();
       } else {
         data['subscribedFires'] = [];
       }
@@ -67,7 +67,9 @@ Middleware<AppState> _createSetPreference() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
       _firebaseMessaging.subscribeToTopic(topic);
@@ -87,11 +89,14 @@ Middleware<AppState> _createSetNotification() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     try {
       final prefs = SharedPreferencesManager.preferences;
-      List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
+      List<String> subscribedFires =
+          prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
         _firebaseMessaging.subscribeToTopic(topic);

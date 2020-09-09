@@ -22,7 +22,6 @@ Middleware<AppState> _loadModis() {
       String url = Endpoints.getModis;
       final response = await get(url);
       List<Modis> modis = ModisResult.fromMap(response.data).toList();
-      print("load contributors");
       store.dispatch(new ModisLoadedAction(modis));
     } catch (e) {
       print(e);

@@ -90,6 +90,7 @@ class HomePage extends StatelessWidget {
         print('on resume $message');
         String fireId = message["data"]["fireId"];
         if (fireId != null) {
+          Navigator.of(context).pop();
           final store = StoreProvider.of<AppState>(context);
           store.dispatch(ClearFireAction());
           store.dispatch(LoadFireAction(fireId));

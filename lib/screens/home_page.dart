@@ -58,12 +58,12 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           final store = StoreProvider.of<AppState>(context);
           store.dispatch(SetPreferenceAction(
-              'satellite', state.preferences['pref-satellite'] == 1 ? 0 : 1));
+              preferenceSatellite, state.preferences[preferenceSatellite] == 1 ? 0 : 1));
         },
       ),
     ];
 
-    if (state.preferences['pref-satellite'] == 1) {
+    if (state.preferences[preferenceSatellite] == 1) {
       widgets.add(Positioned(
         bottom: 5,
         right: 5,
@@ -90,7 +90,6 @@ class HomePage extends StatelessWidget {
         print('on resume $message');
         String fireId = message["data"]["fireId"];
         if (fireId != null) {
-          Navigator.of(context).pop();
           final store = StoreProvider.of<AppState>(context);
           store.dispatch(ClearFireAction());
           store.dispatch(LoadFireAction(fireId));
@@ -247,8 +246,6 @@ class HomePage extends StatelessWidget {
 
         if (state.lightnings?.isNotEmpty ?? false) {
           for (final Lightning lightning in state.lightnings) {
-            print(
-                "Adding lightning on ${lightning.payload.latitude}, ${lightning.payload.longitude}");
             markers.add(
               new Marker(
                 width: fullPinSize * 0.65,
@@ -280,7 +277,6 @@ class HomePage extends StatelessWidget {
 
         String mapboxUrlTemplate;
         String mapboxId;
-
         if (state.preferences[preferenceSatellite] == 1) {
           mapboxUrlTemplate = MAPBOX_URL_SATTELITE_TEMPLATE;
           mapboxId = MAPBOX_SATTELITE_ID;

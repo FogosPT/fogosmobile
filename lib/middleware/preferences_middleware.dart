@@ -10,7 +10,7 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
-const String preferenceSatellite = "satellite";
+const String preferenceSatellite = "pref-satellite";
 
 List<Middleware<AppState>> preferencesMiddleware() {
   final loadPreferences = _createLoadPreferences();

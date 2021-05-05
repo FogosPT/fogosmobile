@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -18,17 +17,22 @@ import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:latlong/latlong.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fogosmobile/constants/variables.dart';
 
 class HomePage extends StatelessWidget {
-  final MapController mapController = new MapController();
   final LatLng _center = new LatLng(39.806251, -8.088591);
-  final List<Marker> markers = [];
+  //final List<Marker> markers = [];
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  MapboxMapController mapController;
+
+  void _onMapCreated(MapboxMapController controller) {
+    mapController = controller;
+  }
 
   _openModalSheet(context) async {
     await showModalBottomSheet<void>(
@@ -57,8 +61,8 @@ class HomePage extends StatelessWidget {
         icon: Icon(Icons.satellite),
         onPressed: () {
           final store = StoreProvider.of<AppState>(context);
-          store.dispatch(SetPreferenceAction(
-              preferenceSatellite, state.preferences[preferenceSatellite] == 1 ? 0 : 1));
+          store.dispatch(SetPreferenceAction(preferenceSatellite,
+              state.preferences[preferenceSatellite] == 1 ? 0 : 1));
         },
       ),
     ];
@@ -148,30 +152,30 @@ class HomePage extends StatelessWidget {
                 pinSize = fullPinSize;
               }
 
-              markers.add(
-                new Marker(
-                  width: pinSize,
-                  height: pinSize,
-                  point: new LatLng(fire.lat, fire.lng),
-                  builder: (BuildContext context) {
-                    return new Container(
-                      decoration: BoxDecoration(
-                          color: getFireColor(fire), shape: BoxShape.circle),
-                      child: IconButton(
-                        icon: new SvgPicture.asset(
-                            getCorrectStatusImage(
-                                fire.statusCode, fire.important),
-                            semanticsLabel: 'Acme Logo'),
-                        onPressed: () async {
-                          store.dispatch(ClearFireAction());
-                          store.dispatch(LoadFireAction(fire.id));
-                          _openModalSheet(context);
-                        },
-                      ),
-                    );
-                  },
-                ),
-              );
+            //   markers.add(
+            //     new Marker(
+            //       width: pinSize,
+            //       height: pinSize,
+            //       point: new LatLng(fire.lat, fire.lng),
+            //       builder: (BuildContext context) {
+            //         return new Container(
+            //           decoration: BoxDecoration(
+            //               color: getFireColor(fire), shape: BoxShape.circle),
+            //           child: IconButton(
+            //             icon: new SvgPicture.asset(
+            //                 getCorrectStatusImage(
+            //                     fire.statusCode, fire.important),
+            //                 semanticsLabel: 'Acme Logo'),
+            //             onPressed: () async {
+            //               store.dispatch(ClearFireAction());
+            //               store.dispatch(LoadFireAction(fire.id));
+            //               _openModalSheet(context);
+            //             },
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   );
             }
           }
         }
@@ -181,32 +185,32 @@ class HomePage extends StatelessWidget {
             if (modis.latitude == null || modis.longitude == null) {
               continue;
             }
-            markers.add(
-              new Marker(
-                point: new LatLng(modis.latitude, modis.longitude),
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () => _openModisModal(context, modis),
-                    child: new Container(
-                        decoration: BoxDecoration(
-                            color: Colors.amberAccent, shape: BoxShape.circle),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              "M",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        )),
-                  );
-                },
-              ),
-            );
+          //   markers.add(
+          //     new Marker(
+          //       point: new LatLng(modis.latitude, modis.longitude),
+          //       builder: (BuildContext context) {
+          //         return GestureDetector(
+          //           onTap: () => _openModisModal(context, modis),
+          //           child: new Container(
+          //               decoration: BoxDecoration(
+          //                   color: Colors.amberAccent, shape: BoxShape.circle),
+          //               child: Center(
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.all(4.0),
+          //                   child: Text(
+          //                     "M",
+          //                     textAlign: TextAlign.center,
+          //                     style: TextStyle(
+          //                         color: Colors.white,
+          //                         fontWeight: FontWeight.bold,
+          //                         fontSize: 18),
+          //                   ),
+          //                 ),
+          //               )),
+          //         );
+          //       },
+          //     ),
+          //   );
           }
         }
 
@@ -215,63 +219,63 @@ class HomePage extends StatelessWidget {
             if (viirs.latitude == null || viirs.longitude == null) {
               continue;
             }
-            markers.add(
-              new Marker(
-                point: new LatLng(viirs.latitude, viirs.longitude),
-                builder: (BuildContext context) {
-                  return GestureDetector(
-                    onTap: () => _openViirsModal(context, viirs),
-                    child: new Container(
-                        decoration: BoxDecoration(
-                            color: Colors.amberAccent, shape: BoxShape.circle),
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Text(
-                              "V",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
-                          ),
-                        )),
-                  );
-                },
-              ),
-            );
+          //   markers.add(
+          //     new Marker(
+          //       point: new LatLng(viirs.latitude, viirs.longitude),
+          //       builder: (BuildContext context) {
+          //         return GestureDetector(
+          //           onTap: () => _openViirsModal(context, viirs),
+          //           child: new Container(
+          //               decoration: BoxDecoration(
+          //                   color: Colors.amberAccent, shape: BoxShape.circle),
+          //               child: Center(
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.all(4.0),
+          //                   child: Text(
+          //                     "V",
+          //                     textAlign: TextAlign.center,
+          //                     style: TextStyle(
+          //                         color: Colors.white,
+          //                         fontWeight: FontWeight.bold,
+          //                         fontSize: 18),
+          //                   ),
+          //                 ),
+          //               )),
+          //         );
+          //       },
+          //     ),
+          //   );
           }
         }
 
         if (state.lightnings?.isNotEmpty ?? false) {
           for (final Lightning lightning in state.lightnings) {
-            markers.add(
-              new Marker(
-                width: fullPinSize * 0.65,
-                height: fullPinSize * 0.65,
-                point: new LatLng(
-                    lightning.payload.latitude, lightning.payload.longitude),
-                builder: (BuildContext context) {
-                  return new Container(
-                    decoration: BoxDecoration(
-                        color: Colors.purpleAccent, shape: BoxShape.circle),
-                    child: IconButton(
-                      icon: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.bolt,
-                          size: fullPinSize * 0.33,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onPressed: () async {
-                        // todo: Add the action
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
+          //   markers.add(
+          //     new Marker(
+          //       width: fullPinSize * 0.65,
+          //       height: fullPinSize * 0.65,
+          //       point: new LatLng(
+          //           lightning.payload.latitude, lightning.payload.longitude),
+          //       builder: (BuildContext context) {
+          //         return new Container(
+          //           decoration: BoxDecoration(
+          //               color: Colors.purpleAccent, shape: BoxShape.circle),
+          //           child: IconButton(
+          //             icon: Center(
+          //               child: FaIcon(
+          //                 FontAwesomeIcons.bolt,
+          //                 size: fullPinSize * 0.33,
+          //                 color: Colors.white,
+          //               ),
+          //             ),
+          //             onPressed: () async {
+          //               // todo: Add the action
+          //             },
+          //           ),
+          //         );
+          //       },
+          //     ),
+          //   );
           }
         }
 
@@ -291,27 +295,20 @@ class HomePage extends StatelessWidget {
           inAsyncCall: state.isLoading && state.fire == null,
           child: Stack(
             children: <Widget>[
-              new FlutterMap(
+              MapboxMap(
                 key: Key(mapboxId),
-                mapController: mapController,
-                options: new MapOptions(
-                  center: _center,
+                minMaxZoomPreference: MinMaxZoomPreference(1.0, 20.0),
+                initialCameraPosition:
+                    CameraPosition(target: _center, zoom: 7.0),
+                styleString: MAPBOX_URL_SATTELITE_TEMPLATE,
+              ),
+              new MapboxMap(
+                key: Key(mapboxId),
+                initialCameraPosition: CameraPosition(
+                  target: _center,
                   zoom: 7.0,
-                  minZoom: 1.0,
-                  maxZoom: 20.0,
                 ),
-                layers: [
-                  new TileLayerOptions(
-                    urlTemplate: mapboxUrlTemplate,
-                    additionalOptions: {
-                      'accessToken': MAPBOX_ACCESS_TOKEN,
-                      'id': mapboxId,
-                    },
-                  ),
-                  new MarkerLayerOptions(
-                    markers: markers,
-                  ),
-                ],
+                styleString: MAPBOX_URL_SATTELITE_TEMPLATE,
               ),
               MapboxCopyright(),
               Positioned(
@@ -418,15 +415,15 @@ class ViirsModal extends StatelessWidget {
 
   const ViirsModal({Key key, this.viirs}) : super(key: key);
 
-  String getConfidence (BuildContext context, String confidence) {
+  String getConfidence(BuildContext context, String confidence) {
     if (confidence == 'nominal') {
-        return FogosLocalizations.of(context).textNominalConfidence;
+      return FogosLocalizations.of(context).textNominalConfidence;
     } else if (confidence == 'low') {
-        return FogosLocalizations.of(context).textLowConfidence;
+      return FogosLocalizations.of(context).textLowConfidence;
     } else if (confidence == 'high') {
-        return FogosLocalizations.of(context).textHighConfidence;
+      return FogosLocalizations.of(context).textHighConfidence;
     } else {
-        return confidence;
+      return confidence;
     }
   }
 
@@ -615,7 +612,6 @@ class ModisModal extends StatelessWidget {
     );
   }
 }
-
 
 String getDate(DateTime time) {
   String date = "${time.day}/${time.month}/${time.year}";

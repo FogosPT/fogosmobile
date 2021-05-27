@@ -36,6 +36,7 @@ import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
+import 'package:logger/logger.dart';
 
 final SentryClient _sentry = new SentryClient(dsn: SENTRY_DSN);
 
@@ -78,6 +79,14 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
     print('Failed to report to Sentry.io: ${response.error}');
   }
 }
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+var loggerNoStack = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
 
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
@@ -157,8 +166,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {});
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {});
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {
@@ -180,7 +191,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   Widget _buildFiltersMenu(AppState state) {
-    return StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
+    return StoreConnector<AppState, SetFiltersCallback>(
+        converter: (Store<AppState> store) {
       return (FireStatus filter) {
         store.dispatch(SelectFireFiltersAction(filter));
       };
@@ -191,19 +203,22 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         itemBuilder: (BuildContext context) => FireStatus.values
             .map(
               (status) => PopupMenuItem<FireStatus>(
-                    value: status,
-                    child: ListTileTheme(
-                      style: ListTileStyle.drawer,
-                      selectedColor: Theme.of(context).accentColor,
-                      child: ListTile(
-                        dense: true,
-                        contentPadding: const EdgeInsets.all(0.0),
-                        selected: state.activeFilters.contains(status),
-                        trailing: state.activeFilters.contains(status) ? Icon(Icons.check) : null,
-                        title: Text(FogosLocalizations.of(context).textFireStatus(status)),
-                      ),
-                    ),
+                value: status,
+                child: ListTileTheme(
+                  style: ListTileStyle.drawer,
+                  selectedColor: Theme.of(context).accentColor,
+                  child: ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.all(0.0),
+                    selected: state.activeFilters.contains(status),
+                    trailing: state.activeFilters.contains(status)
+                        ? Icon(Icons.check)
+                        : null,
+                    title: Text(
+                        FogosLocalizations.of(context).textFireStatus(status)),
                   ),
+                ),
+              ),
             )
             .toList(),
       );
@@ -296,7 +311,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 new DrawerHeader(
                   child: new Center(
-                    child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
+                    child:
+                        SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
                   ),
                   decoration: new BoxDecoration(
                     gradient: new LinearGradient(
@@ -319,7 +335,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.list),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textFiresTable),
+                  title:
+                      new Text(FogosLocalizations.of(context).textFiresTable),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
@@ -335,7 +352,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.warning),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textWarningsMadeira),
+                  title: new Text(
+                      FogosLocalizations.of(context).textWarningsMadeira),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
@@ -343,7 +361,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.warning),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textInformations),
+                  title:
+                      new Text(FogosLocalizations.of(context).textInformations),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(INFO_ROUTE);
@@ -351,7 +370,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.info),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textStatistics),
+                  title:
+                      new Text(FogosLocalizations.of(context).textStatistics),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
@@ -360,7 +380,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ),
                 new Divider(),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textNotifications),
+                  title: new Text(
+                      FogosLocalizations.of(context).textNotifications),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(SETTINGS_ROUTE);

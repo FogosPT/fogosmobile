@@ -40,6 +40,8 @@ dependencies:
 
   #localizations
   intl: 0.17.0
+  equatable: ^2.0.2
+  logger: ^1.0.0
   # TODO(GP): Find another way of compiling translations
   # intl_translation: ^0.17.10
 

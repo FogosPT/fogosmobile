@@ -46,13 +46,16 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.tomahock.fogos"
-        minSdkVersion 16
+        minSdkVersion 20
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
     signingConfigs {
-        debug{}
+        debug{
+//            shrinkResources = false
+        }
         release {
             if (keystorePropertiesFile != null && keystorePropertiesFile.exists()) {
                 keyAlias keystoreProperties['keyAlias']
@@ -74,7 +77,9 @@ flutter {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.6.1'
 }
 apply plugin: 'com.google.gms.google-services'
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
+//com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

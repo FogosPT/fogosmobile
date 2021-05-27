@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 enum FireStatus {
   dispatch,
   significative_ocurrence,
@@ -12,7 +14,7 @@ enum FireStatus {
   false_alert,
 }
 
-class Fire {
+class Fire implements Equatable {
   final String id;
   final int sharepointId;
 
@@ -172,12 +174,22 @@ class Fire {
   }
 
   static List<String> activeFiltersToList(List<FireStatus> statusList) {
-    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ?? [];
+    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ??
+        [];
   }
 
   static List<FireStatus> listFromActiveFilters(List<String> statusList) {
-    return statusList?.map((filter) => Fire._statusFromJson(filter))?.toList() ?? List.from(FireStatus.values);
+    return statusList
+            ?.map((filter) => Fire._statusFromJson(filter))
+            ?.toList() ??
+        List.from(FireStatus.values);
   }
 
   String get fullAddress => '$district, $city, $town, $local';
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  bool get stringify => true;
 }

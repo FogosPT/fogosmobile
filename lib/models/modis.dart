@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 ModisResult modisFromJson(String str) => ModisResult.fromJson(json.decode(str));
 
 String modisToJson(ModisResult data) => json.encode(data.toJson());
@@ -24,14 +26,11 @@ class ModisResult {
       return [];
     }
 
-    return obj
-        .values
-        .map((map) => Modis.fromJson(map))
-        .toList();
+    return obj.values.map((map) => Modis.fromJson(map)).toList();
   }
 }
 
-class Modis {
+class Modis implements Equatable {
   Modis({
     this.latitude,
     this.longitude,
@@ -63,12 +62,16 @@ class Modis {
   String daynight;
 
   factory Modis.fromJson(Map<String, dynamic> json) => Modis(
-        latitude: json["latitude"] != null ? double.tryParse(json["latitude"]) : null,
-        longitude: json["latitude"] != null ? double.tryParse(json["longitude"]) : null,
+        latitude:
+            json["latitude"] != null ? double.tryParse(json["latitude"]) : null,
+        longitude: json["latitude"] != null
+            ? double.tryParse(json["longitude"])
+            : null,
         brightness: json["brightness"],
         scan: json["scan"],
         track: json["track"],
-        acqDate: json["acq_date"] != null ? DateTime.parse(json["acq_date"]) : null,
+        acqDate:
+            json["acq_date"] != null ? DateTime.parse(json["acq_date"]) : null,
         acqTime: json["acq_time"],
         satellite: json["satellite"],
         confidence: json["confidence"],
@@ -94,4 +97,24 @@ class Modis {
         "frp": frp,
         "daynight": daynight,
       };
+
+  @override
+  List<Object> get props => [
+        latitude,
+        longitude,
+        brightness,
+        scan,
+        track,
+        acqDate,
+        acqTime,
+        satellite,
+        confidence,
+        version,
+        brightT31,
+        frp,
+        daynight,
+      ];
+
+  @override
+  bool get stringify => true;
 }

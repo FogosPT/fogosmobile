@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 ViirsResult viirsResultFromJson(String str) =>
     ViirsResult.fromJson(json.decode(str));
 
@@ -32,7 +34,7 @@ class ViirsResult {
   }
 }
 
-class Viirs {
+class Viirs implements Equatable {
   Viirs({
     this.latitude,
     this.longitude,
@@ -99,4 +101,24 @@ class Viirs {
         "frp": frp,
         "daynight": daynight,
       };
+
+  @override
+  List<Object> get props => [
+        latitude,
+        longitude,
+        brightTi4,
+        scan,
+        track,
+        acqDate,
+        acqTime,
+        satellite,
+        confidence,
+        version,
+        brightTi5,
+        frp,
+        daynight,
+      ];
+
+  @override
+  bool get stringify => true;
 }

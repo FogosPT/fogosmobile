@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -11,14 +11,22 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:latlong/latlong.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:share/share.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 
-class FireList extends StatelessWidget {
-  final MapController mapController = new MapController();
+class FireList extends StatefulWidget {
+  @override
+  _FireListState createState() => _FireListState();
+}
+
+class _FireListState extends State<FireList> {
+  MapboxMapController mapController;
+
+  void _onMapCreated(MapboxMapController controller) {
+    mapController = controller;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,22 +108,13 @@ class FireList extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         height: 200.0,
-                        child: FlutterMap(
-                          mapController: mapController,
-                          options: new MapOptions(
-                            center: _center,
-                            zoom: 14.0,
-                            interactive: false,
-                          ),
-                          layers: [
-                            new TileLayerOptions(
-                              urlTemplate: MAPBOX_URL_SATTELITE_TEMPLATE,
-                              additionalOptions: {
-                                'accessToken': MAPBOX_ACCESS_TOKEN,
-                                'id': MAPBOX_SATTELITE_ID,
-                              },
-                            ),
-                          ],
+                        child: MapboxMap(
+                        initialCameraPosition: CameraPosition(target: _center, zoom: 14.0,),
+                        tiltGesturesEnabled: false,
+                        rotateGesturesEnabled: false,
+                        scrollGesturesEnabled: false,
+                        zoomGesturesEnabled: false,
+                        styleString: MAPBOX_URL_SATTELITE_TEMPLATE,
                         ),
                       ),
                       Container(

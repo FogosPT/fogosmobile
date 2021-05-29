@@ -9,6 +9,7 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/main.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
@@ -25,8 +26,6 @@ import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
-
-import '../main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -53,18 +52,6 @@ class _HomePageState extends State<HomePage> {
   List<ViirsMarkerState> _viirsMarkerStates = [];
   List<ModiisMarkerState> _modisMarkerStates = [];
   List<LightningMarkerState> _lightningMarkerStates = [];
-
-  void _clearMarkers() {
-    _fireMarkers = {};
-    _viirsMarkers = {};
-    _modisMarkers = {};
-    _lightningMarkers = {};
-
-    _fireMarkerStates = [];
-    _viirsMarkerStates = [];
-    _modisMarkerStates = [];
-    _lightningMarkerStates = [];
-  }
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -258,6 +245,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    logger.wtf('build');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('on message $message');
@@ -317,6 +305,8 @@ class _HomePageState extends State<HomePage> {
         }
 
         if (state.fires != null && _mapController != null) {
+          final latLngs = <LatLng>[];
+          final firesAdd = <Fire>[];
           for (final Fire fire in state.fires) {
             if (state.activeFilters.contains(fire.status) &&
                 !_fireMarkers.containsKey(fire.id)) {
@@ -326,45 +316,70 @@ class _HomePageState extends State<HomePage> {
                 pinSize = fullPinSize;
               }
 
+              firesAdd.add(fire);
               final latLng = LatLng(fire.lat, fire.lng);
-              // TODO: Use toScreenLocationBatch for better performance
-              _mapController.toScreenLocation(latLng).then((value) {
-                var point = Point<double>(value.x as double, value.y as double);
-                _addFireMarker(fire, latLng, point);
-              });
+              latLngs.add(latLng);
             }
           }
+
+          _mapController.toScreenLocationBatch(latLngs).then((value) {
+            value.asMap().forEach((index, value) {
+              final point = Point<double>(value.x as double, value.y as double);
+              final latLng = latLngs[index];
+              final fire = firesAdd[index];
+              _addFireMarker(fire, latLng, point);
+            });
+          });
         }
 
-        if (state.modis != null &&
-            (state.showModis ?? false) &&
-            _mapController != null) {
-          for (final Modis modis in state.modis) {
+        if (state.modis != null && _mapController != null) {
+          final latLngs = <LatLng>[];
+          final modisAdded = <Modis>[];
+          for (final modis in state.modis) {
             if (modis.latitude == null || modis.longitude == null) {
               continue;
             }
+            modisAdded.add(modis);
             final latLng = LatLng(modis.latitude, modis.longitude);
-            _mapController.toScreenLocation(latLng).then((value) {
-              var point = Point<double>(value.x as double, value.y as double);
-              _addModisMarker(modis, latLng, point);
-            });
+            latLngs.add(latLng);
           }
+
+          _mapController.toScreenLocationBatch(latLngs).then((value) {
+            value.asMap().forEach((index, value) {
+              final point = Point<double>(value.x as double, value.y as double);
+              final latLng = latLngs[index];
+              final modi = modisAdded[index];
+              _addModisMarker(modi, latLng, point);
+            });
+          });
         }
 
-        if (state.viirs != null &&
-            (state.showViirs ?? false) &&
-            _mapController != null) {
-          for (final Viirs viirs in state.viirs) {
+        if (state.viirs != null && _mapController != null) {
+          final latLngs = <LatLng>[];
+          final viirsAdded = <Viirs>[];
+          for (final viirs in state.viirs) {
             if (viirs.latitude == null || viirs.longitude == null) {
               continue;
             }
 
             final latLng = LatLng(viirs.latitude, viirs.longitude);
+            latLngs.add(latLng);
+            viirsAdded.add(viirs);
+
             _mapController.toScreenLocation(latLng).then((value) {
               var point = Point<double>(value.x as double, value.y as double);
               _addViirsMarker(viirs, latLng, point);
             });
           }
+
+          _mapController.toScreenLocationBatch(latLngs).then((value) {
+            value.asMap().forEach((index, value) {
+              final point = Point<double>(value.x as double, value.y as double);
+              final latLng = latLngs[index];
+              final viirs = viirsAdded[index];
+              _addViirsMarker(viirs, latLng, point);
+            });
+          });
         }
 
         if ((state.lightnings?.isNotEmpty ?? false) && _mapController != null) {
@@ -400,20 +415,22 @@ class _HomePageState extends State<HomePage> {
                   children: _fireMarkers.values.toList(),
                 ),
               ),
-              IgnorePointer(
-                ignoring: false,
-                child: Stack(
-                  children: _modisMarkers.values.toList(),
+              if (state.showModis ?? false)
+                IgnorePointer(
+                  ignoring: true,
+                  child: Stack(
+                    children: _modisMarkers.values.toList(),
+                  ),
                 ),
-              ),
-              IgnorePointer(
-                ignoring: false,
-                child: Stack(
-                  children: _viirsMarkers.values.toList(),
+              if (state.showViirs ?? false)
+                IgnorePointer(
+                  ignoring: true,
+                  child: Stack(
+                    children: _viirsMarkers.values.toList(),
+                  ),
                 ),
-              ),
               IgnorePointer(
-                ignoring: false,
+                ignoring: true,
                 child: Stack(
                   children: _lightningMarkers.values.toList(),
                 ),

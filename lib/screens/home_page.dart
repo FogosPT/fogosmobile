@@ -45,12 +45,10 @@ class _HomePageState extends State<HomePage> {
 
   MapboxMapController _mapController;
 
-  Map<String, FireMarker> _fireMarkers = {};
   Map<String, ViirsMarker> _viirsMarkers = {};
   Map<String, ModiisMarker> _modisMarkers = {};
   Map<String, LightningMarker> _lightningMarkers = {};
 
-  List<FireMarkerState> _fireMarkerStates = [];
   List<ViirsMarkerState> _viirsMarkerStates = [];
   List<ModiisMarkerState> _modisMarkerStates = [];
   List<LightningMarkerState> _lightningMarkerStates = [];
@@ -64,10 +62,6 @@ class _HomePageState extends State<HomePage> {
         _updateMarkerPosition();
       }
     });
-  }
-
-  void _addFireMarkerStates(FireMarkerState markerState) {
-    _fireMarkerStates.add(markerState);
   }
 
   void _addViirsMarkerStates(ViirsMarkerState markerState) {
@@ -85,18 +79,6 @@ class _HomePageState extends State<HomePage> {
   void _updateMarkerPosition() {
 
     fireMarkerStack?.updatePositions();
-
-
-    // Fire
-    final fireCoordinates = <LatLng>[];
-    for (final markerState in _fireMarkerStates) {
-      fireCoordinates.add(markerState.getCoordinates());
-    }
-    _mapController.toScreenLocationBatch(fireCoordinates).then((points) {
-      _fireMarkerStates.asMap().forEach((i, value) {
-        _fireMarkerStates[i].updatePosition(points[i]);
-      });
-    });
 
     // Viirs
     final viirsCoordinates = <LatLng>[];
@@ -130,22 +112,6 @@ class _HomePageState extends State<HomePage> {
         _lightningMarkerStates[i].updatePosition(points[i]);
       });
     });
-  }
-
-  void _addFireMarker(Fire fire, LatLng coordinate, Point<double> point) {
-    _fireMarkers.putIfAbsent(
-      fire.id,
-      () => FireMarker(
-        fire.id,
-        fire,
-        coordinate,
-        point,
-        _addFireMarkerStates,
-        () {
-          _openModalSheet(context);
-        },
-      ),
-    );
   }
 
   void _addModisMarker(Modis modis, LatLng coordinate, Point<double> point) {
@@ -196,6 +162,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  ///TODO Opening the BottomSheet takes a long time, needs improvement
   _openModalSheet(context) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -310,34 +277,6 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-        if (state.fires != null && _mapController != null) {
-          final latLngs = <LatLng>[];
-          final firesAdd = <Fire>[];
-          for (final Fire fire in state.fires) {
-            if (state.activeFilters.contains(fire.status) &&
-                !_fireMarkers.containsKey(fire.id)) {
-              double pinSize = fullPinSize * fire.scale;
-
-              if (pinSize == 0) {
-                pinSize = fullPinSize;
-              }
-
-              firesAdd.add(fire);
-              final latLng = LatLng(fire.lat, fire.lng);
-              latLngs.add(latLng);
-            }
-          }
-
-          _mapController.toScreenLocationBatch(latLngs).then((value) {
-            value.asMap().forEach((index, value) {
-              final point = Point<double>(value.x as double, value.y as double);
-              final latLng = latLngs[index];
-              final fire = firesAdd[index];
-              _addFireMarker(fire, latLng, point);
-            });
-          });
-        }
-
         if (state.modis != null && _mapController != null) {
           final latLngs = <LatLng>[];
           final modisAdded = <Modis>[];
@@ -399,10 +338,12 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-
-        fireMarkerStack = MarkerStack<Fire, FireMarker, FireMarkerState>(
+        fireMarkerStack = MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
           mapController: _mapController,
-          data: state.fires,
+          data: state.fires, filters: state.activeFilters,
+          openModal: () {
+            _openModalSheet(context);
+          },
         );
 
         return ModalProgressHUD(
@@ -422,15 +363,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-
-
               fireMarkerStack,
-              // IgnorePointer(
-              //   ignoring: false,
-              //   child: Stack(
-              //     children: _fireMarkers.values.toList(),
-              //   ),
-              // ),
               // if (state.showModis ?? false)
               //   IgnorePointer(
               //     ignoring: true,

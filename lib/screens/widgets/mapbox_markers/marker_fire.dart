@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
@@ -38,7 +39,7 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   LatLng get location => _coordinate;
 }
 
-class FireMarkerState extends State implements BaseMarkerState{
+class FireMarkerState extends State implements BaseMarkerState {
   final _iconSize = 10.0;
 
   Point _position;
@@ -62,6 +63,7 @@ class FireMarkerState extends State implements BaseMarkerState{
         decoration:
             BoxDecoration(color: getFireColor(_fire), shape: BoxShape.circle),
         child: IconButton(
+          iconSize: _getIconSize(_fire.scale),
           icon: SvgPicture.asset(
             getCorrectStatusImage(_fire.statusCode, _fire.important),
             semanticsLabel: 'Fire Marker',
@@ -86,5 +88,14 @@ class FireMarkerState extends State implements BaseMarkerState{
   @override
   LatLng getCoordinates() {
     return (widget as FireMarker)._coordinate;
+  }
+
+  double _getIconSize(double scale) {
+    double pinSize = fullPinSize * scale;
+
+    if (pinSize == 0) {
+      pinSize = fullPinSize;
+    }
+    return pinSize;
   }
 }

@@ -7,9 +7,9 @@ import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-//
+
 class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
-    B extends BaseMarkerState> extends StatefulWidget {
+    B extends BaseMarkerState, F> extends StatefulWidget {
   final bool ignoreTouch;
 
   final MapboxMapController mapController;
@@ -22,18 +22,21 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 
   final List<B> _markerStates;
 
+  final List<F> filters;
+
   MarkerStack({
     @required this.mapController,
     @required this.data,
     this.ignoreTouch = false,
     this.openModal,
+  this.filters,
     Key key,
   })  : this._markers = {},
         this._markerStates = [],
         super(key: key);
 
   @override
-  _MarkerStackState createState() => _MarkerStackState<T, V, B>();
+  _MarkerStackState createState() => _MarkerStackState<T, V, B, F>();
 
   void updatePositions() {
     final latLngs = <LatLng>[];
@@ -50,11 +53,11 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 }
 
 class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
-    B extends BaseMarkerState> extends State<MarkerStack> {
+    B extends BaseMarkerState, F> extends State<MarkerStack> {
   @override
   Widget build(BuildContext context) {
     final latLngs =
-        widget.data?.map<LatLng>((item) => item.location)?.toList() ?? [];
+        widget.data?.skipWhile((value) => value.filter<F>(widget.filters))?.map<LatLng>((item) => item.location)?.toList() ?? [];
     widget.mapController?.toScreenLocationBatch(latLngs)?.then((value) {
       value.asMap().forEach((index, value) {
         final point = Point<double>(value.x as double, value.y as double);
@@ -86,7 +89,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
             widget._markerStates.add(state);
           },
           () {
-            // openModal?.call();
+            widget.openModal?.call();
           },
         );
         widget._markers.putIfAbsent(item.getId, () => value);

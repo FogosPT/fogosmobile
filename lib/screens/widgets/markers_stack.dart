@@ -7,8 +7,9 @@ import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+//
 class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
-    S extends State> extends StatelessWidget {
+    B extends BaseMarkerState> extends StatefulWidget {
   final bool ignoreTouch;
 
   final MapboxMapController mapController;
@@ -19,7 +20,7 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 
   final Map<String, Widget> _markers;
 
-  final List<S> _markerStates;
+  final List<B> _markerStates;
 
   MarkerStack({
     @required this.mapController,
@@ -29,26 +30,46 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
     Key key,
   })  : this._markers = {},
         this._markerStates = [],
-  assert(data != null, 'Data passed cannot be null'),
-  assert(mapController != null, 'MapController needs to be initialized'),
         super(key: key);
 
   @override
+  _MarkerStackState createState() => _MarkerStackState<T, V, B>();
+
+  void updatePositions() {
+    final latLngs = <LatLng>[];
+    for (final markerState in _markerStates) {
+      latLngs.add(markerState.getCoordinates());
+    }
+
+    mapController?.toScreenLocationBatch(latLngs)?.then((points) {
+      _markerStates.asMap().forEach((index, _) {
+        _markerStates[index].updatePosition(points[index]);
+      });
+    });
+  }
+}
+
+class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
+    B extends BaseMarkerState> extends State<MarkerStack> {
+  @override
   Widget build(BuildContext context) {
-    final latLngs = data.map<LatLng>((item) => item.location).toList();
-    mapController.toScreenLocationBatch(latLngs).then((value) {
+    final latLngs =
+        widget.data?.map<LatLng>((item) => item.location)?.toList() ?? [];
+    widget.mapController?.toScreenLocationBatch(latLngs)?.then((value) {
       value.asMap().forEach((index, value) {
         final point = Point<double>(value.x as double, value.y as double);
         final latLng = latLngs[index];
-        final item = data[index];
+        final item = widget.data[index];
         _addMarker(item, latLng, point);
       });
+
+      setState(() {});
     });
 
     return IgnorePointer(
-      ignoring: ignoreTouch,
+      ignoring: widget.ignoreTouch,
       child: Stack(
-        children: _markers.values.toList(),
+        children: widget._markers.values.toList(),
       ),
     );
   }
@@ -61,14 +82,14 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
           item as Fire,
           item.location,
           point,
-           (state) {
-            print('oi');
+          (state) {
+            widget._markerStates.add(state);
           },
           () {
-           // openModal?.call();
+            // openModal?.call();
           },
         );
-        _markers.putIfAbsent(item.getId, () => value);
+        widget._markers.putIfAbsent(item.getId, () => value);
     }
   }
 }

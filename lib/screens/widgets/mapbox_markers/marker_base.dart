@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
@@ -8,4 +10,9 @@ abstract class BaseMarker implements StatefulWidget{
   BaseMarker(this.location);
 }
 
-class BaseMarkerStates {}
+abstract class BaseMarkerState extends State {
+
+  LatLng getCoordinates();
+
+  void updatePosition(Point<num> point);
+}

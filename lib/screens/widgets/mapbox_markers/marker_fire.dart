@@ -30,7 +30,6 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   @override
   State<StatefulWidget> createState() {
     final state = FireMarkerState(_initialPosition, _fire, _openModal);
-    print('oi');
     _addMarkerState(state);
     return state;
   }
@@ -39,7 +38,7 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   LatLng get location => _coordinate;
 }
 
-class FireMarkerState extends State {
+class FireMarkerState extends State implements BaseMarkerState{
   final _iconSize = 10.0;
 
   Point _position;
@@ -77,13 +76,15 @@ class FireMarkerState extends State {
     );
   }
 
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
   }
 
-  LatLng getCoordinate() {
+  @override
+  LatLng getCoordinates() {
     return (widget as FireMarker)._coordinate;
   }
 }

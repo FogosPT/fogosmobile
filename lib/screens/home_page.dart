@@ -39,6 +39,8 @@ class _HomePageState extends State<HomePage> {
     MAPBOX_URL_SATTELITE_TEMPLATE
   ];
 
+
+  MarkerStack fireMarkerStack;
   var currentMapboxTemplate = 0;
 
   MapboxMapController _mapController;
@@ -81,10 +83,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateMarkerPosition() {
+
+    fireMarkerStack?.updatePositions();
+
+
     // Fire
     final fireCoordinates = <LatLng>[];
     for (final markerState in _fireMarkerStates) {
-      fireCoordinates.add(markerState.getCoordinate());
+      fireCoordinates.add(markerState.getCoordinates());
     }
     _mapController.toScreenLocationBatch(fireCoordinates).then((points) {
       _fireMarkerStates.asMap().forEach((i, value) {
@@ -393,8 +399,14 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
+
+        fireMarkerStack = MarkerStack<Fire, FireMarker, FireMarkerState>(
+          mapController: _mapController,
+          data: state.fires,
+        );
+
         return ModalProgressHUD(
-          opacity: 0.75,
+        opacity: 0.75,
           color: Colors.black,
           inAsyncCall: state.isLoading && state.fire == null,
           child: Stack(
@@ -411,11 +423,8 @@ class _HomePageState extends State<HomePage> {
               ),
 
 
-               MarkerStack<Fire, FireMarker, FireMarkerState>(
-                 mapController: _mapController,
-                 data: state.fires,
-               ),
 
+              fireMarkerStack,
               // IgnorePointer(
               //   ignoring: false,
               //   child: Stack(

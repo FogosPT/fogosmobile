@@ -9,7 +9,6 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:fogosmobile/main.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
@@ -18,10 +17,11 @@ import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
-import 'package:fogosmobile/screens/marker_fire.dart';
-import 'package:fogosmobile/screens/marker_lightning.dart';
-import 'package:fogosmobile/screens/marker_modis.dart';
-import 'package:fogosmobile/screens/marker_viirs.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_lightning.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
+import 'package:fogosmobile/screens/widgets/markers_stack.dart';
 import 'package:intl/intl.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -145,16 +145,17 @@ class _HomePageState extends State<HomePage> {
   void _addModisMarker(Modis modis, LatLng coordinate, Point<double> point) {
     final modisId = modis.hashCode.toString();
     _modisMarkers.putIfAbsent(
+      modisId,
+      () => ModiisMarker(
         modisId,
-        () => ModiisMarker(
-              modisId,
-              coordinate,
-              point,
-              _addModisMarkerStates,
-              () {
-                _openModisModal(context, modis);
-              },
-            ));
+        coordinate,
+        point,
+        _addModisMarkerStates,
+        () {
+          _openModisModal(context, modis);
+        },
+      ),
+    );
   }
 
   void _addViirsMarker(Viirs viirs, LatLng latLng, Point<double> point) {
@@ -245,7 +246,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    logger.wtf('build');
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('on message $message');
@@ -409,32 +409,39 @@ class _HomePageState extends State<HomePage> {
                   zoom: 7.0,
                 ),
               ),
-              IgnorePointer(
-                ignoring: false,
-                child: Stack(
-                  children: _fireMarkers.values.toList(),
-                ),
-              ),
-              if (state.showModis ?? false)
-                IgnorePointer(
-                  ignoring: true,
-                  child: Stack(
-                    children: _modisMarkers.values.toList(),
-                  ),
-                ),
-              if (state.showViirs ?? false)
-                IgnorePointer(
-                  ignoring: true,
-                  child: Stack(
-                    children: _viirsMarkers.values.toList(),
-                  ),
-                ),
-              IgnorePointer(
-                ignoring: true,
-                child: Stack(
-                  children: _lightningMarkers.values.toList(),
-                ),
-              ),
+
+
+               MarkerStack<Fire, FireMarker, FireMarkerState>(
+                 mapController: _mapController,
+                 data: state.fires,
+               ),
+
+              // IgnorePointer(
+              //   ignoring: false,
+              //   child: Stack(
+              //     children: _fireMarkers.values.toList(),
+              //   ),
+              // ),
+              // if (state.showModis ?? false)
+              //   IgnorePointer(
+              //     ignoring: true,
+              //     child: Stack(
+              //       children: _modisMarkers.values.toList(),
+              //     ),
+              //   ),
+              // if (state.showViirs ?? false)
+              //   IgnorePointer(
+              //     ignoring: true,
+              //     child: Stack(
+              //       children: _viirsMarkers.values.toList(),
+              //     ),
+              //   ),
+              // IgnorePointer(
+              //   ignoring: true,
+              //   child: Stack(
+              //     children: _lightningMarkers.values.toList(),
+              //   ),
+              // ),
               MapboxCopyright(),
               Positioned(
                 right: 0.0,

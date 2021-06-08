@@ -5,6 +5,8 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 ViirsResult viirsResultFromJson(String str) =>
     ViirsResult.fromJson(json.decode(str));
@@ -34,7 +36,7 @@ class ViirsResult {
   }
 }
 
-class Viirs implements Equatable {
+class Viirs extends BaseMapboxModel implements Equatable {
   Viirs({
     this.latitude,
     this.longitude,
@@ -49,7 +51,7 @@ class Viirs implements Equatable {
     this.brightTi5,
     this.frp,
     this.daynight,
-  });
+  }) : super(LatLng(latitude, longitude), '$latitude');
 
   double latitude;
   double longitude;
@@ -121,4 +123,9 @@ class Viirs implements Equatable {
 
   @override
   bool get stringify => true;
+
+  @override
+  bool filter<T>(List<T> filters) {
+    return latitude != null && longitude != null;
+  }
 }

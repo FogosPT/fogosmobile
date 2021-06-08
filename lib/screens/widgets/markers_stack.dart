@@ -3,10 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/modis.dart';
+import 'package:fogosmobile/models/viirs.dart';
+import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
-
 
 class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
     B extends BaseMarkerState, F> extends StatefulWidget {
@@ -16,7 +20,7 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 
   final List<T> data;
 
-  final void Function() openModal;
+  final void Function(dynamic item) openModal;
 
   final Map<String, Widget> _markers;
 
@@ -29,7 +33,7 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
     @required this.data,
     this.ignoreTouch = false,
     this.openModal,
-  this.filters,
+    this.filters,
     Key key,
   })  : this._markers = {},
         this._markerStates = [],
@@ -56,8 +60,11 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
     B extends BaseMarkerState, F> extends State<MarkerStack> {
   @override
   Widget build(BuildContext context) {
-    final latLngs =
-        widget.data?.skipWhile((value) => value.filter<F>(widget.filters))?.map<LatLng>((item) => item.location)?.toList() ?? [];
+    final latLngs = widget.data
+            ?.skipWhile((value) => value.filter<F>(widget.filters))
+            ?.map<LatLng>((item) => item.location)
+            ?.toList() ??
+        [];
     widget.mapController?.toScreenLocationBatch(latLngs)?.then((value) {
       value.asMap().forEach((index, value) {
         final point = Point<double>(value.x as double, value.y as double);
@@ -78,21 +85,50 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
   }
 
   void _addMarker(T item, LatLng latLng, Point<double> point) {
+    var value;
     switch (V) {
+      case ViirsMarker:
+        value = ViirsMarker(
+          item.getId,
+          item as Viirs,
+          item.location,
+          point,
+          _addMarkerState,
+          _openModal,
+        );
+        break;
+      case ModisMarker:
+        value = ModisMarker(
+          item.getId,
+          item as Modis,
+          item.location,
+          point,
+          _addMarkerState,
+          _openModal,
+        );
+        break;
       case FireMarker:
-        var value = FireMarker(
+        value = FireMarker(
           item.getId,
           item as Fire,
           item.location,
           point,
-          (state) {
-            widget._markerStates.add(state);
-          },
-          () {
-            widget.openModal?.call();
-          },
+          _addMarkerState,
+          _openModal,
         );
-        widget._markers.putIfAbsent(item.getId, () => value);
+        break;
     }
+
+    if(value != null){
+      widget._markers.putIfAbsent(item.getId, () => value);
+    }
+  }
+
+  void _openModal(dynamic item) {
+    widget.openModal?.call(item);
+  }
+
+  void _addMarkerState(state) {
+    widget._markerStates.add(state);
   }
 }

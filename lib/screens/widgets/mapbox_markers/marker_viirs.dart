@@ -3,16 +3,20 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/models/viirs.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ViirsMarker extends StatefulWidget {
+class ViirsMarker extends StatefulWidget implements BaseMarker{
+  final Viirs _viirs;
   final Point _initialPosition;
   final LatLng _coordinate;
   final void Function(ViirsMarkerState) _addMarkerState;
-  final void Function() _openModal;
+  final void Function(Viirs) _openModal;
 
   ViirsMarker(
     String key,
+    this._viirs,
     this._coordinate,
     this._initialPosition,
     this._addMarkerState,
@@ -21,19 +25,25 @@ class ViirsMarker extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    final state = ViirsMarkerState(_initialPosition, _openModal);
+    final state = ViirsMarkerState();
     _addMarkerState(state);
     return state;
   }
+
+  @override
+  LatLng get location => _coordinate;
 }
 
-class ViirsMarkerState extends State {
+class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
   final _iconSize = 10.0;
 
   Point _position;
-  void Function() _openModal;
 
-  ViirsMarkerState(this._position, this._openModal);
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +57,8 @@ class ViirsMarkerState extends State {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => _openModal?.call(),
-        child: new Container(
+        onTap: () => widget._openModal?.call(widget._viirs),
+        child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
           child: Center(
@@ -70,13 +80,15 @@ class ViirsMarkerState extends State {
     );
   }
 
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
   }
 
-  LatLng getCoordinate() {
-    return (widget as ViirsMarker)._coordinate;
+  @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
   }
 }

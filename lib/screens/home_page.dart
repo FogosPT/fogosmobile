@@ -39,19 +39,13 @@ class _HomePageState extends State<HomePage> {
     MAPBOX_URL_SATTELITE_TEMPLATE
   ];
 
-
-  MarkerStack fireMarkerStack;
   var currentMapboxTemplate = 0;
 
+  MarkerStack markerStackFires;
+  MarkerStack markerStackModis;
+  MarkerStack markerStackViirs;
+
   MapboxMapController _mapController;
-
-  Map<String, ViirsMarker> _viirsMarkers = {};
-  Map<String, ModiisMarker> _modisMarkers = {};
-  Map<String, LightningMarker> _lightningMarkers = {};
-
-  List<ViirsMarkerState> _viirsMarkerStates = [];
-  List<ModiisMarkerState> _modisMarkerStates = [];
-  List<LightningMarkerState> _lightningMarkerStates = [];
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
@@ -64,102 +58,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _addViirsMarkerStates(ViirsMarkerState markerState) {
-    _viirsMarkerStates.add(markerState);
-  }
-
-  void _addModisMarkerStates(ModiisMarkerState markerState) {
-    _modisMarkerStates.add(markerState);
-  }
-
-  void _addLightningMarkerStates(LightningMarkerState markerState) {
-    _lightningMarkerStates.add(markerState);
-  }
-
   void _updateMarkerPosition() {
-
-    fireMarkerStack?.updatePositions();
-
-    // Viirs
-    final viirsCoordinates = <LatLng>[];
-    for (final markerState in _viirsMarkerStates) {
-      viirsCoordinates.add(markerState.getCoordinate());
-    }
-    _mapController.toScreenLocationBatch(viirsCoordinates).then((points) {
-      _viirsMarkerStates.asMap().forEach((i, value) {
-        _viirsMarkerStates[i].updatePosition(points[i]);
-      });
-    });
-
-    // Modis
-    final modisCoordinates = <LatLng>[];
-    for (final markerState in _modisMarkerStates) {
-      modisCoordinates.add(markerState.getCoordinate());
-    }
-    _mapController.toScreenLocationBatch(modisCoordinates).then((points) {
-      _modisMarkerStates.asMap().forEach((i, value) {
-        _modisMarkerStates[i].updatePosition(points[i]);
-      });
-    });
-
-    // Lightning
-    final lightningCoordinates = <LatLng>[];
-    for (final markerState in _lightningMarkerStates) {
-      lightningCoordinates.add(markerState.getCoordinate());
-    }
-    _mapController.toScreenLocationBatch(lightningCoordinates).then((points) {
-      _lightningMarkerStates.asMap().forEach((i, value) {
-        _lightningMarkerStates[i].updatePosition(points[i]);
-      });
-    });
-  }
-
-  void _addModisMarker(Modis modis, LatLng coordinate, Point<double> point) {
-    final modisId = modis.hashCode.toString();
-    _modisMarkers.putIfAbsent(
-      modisId,
-      () => ModiisMarker(
-        modisId,
-        coordinate,
-        point,
-        _addModisMarkerStates,
-        () {
-          _openModisModal(context, modis);
-        },
-      ),
-    );
-  }
-
-  void _addViirsMarker(Viirs viirs, LatLng latLng, Point<double> point) {
-    final virsId = viirs.hashCode.toString();
-    _viirsMarkers.putIfAbsent(
-      virsId,
-      () => ViirsMarker(
-        virsId,
-        latLng,
-        point,
-        _addViirsMarkerStates,
-        () {
-          _openViirsModal(context, viirs);
-        },
-      ),
-    );
-  }
-
-  void _addLightningMarker(
-      Lightning lightning, LatLng latLng, Point<double> point) {
-    _lightningMarkers.putIfAbsent(
-      lightning.timestamp,
-      () => LightningMarker(
-        lightning.timestamp,
-        latLng,
-        point,
-        _addLightningMarkerStates,
-        () {
-          // Add action
-        },
-      ),
-    );
+    markerStackFires?.updatePositions();
+    markerStackModis?.updatePositions();
+    markerStackViirs?.updatePositions();
   }
 
   ///TODO Opening the BottomSheet takes a long time, needs improvement
@@ -277,77 +179,46 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-        if (state.modis != null && _mapController != null) {
-          final latLngs = <LatLng>[];
-          final modisAdded = <Modis>[];
-          for (final modis in state.modis) {
-            if (modis.latitude == null || modis.longitude == null) {
-              continue;
-            }
-            modisAdded.add(modis);
-            final latLng = LatLng(modis.latitude, modis.longitude);
-            latLngs.add(latLng);
-          }
+        // if ((state.lightnings?.isNotEmpty ?? false) && _mapController != null) {
+        //   for (final Lightning lightning in state.lightnings) {
+        //     final latLng = LatLng(
+        //         lightning?.payload?.latitude, lightning?.payload?.longitude);
+        //     _mapController.toScreenLocation(latLng).then((value) {
+        //       var point = Point<double>(value.x as double, value.y as double);
+        //       _addLightningMarker(lightning, latLng, point);
+        //     });
+        //   }
+        // }
 
-          _mapController.toScreenLocationBatch(latLngs).then((value) {
-            value.asMap().forEach((index, value) {
-              final point = Point<double>(value.x as double, value.y as double);
-              final latLng = latLngs[index];
-              final modi = modisAdded[index];
-              _addModisMarker(modi, latLng, point);
-            });
-          });
-        }
-
-        if (state.viirs != null && _mapController != null) {
-          final latLngs = <LatLng>[];
-          final viirsAdded = <Viirs>[];
-          for (final viirs in state.viirs) {
-            if (viirs.latitude == null || viirs.longitude == null) {
-              continue;
-            }
-
-            final latLng = LatLng(viirs.latitude, viirs.longitude);
-            latLngs.add(latLng);
-            viirsAdded.add(viirs);
-
-            _mapController.toScreenLocation(latLng).then((value) {
-              var point = Point<double>(value.x as double, value.y as double);
-              _addViirsMarker(viirs, latLng, point);
-            });
-          }
-
-          _mapController.toScreenLocationBatch(latLngs).then((value) {
-            value.asMap().forEach((index, value) {
-              final point = Point<double>(value.x as double, value.y as double);
-              final latLng = latLngs[index];
-              final viirs = viirsAdded[index];
-              _addViirsMarker(viirs, latLng, point);
-            });
-          });
-        }
-
-        if ((state.lightnings?.isNotEmpty ?? false) && _mapController != null) {
-          for (final Lightning lightning in state.lightnings) {
-            final latLng = LatLng(
-                lightning?.payload?.latitude, lightning?.payload?.longitude);
-            _mapController.toScreenLocation(latLng).then((value) {
-              var point = Point<double>(value.x as double, value.y as double);
-              _addLightningMarker(lightning, latLng, point);
-            });
-          }
-        }
-
-        fireMarkerStack = MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
+        markerStackFires =
+            MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
           mapController: _mapController,
-          data: state.fires, filters: state.activeFilters,
-          openModal: () {
+          data: state.fires,
+          filters: state.activeFilters,
+          openModal: (_) {
             _openModalSheet(context);
           },
         );
 
+        markerStackModis =
+            MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
+                mapController: _mapController,
+                data: state.modis,
+                openModal: (item) {
+                  _openModisModal(context, item);
+                });
+
+        markerStackViirs =
+            MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
+          mapController: _mapController,
+          data: state.viirs,
+          openModal: (item) {
+            _openViirsModal(context, item);
+          },
+        );
+
         return ModalProgressHUD(
-        opacity: 0.75,
+          opacity: 0.75,
           color: Colors.black,
           inAsyncCall: state.isLoading && state.fire == null,
           child: Stack(
@@ -362,28 +233,9 @@ class _HomePageState extends State<HomePage> {
                   zoom: 7.0,
                 ),
               ),
-
-              fireMarkerStack,
-              // if (state.showModis ?? false)
-              //   IgnorePointer(
-              //     ignoring: true,
-              //     child: Stack(
-              //       children: _modisMarkers.values.toList(),
-              //     ),
-              //   ),
-              // if (state.showViirs ?? false)
-              //   IgnorePointer(
-              //     ignoring: true,
-              //     child: Stack(
-              //       children: _viirsMarkers.values.toList(),
-              //     ),
-              //   ),
-              // IgnorePointer(
-              //   ignoring: true,
-              //   child: Stack(
-              //     children: _lightningMarkers.values.toList(),
-              //   ),
-              // ),
+              markerStackFires,
+              if (state.showViirs ?? false) markerStackViirs,
+              if (state.showModis ?? false) markerStackModis,
               MapboxCopyright(),
               Positioned(
                 right: 0.0,

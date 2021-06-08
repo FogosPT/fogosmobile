@@ -17,7 +17,7 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   final Point _initialPosition;
   final LatLng _coordinate;
   final void Function(FireMarkerState) _addMarkerState;
-  final void Function() _openModal;
+  final void Function(Fire) _openModal;
 
   FireMarker(
     String key,
@@ -30,7 +30,7 @@ class FireMarker extends StatefulWidget implements BaseMarker {
 
   @override
   State<StatefulWidget> createState() {
-    final state = FireMarkerState(_initialPosition, _fire, _openModal);
+    final state = FireMarkerState();
     _addMarkerState(state);
     return state;
   }
@@ -39,14 +39,16 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   LatLng get location => _coordinate;
 }
 
-class FireMarkerState extends State implements BaseMarkerState {
+class FireMarkerState extends BaseMarkerState<FireMarker> {
   final _iconSize = 10.0;
 
   Point _position;
-  Fire _fire;
-  void Function() _openModal;
 
-  FireMarkerState(this._position, this._fire, this._openModal);
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,17 +63,17 @@ class FireMarkerState extends State implements BaseMarkerState {
       top: _position.y / ratio - _iconSize / 2,
       child: Container(
         decoration:
-            BoxDecoration(color: getFireColor(_fire), shape: BoxShape.circle),
+            BoxDecoration(color: getFireColor(widget._fire), shape: BoxShape.circle),
         child: IconButton(
-          iconSize: _getIconSize(_fire.scale),
+          iconSize: _getIconSize(widget._fire.scale),
           icon: SvgPicture.asset(
-            getCorrectStatusImage(_fire.statusCode, _fire.important),
+            getCorrectStatusImage(widget._fire.statusCode, widget._fire.important),
             semanticsLabel: 'Fire Marker',
           ),
           onPressed: () {
             store.dispatch(ClearFireAction());
-            store.dispatch(LoadFireAction(_fire.id));
-            _openModal?.call();
+            store.dispatch(LoadFireAction(widget._fire.id));
+            widget._openModal?.call(widget._fire);
           },
         ),
       ),
@@ -87,7 +89,7 @@ class FireMarkerState extends State implements BaseMarkerState {
 
   @override
   LatLng getCoordinates() {
-    return (widget as FireMarker)._coordinate;
+    return widget._coordinate;
   }
 
   double _getIconSize(double scale) {

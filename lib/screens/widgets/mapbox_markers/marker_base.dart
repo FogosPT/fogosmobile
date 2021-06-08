@@ -10,7 +10,7 @@ abstract class BaseMarker implements StatefulWidget{
   BaseMarker(this.location);
 }
 
-abstract class BaseMarkerState extends State {
+abstract class BaseMarkerState<T extends StatefulWidget> extends State<T> {
 
   LatLng getCoordinates();
 

@@ -5,7 +5,6 @@ import 'package:fogosmobile/models/base_location_model.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
-import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';

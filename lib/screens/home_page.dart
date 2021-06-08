@@ -4,9 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/actions/modis_actions.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
-import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
@@ -17,12 +14,16 @@ import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
+import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_lightning.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
 import 'package:fogosmobile/screens/widgets/markers_stack.dart';
+import 'package:fogosmobile/screens/widgets/modis_button.dart';
 import 'package:fogosmobile/screens/widgets/modis_modal.dart';
+import 'package:fogosmobile/screens/widgets/satellite_button.dart';
+import 'package:fogosmobile/screens/widgets/viirs_button.dart';
 import 'package:fogosmobile/screens/widgets/viirs_modal.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -85,39 +86,6 @@ class _HomePageState extends State<HomePage> {
     await showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) => ViirsModal(viirs: viirs),
-    );
-  }
-
-  Widget _getSatelliteButton(state, context) {
-    List<Widget> widgets = [
-      IconButton(
-        icon: Icon(Icons.satellite),
-        onPressed: () {
-          final store = StoreProvider.of<AppState>(context);
-          store.dispatch(
-            SetPreferenceAction(preferenceSatellite,
-                state.preferences[preferenceSatellite] == 1 ? 0 : 1),
-          );
-
-          setState(() {});
-        },
-      ),
-    ];
-
-    if (state.preferences[preferenceSatellite] == 1) {
-      widgets.add(Positioned(
-        bottom: 5,
-        right: 5,
-        child: Icon(
-          Icons.check_circle,
-          size: 18,
-          color: Colors.green,
-        ),
-      ));
-    }
-
-    return Stack(
-      children: widgets,
     );
   }
 
@@ -211,7 +179,9 @@ class _HomePageState extends State<HomePage> {
 
         markerStackLightning =
             MarkerStack<Lightning, LightningMarker, LightningMarkerState, void>(
-              mapController: _mapController, data: state.lightnings,);
+          mapController: _mapController,
+          data: state.lightnings,
+        );
 
         return ModalProgressHUD(
           opacity: 0.75,
@@ -241,17 +211,17 @@ class _HomePageState extends State<HomePage> {
                 child: SafeArea(
                   child: Column(
                     children: [
-                      _getBackground(
-                        _getSatelliteButton(state, context),
+                      const MapButtonOverlayBackground(
+                        child: SatelliteButton(),
                       ),
-                      SizedBox(
-                        height: 24,
+                      const SizedBox(height: 24),
+                      const MapButtonOverlayBackground(
+                        child: ViirsButton(),
                       ),
-                      _getBackground(_getViirsButton(state, context)),
-                      SizedBox(
-                        height: 24,
+                      const SizedBox(height: 24),
+                      const MapButtonOverlayBackground(
+                        child: ModisButton(),
                       ),
-                      _getBackground(_getModisButton(state, context)),
                     ],
                   ),
                 ),
@@ -263,76 +233,4 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
-
-  Widget _getBackground(Widget child) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14.0)),
-        color: Colors.white54,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: child,
-      ),
-    );
-  }
-
-  Widget _getViirsButton(AppState state, context) {
-    return InkWell(
-      onTap: () =>
-          StoreProvider.of<AppState>(context).dispatch(ShowViirsAction()),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 16.0,
-              horizontal: 8.0,
-            ),
-            child: Text('Viirs'),
-          ),
-          if (state.showViirs ?? false)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: Icon(
-                Icons.check_circle,
-                size: 18,
-                color: Colors.green,
-              ),
-            )
-        ],
-      ),
-    );
-  }
-
-  Widget _getModisButton(AppState state, context) {
-    return InkWell(
-      onTap: () =>
-          StoreProvider.of<AppState>(context).dispatch(ShowModisAction()),
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 16.0,
-              horizontal: 8.0,
-            ),
-            child: Text('Modis'),
-          ),
-          if (state.showModis ?? false)
-            Positioned(
-              top: 5,
-              right: 5,
-              child: Icon(
-                Icons.check_circle,
-                size: 18,
-                color: Colors.green,
-              ),
-            )
-        ],
-      ),
-    );
-  }
 }
-
-
-

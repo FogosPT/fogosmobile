@@ -8,8 +8,8 @@ import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/constants/variables.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/lightning.dart';
@@ -22,7 +22,8 @@ import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_lightning.dart
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
 import 'package:fogosmobile/screens/widgets/markers_stack.dart';
-import 'package:intl/intl.dart';
+import 'package:fogosmobile/screens/widgets/modis_modal.dart';
+import 'package:fogosmobile/screens/widgets/viirs_modal.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:redux/redux.dart';
@@ -333,211 +334,5 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ViirsModal extends StatelessWidget {
-  final Viirs viirs;
 
-  const ViirsModal({Key key, this.viirs}) : super(key: key);
 
-  String getConfidence(BuildContext context, String confidence) {
-    if (confidence == 'nominal') {
-      return FogosLocalizations.of(context).textNominalConfidence;
-    } else if (confidence == 'low') {
-      return FogosLocalizations.of(context).textLowConfidence;
-    } else if (confidence == 'high') {
-      return FogosLocalizations.of(context).textHighConfidence;
-    } else {
-      return confidence;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(12.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textDate}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: getDate(viirs.acqDate),
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textBrightTi4}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: viirs.brightTi4,
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textBrightTi5}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: viirs.brightTi5,
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textFrp}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: viirs.frp, style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text:
-                          "${FogosLocalizations.of(context).textConfidence}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: getConfidence(context, viirs.confidence),
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ModisModal extends StatelessWidget {
-  final Modis modis;
-
-  const ModisModal({Key key, this.modis}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.all(12.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textDate}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: getDate(modis.acqDate),
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textBrightT31}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: modis.brightT31,
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text:
-                          "${FogosLocalizations.of(context).textBrightness}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: modis.brightness,
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text: "${FogosLocalizations.of(context).textFrp}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: modis.frp, style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-            RichText(
-              text: TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                      text:
-                          "${FogosLocalizations.of(context).textConfidence}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
-                  TextSpan(
-                      text: "${modis.confidence}%",
-                      style: TextStyle(color: Colors.black)),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-String getDate(DateTime time) {
-  String date = "${time.day}/${time.month}/${time.year}";
-  String hours = DateFormat.Hm().format(time);
-  return "$date - $hours";
-}

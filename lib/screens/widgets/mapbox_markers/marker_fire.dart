@@ -86,9 +86,11 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
 
   @override
   void updatePosition(Point<num> point) {
-    setState(() {
-      _position = point;
-    });
+    if(mounted) {
+      setState(() {
+        _position = point;
+      });
+    }
   }
 
   @override

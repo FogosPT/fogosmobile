@@ -47,7 +47,7 @@ class Modis extends BaseMapboxModel implements Equatable {
     this.brightT31,
     this.frp,
     this.daynight,
-  }) : super(LatLng(latitude, longitude), '$latitude');
+  }) : super(LatLng(latitude ?? 0, longitude ?? 0), '$latitude');
 
   double latitude;
   double longitude;
@@ -122,6 +122,6 @@ class Modis extends BaseMapboxModel implements Equatable {
 
   @override
   bool skip<T>(List<T> filters) {
-    return latitude != null && longitude != null;
+    return !(latitude != null && longitude != null);
   }
 }

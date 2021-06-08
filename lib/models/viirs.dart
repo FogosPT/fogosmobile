@@ -51,7 +51,7 @@ class Viirs extends BaseMapboxModel implements Equatable {
     this.brightTi5,
     this.frp,
     this.daynight,
-  }) : super(LatLng(latitude, longitude), '$latitude');
+  }) : super(LatLng(latitude ?? 0.0, longitude ?? 0.0), '$latitude');
 
   double latitude;
   double longitude;
@@ -126,6 +126,6 @@ class Viirs extends BaseMapboxModel implements Equatable {
 
   @override
   bool skip<T>(List<T> filters) {
-    return !(latitude != null && longitude != null);
+    return !(latitude != null && longitude != null) && !(latitude != 0.0 && longitude != 0.0);
   }
 }

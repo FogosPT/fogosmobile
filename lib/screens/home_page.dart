@@ -112,44 +112,48 @@ class _HomePageState extends State<HomePage> {
         currentMapboxTemplate =
             state.preferences[preferenceSatellite] == 1 ? 1 : 0;
 
-        markerStackFires =
-            MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
-          mapController: _mapController,
-          data: state.fires,
-          filters: state.activeFilters,
-          openModal: (_) {
-            _openModalSheet(context);
-          },
-        );
 
-        markerStackModis =
-            MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
-          mapController: _mapController,
-          data: state.modis,
-          openModal: (item) {
-            _openModisModal(context, item);
-          },
-        );
+        if(_mapController != null){
 
-        markerStackViirs =
-            MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
-          mapController: _mapController,
-          data: state.viirs,
-          openModal: (item) {
-            _openViirsModal(context, item);
-          },
-        );
+          markerStackFires =
+              MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
+                mapController: _mapController,
+                data: state.fires,
+                filters: state.activeFilters,
+                openModal: (_) {
+                  _openModalSheet(context);
+                },
+              );
 
-        markerStackLightning =
-            MarkerStack<Lightning, LightningMarker, LightningMarkerState, void>(
-          mapController: _mapController,
-          data: state.lightnings,
-        );
+          markerStackModis =
+              MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
+                mapController: _mapController,
+                data: state.modis,
+                openModal: (item) {
+                  _openModisModal(context, item);
+                },
+              );
+
+          markerStackViirs =
+              MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
+                mapController: _mapController,
+                data: state.viirs,
+                openModal: (item) {
+                  _openViirsModal(context, item);
+                },
+              );
+
+          markerStackLightning =
+              MarkerStack<Lightning, LightningMarker, LightningMarkerState, void>(
+                mapController: _mapController,
+                data: state.lightnings,
+              );
+        }
 
         return ModalProgressHUD(
           opacity: 0.75,
           color: Colors.black,
-          inAsyncCall: state.isLoading && state.fire == null,
+          inAsyncCall: state.isLoading && state.selectedFire == null,
           child: Stack(
             children: <Widget>[
               MapboxMap(
@@ -167,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                 markerStackViirs,
               if (markerStackModis != null && (state.showModis ?? false))
                 markerStackModis,
-              MapboxCopyright(),
+              const MapboxCopyright(),
               Positioned(
                 right: 0.0,
                 top: 0.0,
@@ -175,15 +179,15 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     children: [
                       const MapButtonOverlayBackground(
-                        child: SatelliteButton(),
+                        child: const SatelliteButton(),
                       ),
                       const SizedBox(height: 24),
                       const MapButtonOverlayBackground(
-                        child: ViirsButton(),
+                        child: const ViirsButton(),
                       ),
                       const SizedBox(height: 24),
                       const MapButtonOverlayBackground(
-                        child: ModisButton(),
+                        child: const ModisButton(),
                       ),
                     ],
                   ),

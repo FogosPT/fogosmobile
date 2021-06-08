@@ -17,7 +17,7 @@ class MeansStatistics extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-        store.dispatch(LoadFireMeansHistoryAction(store.state.fire.id));
+        store.dispatch(LoadFireMeansHistoryAction(store.state.selectedFire.id));
       },
       builder: (BuildContext context, AppState state) {
         MeansHistory stats = state.fireMeansHistory;

@@ -29,7 +29,7 @@ class FireDetails extends StatelessWidget {
         return StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           builder: (BuildContext context, AppState state) {
-            Fire fire = state.fire;
+            Fire fire = state.selectedFire;
             if (fire == null) {
               if (state.errors != null && state.errors.contains('fire')) {
                 return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));

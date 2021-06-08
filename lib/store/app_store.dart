@@ -15,7 +15,7 @@ final store = new Store<AppState>(
   appReducer,
   initialState: new AppState(
     fires: [],
-    fire: null,
+    selectedFire: null,
     contributors: [],
     isLoading: false,
     hasFirstLoad: false,

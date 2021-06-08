@@ -86,7 +86,7 @@ class Fire extends BaseMapboxModel implements Equatable {
     this.extra,
     this.cos,
     this.pco,
-  }) : super(LatLng(lat, lng), id);
+  }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
 
   factory Fire.fromJson(Map<String, dynamic> map) {
     return Fire(
@@ -201,6 +201,6 @@ class Fire extends BaseMapboxModel implements Equatable {
     if (filters != null) {
       return !filters.contains(status);
     } else
-      return false;
+      return true;
   }
 }

@@ -26,7 +26,10 @@ class FireMarker extends StatefulWidget implements BaseMarker {
     this._initialPosition,
     this._addMarkerState,
     this._openModal,
-  ) : super(key: Key(key));
+  )   : assert(_coordinate != null),
+        assert(_initialPosition != null),
+        assert(_fire != null),
+        super(key: Key(key));
 
   @override
   State<StatefulWidget> createState() {
@@ -62,12 +65,13 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: Container(
-        decoration:
-            BoxDecoration(color: getFireColor(widget._fire), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: getFireColor(widget._fire), shape: BoxShape.circle),
         child: IconButton(
           iconSize: _getIconSize(widget._fire.scale),
           icon: SvgPicture.asset(
-            getCorrectStatusImage(widget._fire.statusCode, widget._fire.important),
+            getCorrectStatusImage(
+                widget._fire.statusCode, widget._fire.important),
             semanticsLabel: 'Fire Marker',
           ),
           onPressed: () {

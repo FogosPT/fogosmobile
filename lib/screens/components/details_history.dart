@@ -15,7 +15,7 @@ class DetailsHistoryStats extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-        store.dispatch(LoadFireDetailsHistoryAction(store.state.fire.id));
+        store.dispatch(LoadFireDetailsHistoryAction(store.state.selectedFire.id));
       },
       builder: (BuildContext context, AppState state) {
         DetailsHistory stats = state.fireDetailsHistory;

@@ -37,7 +37,7 @@ class Lightning extends BaseMapboxModel {
   Lightning({
     this.timestamp,
     this.payload,
-  }): super(LatLng(payload?.latitude??0, payload?.longitude?? 0), timestamp);
+  }): super(LatLng(payload?.latitude?? 0.0, payload?.longitude?? 0.0), timestamp);
 
   String timestamp;
   LightningData payload;
@@ -53,8 +53,8 @@ class Lightning extends BaseMapboxModel {
       };
 
   @override
-  bool skip<T>(List<T> filter) {
-    return payload.latitude != null &&payload?.longitude != null  ?? true;
+  bool skip<T>(List<T> filters) {
+    return !(payload.latitude != null && payload?.longitude != null  ?? false);
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
@@ -36,12 +37,15 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
     Key key,
   })  : this._markers = {},
         this._markerStates = [],
-        super(key: key);
+        super(key: key) {
+    this.mapController?.addListener(() {
+      if(mapController.isCameraMoving){
+       updatePositions();
+      }
+    });
+  }
 
-  @override
-  _MarkerStackState createState() => _MarkerStackState<T, V, B, F>();
-
-  void updatePositions() {
+  void updatePositions() async {
     final latLngs = <LatLng>[];
     for (final markerState in _markerStates) {
       latLngs.add(markerState.getCoordinates());
@@ -53,6 +57,11 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
       });
     });
   }
+
+  @override
+  _MarkerStackState createState() => _MarkerStackState<T, V, B, F>();
+
+
 }
 
 class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,

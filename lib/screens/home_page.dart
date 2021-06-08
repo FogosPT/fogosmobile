@@ -33,7 +33,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final LatLng _center = new LatLng(39.806251, -8.088591);
+  final LatLng _center = LatLng(39.806251, -8.088591);
   final List<String> _stylesStrings = [
     MAPBOX_TEMPLATE_STYLE,
     MAPBOX_URL_SATTELITE_TEMPLATE
@@ -63,9 +63,9 @@ class _HomePageState extends State<HomePage> {
     markerStackFires?.updatePositions();
     markerStackModis?.updatePositions();
     markerStackViirs?.updatePositions();
+    markerStackLightning?.updatePositions();
   }
 
-  ///TODO Opening the BottomSheet takes a long time, needs improvement
   _openModalSheet(context) async {
     await showModalBottomSheet<void>(
       context: context,

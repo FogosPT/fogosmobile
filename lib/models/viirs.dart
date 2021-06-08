@@ -126,6 +126,6 @@ class Viirs extends BaseMapboxModel implements Equatable {
 
   @override
   bool skip<T>(List<T> filters) {
-    return latitude != null && longitude != null;
+    return !(latitude != null && longitude != null);
   }
 }

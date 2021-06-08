@@ -43,10 +43,10 @@ class FireDetails extends StatelessWidget {
               );
             }
 
-            return new StoreConnector<AppState, SetPreferenceCallBack>(
+            return StoreConnector<AppState, SetPreferenceCallBack>(
               converter: (Store<AppState> store) {
                 return (String fireId, int value) {
-                  store.dispatch(new SetFireNotificationAction(fireId, value));
+                  store.dispatch(SetFireNotificationAction(fireId, value));
                 };
               },
               builder: (BuildContext context,
@@ -94,8 +94,8 @@ class FireDetails extends StatelessWidget {
                                             icon: CircularProgressIndicator(),
                                             onPressed: () {},
                                           )
-                                        : new IconButton(
-                                            icon: new Icon(isFireSubscribed
+                                        : IconButton(
+                                            icon: Icon(isFireSubscribed
                                                 ? Icons.notifications_active
                                                 : Icons.notifications_none),
                                             onPressed: () {

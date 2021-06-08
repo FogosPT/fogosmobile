@@ -89,7 +89,7 @@ class Fire extends BaseMapboxModel implements Equatable {
   }) : super(LatLng(lat, lng), id);
 
   factory Fire.fromJson(Map<String, dynamic> map) {
-    return new Fire(
+    return Fire(
       id: map['id'],
       sharepointId: map['sharepointId'],
       active: map['active'],

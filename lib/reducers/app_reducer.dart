@@ -109,7 +109,7 @@ AppState appReducer(AppState state, action) {
     hasPreferences = false;
   }
 
-  return new AppState(
+  return AppState(
     isLoading: isLoading,
     fires: firesReducer(state.fires, action),
     fire: fireReducer(state.fire, action),

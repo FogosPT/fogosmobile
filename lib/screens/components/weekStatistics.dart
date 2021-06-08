@@ -47,7 +47,7 @@ class WeekStatistics extends StatelessWidget {
               barRendererDecorator: charts.BarLabelDecorator<String>(),
               barGroupingType: charts.BarGroupingType.stacked,
               defaultInteractions: true,
-              behaviors: [new charts.SeriesLegend()],
+              behaviors: [charts.SeriesLegend()],
             ),
             height: 300,
           );

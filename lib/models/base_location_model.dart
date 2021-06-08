@@ -1,4 +1,3 @@
-import 'package:fogosmobile/models/fire.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
 abstract class BaseMapboxModel {
@@ -13,6 +12,6 @@ abstract class BaseMapboxModel {
   String get getId => this.id;
 
   /// Case this object has a status same as the filter, it should not be shown
-  bool filter<T>(List<T> filters);
+  bool skip<T>(List<T> filter);
 
 }

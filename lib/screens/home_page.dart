@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   MarkerStack markerStackFires;
   MarkerStack markerStackModis;
   MarkerStack markerStackViirs;
+  MarkerStack markerStackLightning;
 
   MapboxMapController _mapController;
 
@@ -179,17 +180,6 @@ class _HomePageState extends State<HomePage> {
           }
         }
 
-        // if ((state.lightnings?.isNotEmpty ?? false) && _mapController != null) {
-        //   for (final Lightning lightning in state.lightnings) {
-        //     final latLng = LatLng(
-        //         lightning?.payload?.latitude, lightning?.payload?.longitude);
-        //     _mapController.toScreenLocation(latLng).then((value) {
-        //       var point = Point<double>(value.x as double, value.y as double);
-        //       _addLightningMarker(lightning, latLng, point);
-        //     });
-        //   }
-        // }
-
         markerStackFires =
             MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
           mapController: _mapController,
@@ -202,11 +192,12 @@ class _HomePageState extends State<HomePage> {
 
         markerStackModis =
             MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
-                mapController: _mapController,
-                data: state.modis,
-                openModal: (item) {
-                  _openModisModal(context, item);
-                });
+          mapController: _mapController,
+          data: state.modis,
+          openModal: (item) {
+            _openModisModal(context, item);
+          },
+        );
 
         markerStackViirs =
             MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
@@ -216,6 +207,10 @@ class _HomePageState extends State<HomePage> {
             _openViirsModal(context, item);
           },
         );
+
+        markerStackLightning =
+            MarkerStack<Lightning, LightningMarker, LightningMarkerState, void>(
+              mapController: _mapController, data: state.lightnings,);
 
         return ModalProgressHUD(
           opacity: 0.75,
@@ -233,9 +228,11 @@ class _HomePageState extends State<HomePage> {
                   zoom: 7.0,
                 ),
               ),
-              markerStackFires,
-              if (state.showViirs ?? false) markerStackViirs,
-              if (state.showModis ?? false) markerStackModis,
+              if (markerStackFires != null) markerStackFires,
+              if (markerStackViirs != null && (state.showViirs ?? false))
+                markerStackViirs,
+              if (markerStackModis != null && (state.showModis ?? false))
+                markerStackModis,
               MapboxCopyright(),
               Positioned(
                 right: 0.0,

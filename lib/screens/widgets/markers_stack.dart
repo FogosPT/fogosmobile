@@ -61,7 +61,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
   @override
   Widget build(BuildContext context) {
     final latLngs = widget.data
-            ?.skipWhile((value) => value.filter<F>(widget.filters))
+            ?.skipWhile((value) => value.skip<F>(widget.filters))
             ?.map<LatLng>((item) => item.location)
             ?.toList() ??
         [];

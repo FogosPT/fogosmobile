@@ -190,7 +190,7 @@ Middleware<AppState> _createSelectFireFilters() {
     next(action);
     try {
       final prefs = SharedPreferencesManager.preferences;
-      FireStatus filter = action.filter;
+      FireStatus filter = action.skip;
       List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
 
       if (saveFilters.contains(filter)) {

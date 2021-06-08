@@ -197,7 +197,7 @@ class Fire extends BaseMapboxModel implements Equatable {
   bool get stringify => true;
 
   @override
-  bool filter<T>(List<T> filters) {
+  bool skip<T>(List<T> filters) {
     if (filters != null) {
       return !filters.contains(status);
     } else

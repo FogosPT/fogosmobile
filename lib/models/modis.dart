@@ -121,7 +121,7 @@ class Modis extends BaseMapboxModel implements Equatable {
   bool get stringify => true;
 
   @override
-  bool filter<T>(List<T> filters) {
+  bool skip<T>(List<T> filters) {
     return latitude != null && longitude != null;
   }
 }

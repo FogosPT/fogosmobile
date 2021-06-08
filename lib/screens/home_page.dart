@@ -6,7 +6,6 @@ import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
@@ -14,7 +13,6 @@ import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
-import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_lightning.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
 import 'package:fogosmobile/screens/widgets/markers_stack.dart';
@@ -41,29 +39,12 @@ class _HomePageState extends State<HomePage> {
 
   var currentMapboxTemplate = 0;
 
-  MarkerStack markerStackFires;
-  MarkerStack markerStackModis;
-  MarkerStack markerStackViirs;
-  MarkerStack markerStackLightning;
-
   MapboxMapController _mapController;
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   void _onMapCreated(MapboxMapController controller) {
     _mapController = controller;
-    controller.addListener(() {
-      if (controller.isCameraMoving) {
-        _updateMarkerPosition();
-      }
-    });
-  }
-
-  void _updateMarkerPosition() {
-    markerStackFires?.updatePositions();
-    markerStackModis?.updatePositions();
-    markerStackViirs?.updatePositions();
-    markerStackLightning?.updatePositions();
   }
 
   _openModalSheet(context) async {
@@ -112,43 +93,12 @@ class _HomePageState extends State<HomePage> {
         currentMapboxTemplate =
             state.preferences[preferenceSatellite] == 1 ? 1 : 0;
 
-
-        if(_mapController != null){
-
-          markerStackFires =
-              MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
-                mapController: _mapController,
-                data: state.fires,
-                filters: state.activeFilters,
-                openModal: (_) {
-                  _openModalSheet(context);
-                },
-              );
-
-          markerStackModis =
-              MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
-                mapController: _mapController,
-                data: state.modis,
-                openModal: (item) {
-                  _openModisModal(context, item);
-                },
-              );
-
-          markerStackViirs =
-              MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
-                mapController: _mapController,
-                data: state.viirs,
-                openModal: (item) {
-                  _openViirsModal(context, item);
-                },
-              );
-
-          markerStackLightning =
-              MarkerStack<Lightning, LightningMarker, LightningMarkerState, void>(
-                mapController: _mapController,
-                data: state.lightnings,
-              );
-        }
+        //TODO When we need to show Lightning
+        //   MarkerStack<Lightning, LightningMarker,
+        //       LightningMarkerState, void>(
+        //     mapController: _mapController,
+        //     data: state.lightnings,
+        //   );
 
         return ModalProgressHUD(
           opacity: 0.75,
@@ -166,11 +116,30 @@ class _HomePageState extends State<HomePage> {
                   zoom: 7.0,
                 ),
               ),
-              if (markerStackFires != null) markerStackFires,
-              if (markerStackViirs != null && (state.showViirs ?? false))
-                markerStackViirs,
-              if (markerStackModis != null && (state.showModis ?? false))
-                markerStackModis,
+              MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
+                mapController: _mapController,
+                data: state.fires,
+                filters: state.activeFilters,
+                openModal: (_) {
+                  _openModalSheet(context);
+                },
+              ),
+              if (state.showModis ?? false)
+                MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
+                  mapController: _mapController,
+                  data: state.modis,
+                  openModal: (item) {
+                    _openModisModal(context, item);
+                  },
+                ),
+              if (state.showViirs ?? false)
+                MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
+                  mapController: _mapController,
+                  data: state.viirs,
+                  openModal: (item) {
+                    _openViirsModal(context, item);
+                  },
+                ),
               const MapboxCopyright(),
               Positioned(
                 right: 0.0,

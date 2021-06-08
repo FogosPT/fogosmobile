@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/lightning.dart';
@@ -15,6 +12,7 @@ import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
+import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_lightning.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
@@ -114,41 +112,6 @@ class _HomePageState extends State<HomePage> {
         currentMapboxTemplate =
             state.preferences[preferenceSatellite] == 1 ? 1 : 0;
 
-        Widget overlayWidget = Container();
-
-        if (state.fires.length < 1) {
-          if (state.errors != null && state.errors.contains('fires')) {
-            overlayWidget = Center(
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  color: Colors.black54,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        FogosLocalizations.of(context).textProblemLoadingData,
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        FogosLocalizations.of(context).textInternetConnection,
-                        style: TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }
-        }
-
         markerStackFires =
             MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
           mapController: _mapController,
@@ -226,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              overlayWidget,
+              const MapOverlayErrorInfoWidget(),
             ],
           ),
         );

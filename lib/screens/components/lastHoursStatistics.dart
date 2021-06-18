@@ -55,16 +55,16 @@ class LastHoursStatistics extends StatelessWidget {
               _createSampleData(),
               animate: true,
               behaviors: [
-                new charts.SeriesLegend(
+                charts.SeriesLegend(
                   position: charts.BehaviorPosition.bottom,
                   outsideJustification:
                       charts.OutsideJustification.startDrawArea,
                   horizontalFirst: false,
                   desiredMaxRows: 2,
-                  cellPadding: new EdgeInsets.only(right: 16.0, bottom: 4.0),
+                  cellPadding: EdgeInsets.only(right: 16.0, bottom: 4.0),
                 )
               ],
-              defaultRenderer: new charts.LineRendererConfig(
+              defaultRenderer: charts.LineRendererConfig(
                   includeArea: true, stacked: false),
               dateTimeFactory: const charts.LocalDateTimeFactory(),
             ),

@@ -41,14 +41,14 @@ Middleware<AppState> _createLoadFires() {
       final responseData = json.decode(response.data)["data"];
       List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
-      store.dispatch(new FiresLoadedAction(fires));
+      store.dispatch(FiresLoadedAction(fires));
 
       final prefs = SharedPreferencesManager.preferences;
       List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
+      store.dispatch(SavedFireFiltersAction(saveFilters));
     } catch (e) {
-      store.dispatch(new FiresLoadedAction([]));
-      store.dispatch(new AddErrorAction('fires'));
+      store.dispatch(FiresLoadedAction([]));
+      store.dispatch(AddErrorAction('fires'));
       if (!(e is DioError)) {
         print('throwing error');
         throw e;
@@ -68,18 +68,18 @@ Middleware<AppState> _createLoadFire() {
       final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
-        throw new StateError('No fire data could be loaded: $url');
+        throw StateError('No fire data could be loaded: $url');
       }
 
       Fire fire = Fire.fromJson(responseData);
-      store.dispatch(new FireLoadedAction(fire));
+      store.dispatch(FireLoadedAction(fire));
     } catch (e) {
-      store.dispatch(new FireLoadedAction(null));
-      store.dispatch(new AddErrorAction('fire'));
+      store.dispatch(FireLoadedAction(null));
+      store.dispatch(AddErrorAction('fire'));
       if (e is DioError) {
         if (e.response != null) {
           if (e.response.statusCode >= 400) {
-            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+            throw StateError('Server responded with ${e.response.statusCode}: $url');
           }
         }
       } else {
@@ -99,18 +99,18 @@ Middleware<AppState> _createLoadFireMeansHistory() {
       final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
-        throw new StateError('No getFireMeansHistory could be loaded: $url');
+        throw StateError('No getFireMeansHistory could be loaded: $url');
       }
       MeansHistory data = MeansHistory.fromJson(responseData);
-      store.dispatch(new RemoveErrorAction('fireMeansHistory'));
-      store.dispatch(new FireMeansHistoryLoadedAction(data));
+      store.dispatch(RemoveErrorAction('fireMeansHistory'));
+      store.dispatch(FireMeansHistoryLoadedAction(data));
     } catch (e) {
-      store.dispatch(new FireMeansHistoryLoadedAction(null));
-      store.dispatch(new AddErrorAction('fireMeansHistory'));
+      store.dispatch(FireMeansHistoryLoadedAction(null));
+      store.dispatch(AddErrorAction('fireMeansHistory'));
       if (e is DioError) {
         if (e.response != null) {
           if (e.response.statusCode >= 400) {
-            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+            throw StateError('Server responded with ${e.response.statusCode}: $url');
           }
         }
       } else {
@@ -130,18 +130,18 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
       final response = await get(url);
       final responseData = json.decode(response.data)["data"];
       if (responseData == null) {
-        throw new StateError('No getFireDetailsHistory could be loaded: $url');
+        throw StateError('No getFireDetailsHistory could be loaded: $url');
       }
       DetailsHistory data = DetailsHistory.fromJson(responseData);
-      store.dispatch(new RemoveErrorAction('fireDetailsHistory'));
-      store.dispatch(new FireDetailsHistoryLoadedAction(data));
+      store.dispatch(RemoveErrorAction('fireDetailsHistory'));
+      store.dispatch(FireDetailsHistoryLoadedAction(data));
     } catch (e) {
-      store.dispatch(new FireDetailsHistoryLoadedAction(null));
-      store.dispatch(new AddErrorAction('fireDetailsHistory'));
+      store.dispatch(FireDetailsHistoryLoadedAction(null));
+      store.dispatch(AddErrorAction('fireDetailsHistory'));
       if (e is DioError) {
         if (e.response != null) {
           if (e.response.statusCode >= 400) {
-            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+            throw StateError('Server responded with ${e.response.statusCode}: $url');
           }
         }
       } else {
@@ -163,18 +163,18 @@ Middleware<AppState> _createLoadFireRisk() {
       final responseData = json.decode(response.data)["data"][0]['hoje'];
 
       if (responseData == null) {
-        throw new StateError('No getFireRisk could be loaded: $url');
+        throw StateError('No getFireRisk could be loaded: $url');
       }
 
-      store.dispatch(new RemoveErrorAction('fireRisk'));
-      store.dispatch(new FireRiskLoadedAction(responseData));
+      store.dispatch(RemoveErrorAction('fireRisk'));
+      store.dispatch(FireRiskLoadedAction(responseData));
     } catch (e) {
-      store.dispatch(new FireRiskLoadedAction(null));
-      store.dispatch(new AddErrorAction('fireRisk'));
+      store.dispatch(FireRiskLoadedAction(null));
+      store.dispatch(AddErrorAction('fireRisk'));
       if (e is DioError) {
         if (e.response != null) {
           if (e.response.statusCode >= 400) {
-            throw new StateError('Server responded with ${e.response.statusCode}: $url');
+            throw StateError('Server responded with ${e.response.statusCode}: $url');
           }
         }
       } else {
@@ -190,7 +190,7 @@ Middleware<AppState> _createSelectFireFilters() {
     next(action);
     try {
       final prefs = SharedPreferencesManager.preferences;
-      FireStatus filter = action.filter;
+      FireStatus filter = action.skip;
       List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
 
       if (saveFilters.contains(filter)) {
@@ -200,7 +200,7 @@ Middleware<AppState> _createSelectFireFilters() {
       }
 
       prefs.save('active_filters', Fire.activeFiltersToList(saveFilters));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
+      store.dispatch(SavedFireFiltersAction(saveFilters));
     } catch (e) {
       print(e);
     }

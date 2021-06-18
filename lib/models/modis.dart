@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 ModisResult modisFromJson(String str) => ModisResult.fromJson(json.decode(str));
 
@@ -30,7 +32,7 @@ class ModisResult {
   }
 }
 
-class Modis implements Equatable {
+class Modis extends BaseMapboxModel implements Equatable {
   Modis({
     this.latitude,
     this.longitude,
@@ -45,7 +47,7 @@ class Modis implements Equatable {
     this.brightT31,
     this.frp,
     this.daynight,
-  });
+  }) : super(LatLng(latitude ?? 0, longitude ?? 0), '$latitude');
 
   double latitude;
   double longitude;
@@ -117,4 +119,9 @@ class Modis implements Equatable {
 
   @override
   bool get stringify => true;
+
+  @override
+  bool skip<T>(List<T> filters) {
+    return !(latitude != null && longitude != null);
+  }
 }

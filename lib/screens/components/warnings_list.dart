@@ -10,12 +10,12 @@ class WarningsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        new Padding(
-          padding: new EdgeInsets.only(top: 10.0),
+        Padding(
+          padding: EdgeInsets.only(top: 10.0),
         ),
-        new Expanded(
+        Expanded(
           child: Scrollbar(
-            child: new ListView.builder(
+            child: ListView.builder(
               itemCount: warnings.length,
               itemBuilder: (BuildContext context, int index) {
                 Warning warning = warnings[index];

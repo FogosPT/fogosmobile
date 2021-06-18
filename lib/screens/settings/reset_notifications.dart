@@ -80,7 +80,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: new ListView(
+        child: ListView(
           children: <Widget>[
             Text(FogosLocalizations.of(context).textNotificationProblems),
             if (isLoading)

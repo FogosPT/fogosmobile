@@ -8,17 +8,20 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ModiisMarker extends StatefulWidget {
+class ModisMarker extends StatefulWidget implements BaseMarker{
+  final Modis _modis;
   final Point _initialPosition;
   final LatLng _coordinate;
-  final void Function(ModiisMarkerState) _addMarkerState;
-  final void Function() _openModal;
+  final void Function(ModisMarkerState) _addMarkerState;
+  final void Function(Modis) _openModal;
 
-  ModiisMarker(
+  ModisMarker(
     String key,
+    this._modis,
     this._coordinate,
     this._initialPosition,
     this._addMarkerState,
@@ -27,20 +30,25 @@ class ModiisMarker extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    final state = ModiisMarkerState(_initialPosition, _openModal);
+    final state = ModisMarkerState();
     _addMarkerState(state);
     return state;
   }
+
+  @override
+  LatLng get location => _coordinate;
 }
 
-class ModiisMarkerState extends State {
+class ModisMarkerState extends BaseMarkerState<ModisMarker>{
   final _iconSize = 10.0;
 
   Point _position;
-  void Function() _openModal;
 
-  ModiisMarkerState(this._position, this._openModal);
-
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     var ratio = 1.0;
@@ -53,7 +61,7 @@ class ModiisMarkerState extends State {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => _openModal?.call(),
+        onTap: () => widget._openModal?.call(widget._modis),
         child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
@@ -76,13 +84,15 @@ class ModiisMarkerState extends State {
     );
   }
 
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
   }
 
-  LatLng getCoordinate() {
-    return (widget as ModiisMarker)._coordinate;
+  @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
   }
 }

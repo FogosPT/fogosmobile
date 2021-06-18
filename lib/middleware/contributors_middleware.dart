@@ -24,11 +24,11 @@ Middleware<AppState> _createLoadContributors() {
       final response = await get(url);
       List<Contributor> contributors = Contributor.fromList(response.data);
       print("load contributors");
-      store.dispatch(new ContributorsLoadedAction(contributors));
+      store.dispatch(ContributorsLoadedAction(contributors));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new ContributorsLoadedAction([]));
+      store.dispatch(ContributorsLoadedAction([]));
     }
   };
 }

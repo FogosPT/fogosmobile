@@ -4,10 +4,11 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
+import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class LightningMarker extends StatefulWidget {
+class LightningMarker extends StatefulWidget implements BaseMarker {
   final Point _initialPosition;
   final LatLng _coordinate;
   final void Function(LightningMarkerState) _addMarkerState;
@@ -27,9 +28,12 @@ class LightningMarker extends StatefulWidget {
     _addMarkerState(state);
     return state;
   }
+
+  @override
+  LatLng get location => _coordinate;
 }
 
-class LightningMarkerState extends State {
+class LightningMarkerState extends BaseMarkerState<LightningMarker> {
   Point _position;
   void Function() _openModal;
 
@@ -67,13 +71,15 @@ class LightningMarkerState extends State {
     );
   }
 
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
   }
 
-  LatLng getCoordinate() {
-    return (widget as LightningMarker)._coordinate;
+  @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
   }
 }

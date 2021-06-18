@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+
 LightningRemote lightningFromJson(String str) => LightningRemote.fromJson(json.decode(str));
 
 String lightningToJson(LightningRemote data) => json.encode(data.toJson());
@@ -30,11 +33,11 @@ class LightningRemote {
   }
 }
 
-class Lightning {
+class Lightning extends BaseMapboxModel {
   Lightning({
     this.timestamp,
     this.payload,
-  });
+  }): super(LatLng(payload?.latitude?? 0.0, payload?.longitude?? 0.0), timestamp);
 
   String timestamp;
   LightningData payload;
@@ -48,6 +51,11 @@ class Lightning {
         "timestamp": timestamp,
         "payload": payload.toJson(),
       };
+
+  @override
+  bool skip<T>(List<T> filters) {
+    return !(payload.latitude != null && payload?.longitude != null  ?? false);
+  }
 }
 
 class LightningData {

@@ -35,7 +35,7 @@ class TodayStatistics extends StatelessWidget {
           );
 
           var districtSeries = [
-            new charts.Series<District, String>(
+            charts.Series<District, String>(
               id: FogosLocalizations.of(context).textTodayDistricts,
               colorFn: (District stats, _) => c.Color(
                     r: (25 * stats.fires).clamp(0, 255),
@@ -49,13 +49,13 @@ class TodayStatistics extends StatelessWidget {
             ),
           ];
 
-          var districtChart = new charts.BarChart(
+          var districtChart = charts.BarChart(
             districtSeries,
             animate: true,
             vertical: false,
-            barRendererDecorator: new charts.BarLabelDecorator<String>(),
-            domainAxis: new charts.OrdinalAxisSpec(
-                renderSpec: new charts.NoneRenderSpec()),
+            barRendererDecorator: charts.BarLabelDecorator<String>(),
+            domainAxis: charts.OrdinalAxisSpec(
+                renderSpec: charts.NoneRenderSpec()),
           );
 
           return Container(

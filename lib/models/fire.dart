@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 
 enum FireStatus {
   dispatch,
@@ -14,7 +16,8 @@ enum FireStatus {
   false_alert,
 }
 
-class Fire implements Equatable {
+//TODO Create FireEntity and separate Model from an Entity
+class Fire extends BaseMapboxModel implements Equatable {
   final String id;
   final int sharepointId;
 
@@ -83,10 +86,10 @@ class Fire implements Equatable {
     this.extra,
     this.cos,
     this.pco,
-  });
+  }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
 
   factory Fire.fromJson(Map<String, dynamic> map) {
-    return new Fire(
+    return Fire(
       id: map['id'],
       sharepointId: map['sharepointId'],
       active: map['active'],
@@ -192,4 +195,12 @@ class Fire implements Equatable {
 
   @override
   bool get stringify => true;
+
+  @override
+  bool skip<T>(List<T> filters) {
+    if (filters != null) {
+      return !filters.contains(status);
+    } else
+      return true;
+  }
 }

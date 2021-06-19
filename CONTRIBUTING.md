@@ -16,51 +16,71 @@ If you have a suggestion of a feature or a thing that should be improved, speak 
 
 You don't need to code to help us. If you see some bugs or other things that could be better, open an issue on Github.
 
-## Project Details
-
-### Setup
+## Setup and run project
 
 This app is built with Flutter and Dart 2, follwing Redux's design Pattern.
-
-### Run & Go
 
 Make sure you have installed Flutter following [these instructions](https://flutter.io/get-started/install/).
 
 **Important**: We use the `stable` Flutter channel. Make sure you are on the same channel running
 
-```
-$ flutter channel stable
+```shell
+flutter channel stable
 ```
 
 Clone our repo and check `flutter doctor`
 
-```
-$ git clone https://github.com/FogosPT/fogosmobile
-$ cd fogosmobile
-$ flutter doctor
+```shell
+git clone https://github.com/FogosPT/fogosmobile
+cd fogosmobile
+flutter doctor
 ```
 
 Fix anything `flutter doctor` asks.
-Make sure you have a device connected (Simulator or Emulator or a real device connected) and then run
 
-```
-$ flutter run
-```
+Now, you need configure some files and tokens to run app
 
-You can set up [Visual Studio Code or IntelliJ IDEA/Android Studio](https://flutter.io/get-started/editor/) to do this for you.
+### Configure key.properties (android/key.properties)
 
-**ATTENTION**: If you're thinking about working with an Android Simulator or building for Android, you'll need to do these extra steps:
+If file key.properties is created, ⚠ only if created, you need add some variables to run app
 
-- create a file `key.properties` inside the `android/` folder and inside write:
-
-```
+```shell
+# Config to firebase notifications
 FCI_KEYSTORE_PASSWORD=myKeystorePassword
 FCI_KEY_ALIAS=MyReleaseKey
 FCI_KEY_PASSWORD=myKeypassword
+# Config to create Android release
+storePassword=MyStorePassword
+keyPassword=MyKeyPassword
+keyAlias=MyKeyAlias
+storeFile=MyStoreFileRoute
 ```
 
 This file is on `.gitignore` so it shouldn't show up on `git status`. If it does, be sure to not commit that file.
 After that, everything should be working normally.
+
+### Configure mapbox
+
+Mapbox is a feature to use map into app. To use mapbox, you need config some enviroment variables and token. Follow [this Android page](https://docs.mapbox.com/android/maps/guides/install/) and [this iOS page](https://docs.mapbox.com/ios/maps/guides/) or this steps:
+
+- Create a mapbox account [here](https://account.mapbox.com/auth/signup/)
+- Create a API Token with all secret scopes selected ([ref](https://user-images.githubusercontent.com/21011641/122591350-240b6b80-d063-11eb-8f9b-a0228b65f321.png))
+- Add two enviroment variables into your OS. A variable with name `SDK_REGISTRY_TOKEN` and other with name `MAPBOX_DOWNLOADS_TOKEN`, both with same value: the api token generate in previous step. This is necessary because [this issue](https://github.com/tobrun/flutter-mapbox-gl/issues/604) with flutter-mapbox package
+- Replace `MAPBOX_DOWNLOADS_TOKEN` in `android/main/res/values/strings.xml` with the same api token generated in mapbox page
+
+### Run project
+
+Make sure you have a device connected (Simulator or Emulator or a real device connected) and then run
+
+```shell
+flutter pub get
+flutter run
+```
+
+If when run don't work, please try this steps:
+
+- Run `flutter clean`
+- Reset your code editor (VS Code or Android Studio or whatever)
 
 ## Reading material
 

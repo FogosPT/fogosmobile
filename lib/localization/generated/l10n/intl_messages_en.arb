@@ -433,5 +433,119 @@
     "description": "Make sure you are connected to the Internet",
     "type": "text",
     "placeholders": {}
+  },
+  "textNotificationProblems": "If you are having problems receiving notifications, click the button below.",
+  "@textNotificationProblems": {
+    "description": "If you are having problems receiving notifications, click the button below.",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textResetNotifications": "Reset notifications",
+  "@textResetNotifications": {
+    "description": "Reset notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDate": "Date",
+  "@textDate": {
+    "description": "Data",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi4": "Bright Ti4",
+  "@textBrightTi4": {
+    "description": "Bright Ti 4",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightTi5": "Bright Ti5",
+  "@textBrightTi5": {
+    "description": "Bright Ti 5",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textFrp": "Frp",
+  "@textFrp": {
+    "description": "Frp",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textConfidence": "Confidence",
+  "@textConfidence": {
+    "description": "Confidence",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightness": "Brightness",
+  "@textBrightness": {
+    "description": "Brightness",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textBrightT31": "Bright T31",
+  "@textBrightT31": {
+    "description": "Bright T31",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textLowConfidence": "Low",
+  "@textLowConfidence": {
+    "description": "Low",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNominalConfidence": "Nominal",
+  "@textNominalConfidence": {
+    "description": "Nominal",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textHighConfidence": "High",
+  "@textHighConfidence": {
+    "description": "High",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStart": "Start",
+  "@textDataTableStart": {
+    "description": "DataTable Start",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableDistrict": "District",
+  "@textDataTableDistrict": {
+    "description": "DataTable District",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableCounty": "County",
+  "@textDataTableCounty": {
+    "description": "DataTable Country",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableParish": "Parish",
+  "@textDataTableParish": {
+    "description": "DataTable Parish",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableLocality": "Locality",
+  "@textDataTableLocality": {
+    "description": "DataTable Locality",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textDataTableStatus": "Status",
+  "@textDataTableStatus": {
+    "description": "DataTable Status",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textPlanes": "Planes",
+  "@textPlanes": {
+    "description": "Notification Text Planes",
+    "type": "text",
+    "placeholders": {}
   }
 }

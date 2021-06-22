@@ -1,16 +1,20 @@
 import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/lightning.dart';
+import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/models/fire_details.dart';
+import 'package:fogosmobile/models/viirs.dart';
 
 class AppState {
   List<Fire> fires = [];
-  Fire fire;
+  Fire selectedFire;
   List<FireStatus> activeFilters;
   MeansHistory fireMeansHistory;
   DetailsHistory fireDetailsHistory;
   String fireRisk;
   List<Contributor> contributors = [];
+  List<Lightning> lightnings = [];
   bool isLoading = false;
   bool hasFirstLoad = false;
   bool hasPreferences = false;
@@ -25,10 +29,14 @@ class AppState {
   List errors = [];
   List warnings = [];
   List warningsMadeira = [];
+  List<Viirs> viirs = [];
+  List<Modis> modis = [];
+  bool showModis = false;
+  bool showViirs = false;
 
   AppState({
     this.fires,
-    this.fire,
+    this.selectedFire,
     this.contributors,
     this.isLoading,
     this.hasFirstLoad,
@@ -48,6 +56,11 @@ class AppState {
     this.errors,
     this.warnings,
     this.warningsMadeira,
+    this.viirs,
+    this.modis,
+    this.showModis,
+    this.showViirs,
+    this.lightnings,
   });
 
   AppState copyWith({
@@ -71,10 +84,15 @@ class AppState {
     List errors,
     List warnings,
     List warningsMadeira,
+    List viirs,
+    List modis,
+    bool showModis,
+    bool showViirs,
+    List<Lightning> lightnings,
   }) {
     return new AppState(
       fires: fires ?? this.fires,
-      fire: fire ?? this.fires,
+      selectedFire: fire ?? this.fires,
       contributors: contributors ?? this.contributors,
       isLoading: isLoading ?? this.isLoading,
       hasFirstLoad: hasFirstLoad ?? this.hasFirstLoad,
@@ -94,12 +112,17 @@ class AppState {
       errors: errors ?? this.errors,
       warnings: warnings ?? this.warnings,
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
+      viirs: viirs ?? this.viirs,
+      modis: modis ?? this.modis,
+      showModis: showModis ?? this.showModis,
+      showViirs: showViirs ?? this.showViirs,
+      lightnings: lightnings ?? this.lightnings,
     );
   }
 
   @override
   String toString() {
-    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nwarnings count: ${warnings?.length}, \nwarnings Madeira count: ${warningsMadeira?.length}, \nselected fire: $fire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
+    return 'AppState\n{isLoading: $isLoading, \nfires count: ${fires?.length}, \ncontributors count: ${contributors?.length}, \nwarnings count: ${warnings?.length}, \nwarnings Madeira count: ${warningsMadeira?.length}, \nselected fire: $selectedFire, \nhasFirstLoad: $hasFirstLoad, \nhasContributors: $hasContributors, \nhasPreferences: $hasPreferences, \nprefs: $preferences}';
   }
 
   String getErrors() {

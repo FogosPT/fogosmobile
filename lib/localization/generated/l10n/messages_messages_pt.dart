@@ -3,20 +3,21 @@
 // messages from the main program should be duplicated here with the same
 // function name.
 
+// Ignore issues from commonly used lints in this file.
+// ignore_for_file:unnecessary_brace_in_string_interps, unnecessary_new
+// ignore_for_file:prefer_single_quotes,comment_references, directives_ordering
+// ignore_for_file:annotate_overrides,prefer_generic_function_type_aliases
+// ignore_for_file:unused_import, file_names
+
 import 'package:intl/intl.dart';
 import 'package:intl/message_lookup_by_library.dart';
 
-// ignore: unnecessary_new
-final messages = new MessageLookup();
+final messages = MessageLookup();
 
-// ignore: unused_element
-final _keepAnalysisHappy = Intl.defaultLocale;
-
-// ignore: non_constant_identifier_names
-typedef MessageIfAbsent(String message_str, List args);
+typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 
 class MessageLookup extends MessageLookupByLibrary {
-  get localeName => 'messages_pt';
+  String get localeName => 'messages_pt';
 
   static m0(city, id) => "Incêndio em ${city} https://fogos.pt/fogo/${id}";
 
@@ -29,7 +30,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "textBugs" : MessageLookupByLibrary.simpleMessage("Sugestões / Bugs -"),
     "textCivilProtection" : MessageLookupByLibrary.simpleMessage("Página da Protecção Civil Portuguesa."),
     "textCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
+    "textDataTableCounty" : MessageLookupByLibrary.simpleMessage("Concelho"),
+    "textDataTableDistrict" : MessageLookupByLibrary.simpleMessage("Distrito"),
+    "textDataTableLocality" : MessageLookupByLibrary.simpleMessage("Localidade"),
+    "textDataTableParish" : MessageLookupByLibrary.simpleMessage("Freguesia"),
+    "textDataTableStart" : MessageLookupByLibrary.simpleMessage("Início"),
+    "textDataTableStatus" : MessageLookupByLibrary.simpleMessage("Estado"),
     "textDataUpdate" : MessageLookupByLibrary.simpleMessage("Actualizações de 2 em 2 minutos."),
+    "textBrightT31" : MessageLookupByLibrary.simpleMessage("Bright T31"),
+    "textBrightTi4" : MessageLookupByLibrary.simpleMessage("Bright Ti4"),
+    "textBrightTi5" : MessageLookupByLibrary.simpleMessage("Bright Ti5"),
+    "textBrightness" : MessageLookupByLibrary.simpleMessage("Luminosidade"),
+    "textConfidence" : MessageLookupByLibrary.simpleMessage("Confiança"),
+    "textDate" : MessageLookupByLibrary.simpleMessage("Data"),
     "textEmptyNotifications" : MessageLookupByLibrary.simpleMessage("Não tem notificações ativas para fogos"),
     "textFalseAlarm" : MessageLookupByLibrary.simpleMessage("Falso alarme"),
     "textFalseAlert" : MessageLookupByLibrary.simpleMessage("Falso alerta"),
@@ -44,9 +57,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "textFireStatusResolution" : MessageLookupByLibrary.simpleMessage("Em resolução"),
     "textFireStatusSignificativeOcurrence" : MessageLookupByLibrary.simpleMessage("Ocorrência Significativa"),
     "textFireStatusVigilance" : MessageLookupByLibrary.simpleMessage("Vigilância"),
-    "textFireman" : MessageLookupByLibrary.simpleMessage("Bombeiros"),
+    "textFirefighters" : MessageLookupByLibrary.simpleMessage("Operacionais"),
     "textFires" : MessageLookupByLibrary.simpleMessage("Incêndios"),
-    "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Bombeiros"),
+    "textFiresList" : MessageLookupByLibrary.simpleMessage("Lista de Fogos"),
+    "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Operacionais"),
     "textInformationArrival" : MessageLookupByLibrary.simpleMessage("Chegada ao TO – chegada ao teatro de operações."),
     "textInformationClosed" : MessageLookupByLibrary.simpleMessage("Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos"),
     "textInformationClosing" : MessageLookupByLibrary.simpleMessage("Em conclusão – Incêndio extinto, com pequenos focos de combustão dentro do perímetro do incêndio"),
@@ -56,19 +70,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "textInformationSettling" : MessageLookupByLibrary.simpleMessage("Em resolução – Incêndio sem perigo de propagação para além do perímetro já atingido"),
     "textInformationSupervision" : MessageLookupByLibrary.simpleMessage("Vigilância – Meios no local para actuar em caso de necessidade"),
     "textInformations" : MessageLookupByLibrary.simpleMessage("Informações"),
+    "textInternetConnection" : MessageLookupByLibrary.simpleMessage("Certifique-se que está ligado à Internet."),
     "textLastNight" : MessageLookupByLibrary.simpleMessage("Última Noite"),
     "textLastNightStatistics" : MessageLookupByLibrary.simpleMessage("Estatísticas da última noite"),
     "textLocationApproximate" : MessageLookupByLibrary.simpleMessage("Localização aproximada."),
     "textMapboxImprove" : MessageLookupByLibrary.simpleMessage("Melhorar este mapa"),
     "textMaximumRisk" : MessageLookupByLibrary.simpleMessage("Máximo"),
     "textNoConnection" : MessageLookupByLibrary.simpleMessage("Não foi possível fazer a ligação"),
+    "textNotificationProblems" : MessageLookupByLibrary.simpleMessage("Se está com problemas em receber notificações, clique no botão abaixo."),
     "textNotifications" : MessageLookupByLibrary.simpleMessage("Notificações"),
     "textNow" : MessageLookupByLibrary.simpleMessage("Agora"),
     "textOther" : MessageLookupByLibrary.simpleMessage("Outras"),
     "textPartners" : MessageLookupByLibrary.simpleMessage("Parcerias"),
+    "textPlanes" : MessageLookupByLibrary.simpleMessage("Aviões"),
     "textPreviousDays" : MessageLookupByLibrary.simpleMessage("Últimos Dias"),
+    "textProblemLoadingData" : MessageLookupByLibrary.simpleMessage("Houve um problema a carregar a informação."),
     "textRecordsFrom" : MessageLookupByLibrary.simpleMessage("Registos retirados da"),
     "textRefreshButton" : MessageLookupByLibrary.simpleMessage("Refrescar"),
+    "textResetNotifications" : MessageLookupByLibrary.simpleMessage("Reiniciar notificações"),
     "textResources" : MessageLookupByLibrary.simpleMessage("Meios"),
     "textRiskHigh" : MessageLookupByLibrary.simpleMessage("Elevado"),
     "textRiskModerate" : MessageLookupByLibrary.simpleMessage("Moderado"),
@@ -86,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textTotal" : MessageLookupByLibrary.simpleMessage("Total"),
     "textVehicles" : MessageLookupByLibrary.simpleMessage("Veículos"),
     "textWarnings" : MessageLookupByLibrary.simpleMessage("Avisos"),
+    "textWarningsMadeira" : MessageLookupByLibrary.simpleMessage("Avisos Madeira"),
     "textYesterday" : MessageLookupByLibrary.simpleMessage("Ontem"),
     "textYesterdayDistricts" : MessageLookupByLibrary.simpleMessage("Distritos de ontem"),
     "textYesterdayInterval" : MessageLookupByLibrary.simpleMessage("Intervalo de ontem")

@@ -17,7 +17,7 @@ class MeansStatistics extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-        store.dispatch(LoadFireMeansHistoryAction(store.state.fire.id));
+        store.dispatch(LoadFireMeansHistoryAction(store.state.selectedFire.id));
       },
       builder: (BuildContext context, AppState state) {
         MeansHistory stats = state.fireMeansHistory;
@@ -79,15 +79,15 @@ class MeansStatistics extends StatelessWidget {
                   _createSampleData(),
                   animate: true,
                   behaviors: [
-                    new charts.SeriesLegend(
+                    charts.SeriesLegend(
                       position: charts.BehaviorPosition.bottom,
                       outsideJustification:
                           charts.OutsideJustification.startDrawArea,
                       cellPadding:
-                          new EdgeInsets.only(right: 16.0, bottom: 4.0),
+                          EdgeInsets.only(right: 16.0, bottom: 4.0),
                     )
                   ],
-                  defaultRenderer: new charts.LineRendererConfig(
+                  defaultRenderer: charts.LineRendererConfig(
                       includeArea: true, stacked: false),
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
                 ),

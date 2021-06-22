@@ -29,7 +29,7 @@ class FireDetails extends StatelessWidget {
         return StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           builder: (BuildContext context, AppState state) {
-            Fire fire = state.fire;
+            Fire fire = state.selectedFire;
             if (fire == null) {
               if (state.errors != null && state.errors.contains('fire')) {
                 return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
@@ -43,10 +43,10 @@ class FireDetails extends StatelessWidget {
               );
             }
 
-            return new StoreConnector<AppState, SetPreferenceCallBack>(
+            return StoreConnector<AppState, SetPreferenceCallBack>(
               converter: (Store<AppState> store) {
                 return (String fireId, int value) {
-                  store.dispatch(new SetFireNotificationAction(fireId, value));
+                  store.dispatch(SetFireNotificationAction(fireId, value));
                 };
               },
               builder: (BuildContext context,
@@ -94,8 +94,8 @@ class FireDetails extends StatelessWidget {
                                             icon: CircularProgressIndicator(),
                                             onPressed: () {},
                                           )
-                                        : new IconButton(
-                                            icon: new Icon(isFireSubscribed
+                                        : IconButton(
+                                            icon: Icon(isFireSubscribed
                                                 ? Icons.notifications_active
                                                 : Icons.notifications_none),
                                             onPressed: () {

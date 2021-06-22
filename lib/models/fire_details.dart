@@ -1,12 +1,10 @@
-import 'package:flutter/material.dart';
-
 class MeansHistory {
   final List<Means> means;
 
   MeansHistory({this.means});
 
   factory MeansHistory.fromJson(List<dynamic> json) {
-    List<Means> means = new List<Means>();
+    List<Means> means = <Means>[];
     means = json.map((i) => Means.fromJson(i)).toList();
     return MeansHistory(means: means);
   }
@@ -21,8 +19,7 @@ class Means {
   Means({this.man, this.aerial, this.terrain, this.label});
 
   factory Means.fromJson(Map<String, dynamic> parsedJson) {
-
-   DateTime dateLabel =
+    DateTime dateLabel =
         DateTime.fromMillisecondsSinceEpoch(parsedJson['created'] * 1000);
 
     return Means(
@@ -40,7 +37,7 @@ class DetailsHistory {
   DetailsHistory({this.details});
 
   factory DetailsHistory.fromJson(List<dynamic> json) {
-    List<Details> details = new List<Details>();
+    List<Details> details = <Details>[];
     details = json.map((i) => Details.fromJson(i)).toList();
     return DetailsHistory(details: details);
   }

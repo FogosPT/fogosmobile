@@ -1,5 +1,9 @@
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/viirs_actions.dart';
+import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
+import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -32,8 +36,9 @@ import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
+import 'package:logger/logger.dart';
 
-final SentryClient _sentry = new SentryClient(dsn: SENTRY_DSN);
+final SentryClient _sentry = SentryClient(dsn: SENTRY_DSN);
 
 typedef SetFiltersCallback = Function(FireStatus filter);
 
@@ -75,6 +80,14 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+var loggerNoStack = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
+
 void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
@@ -89,7 +102,7 @@ void main() {
 
   runZoned<Future<void>>(() async {
     try {
-      SharedPreferencesManager.init().then((_) => runApp(new MyApp()));
+      SharedPreferencesManager.init().then((_) => runApp(MyApp()));
     } catch (error, stackTrace) {
       _reportError(error, stackTrace);
     }
@@ -103,22 +116,23 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new StoreProvider(
+    return StoreProvider(
       store: store, // store comes from the app_store.dart import
       child: MaterialApp(
         title: 'Fogos.pt',
         theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
-          '$SETTINGS_ROUTE': (_) => new Settings(),
-          '$WARNINGS_ROUTE': (_) => new Warnings(),
-          '$WARNINGS_MADEIRA_ROUTE': (_) => new WarningsMadeira(),
-          '$PARTNERS_ROUTE': (_) => new Partners(),
-          '$STATISTICS_ROUTE': (_) => new StatisticsPage(),
-          '$INFO_ROUTE': (_) => new InfoPage(),
-          '$ABOUT_ROUTE': (_) => new About(),
-          '$FIRE_DETAILS_ROUTE': (_) => new FireDetailsPage(),
-          '$FIRES_ROUTE': (_) => new FireList(),
+          SETTINGS_ROUTE: (_) => Settings(),
+          WARNINGS_ROUTE: (_) => Warnings(),
+          WARNINGS_MADEIRA_ROUTE: (_) => WarningsMadeira(),
+          PARTNERS_ROUTE: (_) => Partners(),
+          STATISTICS_ROUTE: (_) => StatisticsPage(),
+          INFO_ROUTE: (_) => InfoPage(),
+          ABOUT_ROUTE: (_) => About(),
+          FIRE_DETAILS_ROUTE: (_) => FireDetailsPage(),
+          FIRES_ROUTE: (_) => FireList(),
+          FIRES_TABLES_ROUTE: (_) => FiresTablePage(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -152,52 +166,64 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {});
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {});
   }
 
-  Widget _buildRefreshButton(AppState state, VoidCallback action) => state.isLoading
-      ? Container(
-          width: 54.0,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: new CircularProgressIndicator(
-              strokeWidth: 2.0,
+  Widget _buildRefreshButton(AppState state, VoidCallback action) {
+    return state.isLoading
+        ? Container(
+            width: 48,
+            height: 48,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
             ),
-          ),
-        )
-      : new IconButton(
-          onPressed: action,
-          icon: new Icon(Icons.refresh),
-        );
+          )
+        : IconButton(
+            onPressed: action,
+            icon: Icon(Icons.refresh),
+          );
+  }
 
-  Widget _buildFiltersMenu(AppState state) =>
-      StoreConnector<AppState, SetFiltersCallback>(converter: (Store<AppState> store) {
-        return (FireStatus filter) {
-          store.dispatch(SelectFireFiltersAction(filter));
-        };
-      }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
-        return PopupMenuButton<FireStatus>(
-          icon: Icon(Icons.filter_list),
-          onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
-          itemBuilder: (BuildContext context) => FireStatus.values
-              .map((status) => PopupMenuItem<FireStatus>(
-                  value: status,
-                  child: ListTileTheme(
-                    style: ListTileStyle.drawer,
-                    selectedColor: Theme.of(context).accentColor,
-                    child: ListTile(
-                        dense: true,
-                        contentPadding: const EdgeInsets.all(0.0),
-                        selected: state.activeFilters.contains(status),
-                        trailing: state.activeFilters.contains(status) ? Icon(Icons.check) : null,
-                        title: Text(
-                          FogosLocalizations.of(context).textFireStatus(status),
-                        )),
-                  )))
-              .toList(),
-        );
-      });
+  Widget _buildFiltersMenu(AppState state) {
+    return StoreConnector<AppState, SetFiltersCallback>(
+        converter: (Store<AppState> store) {
+      return (FireStatus filter) {
+        store.dispatch(SelectFireFiltersAction(filter));
+      };
+    }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
+      return PopupMenuButton<FireStatus>(
+        icon: Icon(Icons.filter_list),
+        onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
+        itemBuilder: (BuildContext context) => FireStatus.values
+            .map(
+              (status) => PopupMenuItem<FireStatus>(
+                value: status,
+                child: ListTileTheme(
+                  style: ListTileStyle.drawer,
+                  selectedColor: Theme.of(context).accentColor,
+                  child: ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.all(0.0),
+                    selected: state.activeFilters.contains(status),
+                    trailing: state.activeFilters.contains(status)
+                        ? Icon(Icons.check)
+                        : null,
+                    title: Text(
+                        FogosLocalizations.of(context).textFireStatus(status)),
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      );
+    });
+  }
 
   @override
   void initState() {
@@ -216,6 +242,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       final store = StoreProvider.of<AppState>(context);
       store.dispatch(LoadFiresAction());
+      store.dispatch(LoadModisAction());
+      store.dispatch(LoadViirsAction());
+      store.dispatch(LoadLightningsAction());
     }
   }
 
@@ -230,32 +259,40 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       ),
     );
 
-    return new StoreConnector<AppState, AppState>(
+    return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
         store.dispatch(LoadFiresAction());
-        store.dispatch(new LoadAllPreferencesAction());
+        store.dispatch(LoadLightningsAction());
+        store.dispatch(LoadModisAction());
+        store.dispatch(LoadViirsAction());
+        store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
-          appBar: new FireGradientAppBar(
-            title: new Text(
+          appBar: FireGradientAppBar(
+            title: Text(
               'Fogos.pt',
-              style: new TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.white),
             ),
             actions: [
-              new StoreConnector<AppState, VoidCallback>(
+              StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {
                   return () {
-                    store.dispatch(new LoadFiresAction());
-                    store.dispatch(new LoadAllPreferencesAction());
+                    store.dispatch(LoadFiresAction());
+                    store.dispatch(LoadLightningsAction());
+                    store.dispatch(LoadModisAction());
+                    store.dispatch(LoadViirsAction());
+                    store.dispatch(LoadAllPreferencesAction());
                   };
                 },
                 builder: (BuildContext context, VoidCallback loadFiresAction) {
-                  return new StoreConnector<AppState, AppState>(
+                  return StoreConnector<AppState, AppState>(
                     converter: (Store<AppState> store) => store.state,
                     onInit: (Store<AppState> store) {
                       store.dispatch(LoadFiresAction());
+                      store.dispatch(LoadModisAction());
+                      store.dispatch(LoadViirsAction());
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[
@@ -268,15 +305,16 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               ),
             ],
           ),
-          drawer: new Drawer(
-            child: new ListView(
+          drawer: Drawer(
+            child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
-                new DrawerHeader(
-                  child: new Center(
-                    child: SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
+                DrawerHeader(
+                  child: Center(
+                    child:
+                        SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
                   ),
-                  decoration: new BoxDecoration(
+                  decoration: BoxDecoration(
                     gradient: new LinearGradient(
                         colors: [
                           FogosTheme().accentColor,
@@ -297,6 +335,15 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.list),
                 ),
                 new ListTile(
+                  title:
+                      new Text(FogosLocalizations.of(context).textFiresTable),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
+                  },
+                  leading: Icon(Icons.table_chart),
+                ),
+                new ListTile(
                   title: new Text(FogosLocalizations.of(context).textWarnings),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -305,7 +352,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.warning),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textWarningsMadeira),
+                  title: new Text(
+                      FogosLocalizations.of(context).textWarningsMadeira),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
@@ -313,7 +361,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.warning),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textInformations),
+                  title:
+                      new Text(FogosLocalizations.of(context).textInformations),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(INFO_ROUTE);
@@ -321,7 +370,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.info),
                 ),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textStatistics),
+                  title:
+                      new Text(FogosLocalizations.of(context).textStatistics),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
@@ -330,7 +380,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ),
                 new Divider(),
                 new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textNotifications),
+                  title: new Text(
+                      FogosLocalizations.of(context).textNotifications),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(SETTINGS_ROUTE);

@@ -3,6 +3,9 @@ import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 
 class MapboxCopyright extends StatelessWidget {
+
+  const MapboxCopyright({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Positioned(

@@ -1,10 +1,8 @@
 import 'dart:io';
 
-import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
@@ -12,17 +10,17 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 
+const String preferenceSatellite = "pref-satellite";
+
 List<Middleware<AppState>> preferencesMiddleware() {
   final loadPreferences = _createLoadPreferences();
   final setPreference = _createSetPreference();
   final setNotification = _createSetNotification();
-  final selectFireFilters = _createSelectFireFilters();
 
   return [
     TypedMiddleware<AppState, LoadAllPreferencesAction>(loadPreferences),
     TypedMiddleware<AppState, SetPreferenceAction>(setPreference),
     TypedMiddleware<AppState, SetFireNotificationAction>(setNotification),
-    TypedMiddleware<AppState, SelectFireFiltersAction>(selectFireFilters),
   ];
 }
 
@@ -32,8 +30,8 @@ Middleware<AppState> _createLoadPreferences() {
 
     try {
       String url = Endpoints.getLocations;
-      final response = await http.get(url);
-      final locations = json.decode(utf8.decode(response.bodyBytes))['rows'];
+      final response = await get(url);
+      final locations = response.data['rows'];
 
       Map data = {};
       final prefs = SharedPreferencesManager.preferences;
@@ -45,10 +43,9 @@ Middleware<AppState> _createLoadPreferences() {
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
       List<Fire> fires = store.state.fires;
 
-      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
-
       if (fires.length > 0) {
-        data['subscribedFires'] = fires.where((f) => subbedFires.contains(f.id)).toList();
+        data['subscribedFires'] =
+            fires.where((f) => subbedFires.contains(f.id)).toList();
       } else {
         data['subscribedFires'] = [];
       }
@@ -56,9 +53,9 @@ Middleware<AppState> _createLoadPreferences() {
       data['pref-important'] = prefs.getInt('important') ?? 0;
       data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
       data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
+      data['pref-planes'] = prefs.getInt('planes') ?? 0;
 
       store.dispatch(new AllPreferencesLoadedAction(data));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
     } catch (e) {
       print(e);
     }
@@ -70,7 +67,9 @@ Middleware<AppState> _createSetPreference() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
       _firebaseMessaging.subscribeToTopic(topic);
@@ -81,7 +80,6 @@ Middleware<AppState> _createSetPreference() {
     try {
       final prefs = SharedPreferencesManager.preferences;
       prefs.save(action.key, action.value);
-      store.dispatch(new LoadAllPreferencesAction());
     } catch (e) {}
   };
 }
@@ -91,11 +89,14 @@ Middleware<AppState> _createSetNotification() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-    String topic = Platform.isIOS ? 'mobile-ios-${action.key}' : 'mobile-android-${action.key}';
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
 
     try {
       final prefs = SharedPreferencesManager.preferences;
-      List<String> subscribedFires = prefs.getStringList('subscribedFires') ?? [];
+      List<String> subscribedFires =
+          prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
         _firebaseMessaging.subscribeToTopic(topic);
@@ -105,28 +106,6 @@ Middleware<AppState> _createSetNotification() {
       }
       prefs.save('subscribedFires', subscribedFires);
       store.dispatch(new LoadAllPreferencesAction());
-    } catch (e) {
-      print(e);
-    }
-  };
-}
-
-Middleware<AppState> _createSelectFireFilters() {
-  return (Store store, action, NextDispatcher next) async {
-    next(action);
-    try {
-      final prefs = SharedPreferencesManager.preferences;
-      FireStatus filter = action.filter;
-      List<FireStatus> saveFilters = Fire.listFromActiveFilters(prefs.getStringList('active_filters'));
-
-      if (saveFilters.contains(filter)) {
-        saveFilters.remove(filter);
-      } else {
-        saveFilters.add(filter);
-      }
-
-      prefs.save('active_filters', Fire.activeFiltersToList(saveFilters));
-      store.dispatch(new SavedFireFiltersAction(saveFilters));
     } catch (e) {
       print(e);
     }

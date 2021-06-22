@@ -1,7 +1,7 @@
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/models/statistics.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
@@ -30,8 +30,8 @@ Middleware<AppState> _createLoadNowStats() {
     next(action);
     try {
       String url = Endpoints.getNowStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       NowStats nowStats = NowStats.fromJson(responseData);
       store.dispatch(new NowStatsLoadedAction(nowStats));
     } catch (e) {
@@ -48,8 +48,8 @@ Middleware<AppState> _createTodayStats() {
     next(action);
     try {
       String url = Endpoints.getTodayStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       TodayStats todayStats = TodayStats.fromJson(responseData);
       store.dispatch(new TodayStatsLoadedAction(todayStats));
     } catch (e) {
@@ -66,8 +66,8 @@ Middleware<AppState> _createYesterdayStats() {
     next(action);
     try {
       String url = Endpoints.getYesterdayStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
       store.dispatch(new YesterdayStatsLoadedAction(yesterdayStats));
     } catch (e) {
@@ -84,8 +84,8 @@ Middleware<AppState> _createLastNightStats() {
     next(action);
     try {
       String url = Endpoints.getLastNightStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
       store.dispatch(new LastNightStatsLoadedAction(lastNightStats));
     } catch (e) {
@@ -102,8 +102,8 @@ Middleware<AppState> _createWeekStats() {
     next(action);
     try {
       String url = Endpoints.getWeekStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       WeekStats weekStats = WeekStats.fromJson(responseData);
       store.dispatch(new WeekStatsLoadedAction(weekStats));
     } catch (e) {
@@ -120,8 +120,8 @@ Middleware<AppState> _createLastHoursStats() {
     next(action);
     try {
       String url = Endpoints.getLastHoursStats;
-      final response = await http.get(url);
-      final responseData = json.decode(response.body)['data'];
+      final response = await get(url);
+      final responseData = json.decode(response.data)['data'];
       LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
       store.dispatch(new LastHoursLoadedAction(lastHoursStats));
     } catch (e) {

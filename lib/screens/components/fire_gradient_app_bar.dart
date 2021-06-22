@@ -10,8 +10,8 @@ class FireGradientAppBar extends AppBar {
           actions: actions,
           bottom: bottom,
           flexibleSpace: Container(
-            decoration: new BoxDecoration(
-              gradient: new LinearGradient(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
                   colors: [
                     FogosTheme().accentColor,
                     FogosTheme().primaryColor,

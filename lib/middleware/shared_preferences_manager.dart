@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesManager {
@@ -19,6 +20,7 @@ class SharedPreferencesManager {
   static Future<bool> init([bool withLogs = true]) async {
     if (_instance == null) {
       _showLogs = withLogs;
+      WidgetsFlutterBinding.ensureInitialized();
       _instance = await SharedPreferences.getInstance().catchError((error) {
         print(
             '$_tag: Couldn\'t get the local preferences, operation failed with error: $error');

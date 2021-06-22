@@ -1,3 +1,7 @@
+import 'package:equatable/equatable.dart';
+import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
+
 enum FireStatus {
   dispatch,
   significative_ocurrence,
@@ -12,7 +16,8 @@ enum FireStatus {
   false_alert,
 }
 
-class Fire {
+//TODO Create FireEntity and separate Model from an Entity
+class Fire extends BaseMapboxModel implements Equatable {
   final String id;
   final int sharepointId;
 
@@ -81,10 +86,10 @@ class Fire {
     this.extra,
     this.cos,
     this.pco,
-  });
+  }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
 
   factory Fire.fromJson(Map<String, dynamic> map) {
-    return new Fire(
+    return Fire(
       id: map['id'],
       sharepointId: map['sharepointId'],
       active: map['active'],
@@ -172,12 +177,30 @@ class Fire {
   }
 
   static List<String> activeFiltersToList(List<FireStatus> statusList) {
-    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ?? [];
+    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ??
+        [];
   }
 
   static List<FireStatus> listFromActiveFilters(List<String> statusList) {
-    return statusList?.map((filter) => Fire._statusFromJson(filter))?.toList() ?? List.from(FireStatus.values);
+    return statusList
+            ?.map((filter) => Fire._statusFromJson(filter))
+            ?.toList() ??
+        List.from(FireStatus.values);
   }
 
   String get fullAddress => '$district, $city, $town, $local';
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  bool get stringify => true;
+
+  @override
+  bool skip<T>(List<T> filters) {
+    if (filters != null) {
+      return !filters.contains(status);
+    } else
+      return true;
+  }
 }

@@ -26,7 +26,7 @@ class FireDetailsPage extends StatelessWidget {
       },
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
-        Fire fire = state.fire;
+        Fire fire = state.selectedFire;
 
         if (fire == null) {
           return Scaffold(

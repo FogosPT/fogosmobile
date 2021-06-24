@@ -111,6 +111,8 @@ class _FireListState extends State<FireList> {
                         child: MapboxMap(
                         initialCameraPosition: CameraPosition(target: _center, zoom: 14.0,),
                         tiltGesturesEnabled: false,
+                        myLocationEnabled: true,
+                        myLocationRenderMode: MyLocationRenderMode.GPS,
                         rotateGesturesEnabled: false,
                         scrollGesturesEnabled: false,
                         zoomGesturesEnabled: false,

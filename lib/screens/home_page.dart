@@ -109,6 +109,8 @@ class _HomePageState extends State<HomePage> {
               MapboxMap(
                 accessToken: MAPBOX_ACCESS_TOKEN,
                 trackCameraPosition: true,
+                myLocationEnabled: true,
+                myLocationRenderMode: MyLocationRenderMode.GPS,
                 onMapCreated: _onMapCreated,
                 styleString: _stylesStrings[currentMapboxTemplate],
                 initialCameraPosition: CameraPosition(

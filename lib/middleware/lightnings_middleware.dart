@@ -4,6 +4,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
+import 'dart:convert';
 
 List<Middleware<AppState>> lightningMiddleware() {
   final loadLightnings = _createLightningStrikes();
@@ -22,7 +23,7 @@ Middleware<AppState> _createLightningStrikes() {
       String url = Endpoints.getLightnings;
       final response = await get(url);
       if (response.data != [] && response.data != null) {
-        List<Lightning> lightnings = LightningRemote.fromJson(response.data).data;
+        List<Lightning> lightnings = LightningRemote.fromJson(response.data as Map<String, dynamic>).data;
         store.dispatch(LightningsLoadedAction(lightnings));
       }
     } catch (e) {

@@ -274,18 +274,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(
-                label: 'Tempo',
-                icon: Icon(Icons.access_alarm),
-              ),
-              BottomNavigationBarItem(
-                label: 'Ola',
-                icon: Icon(Icons.access_alarms_rounded),
-              )
-            ],
-          ),
           appBar: FireGradientAppBar(
             title: Text(
               'Fogos.pt',

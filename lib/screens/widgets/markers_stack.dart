@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
-import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
@@ -12,6 +11,9 @@ import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
+/// Abstract Marker Manager class of all Markers used in this project. This class handles all the logic of positioning each marker on the MapboxController and keeping it updated.
+///
+/// With the method `_addMarke` you can check all used markers and add new ones.
 class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
     B extends BaseMarkerState, F> extends StatefulWidget {
   final bool ignoreTouch;
@@ -39,8 +41,8 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
         this._markerStates = [],
         super(key: key) {
     this.mapController?.addListener(() {
-      if(mapController.isCameraMoving){
-       updatePositions();
+      if (mapController?.isCameraMoving ?? false) {
+        updatePositions();
       }
     });
   }
@@ -60,8 +62,6 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 
   @override
   _MarkerStackState createState() => _MarkerStackState<T, V, B, F>();
-
-
 }
 
 class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
@@ -127,7 +127,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
         break;
     }
 
-    if(value != null){
+    if (value != null) {
       widget._markers.putIfAbsent(item.getId, () => value);
     }
   }

@@ -47,7 +47,7 @@ class LightningMarkerState extends BaseMarkerState<LightningMarker> {
       ratio = Platform.isIOS ? 1.0 : MediaQuery.of(context).devicePixelRatio;
     }
 
-    final pinSize = fullPinSize * 0.33;
+    final pinSize = kFullPinSize * 0.33;
 
     return Positioned(
       left: _position.x / ratio - pinSize / 2,

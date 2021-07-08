@@ -3,16 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/modis.dart';
-import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
-import 'package:fogosmobile/store/app_store.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ModisMarker extends StatefulWidget implements BaseMarker{
+class ModisMarker extends StatefulWidget implements BaseMarker {
   final Modis _modis;
   final Point _initialPosition;
   final LatLng _coordinate;
@@ -39,9 +35,7 @@ class ModisMarker extends StatefulWidget implements BaseMarker{
   LatLng get location => _coordinate;
 }
 
-class ModisMarkerState extends BaseMarkerState<ModisMarker>{
-  final _iconSize = 10.0;
-
+class ModisMarkerState extends BaseMarkerState<ModisMarker> {
   Point _position;
 
   @override
@@ -49,6 +43,7 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker>{
     _position = widget._initialPosition;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     var ratio = 1.0;
@@ -58,8 +53,8 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker>{
     }
 
     return Positioned(
-      left: _position.x / ratio - _iconSize / 2,
-      top: _position.y / ratio - _iconSize / 2,
+      left: _position.x / ratio - kFullPinSize / 2,
+      top: _position.y / ratio - kFullPinSize / 2,
       child: GestureDetector(
         onTap: () => widget._openModal?.call(widget._modis),
         child: Container(

@@ -43,8 +43,6 @@ class FireMarker extends StatefulWidget implements BaseMarker {
 }
 
 class FireMarkerState extends BaseMarkerState<FireMarker> {
-  final _iconSize = 10.0;
-
   Point _position;
 
   @override
@@ -60,15 +58,16 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
     if (!kIsWeb) {
       ratio = Platform.isIOS ? 1.0 : MediaQuery.of(context).devicePixelRatio;
     }
+    final pinSize = _getIconSize(widget._fire.scale);
 
     return Positioned(
-      left: _position.x / ratio - _iconSize / 2,
-      top: _position.y / ratio - _iconSize / 2,
+      left: _position.x / ratio - pinSize / 2,
+      top: _position.y / ratio - pinSize / 2,
       child: Container(
         decoration: BoxDecoration(
             color: getFireColor(widget._fire), shape: BoxShape.circle),
         child: IconButton(
-          iconSize: _getIconSize(widget._fire.scale),
+          iconSize: pinSize,
           icon: SvgPicture.asset(
             getCorrectStatusImage(
                 widget._fire.statusCode, widget._fire.important),
@@ -86,7 +85,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
 
   @override
   void updatePosition(Point<num> point) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _position = point;
       });
@@ -99,10 +98,10 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
   }
 
   double _getIconSize(double scale) {
-    double pinSize = fullPinSize * scale;
+    double pinSize = kFullPinSize * scale;
 
     if (pinSize == 0) {
-      pinSize = fullPinSize;
+      pinSize = kFullPinSize;
     }
     return pinSize;
   }

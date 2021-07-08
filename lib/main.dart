@@ -102,7 +102,11 @@ void main() {
 
   runZoned<Future<void>>(() async {
     try {
-      SharedPreferencesManager.init().then((_) => runApp(MyApp()));
+      SharedPreferencesManager.init().then(
+        (_) => runApp(
+          MyApp(),
+        ),
+      );
     } catch (error, stackTrace) {
       _reportError(error, stackTrace);
     }
@@ -270,6 +274,18 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            items: [
+              BottomNavigationBarItem(
+                label: 'Tempo',
+                icon: Icon(Icons.access_alarm),
+              ),
+              BottomNavigationBarItem(
+                label: 'Ola',
+                icon: Icon(Icons.access_alarms_rounded),
+              )
+            ],
+          ),
           appBar: FireGradientAppBar(
             title: Text(
               'Fogos.pt',

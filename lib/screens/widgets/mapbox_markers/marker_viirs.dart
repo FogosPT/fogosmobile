@@ -3,11 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ViirsMarker extends StatefulWidget implements BaseMarker{
+class ViirsMarker extends StatefulWidget implements BaseMarker {
   final Viirs _viirs;
   final Point _initialPosition;
   final LatLng _coordinate;
@@ -35,8 +36,6 @@ class ViirsMarker extends StatefulWidget implements BaseMarker{
 }
 
 class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
-  final _iconSize = 10.0;
-
   Point _position;
 
   @override
@@ -54,8 +53,8 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
     }
 
     return Positioned(
-      left: _position.x / ratio - _iconSize / 2,
-      top: _position.y / ratio - _iconSize / 2,
+      left: _position.x / ratio - kFullPinSize / 2,
+      top: _position.y / ratio - kFullPinSize / 2,
       child: GestureDetector(
         onTap: () => widget._openModal?.call(widget._viirs),
         child: Container(

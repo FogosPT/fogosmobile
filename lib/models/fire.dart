@@ -108,7 +108,7 @@ class Fire extends BaseMapboxModel implements Equatable {
     if (_mapRep.containsKey(propertyName)) {
       return _mapRep[propertyName];
     }
-    throw ArgumentError('propery not found');
+    throw ArgumentError('property not found');
   }
 
   factory Fire.fromJson(Map<String, dynamic> map) {

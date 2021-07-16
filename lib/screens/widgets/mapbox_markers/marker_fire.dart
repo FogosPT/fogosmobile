@@ -62,8 +62,8 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
     }
 
     return Positioned(
-      left: _position.x / ratio - _iconSize / 2,
-      top: _position.y / ratio - _iconSize / 2,
+      left: _position.x / ratio - _getIconSize(widget._fire.scale) / 2,
+      top: _position.y / ratio - _getIconSize(widget._fire.scale) / 2,
       child: Container(
         decoration: BoxDecoration(
             color: getFireColor(widget._fire), shape: BoxShape.circle),

@@ -88,6 +88,29 @@ class Fire extends BaseMapboxModel implements Equatable {
     this.pco,
   }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
 
+  Map<String, dynamic> _toMap() {
+    return {
+      'aerial': aerial,
+      'city': city,
+      'dateTime': dateTime,
+      'district': district,
+      'human': human,
+      'id': id,
+      'local': local,
+      'status': statusCode,
+      'terrain': terrain,
+      'town': town,
+    };
+  }
+
+  dynamic get(String propertyName) {
+    var _mapRep = _toMap();
+    if (_mapRep.containsKey(propertyName)) {
+      return _mapRep[propertyName];
+    }
+    throw ArgumentError('property not found');
+  }
+
   factory Fire.fromJson(Map<String, dynamic> map) {
     return Fire(
       id: map['id'],

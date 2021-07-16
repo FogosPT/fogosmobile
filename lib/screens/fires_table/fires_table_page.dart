@@ -15,7 +15,28 @@ import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:share/share.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 
-class FiresTablePage extends StatelessWidget {
+class FiresTablePage extends StatefulWidget {
+  @override
+  _FiresTablePageState createState() => _FiresTablePageState();
+}
+
+class _FiresTablePageState extends State<FiresTablePage> {
+  int _currentSortColumn = 1;
+  bool _isAscending = false;
+
+  orderFires(columnIndex, List<Fire> fires, field) {
+    setState(() {
+      _currentSortColumn = columnIndex;
+      if (_isAscending == true) {
+        _isAscending = false;
+        fires.sort((a, b) => b.get(field).compareTo(a.get(field)));
+      } else {
+        _isAscending = true;
+        fires.sort((a, b) => a.get(field).compareTo(b.get(field)));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -56,59 +77,83 @@ class FiresTablePage extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: DataTable(
+                  sortColumnIndex: _currentSortColumn,
+                  sortAscending: _isAscending,
                   columns: [
                     DataColumn(
                       label: Text(
                         'ID',
                       ),
+                      onSort: (columnIndex, _) {
+                        orderFires(columnIndex, fires, 'id');
+                      },
                     ),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableStart,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableStart,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'dateTime');
+                        }),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableDistrict,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableDistrict,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'district');
+                        }),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableCounty,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableCounty,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'city');
+                        }),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableParish,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableParish,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'town');
+                        }),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableLocality,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableLocality,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'local');
+                        }),
                     DataColumn(
-                      label: Text(
-                        FogosLocalizations.of(context).textDataTableStatus,
-                      ),
-                    ),
+                        label: Text(
+                          FogosLocalizations.of(context).textDataTableStatus,
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'status');
+                        }),
                     DataColumn(
-                      label: Text(
-                        '👩‍🚒',
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    ),
+                        label: Text(
+                          '👩‍🚒',
+                          style: TextStyle(fontSize: 24.0),
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'human');
+                        }),
                     DataColumn(
-                      label: Text(
-                        '🚒',
-                        style: TextStyle(fontSize: 24.0),
-                      ),
-                    ),
+                        label: Text(
+                          '🚒',
+                          style: TextStyle(fontSize: 24.0),
+                        ),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'terrain');
+                        }),
                     DataColumn(
                       label: Text(
                         '🚁',
                         style: TextStyle(fontSize: 24.0),
                       ),
+                      onSort: (columnIndex, _) {
+                        orderFires(columnIndex, fires, 'aerial');
+                      },
                     ),
                   ],
                   rows: fires

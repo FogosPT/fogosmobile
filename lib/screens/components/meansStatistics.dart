@@ -80,7 +80,7 @@ class MeansStatistics extends StatelessWidget {
                   animate: true,
                   domainAxis: charts.DateTimeAxisSpec(
                     tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
-                      minute: new charts.TimeFormatterSpec(
+                      minute: charts.TimeFormatterSpec(
                           format: "Hm", transitionFormat: "Hm"),
                     ),
                   ),

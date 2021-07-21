@@ -42,7 +42,7 @@ class _FiresTablePageState extends State<FiresTablePage> {
     return new Scaffold(
       appBar: FireGradientAppBar(
         title: new Text(
-          FogosLocalizations.of(context).textFiresList,
+          FogosLocalizations.of(context).textFiresTable,
           style: new TextStyle(color: Colors.white),
         ),
         actions: [

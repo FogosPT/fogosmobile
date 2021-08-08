@@ -37,6 +37,10 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                     value: state.preferences['pref-important'] == 1,
                     onChanged: (bool value) {
                       setPreferenceCallBack('important', value == true ? 1 : 0);
+                      setState(() {
+                        state.preferences['pref-important'] =
+                            value == true ? 1 : 0;
+                      });
                     },
                   ),
                   CheckboxListTile(
@@ -44,6 +48,10 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                     value: state.preferences['pref-warnings'] == 1,
                     onChanged: (bool value) {
                       setPreferenceCallBack('warnings', value == true ? 1 : 0);
+                      setState(() {
+                        state.preferences['pref-warnings'] =
+                            value == true ? 1 : 0;
+                      });
                     },
                   ),
                   CheckboxListTile(
@@ -51,6 +59,10 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                     value: state.preferences['pref-planes'] == 1,
                     onChanged: (bool value) {
                       setPreferenceCallBack('planes', value == true ? 1 : 0);
+                      setState(() {
+                        state.preferences['pref-planes'] =
+                            value == true ? 1 : 0;
+                      });
                     },
                   ),
                 ],

@@ -78,6 +78,12 @@ class MeansStatistics extends StatelessWidget {
                 child: charts.TimeSeriesChart(
                   _createSampleData(),
                   animate: true,
+                  domainAxis: charts.DateTimeAxisSpec(
+                    tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+                      minute: charts.TimeFormatterSpec(
+                          format: "Hm", transitionFormat: "Hm"),
+                    ),
+                  ),
                   behaviors: [
                     charts.SeriesLegend(
                       position: charts.BehaviorPosition.bottom,

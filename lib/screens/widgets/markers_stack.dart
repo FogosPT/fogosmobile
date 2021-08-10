@@ -39,8 +39,8 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
         this._markerStates = [],
         super(key: key) {
     this.mapController?.addListener(() {
-      if(mapController.isCameraMoving){
-       updatePositions();
+      if (mapController.isCameraMoving) {
+        updatePositions();
       }
     });
   }
@@ -68,8 +68,10 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
     B extends BaseMarkerState, F> extends State<MarkerStack> {
   @override
   Widget build(BuildContext context) {
-    final latLngs = widget.data
-            ?.skipWhile((value) => value.skip<F>(widget.filters))
+    final markers =
+        widget.data?.where((value) => !value.skip(widget.filters))?.toList();
+    final latLngs =
+        markers
             ?.map<LatLng>((item) => item.location)
             ?.toList() ??
         [];
@@ -77,10 +79,9 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
       value.asMap().forEach((index, value) {
         final point = Point<double>(value.x as double, value.y as double);
         final latLng = latLngs[index];
-        final item = widget.data[index];
+        final item = markers[index];
         _addMarker(item, latLng, point);
       });
-
       setState(() {});
     });
 
@@ -127,7 +128,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
         break;
     }
 
-    if(value != null){
+    if (value != null) {
       widget._markers.putIfAbsent(item.getId, () => value);
     }
   }

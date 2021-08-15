@@ -11,7 +11,7 @@ import 'package:redux/redux.dart';
 
 class About extends StatelessWidget {
   Widget contributorsWidget() {
-    return new StoreConnector<AppState, AppState>(
+    return StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
         onInit: (Store<AppState> store) {
           if (!store.state.hasContributors) {
@@ -20,7 +20,7 @@ class About extends StatelessWidget {
         },
         builder: (BuildContext context, AppState state) {
           if (state.hasContributors) {
-            return new StoreConnector<AppState, List>(
+            return StoreConnector<AppState, List>(
                 converter: (Store<AppState> store) => store.state.contributors,
                 builder: (BuildContext context, List contributors) {
                   if (contributors != null) {
@@ -35,7 +35,7 @@ class About extends StatelessWidget {
                   }
                 });
           } else {
-            return new Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -44,11 +44,11 @@ class About extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        appBar: new FireGradientAppBar(
-          title: new Text(
+    return Scaffold(
+        appBar: FireGradientAppBar(
+          title: Text(
             'Sobre',
-            style: new TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: Container(
@@ -63,17 +63,17 @@ class About extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: RichText(
-                    text: new TextSpan(
+                    text: TextSpan(
                       children: [
-                        new TextSpan(
+                        TextSpan(
                           text: '${FogosLocalizations.of(context).textRecordsFrom} ',
-                          style: new TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black),
                         ),
-                        new TextSpan(
+                        TextSpan(
                           text: FogosLocalizations.of(context)
                               .textCivilProtection,
-                          style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
                             ..onTap = () => launchURL('http://www.prociv.pt/'),
                         ),
                       ],
@@ -92,16 +92,16 @@ class About extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: RichText(
-                    text: new TextSpan(
+                    text: TextSpan(
                       children: [
-                        new TextSpan(
+                        TextSpan(
                           text: FogosLocalizations.of(context).textBugs,
-                          style: new TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black),
                         ),
-                        new TextSpan(
+                        TextSpan(
                           text: ' mail@fogos.pt.',
-                          style: new TextStyle(color: Colors.blue),
-                          recognizer: new TapGestureRecognizer()
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
                             ..onTap = () => launchURL('mailto:mail@fogos.pt'),
                         ),
                       ],

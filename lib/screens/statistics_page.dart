@@ -32,21 +32,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new FireGradientAppBar(
-        title: new Text(
+      appBar: FireGradientAppBar(
+        title: Text(
           FogosLocalizations.of(context).textStatistics,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: StoreConnector(
         converter: (Store<AppState> store) => store.state,
         onInit: (Store<AppState> store) {
-          store.dispatch(new LoadNowStatsAction());
-          store.dispatch(new LoadTodayStatsAction());
-          store.dispatch(new LoadYesterdayStatsAction());
-          store.dispatch(new LoadLastNightStatsAction());
-          store.dispatch(new LoadWeekStatsAction());
-          store.dispatch(new LoadLastHoursAction());
+          store.dispatch(LoadNowStatsAction());
+          store.dispatch(LoadTodayStatsAction());
+          store.dispatch(LoadYesterdayStatsAction());
+          store.dispatch(LoadLastNightStatsAction());
+          store.dispatch(LoadWeekStatsAction());
+          store.dispatch(LoadLastHoursAction());
         },
         builder: (BuildContext context, AppState state) {
           return Scrollbar(

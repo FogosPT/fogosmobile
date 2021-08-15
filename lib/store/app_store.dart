@@ -11,9 +11,9 @@ import 'package:fogosmobile/middleware/fires_middleware.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/middleware/warnings_middleware.dart';
 
-final store = new Store<AppState>(
+final store = Store<AppState>(
   appReducer,
-  initialState: new AppState(
+  initialState: AppState(
     fires: [],
     selectedFire: null,
     contributors: [],

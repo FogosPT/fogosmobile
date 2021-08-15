@@ -33,7 +33,7 @@ class ContributorItem extends StatelessWidget {
             width: 50,
             height: 50,
             child: ClipRRect(
-              borderRadius: new BorderRadius.circular(4.0),
+              borderRadius: BorderRadius.circular(4.0),
               child: Stack(
                 alignment: const Alignment(0.0, 1.0),
                 children: [
@@ -42,9 +42,9 @@ class ContributorItem extends StatelessWidget {
                     height: double.infinity,
                     fit: BoxFit.fill,
                     placeholder: (context, url) =>
-                        new CircularProgressIndicator(),
+                        CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
-                        new Icon(Icons.account_box),
+                        Icon(Icons.account_box),
                     imageUrl: contributor.avatarUrl,
                   ),
                   Container(

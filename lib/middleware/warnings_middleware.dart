@@ -27,10 +27,10 @@ Middleware<AppState> _createLoadWarnings() {
       final response = await get(url);
       final responseData = json.decode(response.data)['data'];
       List<Warning> warnings = responseData.map<Warning>((model) => Warning.fromJson(model)).toList();
-      store.dispatch(new WarningsLoadedAction(warnings));
+      store.dispatch(WarningsLoadedAction(warnings));
     } catch (e) {
-      store.dispatch(new WarningsLoadedAction(null));
-      store.dispatch(new AddErrorAction('warnings'));
+      store.dispatch(WarningsLoadedAction(null));
+      store.dispatch(AddErrorAction('warnings'));
       throw e;
     }
   };
@@ -45,10 +45,10 @@ Middleware<AppState> _createLoadWarningsMadeira() {
       final response = await get(url);
       final responseData = json.decode(response.data)['data'];
       List<WarningMadeira> warnings = responseData.map<WarningMadeira>((model) => WarningMadeira.fromJson(model)).toList();
-      store.dispatch(new WarningsMadeiraLoadedAction(warnings));
+      store.dispatch(WarningsMadeiraLoadedAction(warnings));
     } catch (e) {
-      store.dispatch(new WarningsMadeiraLoadedAction(null));
-      store.dispatch(new AddErrorAction('warningsMadeira'));
+      store.dispatch(WarningsMadeiraLoadedAction(null));
+      store.dispatch(AddErrorAction('warningsMadeira'));
       throw e;
     }
   };

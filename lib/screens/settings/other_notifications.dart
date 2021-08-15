@@ -15,22 +15,22 @@ class OtherNotifications extends StatefulWidget {
 class _OtherNotificationsState extends State<OtherNotifications> {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, AppState>(
+    return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (store) {
         store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
-        return new StoreConnector<AppState, SetPreferenceCallBack>(
+        return StoreConnector<AppState, SetPreferenceCallBack>(
           converter: (Store<AppState> store) {
             return (String key, int value) {
-              store.dispatch(new SetPreferenceAction(key, value));
+              store.dispatch(SetPreferenceAction(key, value));
             };
           },
           builder: (BuildContext context,
               SetPreferenceCallBack setPreferenceCallBack) {
             return Container(
-              child: new ListView(
+              child: ListView(
                 children: <Widget>[
                   CheckboxListTile(
                     title: Text(FogosLocalizations.of(context).textSignificatOccurences),

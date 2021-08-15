@@ -18,7 +18,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   List locations = [];
-  TextEditingController controller = new TextEditingController();
+  TextEditingController controller = TextEditingController();
   String filter;
 
   @override
@@ -46,11 +46,11 @@ class _SettingsState extends State<Settings> {
         });
       });
 
-      return new Scaffold(
-        appBar: new FireGradientAppBar(
-          title: new Text(
+      return Scaffold(
+        appBar: FireGradientAppBar(
+          title: Text(
             FogosLocalizations.of(context).appTitle,
-            style: new TextStyle(color: Colors.white),
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: Container(
@@ -61,45 +61,46 @@ class _SettingsState extends State<Settings> {
       );
     }
 
-    return new Scaffold(
-      appBar: new FireGradientAppBar(
-        title: new Text(
+    return Scaffold(
+      appBar: FireGradientAppBar(
+        title: Text(
           FogosLocalizations.of(context).appTitle,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      body: new StoreConnector<AppState, AppState>(
+      body: StoreConnector<AppState, AppState>(
         converter: (Store<AppState> store) => store.state,
         onInit: (store) {
           store.dispatch(LoadAllPreferencesAction());
         },
         builder: (BuildContext context, AppState state) {
           if (!state.hasPreferences && !state.isLoading) {
-            return new Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          return new StoreConnector<AppState, SetPreferenceCallBack>(
+          return StoreConnector<AppState, SetPreferenceCallBack>(
             converter: (Store<AppState> store) {
               return (String key, int value) {
-                store.dispatch(new SetPreferenceAction(key, value));
+                store.dispatch(SetPreferenceAction(key, value));
               };
             },
             builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
-              return new Column(
+              return Column(
                 children: <Widget>[
-                  new Padding(
-                    padding: new EdgeInsets.only(top: 20.0),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
                   ),
-                  new ListTile(
-                    title: new TextField(
-                      decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
+                  ListTile(
+                    title: TextField(
+                      decoration: InputDecoration(
+                          labelText: FogosLocalizations.of(context).textCounty),
                       controller: controller,
                     ),
                   ),
-                  new Expanded(
-                    child: new ListView.builder(
+                  Expanded(
+                    child: ListView.builder(
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
@@ -111,7 +112,7 @@ class _SettingsState extends State<Settings> {
                                   setPreferenceAction(_location['key'], value == true ? 1 : 0);
                                 },
                               )
-                            : new Container();
+                            : Container();
                       },
                     ),
                   ),

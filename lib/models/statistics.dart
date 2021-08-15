@@ -169,7 +169,10 @@ class LastHour {
 
   factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel =
-        DateTime.fromMillisecondsSinceEpoch(parsedJson['created'] * 1000);
+        DateTime.fromMillisecondsSinceEpoch(
+        parsedJson['created'].runtimeType == int
+            ? parsedJson['created'] * 1000
+            : parsedJson['created']['sec'] * 1000);
 
     return LastHour(
       man: parsedJson['man'],

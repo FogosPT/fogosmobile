@@ -25,7 +25,9 @@ Middleware<AppState> _createLoadWarnings() {
     try {
       String url = Endpoints.getWarnings;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       List<Warning> warnings = responseData.map<Warning>((model) => Warning.fromJson(model)).toList();
       store.dispatch(new WarningsLoadedAction(warnings));
     } catch (e) {
@@ -43,7 +45,9 @@ Middleware<AppState> _createLoadWarningsMadeira() {
     try {
       String url = Endpoints.getWarningsMadeira;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       List<WarningMadeira> warnings = responseData.map<WarningMadeira>((model) => WarningMadeira.fromJson(model)).toList();
       store.dispatch(new WarningsMadeiraLoadedAction(warnings));
     } catch (e) {

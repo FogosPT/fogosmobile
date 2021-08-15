@@ -31,7 +31,9 @@ Middleware<AppState> _createLoadNowStats() {
     try {
       String url = Endpoints.getNowStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       NowStats nowStats = NowStats.fromJson(responseData);
       store.dispatch(new NowStatsLoadedAction(nowStats));
     } catch (e) {
@@ -49,7 +51,9 @@ Middleware<AppState> _createTodayStats() {
     try {
       String url = Endpoints.getTodayStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       TodayStats todayStats = TodayStats.fromJson(responseData);
       store.dispatch(new TodayStatsLoadedAction(todayStats));
     } catch (e) {
@@ -67,7 +71,9 @@ Middleware<AppState> _createYesterdayStats() {
     try {
       String url = Endpoints.getYesterdayStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
       store.dispatch(new YesterdayStatsLoadedAction(yesterdayStats));
     } catch (e) {
@@ -85,7 +91,9 @@ Middleware<AppState> _createLastNightStats() {
     try {
       String url = Endpoints.getLastNightStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
       store.dispatch(new LastNightStatsLoadedAction(lastNightStats));
     } catch (e) {
@@ -103,7 +111,9 @@ Middleware<AppState> _createWeekStats() {
     try {
       String url = Endpoints.getWeekStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       WeekStats weekStats = WeekStats.fromJson(responseData);
       store.dispatch(new WeekStatsLoadedAction(weekStats));
     } catch (e) {
@@ -121,7 +131,9 @@ Middleware<AppState> _createLastHoursStats() {
     try {
       String url = Endpoints.getLastHoursStats;
       final response = await get(url);
-      final responseData = json.decode(response.data)['data'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
       store.dispatch(new LastHoursLoadedAction(lastHoursStats));
     } catch (e) {

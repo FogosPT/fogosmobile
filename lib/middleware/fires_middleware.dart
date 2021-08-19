@@ -38,8 +38,11 @@ Middleware<AppState> _createLoadFires() {
     try {
       String url = Endpoints.getFires;
       final response = await get(url);
-      final responseData = json.decode(response.data)["data"];
-      List<Fire> fires = responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
+      List<Fire> fires =
+          responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
       store.dispatch(FiresLoadedAction(fires));
 
@@ -66,7 +69,9 @@ Middleware<AppState> _createLoadFire() {
 
     try {
       final response = await get(url);
-      final responseData = json.decode(response.data)["data"];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       if (responseData == null) {
         throw StateError('No fire data could be loaded: $url');
       }
@@ -97,7 +102,9 @@ Middleware<AppState> _createLoadFireMeansHistory() {
 
     try {
       final response = await get(url);
-      final responseData = json.decode(response.data)["data"];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       if (responseData == null) {
         throw StateError('No getFireMeansHistory could be loaded: $url');
       }
@@ -128,7 +135,9 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
 
     try {
       final response = await get(url);
-      final responseData = json.decode(response.data)["data"];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
       if (responseData == null) {
         throw StateError('No getFireDetailsHistory could be loaded: $url');
       }
@@ -160,7 +169,9 @@ Middleware<AppState> _createLoadFireRisk() {
 
     try {
       final response = await get(url);
-      final responseData = json.decode(response.data)["data"][0]['hoje'];
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data'][0]['hoje']
+          : response.data['data'][0]['hoje'];
 
       if (responseData == null) {
         throw StateError('No getFireRisk could be loaded: $url');

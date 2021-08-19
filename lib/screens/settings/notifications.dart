@@ -1,3 +1,4 @@
+import 'package:diacritic/diacritic.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,11 @@ class _NotificationsState extends State<Notifications> {
       getLocations().then((locs) {
         setState(() {
           this.locations = locs;
+          this.locations.sort((a, b) {
+            return removeDiacritics(a['value']['name'])
+                .toLowerCase()
+                .compareTo(removeDiacritics(b['value']['name']).toLowerCase());
+          });
         });
       });
 

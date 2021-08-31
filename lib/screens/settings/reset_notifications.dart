@@ -17,7 +17,7 @@ class ResetNotifications extends StatefulWidget {
 }
 
 class _ResetNotificationsState extends State<ResetNotifications> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   bool isLoading = false;
   bool isSuccess = false;
   bool hasRequestRun = false;
@@ -29,10 +29,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
   }
 
   void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
+    _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
   }
 
   void _resetFirebaseNotifications() async {
@@ -49,7 +46,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
       iOSPermission();
     }
 
-    _firebaseMessaging.deleteInstanceID().then((value) {
+    _firebaseMessaging.deleteToken().then((value) {
       _firebaseMessaging.getToken().then((value) {
         print("token $value");
         setState(() {

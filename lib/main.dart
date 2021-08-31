@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
@@ -88,7 +89,7 @@ var loggerNoStack = Logger(
   printer: PrettyPrinter(methodCount: 0),
 );
 
-void main() {
+void main() async {
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
       // In development mode, simply print to console.
@@ -111,6 +112,8 @@ void main() {
     // Dart errors to the dev console or Sentry depending on the environment.
     _reportError(error, stackTrace);
   });
+
+  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -156,7 +159,7 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   void firebaseCloudMessagingListeners() {
     if (Platform.isIOS) iOSPermission();
 
@@ -166,10 +169,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   void iOSPermission() {
-    _firebaseMessaging.requestNotificationPermissions(
-        IosNotificationSettings(sound: true, badge: true, alert: true));
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {});
+    _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {

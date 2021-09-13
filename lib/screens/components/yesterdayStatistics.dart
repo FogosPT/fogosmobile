@@ -54,7 +54,7 @@ class YesterdayStatistics extends StatelessWidget {
             vertical: false,
             barRendererDecorator: charts.BarLabelDecorator<String>(),
             domainAxis: charts.OrdinalAxisSpec(
-                renderSpec: new charts.NoneRenderSpec()),
+                renderSpec: charts.NoneRenderSpec()),
           );
 
           return Container(

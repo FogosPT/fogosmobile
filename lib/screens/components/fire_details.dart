@@ -278,7 +278,7 @@ class FireDetails extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    FlatButton.icon(
+                                    TextButton.icon(
                                         label: Text('MAIS INFORMAÇÕES'),
                                         icon: Icon(Icons.info),
                                         onPressed: () {

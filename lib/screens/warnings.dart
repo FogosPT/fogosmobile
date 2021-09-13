@@ -11,14 +11,14 @@ import 'package:fogosmobile/screens/components/warnings_list.dart';
 class Warnings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: FireGradientAppBar(
-        title: new Text(
+        title: Text(
           FogosLocalizations.of(context).textWarnings,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      body: new Container(
+      body: Container(
         child: StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           onInit: (Store<AppState> store) {

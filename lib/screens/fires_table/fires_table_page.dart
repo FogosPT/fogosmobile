@@ -39,11 +39,11 @@ class _FiresTablePageState extends State<FiresTablePage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: FireGradientAppBar(
-        title: new Text(
+        title: Text(
           FogosLocalizations.of(context).textFiresTable,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -55,8 +55,8 @@ class _FiresTablePageState extends State<FiresTablePage> {
           ),
         ],
       ),
-      body: new Container(
-          child: new StoreConnector<AppState, AppState>(
+      body: Container(
+          child: StoreConnector<AppState, AppState>(
         onInit: (Store<AppState> store) {
           store.dispatch(LoadFiresAction());
           store.dispatch(ClearFireAction());
@@ -190,7 +190,7 @@ class _FiresTablePageState extends State<FiresTablePage> {
                                         color: getFireColor(fire),
                                         shape: BoxShape.circle),
                                     child: IconButton(
-                                      icon: new SvgPicture.asset(
+                                      icon: SvgPicture.asset(
                                           getCorrectStatusImage(
                                               fire.statusCode, fire.important),
                                           semanticsLabel: 'Acme Logo'),

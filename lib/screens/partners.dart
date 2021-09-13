@@ -6,15 +6,15 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 class Partners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: FireGradientAppBar(
-        title: new Text(
+        title: Text(
           FogosLocalizations.of(context).textPartners,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      body: new Center(
-        child: new ListView(
+      body: Center(
+        child: ListView(
           padding: EdgeInsets.all(15.0),
           children: [
             TextButton(

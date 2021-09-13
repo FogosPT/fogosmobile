@@ -55,7 +55,7 @@ Middleware<AppState> _createLoadPreferences() {
       data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
       data['pref-planes'] = prefs.getInt('planes') ?? 0;
 
-      store.dispatch(new AllPreferencesLoadedAction(data));
+      store.dispatch(AllPreferencesLoadedAction(data));
     } catch (e) {
       print(e);
     }
@@ -105,7 +105,7 @@ Middleware<AppState> _createSetNotification() {
         _firebaseMessaging.unsubscribeFromTopic(topic);
       }
       prefs.save('subscribedFires', subscribedFires);
-      store.dispatch(new LoadAllPreferencesAction());
+      store.dispatch(LoadAllPreferencesAction());
     } catch (e) {
       print(e);
     }

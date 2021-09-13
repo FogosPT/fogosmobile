@@ -90,7 +90,7 @@ class AppState {
     bool showViirs,
     List<Lightning> lightnings,
   }) {
-    return new AppState(
+    return AppState(
       fires: fires ?? this.fires,
       selectedFire: fire ?? this.fires,
       contributors: contributors ?? this.contributors,

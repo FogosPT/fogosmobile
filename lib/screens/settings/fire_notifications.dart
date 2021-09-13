@@ -15,14 +15,14 @@ class FireNotifications extends StatefulWidget {
 class _FireNotificationsState extends State<FireNotifications> {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, AppState>(
+    return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (store) {
         store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
         if (!state.hasPreferences && !state.isLoading) {
-          return new Center(
+          return Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -35,21 +35,21 @@ class _FireNotificationsState extends State<FireNotifications> {
           );
         }
 
-        return new StoreConnector<AppState, SetFireNotificationActionCallBack>(
+        return StoreConnector<AppState, SetFireNotificationActionCallBack>(
           converter: (Store<AppState> store) {
             return (String key, int value) {
-              store.dispatch(new SetFireNotificationAction(key, value));
+              store.dispatch(SetFireNotificationAction(key, value));
             };
           },
           builder: (BuildContext context,
               SetFireNotificationActionCallBack setFireNotificationAction) {
-            return new Column(
+            return Column(
               children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0),
                 ),
-                new Expanded(
-                  child: new ListView.builder(
+                Expanded(
+                  child: ListView.builder(
                     itemCount: subscribedFires.length,
                     itemBuilder: (BuildContext context, int index) {
                       final _subscribedFire = subscribedFires[index];

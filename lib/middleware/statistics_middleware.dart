@@ -35,11 +35,11 @@ Middleware<AppState> _createLoadNowStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       NowStats nowStats = NowStats.fromJson(responseData);
-      store.dispatch(new NowStatsLoadedAction(nowStats));
+      store.dispatch(NowStatsLoadedAction(nowStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new NowStatsLoadedAction(null));
+      store.dispatch(NowStatsLoadedAction(null));
     }
   };
 }
@@ -55,11 +55,11 @@ Middleware<AppState> _createTodayStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       TodayStats todayStats = TodayStats.fromJson(responseData);
-      store.dispatch(new TodayStatsLoadedAction(todayStats));
+      store.dispatch(TodayStatsLoadedAction(todayStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new TodayStatsLoadedAction(null));
+      store.dispatch(TodayStatsLoadedAction(null));
     }
   };
 }
@@ -75,11 +75,11 @@ Middleware<AppState> _createYesterdayStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
-      store.dispatch(new YesterdayStatsLoadedAction(yesterdayStats));
+      store.dispatch(YesterdayStatsLoadedAction(yesterdayStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new YesterdayStatsLoadedAction(null));
+      store.dispatch(YesterdayStatsLoadedAction(null));
     }
   };
 }
@@ -95,11 +95,11 @@ Middleware<AppState> _createLastNightStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
-      store.dispatch(new LastNightStatsLoadedAction(lastNightStats));
+      store.dispatch(LastNightStatsLoadedAction(lastNightStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new LastNightStatsLoadedAction(null));
+      store.dispatch(LastNightStatsLoadedAction(null));
     }
   };
 }
@@ -115,11 +115,11 @@ Middleware<AppState> _createWeekStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       WeekStats weekStats = WeekStats.fromJson(responseData);
-      store.dispatch(new WeekStatsLoadedAction(weekStats));
+      store.dispatch(WeekStatsLoadedAction(weekStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new WeekStatsLoadedAction(null));
+      store.dispatch(WeekStatsLoadedAction(null));
     }
   };
 }
@@ -135,11 +135,11 @@ Middleware<AppState> _createLastHoursStats() {
           ? json.decode(response.data)['data']
           : response.data['data'];
       LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
-      store.dispatch(new LastHoursLoadedAction(lastHoursStats));
+      store.dispatch(LastHoursLoadedAction(lastHoursStats));
     } catch (e) {
       print(e);
       print(e.stackTrace);
-      store.dispatch(new LastHoursLoadedAction(null));
+      store.dispatch(LastHoursLoadedAction(null));
     }
   };
 }

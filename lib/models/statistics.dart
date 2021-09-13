@@ -24,9 +24,9 @@ class TodayStats {
   TodayStats({this.intervalStatsList, this.districtList});
 
   factory TodayStats.fromJson(Map<String, dynamic> parsedJson) {
-    List<IntervalStats> intervalStatsList = new List<IntervalStats>();
-    List<District> districtList = new List<District>();
-    Map<String, int> districtTempMap = new Map<String, int>();
+    List<IntervalStats> intervalStatsList = <IntervalStats>[];
+    List<District> districtList = <District>[];
+    Map<String, int> districtTempMap = Map<String, int>();
 
     parsedJson?.forEach(
         (i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
@@ -45,7 +45,7 @@ class TodayStats {
     // Sort by increasing values
     var sortedKeys = districtTempMap.keys.toList(growable: false)
       ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
-    LinkedHashMap sortedMap = new LinkedHashMap.fromIterable(sortedKeys,
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
         key: (k) => k, value: (k) => districtTempMap[k]);
 
     // Convert the map to a List for chart data
@@ -65,9 +65,9 @@ class YesterdayStats {
   YesterdayStats({this.intervalStatsList, this.districtList});
 
   factory YesterdayStats.fromJson(Map<String, dynamic> parsedJson) {
-    List<IntervalStats> intervalStatsList = new List<IntervalStats>();
-    List<District> districtList = new List<District>();
-    Map<String, int> districtTempMap = new Map<String, int>();
+    List<IntervalStats> intervalStatsList = <IntervalStats>[];
+    List<District> districtList = <District>[];
+    Map<String, int> districtTempMap = Map<String, int>();
 
     parsedJson?.forEach(
         (i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
@@ -86,7 +86,7 @@ class YesterdayStats {
     // Sort by increasing values
     var sortedKeys = districtTempMap.keys.toList(growable: false)
       ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
-    LinkedHashMap sortedMap = new LinkedHashMap.fromIterable(sortedKeys,
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
         key: (k) => k, value: (k) => districtTempMap[k]);
 
     // Convert the map to a List for chart data
@@ -106,7 +106,7 @@ class LastNightStats {
   LastNightStats({this.total, this.districtList});
 
   factory LastNightStats.fromJson(Map<String, dynamic> json) {
-    List<District> districtList = new List<District>();
+    List<District> districtList = <District>[];
     int total = json['total'];
 
     if (total != 0) {
@@ -126,7 +126,7 @@ class WeekStats {
   WeekStats({this.days});
 
   factory WeekStats.fromJson(List<dynamic> json) {
-    List<Day> days = new List<Day>();
+    List<Day> days = <Day>[];
 
     days = json.map((i) => Day.fromJson(i)).toList();
 
@@ -152,7 +152,7 @@ class LastHoursStats {
   LastHoursStats({this.lastHours});
 
   factory LastHoursStats.fromJson(List<dynamic> json) {
-    List<LastHour> lastHours = new List<LastHour>();
+    List<LastHour> lastHours = <LastHour>[];
     lastHours = json.map((i) => LastHour.fromJson(i)).toList();
     return LastHoursStats(lastHours: lastHours);
   }
@@ -194,7 +194,7 @@ class IntervalStats {
   factory IntervalStats.fromJson(Map<String, dynamic> json, String label) {
     int total = json['total'];
 
-    Map<String, int> districtMap = new Map<String, int>();
+    Map<String, int> districtMap = Map<String, int>();
 
     if (total != 0) {
       json['distritos']?.forEach((i, j) => districtMap[i] = j);

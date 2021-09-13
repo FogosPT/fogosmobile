@@ -46,10 +46,10 @@ class InfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new FireGradientAppBar(
-        title: new Text(
+      appBar: FireGradientAppBar(
+        title: Text(
           FogosLocalizations.of(context).textInformations,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
       ),
       body: Scrollbar(

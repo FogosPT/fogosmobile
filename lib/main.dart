@@ -315,7 +315,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                         SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
                   ),
                   decoration: BoxDecoration(
-                    gradient: new LinearGradient(
+                    gradient: LinearGradient(
                         colors: [
                           FogosTheme().accentColor,
                           FogosTheme().primaryColor,
@@ -326,33 +326,34 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                         tileMode: TileMode.clamp),
                   ),
                 ),
-                new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textFiresList),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textFiresList),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(FIRES_ROUTE);
                   },
                   leading: Icon(Icons.list),
                 ),
-                new ListTile(
+                ListTile(
                   title:
-                      new Text(FogosLocalizations.of(context).textFiresTable),
+                      Text(FogosLocalizations.of(context).textFiresTable),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
                   },
                   leading: Icon(Icons.table_chart),
                 ),
-                new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textWarnings),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textWarnings),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(WARNINGS_ROUTE);
                   },
                   leading: Icon(Icons.warning),
                 ),
-                new ListTile(
-                  title: new Text(
+                ListTile(
+                  title:
+                      Text(
                       FogosLocalizations.of(context).textWarningsMadeira),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -360,27 +361,27 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   },
                   leading: Icon(Icons.warning),
                 ),
-                new ListTile(
+                ListTile(
                   title:
-                      new Text(FogosLocalizations.of(context).textInformations),
+                      Text(FogosLocalizations.of(context).textInformations),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(INFO_ROUTE);
                   },
                   leading: Icon(Icons.info),
                 ),
-                new ListTile(
+                ListTile(
                   title:
-                      new Text(FogosLocalizations.of(context).textStatistics),
+                      Text(FogosLocalizations.of(context).textStatistics),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
                   },
                   leading: Icon(Icons.insert_chart),
                 ),
-                new Divider(),
-                new ListTile(
-                  title: new Text(
+                Divider(),
+                ListTile(
+                  title: Text(
                       FogosLocalizations.of(context).textNotifications),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -388,17 +389,17 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   },
                   leading: Icon(Icons.settings),
                 ),
-                new Divider(),
-                new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textAbout),
+                Divider(),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textAbout),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(ABOUT_ROUTE);
                   },
                   leading: Icon(Icons.person),
                 ),
-                new ListTile(
-                  title: new Text(FogosLocalizations.of(context).textPartners),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textPartners),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(PARTNERS_ROUTE);
@@ -408,7 +409,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               ],
             ),
           ),
-          body: new HomePage(),
+          body: HomePage(),
         );
       },
     );

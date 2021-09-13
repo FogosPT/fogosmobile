@@ -30,11 +30,11 @@ class _FireListState extends State<FireList> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       appBar: FireGradientAppBar(
-        title: new Text(
+        title: Text(
           FogosLocalizations.of(context).textFiresList,
-          style: new TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
@@ -46,8 +46,8 @@ class _FireListState extends State<FireList> {
           ),
         ],
       ),
-      body: new Container(
-          child: new StoreConnector<AppState, AppState>(
+      body: Container(
+          child: StoreConnector<AppState, AppState>(
         onInit: (Store<AppState> store) {
           store.dispatch(LoadFiresAction());
           store.dispatch(ClearFireAction());
@@ -63,7 +63,7 @@ class _FireListState extends State<FireList> {
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   elevation: 8.0,
-                  margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -85,7 +85,7 @@ class _FireListState extends State<FireList> {
               itemBuilder: (BuildContext context, int index) {
                 Fire fire = fires[index];
                 String _title = fire.town;
-                final LatLng _center = new LatLng(fire.lat, fire.lng);
+                final LatLng _center = LatLng(fire.lat, fire.lng);
 
                 if (fire.town != fire.local) {
                   _title = '$_title, ${fire.local}';
@@ -103,7 +103,7 @@ class _FireListState extends State<FireList> {
 
                 return Card(
                   elevation: 8.0,
-                  margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                  margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -285,8 +285,10 @@ class _FireListState extends State<FireList> {
                                               icon: CircularProgressIndicator(),
                                               onPressed: () {},
                                             )
-                                          : new IconButton(
-                                              icon: new Icon(isFireSubscribed ? Icons.notifications_active : Icons.notifications_none),
+                                          : IconButton(
+                                              icon: Icon(isFireSubscribed
+                                                  ? Icons.notifications_active
+                                                  : Icons.notifications_none),
                                               onPressed: () {
                                                 store.dispatch(SetFireNotificationAction(fire.id, isFireSubscribed ? 0 : 1));
                                               },

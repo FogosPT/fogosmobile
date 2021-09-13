@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
@@ -41,8 +42,6 @@ class _HomePageState extends State<HomePage> {
 
   MapboxMapController _mapController;
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
   void _onMapCreated(MapboxMapController controller) {
     _mapController = controller;
   }
@@ -70,22 +69,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
-        String fireId = message["data"]["fireId"];
-        if (fireId != null) {
-          final store = StoreProvider.of<AppState>(context);
-          store.dispatch(ClearFireAction());
-          store.dispatch(LoadFireAction(fireId));
-          _openModalSheet(context);
-        }
-      },
-      onLaunch: (Map<String, dynamic> message) async {},
-    );
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Firebase onMessage $message');
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Firebase onMessageOpenedApp ${message.toString()}');
+      String fireId = message.data["fireId"];
+      if (fireId != null) {
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(ClearFireAction());
+        store.dispatch(LoadFireAction(fireId));
+        _openModalSheet(context);
+      }
+    });
 
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,

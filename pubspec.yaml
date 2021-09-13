@@ -20,11 +20,12 @@ dependencies:
   mapbox_gl: ^0.12.0
   http: ^0.12.1
   dio: ^3.0.9
-  firebase_messaging: ^6.0.16
+  firebase_messaging: ^10.0.4
   firebase_analytics: ^5.0.16
-  shared_preferences: '>=0.5.8 <2.0.0'
+  firebase_core: ^1.4.0
+  shared_preferences: ^2.0.6
   diacritic: ^0.1.1
-  url_launcher: ^5.4.10
+  url_launcher: ^6.0.9
   flutter_markdown: ^0.4.1
   auto_size_text: ^2.1.0
 

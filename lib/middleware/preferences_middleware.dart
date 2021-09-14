@@ -65,7 +65,7 @@ Middleware<AppState> _createLoadPreferences() {
 Middleware<AppState> _createSetPreference() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     String topic = Platform.isIOS
         ? 'mobile-ios-${action.key}'
@@ -87,7 +87,7 @@ Middleware<AppState> _createSetPreference() {
 Middleware<AppState> _createSetNotification() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     String topic = Platform.isIOS
         ? 'mobile-ios-${action.key}'

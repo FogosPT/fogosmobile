@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,7 @@ class SharedPreferencesManager {
     if (_instance == null) {
       _showLogs = withLogs;
       WidgetsFlutterBinding.ensureInitialized();
+      await Firebase.initializeApp();
       _instance = await SharedPreferences.getInstance().catchError((error) {
         print(
             '$_tag: Couldn\'t get the local preferences, operation failed with error: $error');

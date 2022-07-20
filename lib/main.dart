@@ -39,7 +39,7 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
 
-final SentryClient _sentry = SentryClient(dsn: SENTRY_DSN);
+final SentryClient _sentry = SentryClient(SentryOptions(dsn: SENTRY_DSN));
 
 typedef SetFiltersCallback = Function(FireStatus filter);
 
@@ -69,15 +69,15 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
 
   print('Reporting to Sentry.io...');
 
-  final SentryResponse response = await _sentry.captureException(
-    exception: error,
+  final SentryId response = await _sentry.captureException(
+    error,
     stackTrace: stackTrace,
   );
 
-  if (response.isSuccessful) {
-    print('Success! Event ID: ${response.eventId}');
+  if (response != null) {
+    print('Success! Event ID: $response');
   } else {
-    print('Failed to report to Sentry.io: ${response.error}');
+    print('Failed to report to Sentry.io: $error');
   }
 }
 
@@ -112,8 +112,6 @@ void main() async {
     // Dart errors to the dev console or Sentry depending on the environment.
     _reportError(error, stackTrace);
   });
-
-  await Firebase.initializeApp();
 }
 
 class MyApp extends StatelessWidget {

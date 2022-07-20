@@ -22,7 +22,7 @@ Middleware<AppState> _createLightningStrikes() {
     try {
       String url = Endpoints.getLightnings;
       final response = await get(url);
-      if (response.data != [] && response.data != null) {
+      if (response.data is! List && response.data != null) {
         List<Lightning> lightnings = LightningRemote.fromJson(response.data as Map<String, dynamic>).data;
         store.dispatch(LightningsLoadedAction(lightnings));
       }

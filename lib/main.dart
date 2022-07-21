@@ -158,16 +158,16 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  void firebaseCloudMessagingListeners() {
-    if (Platform.isIOS) iOSPermission();
+  void firebaseCloudMessagingListeners() async {
+    final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
+
+    if (result.authorizationStatus != AuthorizationStatus.authorized) {
+      return;
+    }
 
     _firebaseMessaging.getToken().then((token) {
       print('token: $token');
     });
-  }
-
-  void iOSPermission() {
-    _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {

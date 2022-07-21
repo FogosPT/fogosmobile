@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Firebase onMessage $message');
+      print('Firebase onMessage ${message.data}');
     });
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       print('Firebase onMessageOpenedApp ${message.toString()}');

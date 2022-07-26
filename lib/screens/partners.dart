@@ -29,9 +29,9 @@ class Partners extends StatelessWidget {
               ),
             ),
             TextButton(
-              child: Image.asset("assets/partners/brpx.png"),
+              child: Image.asset("assets/partners/officelan.png"),
               onPressed: () {
-                launchURL('https://brpx.com/');
+                launchURL('https://officelan.pt/');
               },
             ),
             Padding(

@@ -2,20 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-enum FireStatus {
-  dispatch,
-  significative_ocurrence,
-  vigilance,
-  first_alert_dispatch,
-  arrival,
-  ongoing,
-  in_resolution,
-  in_conclusion,
-  done,
-  false_alarm,
-  false_alert,
-}
-
 //TODO Create FireEntity and separate Model from an Entity
 class Fire extends BaseMapboxModel implements Equatable {
   final String id;
@@ -52,64 +38,43 @@ class Fire extends BaseMapboxModel implements Equatable {
   final String time;
 
   // Importance
-  double importance;
-  double scale;
+  final double importance;
+  final double scale;
 
   // extra
-  String extra;
-  String cos;
-  String pco;
+  final String extra;
+  final String cos;
+  final String pco;
 
   Fire({
-    this.id,
-    this.sharepointId,
-    this.active,
-    this.important,
-    this.status,
-    this.statusCode,
-    this.statusColor,
-    this.nature,
-    this.natureCode,
-    this.aerial,
-    this.terrain,
-    this.human,
-    this.district,
-    this.city,
-    this.town,
-    this.local,
-    this.lat,
-    this.lng,
-    this.created,
-    this.date,
-    this.dateTime,
-    this.time,
-    this.extra,
-    this.cos,
-    this.pco,
-  }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
-
-  Map<String, dynamic> _toMap() {
-    return {
-      'aerial': aerial,
-      'city': city,
-      'dateTime': dateTime,
-      'district': district,
-      'human': human,
-      'id': id,
-      'local': local,
-      'status': statusCode,
-      'terrain': terrain,
-      'town': town,
-    };
-  }
-
-  dynamic get(String propertyName) {
-    var _mapRep = _toMap();
-    if (_mapRep.containsKey(propertyName)) {
-      return _mapRep[propertyName];
-    }
-    throw ArgumentError('property not found');
-  }
+    required this.id,
+    required this.importance,
+    required this.sharepointId,
+    required this.active,
+    required this.important,
+    required this.status,
+    required this.statusCode,
+    required this.statusColor,
+    required this.nature,
+    required this.natureCode,
+    required this.aerial,
+    required this.terrain,
+    required this.human,
+    required this.district,
+    required this.city,
+    required this.town,
+    required this.local,
+    required this.lat,
+    required this.lng,
+    required this.created,
+    required this.date,
+    required this.dateTime,
+    required this.time,
+    required this.extra,
+    required this.cos,
+    required this.pco,
+    this.scale = 1.5,
+  }) : super(LatLng(lat, lng), id);
 
   factory Fire.fromJson(Map<String, dynamic> map) {
     return Fire(
@@ -138,7 +103,55 @@ class Fire extends BaseMapboxModel implements Equatable {
       extra: map['extra'],
       cos: map['cos'],
       pco: map['pco'],
+      importance: 0,
+      scale: 1,
     );
+  }
+
+  String get fullAddress => '$district, $city, $town, $local';
+
+  @override
+  List<Object> get props => [id];
+
+  @override
+  bool get stringify => true;
+
+  dynamic get(String propertyName) {
+    var _mapRep = _toMap();
+    if (_mapRep.containsKey(propertyName)) {
+      return _mapRep[propertyName];
+    }
+    throw ArgumentError('property not found');
+  }
+
+  @override
+  bool skip<T>(List<T> filters) {
+    return !filters.contains(status);
+  }
+
+  Map<String, dynamic> _toMap() {
+    return {
+      'aerial': aerial,
+      'city': city,
+      'dateTime': dateTime,
+      'district': district,
+      'human': human,
+      'id': id,
+      'local': local,
+      'status': statusCode,
+      'terrain': terrain,
+      'town': town,
+    };
+  }
+
+  static List<String> activeFiltersToList(List<FireStatus> statusList) {
+    return statusList.map((filter) => Fire._statusToJson(filter)).toList() ??
+        [];
+  }
+
+  static List<FireStatus> listFromActiveFilters(List<String> statusList) {
+    return statusList.map((filter) => Fire._statusFromJson(filter)).toList() ??
+        List.from(FireStatus.values);
   }
 
   static FireStatus _statusFromJson(String status) {
@@ -198,32 +211,18 @@ class Fire extends BaseMapboxModel implements Equatable {
         throw Exception('Unknown fire state: $status');
     }
   }
+}
 
-  static List<String> activeFiltersToList(List<FireStatus> statusList) {
-    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ??
-        [];
-  }
-
-  static List<FireStatus> listFromActiveFilters(List<String> statusList) {
-    return statusList
-            ?.map((filter) => Fire._statusFromJson(filter))
-            ?.toList() ??
-        List.from(FireStatus.values);
-  }
-
-  String get fullAddress => '$district, $city, $town, $local';
-
-  @override
-  List<Object> get props => [id];
-
-  @override
-  bool get stringify => true;
-
-  @override
-  bool skip<T>(List<T> filters) {
-    if (filters != null) {
-      return !filters.contains(status);
-    } else
-      return true;
-  }
+enum FireStatus {
+  dispatch,
+  significative_ocurrence,
+  vigilance,
+  first_alert_dispatch,
+  arrival,
+  ongoing,
+  in_resolution,
+  in_conclusion,
+  done,
+  false_alarm,
+  false_alert,
 }

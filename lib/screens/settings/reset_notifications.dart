@@ -22,6 +22,47 @@ class _ResetNotificationsState extends State<ResetNotifications> {
   bool isSuccess = false;
   bool hasRequestRun = false;
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: <Widget>[
+            Text(FogosLocalizations.of(context).textNotificationProblems),
+            if (isLoading)
+              Center(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: CircularProgressIndicator(),
+              ))
+            else if (hasRequestRun)
+              isSuccess
+                  ? Center(
+                      child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Icon(Icons.check),
+                    ))
+                  : Center(
+                      child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Icon(Icons.error),
+                    ))
+            else
+              MaterialButton(
+                textTheme: ButtonTextTheme.normal,
+                child:
+                    Text(FogosLocalizations.of(context).textResetNotifications),
+                onPressed: () {
+                  _resetFirebaseNotifications();
+                },
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   getLocations() async {
     String url = Endpoints.getLocations;
     final response = await get(url);
@@ -56,7 +97,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
 
         for (var _location in _locations) {
           String key = _location['key'];
-          num value = state.preferences['pref-$key'];
+          int value = state.preferences?['pref-$key'];
           bool isLocationTurnedOn = value != 0;
 
           if (isLocationTurnedOn) {
@@ -70,45 +111,5 @@ class _ResetNotificationsState extends State<ResetNotifications> {
         isSuccess = false;
       });
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: <Widget>[
-            Text(FogosLocalizations.of(context).textNotificationProblems),
-            if (isLoading)
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: CircularProgressIndicator(),
-              ))
-            else if (hasRequestRun)
-              isSuccess
-                  ? Center(
-                      child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Icon(Icons.check),
-                    ))
-                  : Center(
-                      child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Icon(Icons.error),
-                    ))
-            else
-              MaterialButton(
-                textTheme: ButtonTextTheme.normal,
-                child: Text(FogosLocalizations.of(context).textResetNotifications),
-                onPressed: () {
-                  _resetFirebaseNotifications();
-                },
-              ),
-          ],
-        ),
-      ),
-    );
   }
 }

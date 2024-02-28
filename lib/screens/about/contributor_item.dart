@@ -1,14 +1,15 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class ContributorItem extends StatelessWidget {
-  ContributorItem({this.contributor});
-
   final Contributor contributor;
+
+  ContributorItem({
+    required this.contributor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,10 @@ class ContributorItem extends StatelessWidget {
         child: ListTile(
           dense: true,
           contentPadding: EdgeInsets.only(left: 8.0, right: 8.0),
-          title: (contributor.name != null && contributor.name.isNotEmpty)
+          title: (contributor.name.isNotEmpty)
               ? Text('${contributor.name}')
               : Container(),
-          subtitle: (contributor.bio != null && contributor.bio.isNotEmpty)
+          subtitle: (contributor.bio.isNotEmpty)
               ? AutoSizeText('${contributor.bio}',
                   minFontSize: 10.0,
                   maxLines: 4,
@@ -41,8 +42,7 @@ class ContributorItem extends StatelessWidget {
                     width: 50,
                     height: double.infinity,
                     fit: BoxFit.fill,
-                    placeholder: (context, url) =>
-                        CircularProgressIndicator(),
+                    placeholder: (context, url) => CircularProgressIndicator(),
                     errorWidget: (context, url, error) =>
                         Icon(Icons.account_box),
                     imageUrl: contributor.avatarUrl,

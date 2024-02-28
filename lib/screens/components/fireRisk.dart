@@ -21,17 +21,10 @@ class FireRisk extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-          store.dispatch(LoadFireRiskAction(store.state.selectedFire.id));
+        store.dispatch(LoadFireRiskAction(store.state.selectedFire?.id));
       },
       builder: (BuildContext context, AppState state) {
-        String stats = state.fireRisk;
-
-        if (stats == null) {
-          if (state.errors != null && state.errors.contains('fireRisk')) {
-            return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
-          }
-          return Center(child: CircularProgressIndicator());
-        }
+        String? stats = state.fireRisk;
 
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
@@ -47,7 +40,7 @@ class FireRisk extends StatelessWidget {
     );
   }
 
-  Widget _buildRisk(FireRiskStruct fireRisk, String currentRisk, context) {
+  Widget _buildRisk(FireRiskStruct fireRisk, String? currentRisk, context) {
     final Map riskTranslations = {
       "Reduzido": FogosLocalizations.of(context).textRiskReduced,
       "Moderado": FogosLocalizations.of(context).textRiskModerate,
@@ -61,10 +54,13 @@ class FireRisk extends StatelessWidget {
       child: Container(
         height: 80,
         margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: fireRisk.color),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20), color: fireRisk.color),
         child: Center(
           child: Text(
-            currentRisk == fireRisk.risk ? riskTranslations[currentRisk].toUpperCase() : "",
+            currentRisk == fireRisk.risk
+                ? riskTranslations[currentRisk].toUpperCase()
+                : "",
             style: _body,
           ),
         ),

@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
@@ -8,7 +6,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class SatelliteButton extends StatefulWidget {
-  const SatelliteButton({Key key}) : super(key: key);
+  const SatelliteButton({Key? key}) : super(key: key);
 
   @override
   _SatelliteButtonState createState() => _SatelliteButtonState();
@@ -27,7 +25,7 @@ class _SatelliteButtonState extends State<SatelliteButton> {
               final store = StoreProvider.of<AppState>(context);
               store.dispatch(
                 SetPreferenceAction(preferenceSatellite,
-                    state.preferences[preferenceSatellite] == 1 ? 0 : 1),
+                    state.preferences?[preferenceSatellite] == 1 ? 0 : 1),
               );
 
               setState(() {});
@@ -35,7 +33,7 @@ class _SatelliteButtonState extends State<SatelliteButton> {
           ),
         ];
 
-        if (state.preferences[preferenceSatellite] == 1) {
+        if (state.preferences?[preferenceSatellite] == 1) {
           widgets.add(Positioned(
             bottom: 5,
             right: 5,

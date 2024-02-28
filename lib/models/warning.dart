@@ -4,9 +4,9 @@ class Warning {
   final String description;
 
   Warning({
-    this.timestamp,
-    this.title,
-    this.description,
+    required this.timestamp,
+    required this.title,
+    required this.description,
   });
 
   factory Warning.fromJson(Map<String, dynamic> parsedJson) {

@@ -7,7 +7,7 @@ import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ViirsMarker extends StatefulWidget implements BaseMarker{
+class ViirsMarker extends StatefulWidget implements BaseMarker {
   final Viirs _viirs;
   final Point _initialPosition;
   final LatLng _coordinate;
@@ -24,26 +24,20 @@ class ViirsMarker extends StatefulWidget implements BaseMarker{
   ) : super(key: Key(key));
 
   @override
+  LatLng get location => _coordinate;
+
+  @override
   State<StatefulWidget> createState() {
     final state = ViirsMarkerState();
     _addMarkerState(state);
     return state;
   }
-
-  @override
-  LatLng get location => _coordinate;
 }
 
 class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
   final _iconSize = 10.0;
 
-  Point _position;
-
-  @override
-  void initState() {
-    _position = widget._initialPosition;
-    super.initState();
-  }
+  Point _position = Point(0, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +51,7 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => widget._openModal?.call(widget._viirs),
+        onTap: () => widget._openModal.call(widget._viirs),
         child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
@@ -81,14 +75,20 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
   }
 
   @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
+  }
+
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
+
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
-  }
-
-  @override
-  LatLng getCoordinates() {
-    return widget._coordinate;
   }
 }

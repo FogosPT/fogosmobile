@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/constants/routes.dart';
-import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:redux/redux.dart';
 import 'package:share/share.dart';
 
-typedef SetPreferenceCallBack = Function(String key, int value);
+typedef SetPreferenceCallBack = Function(String? key, int value);
 
 class FireDetails extends StatelessWidget {
   @override
@@ -29,32 +28,20 @@ class FireDetails extends StatelessWidget {
         return StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           builder: (BuildContext context, AppState state) {
-            Fire fire = state.selectedFire;
-            if (fire == null) {
-              if (state.errors != null && state.errors.contains('fire')) {
-                return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
-              }
-
-              return ModalProgressHUD(
-                opacity: 0.75,
-                color: Colors.black,
-                inAsyncCall: true,
-                child: Container(),
-              );
-            }
+            Fire? fire = state.selectedFire;
 
             return StoreConnector<AppState, SetPreferenceCallBack>(
               converter: (Store<AppState> store) {
-                return (String fireId, int value) {
+                return (String? fireId, int value) {
                   store.dispatch(SetFireNotificationAction(fireId, value));
                 };
               },
               builder: (BuildContext context,
                   SetPreferenceCallBack setPreferenceAction) {
                 bool isFireSubscribed = false;
-                if ((state.preferences['subscribedFires'] ?? []).length > 0) {
-                  var subbedFire = state.preferences['subscribedFires']
-                      .firstWhere((fs) => fs.id == fire.id, orElse: () {});
+                if ((state.preferences?['subscribedFires'] ?? []).length > 0) {
+                  var subbedFire = state.preferences?['subscribedFires']
+                      .firstWhere((fs) => fs.id == fire?.id, orElse: () {});
                   if (subbedFire != null) {
                     isFireSubscribed = true;
                   }
@@ -62,8 +49,7 @@ class FireDetails extends StatelessWidget {
                 return SingleChildScrollView(
                   child: Container(
                     child: Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
+                      padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,11 +71,12 @@ class FireDetails extends StatelessWidget {
                                       onPressed: () {
                                         Share.share(
                                             FogosLocalizations.of(context)
-                                                .textShare(fire.city, fire.id));
+                                                .textShare(
+                                                    fire?.city, fire?.id));
                                       },
                                     ),
                                     SizedBox(width: 8),
-                                    state.isLoading
+                                    state.isLoading ?? true
                                         ? IconButton(
                                             icon: CircularProgressIndicator(),
                                             onPressed: () {},
@@ -99,7 +86,7 @@ class FireDetails extends StatelessWidget {
                                                 ? Icons.notifications_active
                                                 : Icons.notifications_none),
                                             onPressed: () {
-                                              setPreferenceAction(fire.id,
+                                              setPreferenceAction(fire?.id,
                                                   isFireSubscribed ? 0 : 1);
                                             },
                                           ),
@@ -135,19 +122,19 @@ class FireDetails extends StatelessWidget {
                                             CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Text(
-                                            fire.district,
+                                            fire?.district ?? '',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                           Text(
-                                            fire.city,
+                                            fire?.city ?? '',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                           Text(
-                                            fire.town,
+                                            fire?.town ?? '',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                           Text(
-                                            fire.local,
+                                            fire?.local ?? '',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],
@@ -163,19 +150,19 @@ class FireDetails extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 16.0),
-                                      child: SvgPicture.asset(
-                                        getCorrectStatusImage(
-                                          fire.statusCode,
-                                          fire.important,
-                                        ),
-                                        width: 25.0,
-                                        height: 25.0,
-                                        color: getFireColor(fire),
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding:
+                                    //       const EdgeInsets.only(right: 16.0),
+                                    //   child: SvgPicture.asset(
+                                    //     // getCorrectStatusImage(
+                                    //     //   fire?.statusCode,
+                                    //     //   fire.important,
+                                    //     // ),
+                                    //     width: 25.0,
+                                    //     height: 25.0,
+                                    //     color: getFireColor(fire),
+                                    //   ),
+                                    // ),
                                     Expanded(
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -185,7 +172,7 @@ class FireDetails extends StatelessWidget {
                                             CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Text(
-                                            '${FogosLocalizations.of(context).textStatus}: ${FogosLocalizations.of(context).textFireStatus(fire.status)}',
+                                            '${FogosLocalizations.of(context).textStatus}: ${FogosLocalizations.of(context).textFireStatus(fire?.status ?? FireStatus.arrival)}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],
@@ -220,15 +207,15 @@ class FireDetails extends StatelessWidget {
                                             CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Text(
-                                            '${FogosLocalizations.of(context).textHumanMeans}: ${fire.human}',
+                                            '${FogosLocalizations.of(context).textHumanMeans}: ${fire?.human}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                           Text(
-                                            '${FogosLocalizations.of(context).textTerrainMeans}: ${fire.terrain}',
+                                            '${FogosLocalizations.of(context).textTerrainMeans}: ${fire?.terrain}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                           Text(
-                                            '${FogosLocalizations.of(context).textAerealMeans}: ${fire.aerial}',
+                                            '${FogosLocalizations.of(context).textAerealMeans}: ${fire?.aerial}',
                                             style: TextStyle(fontSize: 16.0),
                                           )
                                         ],
@@ -261,7 +248,7 @@ class FireDetails extends StatelessWidget {
                                             CrossAxisAlignment.stretch,
                                         children: <Widget>[
                                           Text(
-                                            '${fire.date} ${fire.time}',
+                                            '${fire?.date} ${fire?.time}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],
@@ -269,7 +256,7 @@ class FireDetails extends StatelessWidget {
                                     )
                                   ],
                                 ),
-                                 Padding(
+                                Padding(
                                   padding: EdgeInsets.only(top: 20.0),
                                 ),
                                 ImportantFireExtra(fire),

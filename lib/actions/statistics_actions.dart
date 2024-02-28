@@ -1,49 +1,49 @@
 import 'package:fogosmobile/models/statistics.dart';
 
-class LoadNowStatsAction {}
+class LastHoursLoadedAction {
+  final LastHoursStats? lastHoursStats;
 
-class NowStatsLoadedAction {
-  final NowStats nowStats;
-
-  NowStatsLoadedAction(this.nowStats);
+  LastHoursLoadedAction(this.lastHoursStats);
 }
-
-class LoadTodayStatsAction {}
-
-class TodayStatsLoadedAction {
-  final TodayStats todayStats;
-
-  TodayStatsLoadedAction(this.todayStats);
-}
-
-class LoadYesterdayStatsAction {}
-
-class YesterdayStatsLoadedAction {
-  final YesterdayStats yesterdayStats;
-
-  YesterdayStatsLoadedAction(this.yesterdayStats);
-}
-
-class LoadLastNightStatsAction {}
 
 class LastNightStatsLoadedAction {
-  final LastNightStats lastNightStats;
+  final LastNightStats? lastNightStats;
 
   LastNightStatsLoadedAction(this.lastNightStats);
 }
 
+class LoadLastHoursAction {}
+
+class LoadLastNightStatsAction {}
+
+class LoadNowStatsAction {}
+
+class LoadTodayStatsAction {}
+
 class LoadWeekStatsAction {}
 
+class LoadYesterdayStatsAction {}
+
+class NowStatsLoadedAction {
+  final NowStats? nowStats;
+
+  NowStatsLoadedAction(this.nowStats);
+}
+
+class TodayStatsLoadedAction {
+  final TodayStats? todayStats;
+
+  TodayStatsLoadedAction(this.todayStats);
+}
+
 class WeekStatsLoadedAction {
-  final WeekStats weekStats;
+  final WeekStats? weekStats;
 
   WeekStatsLoadedAction(this.weekStats);
 }
 
-class LoadLastHoursAction {}
+class YesterdayStatsLoadedAction {
+  final YesterdayStats? yesterdayStats;
 
-class LastHoursLoadedAction {
-  final LastHoursStats lastHoursStats;
-
-  LastHoursLoadedAction(this.lastHoursStats);
+  YesterdayStatsLoadedAction(this.yesterdayStats);
 }

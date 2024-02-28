@@ -1,29 +1,29 @@
-import 'package:fogosmobile/actions/modis_actions.dart';
-import 'package:fogosmobile/actions/lightning_actions.dart';
-import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
+import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/lightning_actions.dart';
+import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
+import 'package:fogosmobile/actions/warnings_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/contributors_reducer.dart';
-import 'package:fogosmobile/reducers/fires_reducer.dart';
-import 'package:fogosmobile/reducers/modis_reducer.dart';
-import 'package:fogosmobile/reducers/lightning_reducer.dart';
-import 'package:fogosmobile/reducers/preferences_reducer.dart';
-import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
-import 'package:fogosmobile/reducers/statistics_reducer.dart';
 import 'package:fogosmobile/reducers/errors_reducer.dart';
-import 'package:fogosmobile/actions/warnings_actions.dart';
+import 'package:fogosmobile/reducers/fires_reducer.dart';
+import 'package:fogosmobile/reducers/lightning_reducer.dart';
+import 'package:fogosmobile/reducers/modis_reducer.dart';
+import 'package:fogosmobile/reducers/preferences_reducer.dart';
+import 'package:fogosmobile/reducers/statistics_reducer.dart';
 import 'package:fogosmobile/reducers/viirs_reducer.dart';
 import 'package:fogosmobile/reducers/warnings_reducer.dart';
 
 AppState appReducer(AppState state, action) {
-  bool isLoading;
-  bool hasFirstLoad;
-  bool hasPreferences;
-  bool hasContributors;
-  bool showViirs;
-  bool showModis;
+  bool? isLoading;
+  bool? hasFirstLoad;
+  bool? hasPreferences;
+  bool? hasContributors;
+  bool? showViirs;
+  bool? showModis;
 
   // print('action is action $action');
 
@@ -99,10 +99,10 @@ AppState appReducer(AppState state, action) {
     isLoading = false;
   } else if (action is ShowViirsAction) {
     showViirs = !(state.showViirs ?? false);
-    isLoading = state.isLoading;
+    isLoading = state.isLoading ?? true;
   } else if (action is ShowModisAction) {
     showModis = !(state.showModis ?? false);
-    isLoading = state.isLoading;
+    isLoading = state.isLoading ?? true;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -120,7 +120,7 @@ AppState appReducer(AppState state, action) {
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
-    hasContributors: hasContributors ?? state.contributors.isNotEmpty,
+    hasContributors: hasContributors ?? state.contributors?.isNotEmpty ?? false,
     preferences: preferencesReducer(state.preferences, action),
     activeFilters: filtersReducer(state.activeFilters, action),
     nowStats: nowStatsReducer(state.nowStats, action),
@@ -134,8 +134,8 @@ AppState appReducer(AppState state, action) {
     warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
     modis: modisReducer(state.modis, action),
     viirs: viirsReducer(state.viirs, action),
-    showModis: showModis,
-    showViirs: showViirs,
+    showModis: showModis ?? false,
+    showViirs: showViirs ?? false,
     lightnings: lightningsReducer(state.lightnings, action),
   );
 }

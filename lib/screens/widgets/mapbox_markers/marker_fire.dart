@@ -26,10 +26,10 @@ class FireMarker extends StatefulWidget implements BaseMarker {
     this._initialPosition,
     this._addMarkerState,
     this._openModal,
-  )   : assert(_coordinate != null),
-        assert(_initialPosition != null),
-        assert(_fire != null),
-        super(key: Key(key));
+  ) : super(key: Key(key));
+
+  @override
+  LatLng get location => _coordinate;
 
   @override
   State<StatefulWidget> createState() {
@@ -37,21 +37,12 @@ class FireMarker extends StatefulWidget implements BaseMarker {
     _addMarkerState(state);
     return state;
   }
-
-  @override
-  LatLng get location => _coordinate;
 }
 
 class FireMarkerState extends BaseMarkerState<FireMarker> {
   final _iconSize = 10.0;
 
-  Point _position;
-
-  @override
-  void initState() {
-    _position = widget._initialPosition;
-    super.initState();
-  }
+  Point _position = Point(0, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +68,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
           onPressed: () {
             store.dispatch(ClearFireAction());
             store.dispatch(LoadFireAction(widget._fire.id));
-            widget._openModal?.call(widget._fire);
+            widget._openModal.call(widget._fire);
           },
         ),
       ),
@@ -85,17 +76,23 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
   }
 
   @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
+  }
+
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
+
+  @override
   void updatePosition(Point<num> point) {
-    if(mounted) {
+    if (mounted) {
       setState(() {
         _position = point;
       });
     }
-  }
-
-  @override
-  LatLng getCoordinates() {
-    return widget._coordinate;
   }
 
   double _getIconSize(double scale) {

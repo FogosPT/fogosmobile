@@ -1,47 +1,81 @@
-import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/widgets.dart';
-import 'package:fogosmobile/actions/modis_actions.dart';
-import 'package:fogosmobile/actions/viirs_actions.dart';
-import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
-import 'package:fogosmobile/actions/lightning_actions.dart';
-import 'package:sentry/sentry.dart';
 import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:fogosmobile/constants/routes.dart';
-import 'package:fogosmobile/constants/variables.dart';
-import 'package:fogosmobile/screens/about/about.dart';
-import 'package:fogosmobile/screens/partners.dart';
-import 'package:fogosmobile/screens/info_page.dart';
-import 'package:fogosmobile/screens/statistics_page.dart';
-import 'package:fogosmobile/styles/theme.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/actions/lightning_actions.dart';
+import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
-import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/screens/assets/icons.dart';
-import 'package:fogosmobile/screens/home_page.dart';
-import 'package:fogosmobile/screens/settings/settings.dart';
-import 'package:fogosmobile/store/app_store.dart';
+import 'package:fogosmobile/actions/viirs_actions.dart';
+import 'package:fogosmobile/constants/routes.dart';
+import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/about/about.dart';
+import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
-import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
-import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
+import 'package:fogosmobile/screens/home_page.dart';
+import 'package:fogosmobile/screens/info_page.dart';
+import 'package:fogosmobile/screens/partners.dart';
+import 'package:fogosmobile/screens/settings/settings.dart';
+import 'package:fogosmobile/screens/statistics_page.dart';
+import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
+import 'package:fogosmobile/store/app_store.dart';
+import 'package:fogosmobile/styles/theme.dart';
 import 'package:logger/logger.dart';
+import 'package:redux/redux.dart';
+import 'package:sentry/sentry.dart';
+
+void main() async {
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (isInDebugMode) {
+      // In development mode, simply print to console.
+      FlutterError.dumpErrorToConsole(details);
+    } else {
+      // In production mode, report to the application zone to report to
+      // Sentry.
+      if (details.stack != null) {
+        Zone.current.handleUncaughtError(details.exception, details.stack!);
+      }
+    }
+  };
+
+  runZonedGuarded<Future<void>>(
+    () async {
+      try {
+        SharedPreferencesManager.init().then((_) => runApp(MyApp()));
+      } catch (error, stackTrace) {
+        _reportError(error, stackTrace);
+      }
+    },
+    (error, stack) {
+      // Whenever an error occurs, call the `_reportError` function. This sends
+      // Dart errors to the dev console or Sentry depending on the environment.
+      _reportError(error, stack);
+    },
+  );
+}
+
+var logger = Logger(
+  printer: PrettyPrinter(),
+);
+
+var loggerNoStack = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
 
 final SentryClient _sentry = SentryClient(SentryOptions(dsn: SENTRY_DSN));
-
-typedef SetFiltersCallback = Function(FireStatus filter);
 
 bool get isInDebugMode {
   // Assume you're in production mode
@@ -74,44 +108,14 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
     stackTrace: stackTrace,
   );
 
-  if (response != null) {
-    print('Success! Event ID: $response');
-  } else {
-    print('Failed to report to Sentry.io: $error');
-  }
+  print('Success! Event ID: $response');
 }
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+typedef SetFiltersCallback = Function(FireStatus filter);
 
-var loggerNoStack = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
-
-void main() async {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    if (isInDebugMode) {
-      // In development mode, simply print to console.
-      FlutterError.dumpErrorToConsole(details);
-    } else {
-      // In production mode, report to the application zone to report to
-      // Sentry.
-      Zone.current.handleUncaughtError(details.exception, details.stack);
-    }
-  };
-
-  runZoned<Future<void>>(() async {
-    try {
-      SharedPreferencesManager.init().then((_) => runApp(MyApp()));
-    } catch (error, stackTrace) {
-      _reportError(error, stackTrace);
-    }
-  }, onError: (error, stackTrace) {
-    // Whenever an error occurs, call the `_reportError` function. This sends
-    // Dart errors to the dev console or Sentry depending on the environment.
-    _reportError(error, stackTrace);
-  });
+class FirstPage extends StatefulWidget {
+  @override
+  _FirstPageState createState() => _FirstPageState();
 }
 
 class MyApp extends StatelessWidget {
@@ -151,101 +155,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class FirstPage extends StatefulWidget {
-  @override
-  _FirstPageState createState() => _FirstPageState();
-}
-
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  void firebaseCloudMessagingListeners() async {
-    final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
-
-    if (result.authorizationStatus != AuthorizationStatus.authorized) {
-      return;
-    }
-
-    _firebaseMessaging.getToken().then((token) {
-      print('token: $token');
-    });
-  }
-
-  Widget _buildRefreshButton(AppState state, VoidCallback action) {
-    return state.isLoading
-        ? Container(
-            width: 48,
-            height: 48,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-              ),
-            ),
-          )
-        : IconButton(
-            onPressed: action,
-            icon: Icon(Icons.refresh),
-          );
-  }
-
-  Widget _buildFiltersMenu(AppState state) {
-    return StoreConnector<AppState, SetFiltersCallback>(
-        converter: (Store<AppState> store) {
-      return (FireStatus filter) {
-        store.dispatch(SelectFireFiltersAction(filter));
-      };
-    }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
-      return PopupMenuButton<FireStatus>(
-        icon: Icon(Icons.filter_list),
-        onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
-        itemBuilder: (BuildContext context) => FireStatus.values
-            .map(
-              (status) => PopupMenuItem<FireStatus>(
-                value: status,
-                child: ListTileTheme(
-                  style: ListTileStyle.drawer,
-                  selectedColor: Theme.of(context).accentColor,
-                  child: ListTile(
-                    dense: true,
-                    contentPadding: const EdgeInsets.all(0.0),
-                    selected: state.activeFilters.contains(status),
-                    trailing: state.activeFilters.contains(status)
-                        ? Icon(Icons.check)
-                        : null,
-                    title: Text(
-                        FogosLocalizations.of(context).textFireStatus(status)),
-                  ),
-                ),
-              ),
-            )
-            .toList(),
-      );
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      final store = StoreProvider.of<AppState>(context);
-      store.dispatch(LoadFiresAction());
-      store.dispatch(LoadModisAction());
-      store.dispatch(LoadViirsAction());
-      store.dispatch(LoadLightningsAction());
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     firebaseCloudMessagingListeners();
@@ -269,6 +180,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: FireGradientAppBar(
+            bottom: TabBar(
+              tabs: [],
+            ),
             title: Text(
               'Fogos.pt',
               style: TextStyle(color: Colors.white),
@@ -309,8 +223,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 DrawerHeader(
                   child: Center(
-                    child:
-                        SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
+                    child: SvgPicture.asset(imgSvgLogoFlame,
+                        colorFilter:
+                            ColorFilter.mode(Colors.white, BlendMode.srcIn)),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -325,8 +240,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   ),
                 ),
                 ListTile(
-                  title:
-                      Text(FogosLocalizations.of(context).textFiresTable),
+                  title: Text(FogosLocalizations.of(context).textFiresTable),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
@@ -343,8 +257,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ),
                 ListTile(
                   title:
-                      Text(
-                      FogosLocalizations.of(context).textWarningsMadeira),
+                      Text(FogosLocalizations.of(context).textWarningsMadeira),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
@@ -352,8 +265,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.warning),
                 ),
                 ListTile(
-                  title:
-                      Text(FogosLocalizations.of(context).textInformations),
+                  title: Text(FogosLocalizations.of(context).textInformations),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(INFO_ROUTE);
@@ -361,8 +273,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.info),
                 ),
                 ListTile(
-                  title:
-                      Text(FogosLocalizations.of(context).textStatistics),
+                  title: Text(FogosLocalizations.of(context).textStatistics),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
@@ -371,8 +282,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ),
                 Divider(),
                 ListTile(
-                  title: Text(
-                      FogosLocalizations.of(context).textNotifications),
+                  title: Text(FogosLocalizations.of(context).textNotifications),
                   onTap: () {
                     Navigator.of(context).pop();
                     Navigator.of(context).pushNamed(SETTINGS_ROUTE);
@@ -403,5 +313,94 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         );
       },
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(LoadFiresAction());
+      store.dispatch(LoadModisAction());
+      store.dispatch(LoadViirsAction());
+      store.dispatch(LoadLightningsAction());
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  void firebaseCloudMessagingListeners() async {
+    final result = await _firebaseMessaging.requestPermission(
+        sound: true, badge: true, alert: true);
+
+    if (result.authorizationStatus != AuthorizationStatus.authorized) {
+      return;
+    }
+
+    _firebaseMessaging.getToken().then((token) {
+      print('token: $token');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Widget _buildFiltersMenu(AppState state) {
+    return StoreConnector<AppState, SetFiltersCallback>(
+        converter: (Store<AppState> store) {
+      return (FireStatus filter) {
+        store.dispatch(SelectFireFiltersAction(filter));
+      };
+    }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
+      return PopupMenuButton<FireStatus>(
+        icon: Icon(Icons.filter_list),
+        onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
+        itemBuilder: (BuildContext context) => FireStatus.values
+            .map(
+              (status) => PopupMenuItem<FireStatus>(
+                value: status,
+                child: ListTileTheme(
+                  style: ListTileStyle.drawer,
+                  selectedColor: Theme.of(context).colorScheme.secondary,
+                  child: ListTile(
+                    dense: true,
+                    contentPadding: const EdgeInsets.all(0.0),
+                    selected: state.activeFilters?.contains(status) ?? false,
+                    trailing: state.activeFilters?.contains(status) ?? false
+                        ? Icon(Icons.check)
+                        : null,
+                    title: Text(
+                        FogosLocalizations.of(context).textFireStatus(status)),
+                  ),
+                ),
+              ),
+            )
+            .toList(),
+      );
+    });
+  }
+
+  Widget _buildRefreshButton(AppState state, VoidCallback action) {
+    return state.isLoading ?? true
+        ? Container(
+            width: 48,
+            height: 48,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CircularProgressIndicator(
+                strokeWidth: 2.0,
+              ),
+            ),
+          )
+        : IconButton(
+            onPressed: action,
+            icon: Icon(Icons.refresh),
+          );
   }
 }

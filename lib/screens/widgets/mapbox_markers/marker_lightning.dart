@@ -64,7 +64,7 @@ class LightningMarkerState extends BaseMarkerState<LightningMarker> {
             ),
           ),
           onPressed: () {
-            _openModal?.call();
+            _openModal.call();
           },
         ),
       ),

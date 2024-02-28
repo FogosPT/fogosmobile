@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
-import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/fire_notifications.dart';
-import 'package:fogosmobile/screens/settings/other_notifications.dart';
+import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/reset_notifications.dart';
 
 class Settings extends StatefulWidget {
@@ -35,7 +34,7 @@ class _SettingsState extends State<Settings> {
           children: [
             Notifications(),
             FireNotifications(),
-            OtherNotifications(),
+            // OtherNotifications(),
             ResetNotifications(),
           ],
         ),

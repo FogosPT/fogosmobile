@@ -1,101 +1,101 @@
 import 'dart:collection';
 
-class NowStats {
-  final String man;
-  final String aerial;
-  final String cars;
-  final String total;
+class Day {
+  final String label;
+  final int total;
+  final int fake;
 
-  NowStats({this.man, this.aerial, this.cars, this.total});
+  Day({
+    required this.label,
+    required this.total,
+    required this.fake,
+  });
 
-  factory NowStats.fromJson(Map<String, dynamic> parsedJson) {
-    return NowStats(
-        man: parsedJson['man'].toString(),
-        aerial: parsedJson['aerial'].toString(),
-        cars: parsedJson['cars'].toString(),
-        total: parsedJson['total'].toString());
+  factory Day.fromJson(Map<String, dynamic> json) {
+    return Day(label: json['label'], total: json['total'], fake: json['false']);
   }
 }
 
-class TodayStats {
-  final List<IntervalStats> intervalStatsList;
-  final List<District> districtList;
+class District {
+  final String district;
+  final int fires;
 
-  TodayStats({this.intervalStatsList, this.districtList});
+  District({
+    required this.district,
+    required this.fires,
+  });
 
-  factory TodayStats.fromJson(Map<String, dynamic> parsedJson) {
-    List<IntervalStats> intervalStatsList = <IntervalStats>[];
-    List<District> districtList = <District>[];
-    Map<String, int> districtTempMap = Map<String, int>();
-
-    parsedJson?.forEach(
-        (i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
-
-    // Checks for double entries and sums them
-    intervalStatsList.forEach((d) {
-      d.districtMap.forEach((k, v) {
-        if (districtTempMap.containsKey(k)) {
-          districtTempMap.update(k, (dynamic val) => val + v);
-        } else {
-          districtTempMap[k] = v;
-        }
-      });
-    });
-
-    // Sort by increasing values
-    var sortedKeys = districtTempMap.keys.toList(growable: false)
-      ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
-    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-        key: (k) => k, value: (k) => districtTempMap[k]);
-
-    // Convert the map to a List for chart data
-    sortedMap.forEach((k, v) {
-      districtList.add(District(district: k, fires: v));
-    });
-
-    return TodayStats(
-        intervalStatsList: intervalStatsList, districtList: districtList);
+  factory District.fromJson(String district, int fire) {
+    return District(district: district, fires: fire);
   }
 }
 
-class YesterdayStats {
-  final List<IntervalStats> intervalStatsList;
-  final List<District> districtList;
+class IntervalStats {
+  final String label;
+  final int total;
+  final Map<String, int> districtMap;
 
-  YesterdayStats({this.intervalStatsList, this.districtList});
+  IntervalStats({
+    required this.total,
+    required this.districtMap,
+    required this.label,
+  });
 
-  factory YesterdayStats.fromJson(Map<String, dynamic> parsedJson) {
-    List<IntervalStats> intervalStatsList = <IntervalStats>[];
-    List<District> districtList = <District>[];
-    Map<String, int> districtTempMap = Map<String, int>();
+  factory IntervalStats.fromJson(Map<String, dynamic> json, String label) {
+    int total = json['total'];
 
-    parsedJson?.forEach(
-        (i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
+    Map<String, int> districtMap = Map<String, int>();
 
-    // Checks for double entries and sums them
-    intervalStatsList.forEach((d) {
-      d.districtMap.forEach((k, v) {
-        if (districtTempMap.containsKey(k)) {
-          districtTempMap.update(k, (dynamic val) => val + v);
-        } else {
-          districtTempMap[k] = v;
-        }
-      });
-    });
+    if (total != 0) {
+      json['distritos']?.forEach((i, j) => districtMap[i] = j);
+    }
 
-    // Sort by increasing values
-    var sortedKeys = districtTempMap.keys.toList(growable: false)
-      ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
-    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-        key: (k) => k, value: (k) => districtTempMap[k]);
+    return IntervalStats(total: total, label: label, districtMap: districtMap);
+  }
+}
 
-    // Convert the map to a List for chart data
-    sortedMap.forEach((k, v) {
-      districtList.add(District(district: k, fires: v));
-    });
+class LastHour {
+  final int man;
+  final int aerial;
+  final int cars;
+  final int total;
+  final DateTime label;
 
-    return YesterdayStats(
-        intervalStatsList: intervalStatsList, districtList: districtList);
+  LastHour({
+    required this.man,
+    required this.aerial,
+    required this.cars,
+    required this.total,
+    required this.label,
+  });
+
+  factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
+    DateTime dateLabel = DateTime.fromMillisecondsSinceEpoch(
+        parsedJson['created'].runtimeType == int
+            ? parsedJson['created'] * 1000
+            : parsedJson['created']['sec'] * 1000);
+
+    return LastHour(
+      man: parsedJson['man'],
+      aerial: parsedJson['aerial'],
+      cars: parsedJson['cars'],
+      total: parsedJson['total'],
+      label: dateLabel,
+    );
+  }
+}
+
+class LastHoursStats {
+  final List<LastHour> lastHours;
+
+  LastHoursStats({
+    required this.lastHours,
+  });
+
+  factory LastHoursStats.fromJson(List<dynamic> json) {
+    List<LastHour> lastHours = <LastHour>[];
+    lastHours = json.map((i) => LastHour.fromJson(i)).toList();
+    return LastHoursStats(lastHours: lastHours);
   }
 }
 
@@ -103,7 +103,10 @@ class LastNightStats {
   final int total;
   final List<District> districtList;
 
-  LastNightStats({this.total, this.districtList});
+  LastNightStats({
+    required this.total,
+    required this.districtList,
+  });
 
   factory LastNightStats.fromJson(Map<String, dynamic> json) {
     List<District> districtList = <District>[];
@@ -120,10 +123,79 @@ class LastNightStats {
   }
 }
 
+class NowStats {
+  final String man;
+  final String aerial;
+  final String cars;
+  final String total;
+
+  NowStats({
+    required this.man,
+    required this.aerial,
+    required this.cars,
+    required this.total,
+  });
+
+  factory NowStats.fromJson(Map<String, dynamic> parsedJson) {
+    return NowStats(
+        man: parsedJson['man'].toString(),
+        aerial: parsedJson['aerial'].toString(),
+        cars: parsedJson['cars'].toString(),
+        total: parsedJson['total'].toString());
+  }
+}
+
+class TodayStats {
+  final List<IntervalStats> intervalStatsList;
+  final List<District> districtList;
+
+  TodayStats({
+    required this.intervalStatsList,
+    required this.districtList,
+  });
+
+  factory TodayStats.fromJson(Map<String, dynamic> parsedJson) {
+    List<IntervalStats> intervalStatsList = <IntervalStats>[];
+    List<District> districtList = <District>[];
+    Map<String, int> districtTempMap = Map<String, int>();
+
+    parsedJson
+        .forEach((i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
+
+    // Checks for double entries and sums them
+    intervalStatsList.forEach((d) {
+      d.districtMap.forEach((k, v) {
+        if (districtTempMap.containsKey(k)) {
+          districtTempMap.update(k, (dynamic val) => val + v);
+        } else {
+          districtTempMap[k] = v;
+        }
+      });
+    });
+
+    // Sort by increasing values
+    var sortedKeys = districtTempMap.keys.toList(growable: false)
+      ..sort((k1, k2) =>
+          districtTempMap[k1]?.compareTo(districtTempMap[k2] ?? 0) ?? 0);
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
+        key: (k) => k, value: (k) => districtTempMap[k]);
+
+    // Convert the map to a List for chart data
+    sortedMap.forEach((k, v) {
+      districtList.add(District(district: k, fires: v));
+    });
+
+    return TodayStats(
+        intervalStatsList: intervalStatsList, districtList: districtList);
+  }
+}
+
 class WeekStats {
   final List<Day> days;
 
-  WeekStats({this.days});
+  WeekStats({
+    required this.days,
+  });
 
   factory WeekStats.fromJson(List<dynamic> json) {
     List<Day> days = <Day>[];
@@ -134,83 +206,47 @@ class WeekStats {
   }
 }
 
-class Day {
-  final String label;
-  final int total;
-  final int fake;
+class YesterdayStats {
+  final List<IntervalStats> intervalStatsList;
+  final List<District> districtList;
 
-  Day({this.label, this.total, this.fake});
+  YesterdayStats({
+    required this.intervalStatsList,
+    required this.districtList,
+  });
 
-  factory Day.fromJson(Map<String, dynamic> json) {
-    return Day(label: json['label'], total: json['total'], fake: json['false']);
-  }
-}
+  factory YesterdayStats.fromJson(Map<String, dynamic> parsedJson) {
+    List<IntervalStats> intervalStatsList = <IntervalStats>[];
+    List<District> districtList = <District>[];
+    Map<String, int> districtTempMap = Map<String, int>();
 
-class LastHoursStats {
-  final List<LastHour> lastHours;
+    parsedJson
+        .forEach((i, j) => intervalStatsList.add(IntervalStats.fromJson(j, i)));
 
-  LastHoursStats({this.lastHours});
+    // Checks for double entries and sums them
+    intervalStatsList.forEach((d) {
+      d.districtMap.forEach((k, v) {
+        if (districtTempMap.containsKey(k)) {
+          districtTempMap.update(k, (dynamic val) => val + v);
+        } else {
+          districtTempMap[k] = v;
+        }
+      });
+    });
 
-  factory LastHoursStats.fromJson(List<dynamic> json) {
-    List<LastHour> lastHours = <LastHour>[];
-    lastHours = json.map((i) => LastHour.fromJson(i)).toList();
-    return LastHoursStats(lastHours: lastHours);
-  }
-}
+    // Sort by increasing values
+    var sortedKeys = districtTempMap.keys.toList(growable: false)
+      ..sort((k1, k2) =>
+          districtTempMap[k1]?.compareTo(districtTempMap[k2] ?? 0) ?? 0);
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
+        key: (k) => k, value: (k) => districtTempMap[k]);
 
-class LastHour {
-  final int man;
-  final int aerial;
-  final int cars;
-  final int total;
-  final DateTime label;
+    // Convert the map to a List for chart data
+    sortedMap.forEach((k, v) {
+      districtList.add(District(district: k, fires: v));
+    });
 
-  LastHour({this.man, this.aerial, this.cars, this.total, this.label});
-
-  factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
-    DateTime dateLabel =
-        DateTime.fromMillisecondsSinceEpoch(
-        parsedJson['created'].runtimeType == int
-            ? parsedJson['created'] * 1000
-            : parsedJson['created']['sec'] * 1000);
-
-    return LastHour(
-      man: parsedJson['man'],
-      aerial: parsedJson['aerial'],
-      cars: parsedJson['cars'],
-      total: parsedJson['total'],
-      label: dateLabel,
-    );
-  }
-}
-
-class IntervalStats {
-  final String label;
-  final int total;
-  final Map<String, int> districtMap;
-
-  IntervalStats({this.total, this.districtMap, this.label});
-
-  factory IntervalStats.fromJson(Map<String, dynamic> json, String label) {
-    int total = json['total'];
-
-    Map<String, int> districtMap = Map<String, int>();
-
-    if (total != 0) {
-      json['distritos']?.forEach((i, j) => districtMap[i] = j);
-    }
-
-    return IntervalStats(total: total, label: label, districtMap: districtMap);
-  }
-}
-
-class District {
-  final String district;
-  final int fires;
-
-  District({this.district, this.fires});
-
-  factory District.fromJson(String district, int fire) {
-    return District(district: district, fires: fire);
+    return YesterdayStats(
+        intervalStatsList: intervalStatsList, districtList: districtList);
   }
 }

@@ -25,7 +25,6 @@ Middleware<AppState> _loadModis() {
       store.dispatch(ModisLoadedAction(modis));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(ModisLoadedAction([]));
     }
   };

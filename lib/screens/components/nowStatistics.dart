@@ -13,12 +13,15 @@ class NowStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, NowStats>(
-      converter: (Store<AppState> store) => store.state.nowStats,
+      converter: (Store<AppState> store) =>
+          store.state.nowStats ??
+          NowStats(
+            man: '',
+            aerial: '',
+            cars: '',
+            total: '',
+          ),
       builder: (BuildContext context, NowStats stats) {
-        if (stats == null) {
-          return Center(child: CircularProgressIndicator());
-        }
-
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Row(
@@ -37,7 +40,7 @@ class NowStatistics extends StatelessWidget {
   }
 
   Widget _buildItem(String imgPath, String text,
-      [double height = 50.0, Color color]) {
+      [double height = 50.0, Color? color]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

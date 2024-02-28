@@ -18,29 +18,16 @@ import 'package:intl/src/intl_helpers.dart';
 import 'messages_en.dart' deferred as messages_en;
 import 'messages_messages_pt.dart' deferred as messages_messages_pt;
 
-typedef Future<dynamic> LibraryLoader();
 Map<String, LibraryLoader> _deferredLibraries = {
   'en': messages_en.loadLibrary,
   'messages_pt': messages_messages_pt.loadLibrary,
 };
 
-MessageLookupByLibrary _findExact(String localeName) {
-  switch (localeName) {
-    case 'en':
-      return messages_en.messages;
-    case 'messages_pt':
-      return messages_messages_pt.messages;
-    default:
-      return null;
-  }
-}
-
 /// User programs should call this before using [localeName] for messages.
 Future<bool> initializeMessages(String localeName) async {
   var availableLocale = Intl.verifiedLocale(
-    localeName,
-    (locale) => _deferredLibraries[locale] != null,
-    onFailure: (_) => null);
+      localeName, (locale) => _deferredLibraries[locale] != null,
+      onFailure: (_) => null);
   if (availableLocale == null) {
     return new Future.value(false);
   }
@@ -51,6 +38,22 @@ Future<bool> initializeMessages(String localeName) async {
   return new Future.value(true);
 }
 
+MessageLookupByLibrary _findExact(String localeName) {
+  switch (localeName) {
+    case 'en':
+      return messages_en.messages;
+    case 'messages_pt':
+    default:
+      return messages_messages_pt.messages;
+  }
+}
+
+MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {
+  var actualLocale =
+      Intl.verifiedLocale(locale, _messagesExistFor, onFailure: (_) => null);
+  return _findExact(actualLocale);
+}
+
 bool _messagesExistFor(String locale) {
   try {
     return _findExact(locale) != null;
@@ -59,9 +62,4 @@ bool _messagesExistFor(String locale) {
   }
 }
 
-MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {
-  var actualLocale = Intl.verifiedLocale(locale, _messagesExistFor,
-      onFailure: (_) => null);
-  if (actualLocale == null) return null;
-  return _findExact(actualLocale);
-}
+typedef Future<dynamic> LibraryLoader();

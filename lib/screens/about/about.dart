@@ -1,51 +1,24 @@
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/screens/about/contributor_item.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
-import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 class About extends StatelessWidget {
-  Widget contributorsWidget() {
-    return StoreConnector<AppState, AppState>(
-        converter: (Store<AppState> store) => store.state,
-        onInit: (Store<AppState> store) {
-          if (!store.state.hasContributors) {
-            store.dispatch(LoadContributorsAction());
-          }
-        },
-        builder: (BuildContext context, AppState state) {
-          if (state.hasContributors) {
-            return StoreConnector<AppState, List>(
-                converter: (Store<AppState> store) => store.state.contributors,
-                builder: (BuildContext context, List contributors) {
-                  if (contributors != null) {
-                    return Scrollbar(
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(top: 8.0),
-                        itemBuilder: (_, int i) =>
-                            ContributorItem(contributor: contributors[i]),
-                        itemCount: contributors.length,
-                      ),
-                    );
-                  }
-                });
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: FireGradientAppBar(
+          bottom: TabBar(
+            tabs: [],
+          ),
+          actions: [],
           title: Text(
             'Sobre',
             style: TextStyle(color: Colors.white),
@@ -66,7 +39,8 @@ class About extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '${FogosLocalizations.of(context).textRecordsFrom} ',
+                          text:
+                              '${FogosLocalizations.of(context).textRecordsFrom} ',
                           style: TextStyle(color: Colors.black),
                         ),
                         TextSpan(
@@ -117,5 +91,38 @@ class About extends StatelessWidget {
             ),
           ),
         ));
+  }
+
+  Widget contributorsWidget() {
+    return StoreConnector<AppState, AppState>(
+        converter: (Store<AppState> store) => store.state,
+        onInit: (Store<AppState> store) {
+          if (!(store.state.hasContributors ?? false)) {
+            store.dispatch(LoadContributorsAction());
+          }
+        },
+        builder: (BuildContext context, AppState state) {
+          if (state.hasContributors ?? false) {
+            return StoreConnector<AppState, List<Contributor>>(
+                converter: (Store<AppState> store) =>
+                    store.state.contributors ?? [],
+                builder:
+                    (BuildContext context, List<Contributor>? contributors) {
+                  return Scrollbar(
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(top: 8.0),
+                      itemBuilder: (_, int i) {
+                        return ContributorItem(contributor: contributors![i]);
+                      },
+                      itemCount: contributors?.length ?? 0,
+                    ),
+                  );
+                });
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }

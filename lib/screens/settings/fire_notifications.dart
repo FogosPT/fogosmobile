@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:redux/redux.dart';
-import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:redux/redux.dart';
 
 typedef SetFireNotificationActionCallBack = Function(String key, int value);
 
@@ -21,13 +21,13 @@ class _FireNotificationsState extends State<FireNotifications> {
         store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
-        if (!state.hasPreferences && !state.isLoading) {
+        if (!(state.hasPreferences ?? false) && !(state.isLoading ?? false)) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
 
-        var subscribedFires = state.preferences['subscribedFires'] ?? [];
+        var subscribedFires = state.preferences?['subscribedFires'] ?? [];
 
         if (subscribedFires.length == 0) {
           return Center(

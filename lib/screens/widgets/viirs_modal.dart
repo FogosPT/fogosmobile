@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/utils/date_utils.dart';
 
 class ViirsModal extends StatelessWidget {
   final Viirs viirs;
 
-  const ViirsModal({Key key, this.viirs}) : super(key: key);
-
-  String getConfidence(BuildContext context, String confidence) {
-    if (confidence == 'nominal') {
-      return FogosLocalizations.of(context).textNominalConfidence;
-    } else if (confidence == 'low') {
-      return FogosLocalizations.of(context).textLowConfidence;
-    } else if (confidence == 'high') {
-      return FogosLocalizations.of(context).textHighConfidence;
-    } else {
-      return confidence;
-    }
-  }
+  const ViirsModal({
+    Key? key,
+    required this.viirs,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +85,7 @@ class ViirsModal extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                       text:
-                      "${FogosLocalizations.of(context).textConfidence}: ",
+                          "${FogosLocalizations.of(context).textConfidence}: ",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
@@ -107,5 +98,17 @@ class ViirsModal extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getConfidence(BuildContext context, String confidence) {
+    if (confidence == 'nominal') {
+      return FogosLocalizations.of(context).textNominalConfidence;
+    } else if (confidence == 'low') {
+      return FogosLocalizations.of(context).textLowConfidence;
+    } else if (confidence == 'high') {
+      return FogosLocalizations.of(context).textHighConfidence;
+    } else {
+      return confidence;
+    }
   }
 }

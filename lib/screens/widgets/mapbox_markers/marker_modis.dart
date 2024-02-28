@@ -3,16 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
-import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
-import 'package:fogosmobile/store/app_store.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-class ModisMarker extends StatefulWidget implements BaseMarker{
+class ModisMarker extends StatefulWidget implements BaseMarker {
   final Modis _modis;
   final Point _initialPosition;
   final LatLng _coordinate;
@@ -29,26 +24,21 @@ class ModisMarker extends StatefulWidget implements BaseMarker{
   ) : super(key: Key(key));
 
   @override
+  LatLng get location => _coordinate;
+
+  @override
   State<StatefulWidget> createState() {
     final state = ModisMarkerState();
     _addMarkerState(state);
     return state;
   }
-
-  @override
-  LatLng get location => _coordinate;
 }
 
-class ModisMarkerState extends BaseMarkerState<ModisMarker>{
+class ModisMarkerState extends BaseMarkerState<ModisMarker> {
   final _iconSize = 10.0;
 
-  Point _position;
+  Point _position = Point(0, 0);
 
-  @override
-  void initState() {
-    _position = widget._initialPosition;
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     var ratio = 1.0;
@@ -61,7 +51,7 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker>{
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => widget._openModal?.call(widget._modis),
+        onTap: () => widget._openModal.call(widget._modis),
         child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
@@ -85,14 +75,20 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker>{
   }
 
   @override
+  LatLng getCoordinates() {
+    return widget._coordinate;
+  }
+
+  @override
+  void initState() {
+    _position = widget._initialPosition;
+    super.initState();
+  }
+
+  @override
   void updatePosition(Point<num> point) {
     setState(() {
       _position = point;
     });
-  }
-
-  @override
-  LatLng getCoordinates() {
-    return widget._coordinate;
   }
 }

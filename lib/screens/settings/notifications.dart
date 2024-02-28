@@ -1,13 +1,13 @@
 import 'package:diacritic/diacritic.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:fogosmobile/constants/endpoints.dart';
-import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
 
 typedef SetPreferenceCallBack = Function(String key, int value);
 
@@ -19,23 +19,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   List locations = [];
   TextEditingController controller = new TextEditingController();
-  String filter;
-
-  @override
-  initState() {
-    super.initState();
-    controller.addListener(() {
-      setState(() {
-        filter = controller.text;
-      });
-    });
-  }
-
-  getLocations() async {
-    String url = Endpoints.getLocations;
-    final response = await get(url);
-    return response.data['rows'];
-  }
+  String? filter;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +61,8 @@ class _NotificationsState extends State<Notifications> {
               store.dispatch(new LoadAllPreferencesAction());
             };
           },
-          builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+          builder: (BuildContext context,
+              SetPreferenceCallBack setPreferenceAction) {
             return new Column(
               children: <Widget>[
                 new Padding(
@@ -85,7 +70,8 @@ class _NotificationsState extends State<Notifications> {
                 ),
                 new ListTile(
                   title: new TextField(
-                    decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
+                    decoration: new InputDecoration(
+                        labelText: FogosLocalizations.of(context).textCounty),
                     controller: controller,
                   ),
                 ),
@@ -95,16 +81,21 @@ class _NotificationsState extends State<Notifications> {
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
-                        return filter == null ||
-                                filter == "" ||
-                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter))
-                            ? CheckboxListTile(
-                                title: Text(_location['value']['name']),
-                                value: state.preferences['pref-${_location['key']}'] == 1,
-                                onChanged: (bool value) {
-                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
-                                },
-                              )
+                        return filter == "" ||
+                                transformStringToSearch(
+                                        _location['value']['name'])
+                                    .contains(transformStringToSearch(filter))
+                            ? SizedBox()
+                            // CheckboxListTile(
+                            //     title: Text(_location['value']['name']),
+                            //     value: state.preferences[
+                            //             'pref-${_location['key']}'] ==
+                            //         1,
+                            //     // onChanged: (bool value) {
+                            //     //   setPreferenceAction(
+                            //     //       _location['key'], value == true ? 1 : 0);
+                            //     // },
+                            //   )
                             : new Container();
                       },
                     ),
@@ -116,5 +107,21 @@ class _NotificationsState extends State<Notifications> {
         );
       },
     );
+  }
+
+  getLocations() async {
+    String url = Endpoints.getLocations;
+    final response = await get(url);
+    return response.data['rows'];
+  }
+
+  @override
+  initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {
+        filter = controller.text;
+      });
+    });
   }
 }

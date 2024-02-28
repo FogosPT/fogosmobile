@@ -7,18 +7,15 @@ class Contributor {
   final String location;
 
   Contributor({
-    this.avatarUrl,
-    this.name,
-    this.login,
-    this.bio,
-    this.websiteUrl,
-    this.location,
+    required this.avatarUrl,
+    required this.name,
+    required this.login,
+    required this.bio,
+    required this.websiteUrl,
+    required this.location,
   });
 
   factory Contributor.map(Map<String, dynamic> obj) {
-    if (obj == null) {
-      return Contributor();
-    }
     return Contributor(
       avatarUrl: obj["avatar_url"],
       name: obj["name"],
@@ -27,14 +24,6 @@ class Contributor {
       websiteUrl: obj["blog"],
       location: obj["location"],
     );
-  }
-
-  static Contributor fromMap(Map<String, dynamic> obj) => Contributor.map(obj);
-  static List<Contributor> fromList(List<dynamic> obj) {
-    if (obj == null) {
-      return [];
-    }
-    return obj.cast<Map<String, dynamic>>().map(Contributor.fromMap).toList();
   }
 
   Map<String, dynamic> toMap() {
@@ -48,4 +37,10 @@ class Contributor {
     map["location"] = location;
     return map;
   }
+
+  static List<Contributor> fromList(List<dynamic> obj) {
+    return obj.cast<Map<String, dynamic>>().map(Contributor.fromMap).toList();
+  }
+
+  static Contributor fromMap(Map<String, dynamic> obj) => Contributor.map(obj);
 }

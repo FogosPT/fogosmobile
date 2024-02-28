@@ -1,21 +1,21 @@
-class LoadAllPreferencesAction {}
-
 class AllPreferencesLoadedAction {
-  final Map preferences;
+  final Map? preferences;
 
   AllPreferencesLoadedAction(this.preferences);
 }
 
-class SetPreferenceAction {
-  final String key;
-  final int value;
-
-  SetPreferenceAction(this.key, this.value);
-}
+class LoadAllPreferencesAction {}
 
 class SetFireNotificationAction {
-  final String key;
-  final int value;
+  final String? key;
+  final int? value;
 
   SetFireNotificationAction(this.key, this.value);
+}
+
+class SetPreferenceAction {
+  final String? key;
+  final int? value;
+
+  SetPreferenceAction(this.key, this.value);
 }

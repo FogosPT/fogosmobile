@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:fogosmobile/models/modis.dart';
-
 import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/screens/utils/date_utils.dart';
 
 class ModisModal extends StatelessWidget {
   final Modis modis;
 
-  const ModisModal({Key key, this.modis}) : super(key: key);
+  const ModisModal({
+    Key? key,
+    required this.modis,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,7 @@ class ModisModal extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                       text:
-                      "${FogosLocalizations.of(context).textBrightness}: ",
+                          "${FogosLocalizations.of(context).textBrightness}: ",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(
@@ -84,7 +86,7 @@ class ModisModal extends StatelessWidget {
                 children: <TextSpan>[
                   TextSpan(
                       text:
-                      "${FogosLocalizations.of(context).textConfidence}: ",
+                          "${FogosLocalizations.of(context).textConfidence}: ",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black)),
                   TextSpan(

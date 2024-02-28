@@ -2,18 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
-import 'package:fogosmobile/constants/routes.dart';
-import 'package:fogosmobile/constants/variables.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
-import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
-import 'package:share/share.dart';
-import 'package:fogosmobile/screens/assets/images.dart';
+import 'package:redux/redux.dart';
 
 class FiresTablePage extends StatefulWidget {
   @override
@@ -23,19 +17,6 @@ class FiresTablePage extends StatefulWidget {
 class _FiresTablePageState extends State<FiresTablePage> {
   int _currentSortColumn = 1;
   bool _isAscending = false;
-
-  orderFires(columnIndex, List<Fire> fires, field) {
-    setState(() {
-      _currentSortColumn = columnIndex;
-      if (_isAscending == true) {
-        _isAscending = false;
-        fires.sort((a, b) => b.get(field).compareTo(a.get(field)));
-      } else {
-        _isAscending = true;
-        fires.sort((a, b) => a.get(field).compareTo(b.get(field)));
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +44,8 @@ class _FiresTablePageState extends State<FiresTablePage> {
         },
         converter: (Store<AppState> store) => store.state,
         builder: (BuildContext context, AppState state) {
-          List<Fire> fires = state.fires;
-          bool isLoading = state.isLoading;
+          List<Fire> fires = state.fires ?? [];
+          bool isLoading = state.isLoading ?? true;
 
           if (isLoading) {
             return Center(
@@ -203,13 +184,14 @@ class _FiresTablePageState extends State<FiresTablePage> {
                               ),
                             ),
                             DataCell(
-                              Text(fire.human?.toString() ?? 0),
+                              // Text(fire.human ?? '0'),
+                              Text(fire.human.toString()),
                             ),
                             DataCell(
-                              Text(fire.terrain?.toString() ?? 0),
+                              Text(fire.terrain.toString()),
                             ),
                             DataCell(
-                              Text(fire.aerial?.toString() ?? 0),
+                              Text(fire.aerial.toString()),
                             ),
                           ],
                         ),
@@ -222,5 +204,18 @@ class _FiresTablePageState extends State<FiresTablePage> {
         },
       )),
     );
+  }
+
+  orderFires(columnIndex, List<Fire> fires, field) {
+    setState(() {
+      _currentSortColumn = columnIndex;
+      if (_isAscending == true) {
+        _isAscending = false;
+        fires.sort((a, b) => b.get(field).compareTo(a.get(field)));
+      } else {
+        _isAscending = true;
+        fires.sort((a, b) => a.get(field).compareTo(b.get(field)));
+      }
+    });
   }
 }

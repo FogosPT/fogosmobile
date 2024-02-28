@@ -25,7 +25,6 @@ Middleware<AppState> _loadViirs() {
       store.dispatch(ViirsLoadedAction(viirs));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(ViirsLoadedAction([]));
     }
   };

@@ -1,6 +1,7 @@
 import 'package:fogosmobile/actions/contributors_actions.dart';
+import 'package:fogosmobile/models/contributor.dart';
 
-contributorsReducer(List contributors, action) {
+contributorsReducer(List<Contributor>? contributors, action) {
   if (action is LoadContributorsAction) {
     return contributors;
   } else if (action is ContributorsLoadedAction) {

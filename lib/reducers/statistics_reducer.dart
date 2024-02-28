@@ -1,37 +1,17 @@
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/models/statistics.dart';
 
-nowStatsReducer(NowStats stats, action) {
-  if (action is LoadNowStatsAction) {
+lastHoursStatsReducer(LastHoursStats? stats, action) {
+  if (action is LoadLastHoursAction) {
     return stats;
-  } else if (action is NowStatsLoadedAction) {
-    return action.nowStats;
+  } else if (action is LastHoursLoadedAction) {
+    return action.lastHoursStats;
   } else {
     return stats;
   }
 }
 
-todayStatsReducer(TodayStats stats, action) {
-  if (action is LoadTodayStatsAction) {
-    return stats;
-  } else if (action is TodayStatsLoadedAction) {
-    return action.todayStats;
-  } else {
-    return stats;
-  }
-}
-
-yesterdayStatsReducer(YesterdayStats stats, action) {
-  if (action is LoadYesterdayStatsAction) {
-    return stats;
-  } else if (action is YesterdayStatsLoadedAction) {
-    return action.yesterdayStats;
-  } else {
-    return stats;
-  }
-}
-
-lastNightStatsReducer(LastNightStats stats, action) {
+lastNightStatsReducer(LastNightStats? stats, action) {
   if (action is LoadLastNightStatsAction) {
     return stats;
   } else if (action is LastNightStatsLoadedAction) {
@@ -41,7 +21,27 @@ lastNightStatsReducer(LastNightStats stats, action) {
   }
 }
 
-weekStatsReducer(WeekStats stats, action) {
+nowStatsReducer(NowStats? stats, action) {
+  if (action is LoadNowStatsAction) {
+    return stats;
+  } else if (action is NowStatsLoadedAction) {
+    return action.nowStats;
+  } else {
+    return stats;
+  }
+}
+
+todayStatsReducer(TodayStats? stats, action) {
+  if (action is LoadTodayStatsAction) {
+    return stats;
+  } else if (action is TodayStatsLoadedAction) {
+    return action.todayStats;
+  } else {
+    return stats;
+  }
+}
+
+weekStatsReducer(WeekStats? stats, action) {
   if (action is LoadWeekStatsAction) {
     return stats;
   } else if (action is WeekStatsLoadedAction) {
@@ -51,11 +51,11 @@ weekStatsReducer(WeekStats stats, action) {
   }
 }
 
-lastHoursStatsReducer(LastHoursStats stats, action) {
-  if (action is LoadLastHoursAction) {
+yesterdayStatsReducer(YesterdayStats? stats, action) {
+  if (action is LoadYesterdayStatsAction) {
     return stats;
-  } else if (action is LastHoursLoadedAction) {
-    return action.lastHoursStats;
+  } else if (action is YesterdayStatsLoadedAction) {
+    return action.yesterdayStats;
   } else {
     return stats;
   }

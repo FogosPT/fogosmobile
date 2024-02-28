@@ -1,11 +1,11 @@
-import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/actions/preferences_actions.dart';
+import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:fogosmobile/constants/endpoints.dart';
-import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/actions/preferences_actions.dart';
 
 import 'components/fire_gradient_app_bar.dart';
 
@@ -19,23 +19,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   List locations = [];
   TextEditingController controller = TextEditingController();
-  String filter;
-
-  @override
-  initState() {
-    super.initState();
-    controller.addListener(() {
-      setState(() {
-        filter = controller.text;
-      });
-    });
-  }
-
-  getLocations() async {
-    String url = Endpoints.getLocations;
-    final response = await get(url);
-    return response.data['rows'];
-  }
+  String? filter;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +58,7 @@ class _SettingsState extends State<Settings> {
           store.dispatch(LoadAllPreferencesAction());
         },
         builder: (BuildContext context, AppState state) {
-          if (!state.hasPreferences && !state.isLoading) {
+          if (!(state.hasPreferences ?? false) && !(state.isLoading ?? false)) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -86,7 +70,8 @@ class _SettingsState extends State<Settings> {
                 store.dispatch(SetPreferenceAction(key, value));
               };
             },
-            builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+            builder: (BuildContext context,
+                SetPreferenceCallBack setPreferenceAction) {
               return Column(
                 children: <Widget>[
                   Padding(
@@ -104,14 +89,21 @@ class _SettingsState extends State<Settings> {
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
-                        return filter == null || filter == "" || _location['value']['name'].toLowerCase().contains(filter.toLowerCase())
-                            ? CheckboxListTile(
-                                title: Text(_location['value']['name']),
-                                value: state.preferences['pref-${_location['key']}'] == 1,
-                                onChanged: (bool value) {
-                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
-                                },
-                              )
+                        return filter == "" ||
+                                _location['value']['name']
+                                    .toLowerCase()
+                                    .contains(filter?.toLowerCase())
+                            ? SizedBox()
+                            // CheckboxListTile(
+                            //     title: Text(_location['value']['name']),
+                            //     value: state.preferences[
+                            //             'pref-${_location['key']}'] ==
+                            //         1,
+                            //     onChanged: (bool value) {
+                            //       setPreferenceAction(
+                            //           _location['key'], value == true ? 1 : 0);
+                            //     },
+                            //   )
                             : Container();
                       },
                     ),
@@ -123,5 +115,21 @@ class _SettingsState extends State<Settings> {
         },
       ),
     );
+  }
+
+  getLocations() async {
+    String url = Endpoints.getLocations;
+    final response = await get(url);
+    return response.data['rows'];
+  }
+
+  @override
+  initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {
+        filter = controller.text;
+      });
+    });
   }
 }

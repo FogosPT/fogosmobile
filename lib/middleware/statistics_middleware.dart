@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:fogosmobile/actions/statistics_actions.dart';
+import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'dart:convert';
-import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/constants/endpoints.dart';
 
 List<Middleware<AppState>> statisticsMiddleware() {
   final loadNowStats = _createLoadNowStats();
@@ -24,6 +25,44 @@ List<Middleware<AppState>> statisticsMiddleware() {
   ];
 }
 
+// Get last hours stats
+Middleware<AppState> _createLastHoursStats() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    try {
+      String url = Endpoints.getLastHoursStats;
+      final response = await get(url);
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
+      LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
+      store.dispatch(LastHoursLoadedAction(lastHoursStats));
+    } catch (e) {
+      print(e);
+      store.dispatch(LastHoursLoadedAction(null));
+    }
+  };
+}
+
+// Get last night stats
+Middleware<AppState> _createLastNightStats() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    try {
+      String url = Endpoints.getLastNightStats;
+      final response = await get(url);
+      final responseData = response.data.runtimeType == String
+          ? json.decode(response.data)['data']
+          : response.data['data'];
+      LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
+      store.dispatch(LastNightStatsLoadedAction(lastNightStats));
+    } catch (e) {
+      print(e);
+      store.dispatch(LastNightStatsLoadedAction(null));
+    }
+  };
+}
+
 /// Get now stats
 Middleware<AppState> _createLoadNowStats() {
   return (Store store, action, NextDispatcher next) async {
@@ -38,7 +77,6 @@ Middleware<AppState> _createLoadNowStats() {
       store.dispatch(NowStatsLoadedAction(nowStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(NowStatsLoadedAction(null));
     }
   };
@@ -58,48 +96,7 @@ Middleware<AppState> _createTodayStats() {
       store.dispatch(TodayStatsLoadedAction(todayStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(TodayStatsLoadedAction(null));
-    }
-  };
-}
-
-// Get yesterday stats
-Middleware<AppState> _createYesterdayStats() {
-  return (Store store, action, NextDispatcher next) async {
-    next(action);
-    try {
-      String url = Endpoints.getYesterdayStats;
-      final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
-      YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
-      store.dispatch(YesterdayStatsLoadedAction(yesterdayStats));
-    } catch (e) {
-      print(e);
-      print(e.stackTrace);
-      store.dispatch(YesterdayStatsLoadedAction(null));
-    }
-  };
-}
-
-// Get last night stats
-Middleware<AppState> _createLastNightStats() {
-  return (Store store, action, NextDispatcher next) async {
-    next(action);
-    try {
-      String url = Endpoints.getLastNightStats;
-      final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
-      LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
-      store.dispatch(LastNightStatsLoadedAction(lastNightStats));
-    } catch (e) {
-      print(e);
-      print(e.stackTrace);
-      store.dispatch(LastNightStatsLoadedAction(null));
     }
   };
 }
@@ -118,28 +115,26 @@ Middleware<AppState> _createWeekStats() {
       store.dispatch(WeekStatsLoadedAction(weekStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(WeekStatsLoadedAction(null));
     }
   };
 }
 
-// Get last hours stats
-Middleware<AppState> _createLastHoursStats() {
+// Get yesterday stats
+Middleware<AppState> _createYesterdayStats() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     try {
-      String url = Endpoints.getLastHoursStats;
+      String url = Endpoints.getYesterdayStats;
       final response = await get(url);
       final responseData = response.data.runtimeType == String
           ? json.decode(response.data)['data']
           : response.data['data'];
-      LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
-      store.dispatch(LastHoursLoadedAction(lastHoursStats));
+      YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
+      store.dispatch(YesterdayStatsLoadedAction(yesterdayStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
-      store.dispatch(LastHoursLoadedAction(null));
+      store.dispatch(YesterdayStatsLoadedAction(null));
     }
   };
 }

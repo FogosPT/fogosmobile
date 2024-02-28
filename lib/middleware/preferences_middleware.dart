@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
-import 'package:fogosmobile/utils/network_utils.dart';
-import 'package:redux/redux.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/utils/network_utils.dart';
+import 'package:redux/redux.dart';
 
 const String preferenceSatellite = "pref-satellite";
 
@@ -62,28 +61,6 @@ Middleware<AppState> _createLoadPreferences() {
   };
 }
 
-Middleware<AppState> _createSetPreference() {
-  return (Store store, action, NextDispatcher next) async {
-    next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
-    String topic = Platform.isIOS
-        ? 'mobile-ios-${action.key}'
-        : 'mobile-android-${action.key}';
-
-    if (action.value == 1) {
-      _firebaseMessaging.subscribeToTopic(topic);
-    } else {
-      _firebaseMessaging.unsubscribeFromTopic(topic);
-    }
-
-    try {
-      final prefs = SharedPreferencesManager.preferences;
-      prefs.save(action.key, action.value);
-    } catch (e) {}
-  };
-}
-
 Middleware<AppState> _createSetNotification() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
@@ -109,5 +86,27 @@ Middleware<AppState> _createSetNotification() {
     } catch (e) {
       print(e);
     }
+  };
+}
+
+Middleware<AppState> _createSetPreference() {
+  return (Store store, action, NextDispatcher next) async {
+    next(action);
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+    String topic = Platform.isIOS
+        ? 'mobile-ios-${action.key}'
+        : 'mobile-android-${action.key}';
+
+    if (action.value == 1) {
+      _firebaseMessaging.subscribeToTopic(topic);
+    } else {
+      _firebaseMessaging.unsubscribeFromTopic(topic);
+    }
+
+    try {
+      final prefs = SharedPreferencesManager.preferences;
+      prefs.save(action.key, action.value);
+    } catch (e) {}
   };
 }

@@ -3,51 +3,9 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 
 class ImportantFireExtra extends StatelessWidget {
-  final Fire fire;
+  final Fire? fire;
 
   ImportantFireExtra(this.fire);
-
-  _getImportantFireExtraInfo() {
-    List<Widget> extraInfo = [];
-
-    if (fire.extra != null && fire.extra.isNotEmpty) {
-      extraInfo.add(
-        Text(
-          fire.extra,
-        ),
-      );
-
-      extraInfo.add(
-        Padding(
-          padding: EdgeInsets.only(bottom: 6.0),
-        ),
-      );
-    }
-
-    if (fire.cos != null && fire.cos.isNotEmpty) {
-      extraInfo.add(
-        Text(
-          fire.cos,
-        ),
-      );
-
-      extraInfo.add(
-        Padding(
-          padding: EdgeInsets.only(bottom: 6.0),
-        ),
-      );
-    }
-
-    if (fire.pco != null && fire.pco.isNotEmpty) {
-      extraInfo.add(
-        Text(
-          fire.pco,
-        ),
-      );
-    }
-
-    return extraInfo;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,5 +32,47 @@ class ImportantFireExtra extends StatelessWidget {
         )
       ],
     );
+  }
+
+  _getImportantFireExtraInfo() {
+    List<Widget> extraInfo = [];
+
+    if (fire?.extra.isNotEmpty ?? false) {
+      extraInfo.add(
+        Text(
+          fire?.extra ?? '',
+        ),
+      );
+
+      extraInfo.add(
+        Padding(
+          padding: EdgeInsets.only(bottom: 6.0),
+        ),
+      );
+    }
+
+    if (fire?.cos.isNotEmpty ?? false) {
+      extraInfo.add(
+        Text(
+          fire?.cos ?? '',
+        ),
+      );
+
+      extraInfo.add(
+        Padding(
+          padding: EdgeInsets.only(bottom: 6.0),
+        ),
+      );
+    }
+
+    if (fire?.pco.isNotEmpty ?? false) {
+      extraInfo.add(
+        Text(
+          fire?.pco ?? '',
+        ),
+      );
+    }
+
+    return extraInfo;
   }
 }

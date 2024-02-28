@@ -2,16 +2,16 @@ import 'package:fogosmobile/models/warning.dart';
 
 class LoadWarningsAction {}
 
+class LoadWarningsMadeiraAction {}
+
 class WarningsLoadedAction {
-  final List<Warning> warnings;
+  final List<Warning>? warnings;
 
   WarningsLoadedAction(this.warnings);
 }
 
-class LoadWarningsMadeiraAction {}
-
 class WarningsMadeiraLoadedAction {
-  final List<WarningMadeira> warnings;
+  final List<WarningMadeira>? warnings;
 
   WarningsMadeiraLoadedAction(this.warnings);
 }

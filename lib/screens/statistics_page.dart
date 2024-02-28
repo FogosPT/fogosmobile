@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fogosmobile/localization/fogos_localizations.dart';
-import 'package:fogosmobile/models/statistics.dart';
-import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
-import 'package:fogosmobile/screens/components/todayStatistics.dart';
-import 'package:fogosmobile/screens/components/weekStatistics.dart';
-import 'package:fogosmobile/screens/components/lastHoursStatistics.dart';
-import 'package:fogosmobile/screens/components/lastNightStatistics.dart';
-import 'package:fogosmobile/screens/components/nowStatistics.dart';
-import 'package:fogosmobile/screens/components/yesterdayStatistics.dart';
-
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/actions/statistics_actions.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
+import 'package:fogosmobile/screens/components/nowStatistics.dart';
+import 'package:redux/redux.dart';
 
 class StatisticsPage extends StatefulWidget {
   @override
@@ -20,8 +13,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  YesterdayStats yesterdayStats;
-  TodayStats todayStats;
+  // YesterdayStats yesterdayStats;
+  // TodayStats todayStats;
 
   final TextStyle _header = TextStyle(
     color: Color(0xffff512f),
@@ -53,40 +46,56 @@ class _StatisticsPageState extends State<StatisticsPage> {
             child: ListView(
               children: <Widget>[
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textNow.toUpperCase(), style: _header),
+                  title: Text(
+                      FogosLocalizations.of(context).textNow.toUpperCase(),
+                      style: _header),
                 ),
                 SizedBox(height: 10),
                 NowStatistics(),
                 SizedBox(height: 25),
-                LastHoursStatistics(),
+                // LastHoursStatistics(),
                 SizedBox(height: 15),
                 Divider(color: Color(0xffff512f)),
                 SizedBox(height: 15),
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textToday.toUpperCase(), style: _header),
+                  title: Text(
+                      FogosLocalizations.of(context).textToday.toUpperCase(),
+                      style: _header),
                 ),
-                TodayStatistics(),
+                // TodayStatistics(),
                 SizedBox(height: 15),
                 Divider(color: Color(0xffff512f)),
                 SizedBox(height: 15),
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textYesterday.toUpperCase(), style: _header),
+                  title: Text(
+                      FogosLocalizations.of(context)
+                          .textYesterday
+                          .toUpperCase(),
+                      style: _header),
                 ),
-                YesterdayStatistics(),
+                // YesterdayStatistics(),
                 SizedBox(height: 15),
                 Divider(color: Color(0xffff512f)),
                 SizedBox(height: 15),
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textLastNight.toUpperCase(), style: _header),
+                  title: Text(
+                      FogosLocalizations.of(context)
+                          .textLastNight
+                          .toUpperCase(),
+                      style: _header),
                 ),
-                LastNightStatistics(),
+                // LastNightStatistics(),
                 SizedBox(height: 15),
                 Divider(color: Color(0xffff512f)),
                 SizedBox(height: 15),
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textPreviousDays.toUpperCase(), style: _header),
+                  title: Text(
+                      FogosLocalizations.of(context)
+                          .textPreviousDays
+                          .toUpperCase(),
+                      style: _header),
                 ),
-                WeekStatistics(),
+                // WeekStatistics(),
                 SizedBox(height: 25),
               ],
             ),

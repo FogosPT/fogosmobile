@@ -38,7 +38,7 @@ Future<bool> initializeMessages(String localeName) async {
   return new Future.value(true);
 }
 
-MessageLookupByLibrary _findExact(String localeName) {
+MessageLookupByLibrary _findExact(String? localeName) {
   switch (localeName) {
     case 'en':
       return messages_en.messages;
@@ -56,7 +56,8 @@ MessageLookupByLibrary _findGeneratedMessagesFor(String locale) {
 
 bool _messagesExistFor(String locale) {
   try {
-    return _findExact(locale) != null;
+    return true;
+    // return _findExact(locale);
   } catch (e) {
     return false;
   }

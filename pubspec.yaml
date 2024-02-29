@@ -42,7 +42,6 @@ dependencies:
   equatable: ^2.0.2
   logger: ^2.0.2+1
 
-  charts_common: any
 dev_dependencies:
   build_runner: ^2.1.2
   flutter_test:

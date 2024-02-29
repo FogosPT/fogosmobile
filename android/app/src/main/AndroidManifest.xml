@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.fogosmobile">
+xmlns:tools="http://schemas.android.com/tools"
+package="com.example.fogosmobile"
+>
   <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -10,7 +12,7 @@ package="com.example.fogosmobile">
   <application android:name="${applicationName}"
   android:label="Fogos.pt" android:icon="@mipmap/ic_launcher">
     <meta-data android:name="com.mapbox.token"
-    android:value="pk.eyJ1IjoiYWJhcnJvc28iLCJhIjoiMWY2ZGJmZmM3Yzg5N2NiMTY4NWZjMWYzNzYzYzJiN2EifQ.NF3dRCjSAsyiyhgOMNkPIw" />
+    android:value="sk.eyJ1IjoiYWJhcnJvc28iLCJhIjoiY2x0NmhucW9rMGNhZjJsbW1rdjZqeGQzNCJ9.mFNsfNeVVk2NyaBMrkfUnQ" />
     <activity android:name=".MainActivity"
     android:launchMode="singleTop"
     android:exported="true"

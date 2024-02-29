@@ -2,14 +2,12 @@ buildscript {
     ext.kotlin_version = '1.6.10'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.2'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.8'
-
     }
 }
 
@@ -27,9 +25,20 @@ allprojects {
                 // This should always be `mapbox` (not your username).
                 username = 'mapbox'
                 // Use the secret token you stored in gradle.properties as the password
-                //password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
-                password = System.getenv("MAPBOX_DOWNLOADS_TOKEN") ?: project.property("MAPBOX_DOWNLOADS_TOKEN") as String
+                password = project.properties['MAPBOX_DOWNLOADS_TOKEN'] ?: ""
+                // password = System.getenv("MAPBOX_DOWNLOADS_TOKEN") ?: project.property("MAPBOX_DOWNLOADS_TOKEN") as String
 
+            }
+        }
+    }
+       subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    if (namespace == null) {
+                        namespace project.group
+                    }
+                }
             }
         }
     }
@@ -43,6 +52,6 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

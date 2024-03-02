@@ -11,7 +11,7 @@ xmlns:tools="http://schemas.android.com/tools"
   <application android:name="${applicationName}"
   android:label="Fogos.pt" android:icon="@mipmap/ic_launcher">
     <meta-data android:name="com.mapbox.token"
-    android:value="sk.eyJ1IjoiYWJhcnJvc28iLCJhIjoiY2x0NmhucW9rMGNhZjJsbW1rdjZqeGQzNCJ9.mFNsfNeVVk2NyaBMrkfUnQ" />
+    android:value="MAPBOX_ACCESS_TOKEN" />
     <activity android:name=".MainActivity"
     android:launchMode="singleTop"
     android:exported="true"

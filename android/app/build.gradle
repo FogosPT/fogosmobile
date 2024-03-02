@@ -41,7 +41,9 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 
 android {
-    compileSdkVersion 33
+         namespace 'com.example.fogosmobile'
+
+    compileSdkVersion 34
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

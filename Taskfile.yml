@@ -1,0 +1,13 @@
+# This is a Taskfile, a simple way to define tasks for your projects.
+# For more information, check out https://taskfile.dev/#/usage
+version: '3'
+
+tasks:
+  clean:
+    cmds:
+      - flutter clean && flutter pub get
+  nuke:
+    cmds:
+      - git clean -dfx && dart pub cache clean && flutter clean && flutter pub get && flutter analyze && dart analyze
+
+

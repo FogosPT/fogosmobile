@@ -15,6 +15,42 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`fogos_api` - `v0.0.1+2`](#fogos_api---v0012)
+ - [`fogospt` - `v1.0.2`](#fogospt---v102)
+ - [`fogospt_admin` - `v1.0.2`](#fogospt_admin---v102)
+ - [`warnings_api` - `v0.0.1+2`](#warnings_api---v0012)
+
+---
+
+#### `fogos_api` - `v0.0.1+2`
+
+ - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))
+
+#### `fogospt` - `v1.0.2`
+
+ - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))
+
+#### `fogospt_admin` - `v1.0.2`
+
+ - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))
+
+#### `warnings_api` - `v0.0.1+2`
+
+ - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))
+
+
+## 2024-03-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fogos_api` - `v0.0.1+1`](#fogos_api---v0011)
  - [`fogospt` - `v1.0.1`](#fogospt---v101)
  - [`fogospt_admin` - `v1.0.1`](#fogospt_admin---v101)

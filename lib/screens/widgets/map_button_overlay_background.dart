@@ -13,10 +13,7 @@ class MapButtonOverlayBackground extends StatelessWidget {
         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(14.0)),
         color: Colors.white54,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: child,
-      ),
+      child: Padding(padding: const EdgeInsets.all(4.0), child: child),
     );
   }
 }

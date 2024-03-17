@@ -6,7 +6,7 @@ class Contributor {
   final String websiteUrl;
   final String location;
 
-  Contributor({
+  const Contributor({
     required this.avatarUrl,
     required this.name,
     required this.login,

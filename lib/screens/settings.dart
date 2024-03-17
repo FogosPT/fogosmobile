@@ -12,6 +12,7 @@ import 'components/fire_gradient_app_bar.dart';
 typedef SetPreferenceCallBack = Function(String key, int value);
 
 class Settings extends StatefulWidget {
+  const Settings();
   @override
   _SettingsState createState() => _SettingsState();
 }
@@ -37,11 +38,7 @@ class _SettingsState extends State<Settings> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: Container(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        body: Container(child: Center(child: CircularProgressIndicator())),
       );
     }
 
@@ -59,9 +56,7 @@ class _SettingsState extends State<Settings> {
         },
         builder: (BuildContext context, AppState state) {
           if (!(state.hasPreferences ?? false) && !(state.isLoading ?? false)) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           }
 
           return StoreConnector<AppState, SetPreferenceCallBack>(
@@ -70,17 +65,18 @@ class _SettingsState extends State<Settings> {
                 store.dispatch(SetPreferenceAction(key, value));
               };
             },
-            builder: (BuildContext context,
-                SetPreferenceCallBack setPreferenceAction) {
+            builder: (
+              BuildContext context,
+              SetPreferenceCallBack setPreferenceAction,
+            ) {
               return Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                  ),
+                children: [
+                  Padding(padding: EdgeInsets.only(top: 20.0)),
                   ListTile(
                     title: TextField(
                       decoration: InputDecoration(
-                          labelText: FogosLocalizations.of(context).textCounty),
+                        labelText: FogosLocalizations.of(context).textCounty,
+                      ),
                       controller: controller,
                     ),
                   ),

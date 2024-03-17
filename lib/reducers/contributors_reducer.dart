@@ -6,7 +6,6 @@ contributorsReducer(List<Contributor>? contributors, action) {
     return contributors;
   } else if (action is ContributorsLoadedAction) {
     return action.contributors;
-  } else {
-    return contributors;
   }
+  return contributors;
 }

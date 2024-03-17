@@ -12,6 +12,7 @@ import 'package:fogosmobile/utils/network_utils.dart';
 typedef SetPreferenceCallBack = Function(String key, int value);
 
 class ResetNotifications extends StatefulWidget {
+  const ResetNotifications();
   @override
   _ResetNotificationsState createState() => _ResetNotificationsState();
 }
@@ -28,26 +29,29 @@ class _ResetNotificationsState extends State<ResetNotifications> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(
-          children: <Widget>[
+          children: [
             Text(FogosLocalizations.of(context).textNotificationProblems),
             if (isLoading)
               Center(
-                  child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: CircularProgressIndicator(),
-              ))
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: CircularProgressIndicator(),
+                ),
+              )
             else if (hasRequestRun)
               isSuccess
                   ? Center(
                       child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Icon(Icons.check),
-                    ))
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Icon(Icons.check),
+                      ),
+                    )
                   : Center(
                       child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Icon(Icons.error),
-                    ))
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: Icon(Icons.error),
+                      ),
+                    )
             else
               MaterialButton(
                 textTheme: ButtonTextTheme.normal,

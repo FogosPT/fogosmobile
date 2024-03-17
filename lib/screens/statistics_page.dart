@@ -8,6 +8,7 @@ import 'package:fogosmobile/screens/components/nowStatistics.dart';
 import 'package:redux/redux.dart';
 
 class StatisticsPage extends StatefulWidget {
+  const StatisticsPage();
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
 }
@@ -44,11 +45,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
         builder: (BuildContext context, AppState state) {
           return Scrollbar(
             child: ListView(
-              children: <Widget>[
+              children: [
                 ListTile(
                   title: Text(
-                      FogosLocalizations.of(context).textNow.toUpperCase(),
-                      style: _header),
+                    FogosLocalizations.of(context).textNow.toUpperCase(),
+                    style: _header,
+                  ),
                 ),
                 SizedBox(height: 10),
                 NowStatistics(),
@@ -59,8 +61,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(
-                      FogosLocalizations.of(context).textToday.toUpperCase(),
-                      style: _header),
+                    FogosLocalizations.of(context).textToday.toUpperCase(),
+                    style: _header,
+                  ),
                 ),
                 // TodayStatistics(),
                 SizedBox(height: 15),
@@ -68,10 +71,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(
-                      FogosLocalizations.of(context)
-                          .textYesterday
-                          .toUpperCase(),
-                      style: _header),
+                    FogosLocalizations.of(context).textYesterday.toUpperCase(),
+                    style: _header,
+                  ),
                 ),
                 // YesterdayStatistics(),
                 SizedBox(height: 15),
@@ -79,10 +81,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(
-                      FogosLocalizations.of(context)
-                          .textLastNight
-                          .toUpperCase(),
-                      style: _header),
+                    FogosLocalizations.of(context).textLastNight.toUpperCase(),
+                    style: _header,
+                  ),
                 ),
                 // LastNightStatistics(),
                 SizedBox(height: 15),
@@ -90,10 +91,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(
-                      FogosLocalizations.of(context)
-                          .textPreviousDays
-                          .toUpperCase(),
-                      style: _header),
+                    FogosLocalizations.of(context)
+                        .textPreviousDays
+                        .toUpperCase(),
+                    style: _header,
+                  ),
                 ),
                 // WeekStatistics(),
                 SizedBox(height: 25),

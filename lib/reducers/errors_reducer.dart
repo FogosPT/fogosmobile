@@ -21,7 +21,6 @@ errorsReducer(dynamic errors, action) {
     }
 
     return errors;
-  } else {
-    return errors;
   }
+  return errors;
 }

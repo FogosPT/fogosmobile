@@ -1,11 +1,15 @@
 import 'package:fogosmobile/models/modis.dart';
 
-class LoadModisAction {}
+class LoadModisAction {
+  const LoadModisAction();
+}
 
 class ModisLoadedAction {
   final List<Modis> modis;
 
-  ModisLoadedAction(this.modis);
+  const ModisLoadedAction(this.modis);
 }
 
-class ShowModisAction {}
+class ShowModisAction {
+  const ShowModisAction();
+}

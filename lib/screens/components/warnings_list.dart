@@ -4,17 +4,13 @@ import 'package:fogosmobile/models/warning.dart';
 class WarningsList extends StatelessWidget {
   final List? warnings;
 
-  WarningsList({
-    required this.warnings,
-  });
+  const WarningsList({required this.warnings});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 10.0),
-        ),
+      children: [
+        Padding(padding: EdgeInsets.only(top: 10.0)),
         Expanded(
           child: Scrollbar(
             child: ListView.builder(
@@ -25,13 +21,14 @@ class WarningsList extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
+                    children: [
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.5),
-                            color: Color(0xfff45e29)),
+                          borderRadius: BorderRadius.circular(2.5),
+                          color: Color(0xfff45e29),
+                        ),
                         child: Text(
                           warning?.timestamp ?? '',
                           style: TextStyle(color: Colors.white),
@@ -54,18 +51,21 @@ class WarningsList extends StatelessWidget {
     if (warning.title != null) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Container(
             padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
-            child: Text(warning.title,
-                style: TextStyle(color: Colors.redAccent, fontSize: 16)),
+            child: Text(
+              warning.title,
+              style: TextStyle(color: Colors.redAccent, fontSize: 16),
+            ),
           ),
           Text(warning.description),
         ],
       );
     }
     return Container(
-        padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
-        child: Text(warning.description));
+      padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
+      child: Text(warning.description),
+    );
   }
 }

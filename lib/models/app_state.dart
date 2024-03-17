@@ -121,7 +121,7 @@ class AppState {
   }
 
   String getErrors() {
-    return this.errors.toString();
+    return this.errors?.toString() ?? '';
   }
 
   @override

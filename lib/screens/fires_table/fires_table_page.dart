@@ -10,6 +10,7 @@ import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:redux/redux.dart';
 
 class FiresTablePage extends StatefulWidget {
+  const FiresTablePage();
   @override
   _FiresTablePageState createState() => _FiresTablePageState();
 }
@@ -37,172 +38,159 @@ class _FiresTablePageState extends State<FiresTablePage> {
         ],
       ),
       body: Container(
-          child: StoreConnector<AppState, AppState>(
-        onInit: (Store<AppState> store) {
-          store.dispatch(LoadFiresAction());
-          store.dispatch(ClearFireAction());
-        },
-        converter: (Store<AppState> store) => store.state,
-        builder: (BuildContext context, AppState state) {
-          List<Fire> fires = state.fires ?? [];
-          bool isLoading = state.isLoading ?? true;
+        child: StoreConnector<AppState, AppState>(
+          onInit: (Store<AppState> store) {
+            store.dispatch(LoadFiresAction());
+            store.dispatch(ClearFireAction());
+          },
+          converter: (Store<AppState> store) => store.state,
+          builder: (BuildContext context, AppState state) {
+            List<Fire> fires = state.fires ?? [];
+            bool isLoading = state.isLoading ?? true;
 
-          if (isLoading) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+            if (isLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-          return Scrollbar(
-            child: SingleChildScrollView(
+            return Scrollbar(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  sortColumnIndex: _currentSortColumn,
-                  sortAscending: _isAscending,
-                  columns: [
-                    DataColumn(
-                      label: Text(
-                        'ID',
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: DataTable(
+                    sortColumnIndex: _currentSortColumn,
+                    sortAscending: _isAscending,
+                    columns: [
+                      DataColumn(
+                        label: Text('ID'),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'id');
+                        },
                       ),
-                      onSort: (columnIndex, _) {
-                        orderFires(columnIndex, fires, 'id');
-                      },
-                    ),
-                    DataColumn(
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableStart,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'dateTime');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableDistrict,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'district');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableCounty,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'city');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableParish,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'town');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableLocality,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'local');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           FogosLocalizations.of(context).textDataTableStatus,
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'status');
-                        }),
-                    DataColumn(
+                        },
+                      ),
+                      DataColumn(
                         label: Text(
                           '👩‍🚒',
                           style: TextStyle(fontSize: 24.0),
                         ),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'human');
-                        }),
-                    DataColumn(
-                        label: Text(
-                          '🚒',
-                          style: TextStyle(fontSize: 24.0),
-                        ),
+                        },
+                      ),
+                      DataColumn(
+                        label: Text('🚒', style: TextStyle(fontSize: 24.0)),
                         onSort: (columnIndex, _) {
                           orderFires(columnIndex, fires, 'terrain');
-                        }),
-                    DataColumn(
-                      label: Text(
-                        '🚁',
-                        style: TextStyle(fontSize: 24.0),
+                        },
                       ),
-                      onSort: (columnIndex, _) {
-                        orderFires(columnIndex, fires, 'aerial');
-                      },
-                    ),
-                  ],
-                  rows: fires
-                      .map(
-                        (fire) => DataRow(
-                          cells: <DataCell>[
-                            DataCell(
-                              Text(fire.id),
-                            ),
-                            DataCell(
-                              Text('${fire.date} ${fire.time}'),
-                            ),
-                            DataCell(
-                              Text(fire.district),
-                            ),
-                            DataCell(
-                              Text(fire.city),
-                            ),
-                            DataCell(
-                              Text(fire.town),
-                            ),
-                            DataCell(
-                              Text(fire.local),
-                            ),
-                            DataCell(
-                              Wrap(
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 32.0,
-                                    width: 32.0,
-                                    margin: EdgeInsets.all(4.0),
-                                    decoration: BoxDecoration(
+                      DataColumn(
+                        label: Text('🚁', style: TextStyle(fontSize: 24.0)),
+                        onSort: (columnIndex, _) {
+                          orderFires(columnIndex, fires, 'aerial');
+                        },
+                      ),
+                    ],
+                    rows: fires
+                        .map(
+                          (fire) => DataRow(
+                            cells: [
+                              DataCell(Text(fire.id)),
+                              DataCell(Text('${fire.date} ${fire.time}')),
+                              DataCell(Text(fire.district)),
+                              DataCell(Text(fire.city)),
+                              DataCell(Text(fire.town)),
+                              DataCell(Text(fire.local)),
+                              DataCell(
+                                Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 32.0,
+                                      width: 32.0,
+                                      margin: EdgeInsets.all(4.0),
+                                      decoration: BoxDecoration(
                                         color: getFireColor(fire),
-                                        shape: BoxShape.circle),
-                                    child: IconButton(
-                                      icon: SvgPicture.asset(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: IconButton(
+                                        icon: SvgPicture.asset(
                                           getCorrectStatusImage(
-                                              fire.statusCode, fire.important),
-                                          semanticsLabel: 'Acme Logo'),
-                                      onPressed: null,
+                                            fire.statusCode,
+                                            fire.important,
+                                          ),
+                                          semanticsLabel: 'Acme Logo',
+                                        ),
+                                        onPressed: null,
+                                      ),
                                     ),
-                                  ),
-                                  Text(FogosLocalizations.of(context)
-                                      .textFireStatus(fire.status)),
-                                ],
+                                    Text(FogosLocalizations.of(context)
+                                        .textFireStatus(fire.status)),
+                                  ],
+                                ),
                               ),
-                            ),
-                            DataCell(
-                              // Text(fire.human ?? '0'),
-                              Text(fire.human.toString()),
-                            ),
-                            DataCell(
-                              Text(fire.terrain.toString()),
-                            ),
-                            DataCell(
-                              Text(fire.aerial.toString()),
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
+                              DataCell(
+                                // Text(fire.human ?? '0'),
+                                Text(fire.human.toString()),
+                              ),
+                              DataCell(Text(fire.terrain.toString())),
+                              DataCell(Text(fire.aerial.toString())),
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      )),
+            );
+          },
+        ),
+      ),
     );
   }
 

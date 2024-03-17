@@ -7,9 +7,7 @@ import 'package:fogosmobile/utils/uri_utils.dart';
 class ContributorItem extends StatelessWidget {
   final Contributor contributor;
 
-  ContributorItem({
-    required this.contributor,
-  });
+  const ContributorItem({required this.contributor});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +23,12 @@ class ContributorItem extends StatelessWidget {
               ? Text('${contributor.name}')
               : Container(),
           subtitle: (contributor.bio.isNotEmpty)
-              ? AutoSizeText('${contributor.bio}',
+              ? AutoSizeText(
+                  '${contributor.bio}',
                   minFontSize: 10.0,
                   maxLines: 4,
-                  overflow: TextOverflow.ellipsis)
+                  overflow: TextOverflow.ellipsis,
+                )
               : Container(),
           leading: Container(
             width: 50,
@@ -50,9 +50,7 @@ class ContributorItem extends StatelessWidget {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.only(right: 2.0, left: 2.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black45,
-                    ),
+                    decoration: BoxDecoration(color: Colors.black45),
                     child: Center(
                       heightFactor: 1,
                       child: AutoSizeText(

@@ -8,9 +8,7 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> lightningMiddleware() {
   final loadLightnings = _createLightningStrikes();
 
-  return [
-    TypedMiddleware<AppState, LoadLightningsAction>(loadLightnings),
-  ];
+  return [TypedMiddleware<AppState, LoadLightningsAction>(loadLightnings)];
 }
 
 /// Get list of lightnings

@@ -51,7 +51,7 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker> {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => widget._openModal.call(widget._modis),
+        onTap: () => widget._openModal(widget._modis),
         child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
@@ -81,8 +81,8 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker> {
 
   @override
   void initState() {
-    _position = widget._initialPosition;
     super.initState();
+    _position = widget._initialPosition;
   }
 
   @override

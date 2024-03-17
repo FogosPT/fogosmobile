@@ -3,7 +3,9 @@ import 'package:fogosmobile/models/contributor.dart';
 class ContributorsLoadedAction {
   final List<Contributor> contributors;
 
-  ContributorsLoadedAction(this.contributors);
+  const ContributorsLoadedAction(this.contributors);
 }
 
-class LoadContributorsAction {}
+class LoadContributorsAction {
+  const LoadContributorsAction();
+}

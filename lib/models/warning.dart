@@ -3,7 +3,7 @@ class Warning {
   final String title;
   final String description;
 
-  Warning({
+  const Warning({
     required this.timestamp,
     required this.title,
     required this.description,

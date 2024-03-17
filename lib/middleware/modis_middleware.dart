@@ -8,9 +8,7 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> modisMiddleware() {
   final loadModis = _loadModis();
 
-  return [
-    TypedMiddleware<AppState, LoadModisAction>(loadModis),
-  ];
+  return [TypedMiddleware<AppState, LoadModisAction>(loadModis)];
 }
 
 /// Get list of modis

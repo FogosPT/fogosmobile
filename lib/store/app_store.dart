@@ -22,7 +22,7 @@ final store = Store<AppState>(
     hasPreferences: false,
     hasContributors: false,
     preferences: {},
-    activeFilters: List.from(FireStatus.values),
+    activeFilters: List.of(FireStatus.values),
     warningsMadeira: [],
     modis: [],
     viirs: [],
@@ -38,5 +38,5 @@ final store = Store<AppState>(
     ..addAll(modisMiddleware())
     ..addAll(warningsMiddleware())
     ..addAll(warningsMiddleware())
-    ..addAll(lightningMiddleware())
+    ..addAll(lightningMiddleware()),
 );

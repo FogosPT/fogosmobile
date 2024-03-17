@@ -151,7 +151,7 @@ class Fire extends BaseMapboxModel implements Equatable {
 
   static List<FireStatus> listFromActiveFilters(List<String> statusList) {
     return statusList.map((filter) => Fire._statusFromJson(filter)).toList() ??
-        List.from(FireStatus.values);
+        List.of(FireStatus.values);
   }
 
   static FireStatus _statusFromJson(String status) {

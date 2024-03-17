@@ -5,7 +5,7 @@ import 'package:fogosmobile/screens/utils/widget_utils.dart';
 class ImportantFireExtra extends StatelessWidget {
   final Fire? fire;
 
-  ImportantFireExtra(this.fire);
+  const ImportantFireExtra(this.fire);
 
   @override
   Widget build(BuildContext context) {
@@ -17,19 +17,12 @@ class ImportantFireExtra extends StatelessWidget {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
+      children: [
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
-          child: Icon(
-            Icons.add,
-            color: getFireColor(fire),
-          ),
+          child: Icon(Icons.add, color: getFireColor(fire)),
         ),
-        Expanded(
-          child: Column(
-            children: extraInfo,
-          ),
-        )
+        Expanded(child: Column(children: extraInfo)),
       ],
     );
   }
@@ -38,39 +31,19 @@ class ImportantFireExtra extends StatelessWidget {
     List<Widget> extraInfo = [];
 
     if (fire?.extra.isNotEmpty ?? false) {
-      extraInfo.add(
-        Text(
-          fire?.extra ?? '',
-        ),
-      );
+      extraInfo.add(Text(fire?.extra ?? ''));
 
-      extraInfo.add(
-        Padding(
-          padding: EdgeInsets.only(bottom: 6.0),
-        ),
-      );
+      extraInfo.add(Padding(padding: EdgeInsets.only(bottom: 6.0)));
     }
 
     if (fire?.cos.isNotEmpty ?? false) {
-      extraInfo.add(
-        Text(
-          fire?.cos ?? '',
-        ),
-      );
+      extraInfo.add(Text(fire?.cos ?? ''));
 
-      extraInfo.add(
-        Padding(
-          padding: EdgeInsets.only(bottom: 6.0),
-        ),
-      );
+      extraInfo.add(Padding(padding: EdgeInsets.only(bottom: 6.0)));
     }
 
     if (fire?.pco.isNotEmpty ?? false) {
-      extraInfo.add(
-        Text(
-          fire?.pco ?? '',
-        ),
-      );
+      extraInfo.add(Text(fire?.pco ?? ''));
     }
 
     return extraInfo;

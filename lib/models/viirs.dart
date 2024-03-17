@@ -112,17 +112,13 @@ class Viirs extends BaseMapboxModel implements Equatable {
 class ViirsResult {
   Viirs viirs;
 
-  ViirsResult({
-    required this.viirs,
-  });
+  ViirsResult({required this.viirs});
 
   factory ViirsResult.fromJson(Map<String, dynamic> json) => ViirsResult(
         viirs: Viirs.fromJson(json["1"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "1": viirs.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"1": viirs.toJson()};
 
   static List<Viirs> fromMap(Map<String, dynamic> obj) {
     return obj.values.map((map) => Viirs.fromJson(map)).toList();

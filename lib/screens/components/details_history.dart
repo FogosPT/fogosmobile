@@ -9,13 +9,15 @@ import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
 class DetailsHistoryStats extends StatelessWidget {
+  const DetailsHistoryStats();
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
         store.dispatch(
-            LoadFireDetailsHistoryAction(store.state.selectedFire?.id));
+          LoadFireDetailsHistoryAction(store.state.selectedFire?.id),
+        );
       },
       builder: (BuildContext context, AppState state) {
         DetailsHistory? stats = state.fireDetailsHistory;
@@ -23,7 +25,7 @@ class DetailsHistoryStats extends StatelessWidget {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 70),
           child: Column(
-            children: <Widget>[
+            children: [
               for (Details details in stats?.details ?? [])
                 _buildHistory(details),
             ],
@@ -35,11 +37,13 @@ class DetailsHistoryStats extends StatelessWidget {
 
   Widget _buildHistory(Details details) {
     return Column(
-      children: <Widget>[
+      children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20), color: Colors.white70),
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white70,
+          ),
           child: ListTile(
             contentPadding: EdgeInsets.all(0),
             dense: true,
@@ -48,15 +52,16 @@ class DetailsHistoryStats extends StatelessWidget {
               child: Container(
                 width: 20,
                 child: SvgPicture.asset(
-                    getCorrectStatusImage(details.statusCode, false),
-                    semanticsLabel: 'Acme Logo'),
+                  getCorrectStatusImage(details.statusCode, false),
+                  semanticsLabel: 'Acme Logo',
+                ),
               ),
             ),
             title: Text(DateFormat('dd-MM-yyyy - H:mm').format(details.label)),
             subtitle: Text(details.status),
           ),
         ),
-        Container(height: 50, width: 2, color: Colors.grey)
+        Container(height: 50, width: 2, color: Colors.grey),
       ],
     );
   }

@@ -31,7 +31,7 @@ class FireRisk extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
+            children: [
               for (var risk in _riskList) _buildRisk(risk, stats, context),
             ],
           ),
@@ -55,7 +55,9 @@ class FireRisk extends StatelessWidget {
         height: 80,
         margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: fireRisk.color),
+          borderRadius: BorderRadius.circular(20),
+          color: fireRisk.color,
+        ),
         child: Center(
           child: Text(
             currentRisk == fireRisk.risk
@@ -73,5 +75,5 @@ class FireRiskStruct {
   final String risk;
   final Color color;
 
-  FireRiskStruct(this.risk, this.color);
+  const FireRiskStruct(this.risk, this.color);
 }

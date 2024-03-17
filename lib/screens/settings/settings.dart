@@ -6,6 +6,7 @@ import 'package:fogosmobile/screens/settings/notifications.dart';
 import 'package:fogosmobile/screens/settings/reset_notifications.dart';
 
 class Settings extends StatefulWidget {
+  const Settings();
   @override
   _SettingsState createState() => _SettingsState();
 }

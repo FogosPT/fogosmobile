@@ -5,9 +5,26 @@ version: '3'
 tasks:
   clean:
     cmds:
-      - flutter clean && flutter pub get
+      - echo "Cleaning up..."
+      - flutter clean
+      - echo "Fetching dependencies..."
+      - flutter pub get
+      - echo "Done"
   nuke:
     cmds:
-      - git clean -dfx && dart pub cache clean && flutter clean && flutter pub get && flutter analyze && dart analyze
+      - echo "Nuking..."
+      - echo "Cleaning git through untracked directories, forced enabled to delete all untracked files, and build files..."
+      - git clean -dfx 
+      - echo "Cleaning global Dart cache..."
+      - dart pub cache clean
+      - echo "Cleaning up Flutter files..."
+      - flutter clean
+      - echo "Fetching dependencies..."
+      - flutter pub get
+      - echo "Flutter analyze..."
+      - flutter analyze
+      - echo "Dart analyze..."
+      - dart analyze
+      - echo "Done"
 
 

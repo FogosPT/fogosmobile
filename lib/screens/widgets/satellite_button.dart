@@ -24,8 +24,10 @@ class _SatelliteButtonState extends State<SatelliteButton> {
             onPressed: () {
               final store = StoreProvider.of<AppState>(context);
               store.dispatch(
-                SetPreferenceAction(preferenceSatellite,
-                    state.preferences?[preferenceSatellite] == 1 ? 0 : 1),
+                SetPreferenceAction(
+                  preferenceSatellite,
+                  state.preferences?[preferenceSatellite] == 1 ? 0 : 1,
+                ),
               );
 
               setState(() {});
@@ -37,17 +39,11 @@ class _SatelliteButtonState extends State<SatelliteButton> {
           widgets.add(Positioned(
             bottom: 5,
             right: 5,
-            child: Icon(
-              Icons.check_circle,
-              size: 18,
-              color: Colors.green,
-            ),
+            child: Icon(Icons.check_circle, size: 18, color: Colors.green),
           ));
         }
 
-        return Stack(
-          children: widgets,
-        );
+        return Stack(children: widgets);
       },
     );
   }

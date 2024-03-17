@@ -62,7 +62,7 @@ Middleware<AppState> _createLoadPreferences() {
 }
 
 Middleware<AppState> _createSetNotification() {
-  return (Store store, action, NextDispatcher next) async {
+  return (Store store, action, NextDispatcher next) {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
@@ -90,7 +90,7 @@ Middleware<AppState> _createSetNotification() {
 }
 
 Middleware<AppState> _createSetPreference() {
-  return (Store store, action, NextDispatcher next) async {
+  return (Store store, action, NextDispatcher next) {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 

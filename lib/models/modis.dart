@@ -107,17 +107,13 @@ class Modis extends BaseMapboxModel implements Equatable {
 class ModisResult {
   Modis modis;
 
-  ModisResult({
-    required this.modis,
-  });
+  ModisResult({required this.modis});
 
   factory ModisResult.fromJson(Map<String, dynamic> json) => ModisResult(
         modis: Modis.fromJson(json["1"]),
       );
 
-  Map<String, dynamic> toJson() => {
-        "1": modis.toJson(),
-      };
+  Map<String, dynamic> toJson() => {"1": modis.toJson()};
 
   static List<Modis> fromMap(Map<String, dynamic> obj) {
     return obj.values.map((map) => Modis.fromJson(map)).toList();

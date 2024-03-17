@@ -3,14 +3,18 @@ class Details {
   final int statusCode;
   final DateTime label;
 
-  Details(
-      {required this.status, required this.statusCode, required this.label});
+  const Details({
+    required this.status,
+    required this.statusCode,
+    required this.label,
+  });
 
   factory Details.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel = DateTime.fromMillisecondsSinceEpoch(
-        parsedJson['created'].runtimeType == int
-            ? parsedJson['created'] * 1000
-            : parsedJson['created']['sec'] * 1000);
+      parsedJson['created'].runtimeType == int
+          ? parsedJson['created'] * 1000
+          : parsedJson['created']['sec'] * 1000,
+    );
     return Details(
       status: parsedJson['status'],
       statusCode: parsedJson['statusCode'],
@@ -22,7 +26,7 @@ class Details {
 class DetailsHistory {
   final List<Details> details;
 
-  DetailsHistory({required this.details});
+  const DetailsHistory({required this.details});
 
   factory DetailsHistory.fromJson(List<dynamic> json) {
     List<Details> details = <Details>[];
@@ -37,7 +41,7 @@ class Means {
   final int terrain;
   final DateTime label;
 
-  Means({
+  const Means({
     required this.man,
     required this.aerial,
     required this.terrain,
@@ -46,9 +50,10 @@ class Means {
 
   factory Means.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel = DateTime.fromMillisecondsSinceEpoch(
-        parsedJson['created'].runtimeType == int
-            ? parsedJson['created'] * 1000
-            : parsedJson['created']['sec'] * 1000);
+      parsedJson['created'].runtimeType == int
+          ? parsedJson['created'] * 1000
+          : parsedJson['created']['sec'] * 1000,
+    );
 
     return Means(
       man: parsedJson['man'],
@@ -62,7 +67,7 @@ class Means {
 class MeansHistory {
   final List<Means>? means;
 
-  MeansHistory({this.means});
+  const MeansHistory({this.means});
 
   factory MeansHistory.fromJson(List<dynamic> json) {
     List<Means> means = <Means>[];

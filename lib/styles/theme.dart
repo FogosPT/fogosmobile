@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FogosTheme {
+  const FogosTheme();
   static Color _primaryColor = Color(0xffff512f);
   static Color _accentColor = Color(0xfff09819);
 
@@ -9,8 +10,10 @@ class FogosTheme {
   ThemeData get themeData => _themeData;
 
   static final ThemeData _themeData = ThemeData(
-      brightness: Brightness.light,
-      iconTheme: IconThemeData(color: Colors.black),
-      indicatorColor: Colors.white,
-      primaryColor: _primaryColor, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: _accentColor));
+    brightness: Brightness.light,
+    iconTheme: IconThemeData(color: Colors.black),
+    indicatorColor: Colors.white,
+    primaryColor: _primaryColor,
+    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: _accentColor),
+  );
 }

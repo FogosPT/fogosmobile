@@ -1,13 +1,15 @@
-class ClearErrorsAction {}
+class ClearErrorsAction {
+  const ClearErrorsAction();
+}
 
 class AddErrorAction {
   final String error;
 
-  AddErrorAction(this.error);
+  const AddErrorAction(this.error);
 }
 
 class RemoveErrorAction {
   final String error;
 
-  RemoveErrorAction(this.error);
+  const RemoveErrorAction(this.error);
 }

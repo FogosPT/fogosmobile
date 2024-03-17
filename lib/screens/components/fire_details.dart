@@ -16,6 +16,7 @@ import 'package:share/share.dart';
 typedef SetPreferenceCallBack = Function(String? key, int value);
 
 class FireDetails extends StatelessWidget {
+  const FireDetails();
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, VoidCallback>(
@@ -36,8 +37,10 @@ class FireDetails extends StatelessWidget {
                   store.dispatch(SetFireNotificationAction(fireId, value));
                 };
               },
-              builder: (BuildContext context,
-                  SetPreferenceCallBack setPreferenceAction) {
+              builder: (
+                BuildContext context,
+                SetPreferenceCallBack setPreferenceAction,
+              ) {
                 bool isFireSubscribed = false;
                 if ((state.preferences?['subscribedFires'] ?? []).length > 0) {
                   var subbedFire = state.preferences?['subscribedFires']
@@ -54,7 +57,7 @@ class FireDetails extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
+                        children: [
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -62,17 +65,20 @@ class FireDetails extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
+                              children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
+                                  children: [
                                     IconButton(
                                       icon: Icon(Icons.share),
                                       onPressed: () {
                                         Share.share(
-                                            FogosLocalizations.of(context)
-                                                .textShare(
-                                                    fire?.city, fire?.id));
+                                          FogosLocalizations.of(context)
+                                              .textShare(
+                                            fire?.city,
+                                            fire?.id,
+                                          ),
+                                        );
                                       },
                                     ),
                                     SizedBox(width: 8),
@@ -86,8 +92,10 @@ class FireDetails extends StatelessWidget {
                                                 ? Icons.notifications_active
                                                 : Icons.notifications_none),
                                             onPressed: () {
-                                              setPreferenceAction(fire?.id,
-                                                  isFireSubscribed ? 0 : 1);
+                                              setPreferenceAction(
+                                                fire?.id,
+                                                isFireSubscribed ? 0 : 1,
+                                              );
                                             },
                                           ),
                                     SizedBox(width: 8),
@@ -104,7 +112,7 @@ class FireDetails extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
+                                  children: [
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
@@ -120,7 +128,7 @@ class FireDetails extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
-                                        children: <Widget>[
+                                        children: [
                                           Text(
                                             fire?.district ?? '',
                                             style: TextStyle(fontSize: 16.0),
@@ -139,17 +147,15 @@ class FireDetails extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20.0),
-                                ),
+                                Padding(padding: EdgeInsets.only(top: 20.0)),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
+                                  children: [
                                     // Padding(
                                     //   padding:
                                     //       const EdgeInsets.only(right: 16.0),
@@ -170,24 +176,22 @@ class FireDetails extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
-                                        children: <Widget>[
+                                        children: [
                                           Text(
                                             '${FogosLocalizations.of(context).textStatus}: ${FogosLocalizations.of(context).textFireStatus(fire?.status ?? FireStatus.arrival)}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20.0),
-                                ),
+                                Padding(padding: EdgeInsets.only(top: 20.0)),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
+                                  children: [
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
@@ -205,7 +209,7 @@ class FireDetails extends StatelessWidget {
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
-                                        children: <Widget>[
+                                        children: [
                                           Text(
                                             '${FogosLocalizations.of(context).textHumanMeans}: ${fire?.human}',
                                             style: TextStyle(fontSize: 16.0),
@@ -217,20 +221,18 @@ class FireDetails extends StatelessWidget {
                                           Text(
                                             '${FogosLocalizations.of(context).textAerealMeans}: ${fire?.aerial}',
                                             style: TextStyle(fontSize: 16.0),
-                                          )
+                                          ),
                                         ],
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20.0),
-                                ),
+                                Padding(padding: EdgeInsets.only(top: 20.0)),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
+                                  children: [
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
@@ -246,37 +248,36 @@ class FireDetails extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
-                                        children: <Widget>[
+                                        children: [
                                           Text(
                                             '${fire?.date} ${fire?.time}',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 20.0),
-                                ),
+                                Padding(padding: EdgeInsets.only(top: 20.0)),
                                 ImportantFireExtra(fire),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
+                                  children: [
                                     TextButton.icon(
-                                        label: Text('MAIS INFORMAÇÕES'),
-                                        icon: Icon(Icons.info),
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pushNamed(FIRE_DETAILS_ROUTE);
-                                        }),
+                                      label: Text('MAIS INFORMAÇÕES'),
+                                      icon: Icon(Icons.info),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed(FIRE_DETAILS_ROUTE);
+                                      },
+                                    ),
                                   ],
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),

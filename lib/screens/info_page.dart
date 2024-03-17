@@ -55,12 +55,21 @@ class InfoPage extends StatelessWidget {
       body: Scrollbar(
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          children: <Widget>[
+          children: [
             ListTile(
-              title: Text(FogosLocalizations.of(context).textInformationIncidentStatus.toUpperCase(), style: _header),
+              title: Text(
+                FogosLocalizations.of(context)
+                    .textInformationIncidentStatus
+                    .toUpperCase(),
+                style: _header,
+              ),
               contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-            _occurencyBulletPoint(FogosLocalizations.of(context).textInformationFirstOrderDispatch, imgSvgIconAlarm, Color(0xffff6e02)),
+            _occurencyBulletPoint(
+              FogosLocalizations.of(context).textInformationFirstOrderDispatch,
+              imgSvgIconAlarm,
+              Color(0xffff6e02),
+            ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationArrival,
               imgSvgIconPointer,
@@ -104,7 +113,8 @@ class InfoPage extends StatelessWidget {
             SizedBox(height: 20),
             MarkdownBody(
               data: _infoMarkdownData,
-              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
+              styleSheet:
+                  MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
                 h1: _header,
                 p: _body,
               ),
@@ -128,10 +138,7 @@ class InfoPage extends StatelessWidget {
       backgroundColor: color,
       child: Container(
         width: 25,
-        child: SvgPicture.asset(
-          icon,
-          semanticsLabel: 'Acme Logo',
-        ),
+        child: SvgPicture.asset(icon, semanticsLabel: 'Acme Logo'),
       ),
     );
   }

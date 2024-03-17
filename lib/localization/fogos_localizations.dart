@@ -39,6 +39,7 @@ import './generated/l10n/messages_all.dart';
 /// ```
 
 class FogosLocalizations {
+  const FogosLocalizations();
   // Localized Messages
   String get appTitle => Intl.message(
         "Fogos.pt",
@@ -268,11 +269,7 @@ class FogosLocalizations {
         desc: 'Fire status: vigilance',
       );
 
-  String get textFrp => Intl.message(
-        "Frp",
-        name: 'textFrp',
-        desc: "Frp",
-      );
+  String get textFrp => Intl.message("Frp", name: 'textFrp', desc: "Frp");
 
   String get textHighConfidence => Intl.message(
         "Alta",
@@ -407,11 +404,7 @@ class FogosLocalizations {
         desc: 'Texto de notificações - App Drawer',
       );
 
-  String get textNow => Intl.message(
-        "Agora",
-        name: 'textNow',
-        desc: 'Now',
-      );
+  String get textNow => Intl.message("Agora", name: 'textNow', desc: 'Now');
 
   String get textOther => Intl.message(
         "Outras",
@@ -610,12 +603,13 @@ class FogosLocalizations {
     }
   }
 
-  String textShare(String? city, String? id) =>
-      Intl.message('Incêndio em $city https://fogos.pt/fogo/$id',
-          name: 'textShare',
-          args: [city ?? '', id ?? ''],
-          desc: 'Share Text',
-          examples: const {'city': 'Grândola', 'id': '1'});
+  String textShare(String? city, String? id) => Intl.message(
+        'Incêndio em $city https://fogos.pt/fogo/$id',
+        name: 'textShare',
+        args: [city ?? '', id ?? ''],
+        desc: 'Share Text',
+        examples: const {'city': 'Grândola', 'id': '1'},
+      );
 
   /// Initialize localization systems and messages
   static Future<FogosLocalizations> load(Locale locale) async {

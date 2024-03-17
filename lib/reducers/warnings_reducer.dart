@@ -5,9 +5,8 @@ warningsMadeiraReducer(List? warnings, action) {
     return warnings;
   } else if (action is WarningsMadeiraLoadedAction) {
     return action.warnings;
-  } else {
-    return warnings;
   }
+  return warnings;
 }
 
 warningsReducer(List? warnings, action) {
@@ -15,7 +14,6 @@ warningsReducer(List? warnings, action) {
     return warnings;
   } else if (action is WarningsLoadedAction) {
     return action.warnings;
-  } else {
-    return warnings;
   }
+  return warnings;
 }

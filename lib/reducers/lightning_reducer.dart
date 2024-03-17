@@ -6,7 +6,6 @@ lightningsReducer(List<Lightning>? lightnings, action) {
     return lightnings;
   } else if (action is LightningsLoadedAction) {
     return action.lightnings;
-  } else {
-    return lightnings;
   }
+  return lightnings;
 }

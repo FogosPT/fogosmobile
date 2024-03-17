@@ -1,76 +1,86 @@
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 
-class ClearFireAction {}
+class ClearFireAction {
+  const ClearFireAction();
+}
 
-class ClearFireDetailsAction {}
+class ClearFireDetailsAction {
+  const ClearFireDetailsAction();
+}
 
-class ClearFireMeansAction {}
+class ClearFireMeansAction {
+  const ClearFireMeansAction();
+}
 
-class ClearFireRiskAction {}
+class ClearFireRiskAction {
+  const ClearFireRiskAction();
+}
 
 class FireDetailsHistoryLoadedAction {
   final DetailsHistory? data;
 
-  FireDetailsHistoryLoadedAction(this.data);
+  const FireDetailsHistoryLoadedAction(this.data);
 }
 
 class FireLoadedAction {
   final Fire? fire;
 
-  FireLoadedAction(this.fire);
+  const FireLoadedAction(this.fire);
 }
 
 class FireMeansHistoryLoadedAction {
   final MeansHistory? data;
 
-  FireMeansHistoryLoadedAction(this.data);
+  const FireMeansHistoryLoadedAction(this.data);
 }
 
 class FireRiskLoadedAction {
   final String? risk;
 
-  FireRiskLoadedAction(this.risk);
+  const FireRiskLoadedAction(this.risk);
 }
 
 class FiresLoadedAction {
   final List<Fire> fires;
 
-  FiresLoadedAction(this.fires);
+  const FiresLoadedAction(this.fires);
 }
 
 class LoadFireAction {
   final String? fireId;
 
-  LoadFireAction(this.fireId);
+  const LoadFireAction(this.fireId);
 }
 
 class LoadFireDetailsHistoryAction {
   final String? fireId;
 
-  LoadFireDetailsHistoryAction(this.fireId);
+  const LoadFireDetailsHistoryAction(this.fireId);
 }
 
 class LoadFireMeansHistoryAction {
   final String? fireId;
 
-  LoadFireMeansHistoryAction(this.fireId);
+  const LoadFireMeansHistoryAction(this.fireId);
 }
 
 class LoadFireRiskAction {
   final String? fireId;
 
-  LoadFireRiskAction(this.fireId);
+  const LoadFireRiskAction(this.fireId);
 }
 
-class LoadFiresAction {}
+class LoadFiresAction {
+  const LoadFiresAction();
+}
 
 class SavedFireFiltersAction {
   final List<FireStatus> filters;
-  SavedFireFiltersAction(this.filters);
+  const SavedFireFiltersAction(this.filters);
 }
 
 class SelectFireFiltersAction {
   final FireStatus filter;
-  SelectFireFiltersAction(this.filter);
+  const SelectFireFiltersAction(this.filter);
 }

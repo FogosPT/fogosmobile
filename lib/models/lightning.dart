@@ -12,11 +12,11 @@ class Lightning extends BaseMapboxModel {
   String timestamp;
 
   LightningData payload;
-  Lightning({
-    required this.timestamp,
-    required this.payload,
-  }) : super(LatLng(payload.latitude ?? 0.0, payload.longitude ?? 0.0),
-            timestamp);
+  Lightning({required this.timestamp, required this.payload})
+      : super(
+          LatLng(payload.latitude ?? 0.0, payload.longitude ?? 0.0),
+          timestamp,
+        );
 
   factory Lightning.fromJson(Map<String, dynamic> json) => Lightning(
         timestamp: json["timestamp"],
@@ -61,14 +61,13 @@ class LightningData {
 class LightningRemote {
   List<Lightning> data;
 
-  LightningRemote({
-    required this.data,
-  });
+  LightningRemote({required this.data});
 
   factory LightningRemote.fromJson(Map<String, dynamic> json) =>
       LightningRemote(
         data: List<Lightning>.from(
-            json["data"].map((x) => Lightning.fromJson(x))),
+          json["data"].map((x) => Lightning.fromJson(x)),
+        ),
       );
 
   Map<String, dynamic> toJson() => {

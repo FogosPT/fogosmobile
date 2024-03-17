@@ -6,7 +6,6 @@ modisReducer(List<Modis>? modis, action) {
     return modis;
   } else if (action is ModisLoadedAction) {
     return action.modis;
-  } else {
-    return modis;
   }
+  return modis;
 }

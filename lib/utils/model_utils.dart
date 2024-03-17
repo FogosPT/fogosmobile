@@ -25,7 +25,10 @@ const topImportance = "topImportance";
 // }
 
 double getPonderatedImportanceFactor(
-    double importance, statusCode, Map<String, dynamic> status) {
+  double importance,
+  statusCode,
+  Map<String, dynamic> status,
+) {
   var importanceScale = 0.0;
 
   // check for fake alarm's or calls

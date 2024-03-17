@@ -8,6 +8,7 @@ import 'package:redux/redux.dart';
 typedef SetFireNotificationActionCallBack = Function(String key, int value);
 
 class FireNotifications extends StatefulWidget {
+  const FireNotifications();
   @override
   _FireNotificationsState createState() => _FireNotificationsState();
 }
@@ -22,9 +23,7 @@ class _FireNotificationsState extends State<FireNotifications> {
       },
       builder: (BuildContext context, AppState state) {
         if (!(state.hasPreferences ?? false) && !(state.isLoading ?? false)) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         }
 
         var subscribedFires = state.preferences?['subscribedFires'] ?? [];
@@ -41,13 +40,13 @@ class _FireNotificationsState extends State<FireNotifications> {
               store.dispatch(SetFireNotificationAction(key, value));
             };
           },
-          builder: (BuildContext context,
-              SetFireNotificationActionCallBack setFireNotificationAction) {
+          builder: (
+            BuildContext context,
+            SetFireNotificationActionCallBack setFireNotificationAction,
+          ) {
             return Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                ),
+              children: [
+                Padding(padding: EdgeInsets.only(top: 20.0)),
                 Expanded(
                   child: ListView.builder(
                     itemCount: subscribedFires.length,
@@ -62,7 +61,8 @@ class _FireNotificationsState extends State<FireNotifications> {
                       return ListTile(
                         title: Text(_title),
                         subtitle: Text(
-                            '${_subscribedFire.city}, ${_subscribedFire.district}'),
+                          '${_subscribedFire.city}, ${_subscribedFire.district}',
+                        ),
                         isThreeLine: true,
                         trailing: IconButton(
                           icon: Icon(Icons.delete),

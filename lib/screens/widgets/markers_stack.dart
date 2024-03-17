@@ -47,7 +47,7 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
   @override
   _MarkerStackState createState() => _MarkerStackState<T, V, B, F>();
 
-  void updatePositions() async {
+  void updatePositions() {
     final latLngs = <LatLng>[];
     for (final markerState in _markerStates) {
       latLngs.add(markerState.getCoordinates());
@@ -67,7 +67,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
   Widget build(BuildContext context) {
     final markers =
         widget.data.where((value) => !value.skip(widget.filters)).toList();
-    final latLngs = markers.map<LatLng>((item) => item.location).toList() ?? [];
+    final latLngs = markers.map<LatLng>((item) => item.location).toList();
     widget.mapController.toScreenLocationBatch(latLngs).then((value) {
       value.asMap().forEach((index, value) {
         final point = Point<double>(value.x as double, value.y as double);
@@ -80,9 +80,7 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
 
     return IgnorePointer(
       ignoring: widget.ignoreTouch,
-      child: Stack(
-        children: widget._markers.values.toList(),
-      ),
+      child: Stack(children: widget._markers.values.toList()),
     );
   }
 
@@ -134,6 +132,6 @@ class _MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
   }
 
   void _openModal(dynamic item) {
-    widget.openModal.call(item);
+    widget.openModal(item);
   }
 }

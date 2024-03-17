@@ -24,9 +24,7 @@ class MapOverlayErrorInfoWidget extends StatelessWidget {
 }
 
 class _MapOverlayErrorMessage extends StatelessWidget {
-  const _MapOverlayErrorMessage({
-    Key? key,
-  }) : super(key: key);
+  const _MapOverlayErrorMessage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +40,7 @@ class _MapOverlayErrorMessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Text(
                 FogosLocalizations.of(context).textProblemLoadingData,
                 style: TextStyle(color: Colors.white),

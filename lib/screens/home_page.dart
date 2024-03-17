@@ -14,6 +14,7 @@ import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage();
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -22,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   final LatLng _center = LatLng(39.806251, -8.088591);
   final List<String> _stylesStrings = [
     MAPBOX_TEMPLATE_STYLE,
-    MAPBOX_URL_SATTELITE_TEMPLATE
+    MAPBOX_URL_SATTELITE_TEMPLATE,
   ];
 
   var currentMapboxTemplate = 0;

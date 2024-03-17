@@ -57,18 +57,22 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
       top: _position.y / ratio - _getIconSize(widget._fire.scale) / 2,
       child: Container(
         decoration: BoxDecoration(
-            color: getFireColor(widget._fire), shape: BoxShape.circle),
+          color: getFireColor(widget._fire),
+          shape: BoxShape.circle,
+        ),
         child: IconButton(
           iconSize: _getIconSize(widget._fire.scale),
           icon: SvgPicture.asset(
             getCorrectStatusImage(
-                widget._fire.statusCode, widget._fire.important),
+              widget._fire.statusCode,
+              widget._fire.important,
+            ),
             semanticsLabel: 'Fire Marker',
           ),
           onPressed: () {
             store.dispatch(ClearFireAction());
             store.dispatch(LoadFireAction(widget._fire.id));
-            widget._openModal.call(widget._fire);
+            widget._openModal(widget._fire);
           },
         ),
       ),
@@ -82,8 +86,8 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
 
   @override
   void initState() {
-    _position = widget._initialPosition;
     super.initState();
+    _position = widget._initialPosition;
   }
 
   @override

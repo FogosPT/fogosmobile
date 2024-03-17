@@ -8,6 +8,7 @@ import 'package:fogosmobile/screens/components/warnings_list.dart';
 import 'package:redux/redux.dart';
 
 class Warnings extends StatelessWidget {
+  const Warnings();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

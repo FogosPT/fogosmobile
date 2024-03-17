@@ -1,0 +1,37 @@
+name: fogos
+repository: https://github.com/FogosPT/fogospt.git 
+
+packages:
+  - apps/*
+  - packages/*
+
+ide:
+  intellij:
+    enabled: false
+
+command:
+  bootstrap:
+    environment:
+      sdk: '^3.3.0'
+      flutter: '>=2.17.0 <3.0.0'
+    dependencies:
+      logger: ^2.0.2+1
+      equatable: ^2.0.2
+      freezed: ^2.4.7
+      sentry: ^7.18.0
+
+    dev_dependencies:
+      build_runner: ^2.1.2
+      bloc_test: ^9.1.6
+      json_serializable: ^6.7.1
+      flutter_lints: ^3.0.0
+      
+      
+  version:
+    branch: vega
+
+scripts: 
+  analyze:
+    exec: dart analyze .
+  fix:
+    exec: dart fix . && dcm fix .

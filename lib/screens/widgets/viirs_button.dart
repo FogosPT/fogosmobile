@@ -33,7 +33,7 @@ class ViirsButton extends StatelessWidget {
                     size: 18,
                     color: Colors.green,
                   ),
-                )
+                ),
             ],
           ),
         );

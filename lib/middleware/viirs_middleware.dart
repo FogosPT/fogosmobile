@@ -8,9 +8,7 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> viirsMiddleware() {
   final loadViirs = _loadViirs();
 
-  return [
-    TypedMiddleware<AppState, LoadViirsAction>(loadViirs),
-  ];
+  return [TypedMiddleware<AppState, LoadViirsAction>(loadViirs)];
 }
 
 /// Get list of viirs

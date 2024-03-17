@@ -6,10 +6,7 @@ import 'package:fogosmobile/screens/utils/date_utils.dart';
 class ViirsModal extends StatelessWidget {
   final Viirs viirs;
 
-  const ViirsModal({
-    Key? key,
-    required this.viirs,
-  }) : super(key: key);
+  const ViirsModal({Key? key, required this.viirs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +20,7 @@ class ViirsModal extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: IconButton(
-                icon: Icon(
-                  Icons.close,
-                ),
+                icon: Icon(Icons.close),
                 onPressed: () => Navigator.of(context).pop(),
               ),
             ),
@@ -33,12 +28,16 @@ class ViirsModal extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      text: "${FogosLocalizations.of(context).textDate}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
+                    text: "${FogosLocalizations.of(context).textDate}: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                   TextSpan(
-                      text: FogosDateUtils.getDate(viirs.acqDate),
-                      style: TextStyle(color: Colors.black)),
+                    text: FogosDateUtils.getDate(viirs.acqDate),
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -46,12 +45,16 @@ class ViirsModal extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      text: "${FogosLocalizations.of(context).textBrightTi4}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
+                    text: "${FogosLocalizations.of(context).textBrightTi4}: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                   TextSpan(
-                      text: viirs.brightTi4,
-                      style: TextStyle(color: Colors.black)),
+                    text: viirs.brightTi4,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -59,12 +62,16 @@ class ViirsModal extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      text: "${FogosLocalizations.of(context).textBrightTi5}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
+                    text: "${FogosLocalizations.of(context).textBrightTi5}: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                   TextSpan(
-                      text: viirs.brightTi5,
-                      style: TextStyle(color: Colors.black)),
+                    text: viirs.brightTi5,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -72,11 +79,16 @@ class ViirsModal extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      text: "${FogosLocalizations.of(context).textFrp}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
+                    text: "${FogosLocalizations.of(context).textFrp}: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                   TextSpan(
-                      text: viirs.frp, style: TextStyle(color: Colors.black)),
+                    text: viirs.frp,
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -84,13 +96,16 @@ class ViirsModal extends StatelessWidget {
               text: TextSpan(
                 children: <TextSpan>[
                   TextSpan(
-                      text:
-                          "${FogosLocalizations.of(context).textConfidence}: ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black)),
+                    text: "${FogosLocalizations.of(context).textConfidence}: ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
                   TextSpan(
-                      text: getConfidence(context, viirs.confidence),
-                      style: TextStyle(color: Colors.black)),
+                    text: getConfidence(context, viirs.confidence),
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -107,8 +122,7 @@ class ViirsModal extends StatelessWidget {
       return FogosLocalizations.of(context).textLowConfidence;
     } else if (confidence == 'high') {
       return FogosLocalizations.of(context).textHighConfidence;
-    } else {
-      return confidence;
     }
+    return confidence;
   }
 }

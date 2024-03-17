@@ -5,11 +5,7 @@ class Day {
   final int total;
   final int fake;
 
-  Day({
-    required this.label,
-    required this.total,
-    required this.fake,
-  });
+  const Day({required this.label, required this.total, required this.fake});
 
   factory Day.fromJson(Map<String, dynamic> json) {
     return Day(label: json['label'], total: json['total'], fake: json['false']);
@@ -20,10 +16,7 @@ class District {
   final String district;
   final int fires;
 
-  District({
-    required this.district,
-    required this.fires,
-  });
+  const District({required this.district, required this.fires});
 
   factory District.fromJson(String district, int fire) {
     return District(district: district, fires: fire);
@@ -35,7 +28,7 @@ class IntervalStats {
   final int total;
   final Map<String, int> districtMap;
 
-  IntervalStats({
+  const IntervalStats({
     required this.total,
     required this.districtMap,
     required this.label,
@@ -61,7 +54,7 @@ class LastHour {
   final int total;
   final DateTime label;
 
-  LastHour({
+  const LastHour({
     required this.man,
     required this.aerial,
     required this.cars,
@@ -71,9 +64,10 @@ class LastHour {
 
   factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel = DateTime.fromMillisecondsSinceEpoch(
-        parsedJson['created'].runtimeType == int
-            ? parsedJson['created'] * 1000
-            : parsedJson['created']['sec'] * 1000);
+      parsedJson['created'].runtimeType == int
+          ? parsedJson['created'] * 1000
+          : parsedJson['created']['sec'] * 1000,
+    );
 
     return LastHour(
       man: parsedJson['man'],
@@ -88,9 +82,7 @@ class LastHour {
 class LastHoursStats {
   final List<LastHour> lastHours;
 
-  LastHoursStats({
-    required this.lastHours,
-  });
+  const LastHoursStats({required this.lastHours});
 
   factory LastHoursStats.fromJson(List<dynamic> json) {
     List<LastHour> lastHours = <LastHour>[];
@@ -103,10 +95,7 @@ class LastNightStats {
   final int total;
   final List<District> districtList;
 
-  LastNightStats({
-    required this.total,
-    required this.districtList,
-  });
+  const LastNightStats({required this.total, required this.districtList});
 
   factory LastNightStats.fromJson(Map<String, dynamic> json) {
     List<District> districtList = <District>[];
@@ -129,7 +118,7 @@ class NowStats {
   final String cars;
   final String total;
 
-  NowStats({
+  const NowStats({
     required this.man,
     required this.aerial,
     required this.cars,
@@ -138,10 +127,11 @@ class NowStats {
 
   factory NowStats.fromJson(Map<String, dynamic> parsedJson) {
     return NowStats(
-        man: parsedJson['man'].toString(),
-        aerial: parsedJson['aerial'].toString(),
-        cars: parsedJson['cars'].toString(),
-        total: parsedJson['total'].toString());
+      man: parsedJson['man'].toString(),
+      aerial: parsedJson['aerial'].toString(),
+      cars: parsedJson['cars'].toString(),
+      total: parsedJson['total'].toString(),
+    );
   }
 }
 
@@ -149,7 +139,7 @@ class TodayStats {
   final List<IntervalStats> intervalStatsList;
   final List<District> districtList;
 
-  TodayStats({
+  const TodayStats({
     required this.intervalStatsList,
     required this.districtList,
   });
@@ -177,8 +167,11 @@ class TodayStats {
     var sortedKeys = districtTempMap.keys.toList(growable: false)
       ..sort((k1, k2) =>
           districtTempMap[k1]?.compareTo(districtTempMap[k2] ?? 0) ?? 0);
-    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-        key: (k) => k, value: (k) => districtTempMap[k]);
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(
+      sortedKeys,
+      key: (k) => k,
+      value: (k) => districtTempMap[k],
+    );
 
     // Convert the map to a List for chart data
     sortedMap.forEach((k, v) {
@@ -186,16 +179,16 @@ class TodayStats {
     });
 
     return TodayStats(
-        intervalStatsList: intervalStatsList, districtList: districtList);
+      intervalStatsList: intervalStatsList,
+      districtList: districtList,
+    );
   }
 }
 
 class WeekStats {
   final List<Day> days;
 
-  WeekStats({
-    required this.days,
-  });
+  const WeekStats({required this.days});
 
   factory WeekStats.fromJson(List<dynamic> json) {
     List<Day> days = <Day>[];
@@ -210,7 +203,7 @@ class YesterdayStats {
   final List<IntervalStats> intervalStatsList;
   final List<District> districtList;
 
-  YesterdayStats({
+  const YesterdayStats({
     required this.intervalStatsList,
     required this.districtList,
   });
@@ -238,8 +231,11 @@ class YesterdayStats {
     var sortedKeys = districtTempMap.keys.toList(growable: false)
       ..sort((k1, k2) =>
           districtTempMap[k1]?.compareTo(districtTempMap[k2] ?? 0) ?? 0);
-    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
-        key: (k) => k, value: (k) => districtTempMap[k]);
+    LinkedHashMap sortedMap = LinkedHashMap.fromIterable(
+      sortedKeys,
+      key: (k) => k,
+      value: (k) => districtTempMap[k],
+    );
 
     // Convert the map to a List for chart data
     sortedMap.forEach((k, v) {
@@ -247,6 +243,8 @@ class YesterdayStats {
     });
 
     return YesterdayStats(
-        intervalStatsList: intervalStatsList, districtList: districtList);
+      intervalStatsList: intervalStatsList,
+      districtList: districtList,
+    );
   }
 }

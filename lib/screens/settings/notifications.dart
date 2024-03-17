@@ -12,6 +12,7 @@ import 'package:redux/redux.dart';
 typedef SetPreferenceCallBack = Function(String key, int value);
 
 class Notifications extends StatefulWidget {
+  const Notifications();
   @override
   _NotificationsState createState() => _NotificationsState();
 }
@@ -35,11 +36,7 @@ class _NotificationsState extends State<Notifications> {
         });
       });
 
-      return Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return Container(child: Center(child: CircularProgressIndicator()));
     }
 
     return new StoreConnector<AppState, AppState>(
@@ -49,9 +46,7 @@ class _NotificationsState extends State<Notifications> {
       },
       builder: (BuildContext context, AppState state) {
         if (state.hasPreferences == false && state.isLoading == false) {
-          return new Center(
-            child: CircularProgressIndicator(),
-          );
+          return new Center(child: CircularProgressIndicator());
         }
 
         return new StoreConnector<AppState, SetPreferenceCallBack>(
@@ -61,17 +56,18 @@ class _NotificationsState extends State<Notifications> {
               store.dispatch(new LoadAllPreferencesAction());
             };
           },
-          builder: (BuildContext context,
-              SetPreferenceCallBack setPreferenceAction) {
+          builder: (
+            BuildContext context,
+            SetPreferenceCallBack setPreferenceAction,
+          ) {
             return new Column(
-              children: <Widget>[
-                new Padding(
-                  padding: new EdgeInsets.only(top: 20.0),
-                ),
+              children: [
+                new Padding(padding: new EdgeInsets.only(top: 20.0)),
                 new ListTile(
                   title: new TextField(
                     decoration: new InputDecoration(
-                        labelText: FogosLocalizations.of(context).textCounty),
+                      labelText: FogosLocalizations.of(context).textCounty,
+                    ),
                     controller: controller,
                   ),
                 ),
@@ -83,8 +79,8 @@ class _NotificationsState extends State<Notifications> {
                         final _location = this.locations[index];
                         return filter == "" ||
                                 transformStringToSearch(
-                                        _location['value']['name'])
-                                    .contains(transformStringToSearch(filter))
+                                  _location['value']['name'],
+                                ).contains(transformStringToSearch(filter))
                             ? SizedBox()
                             // CheckboxListTile(
                             //     title: Text(_location['value']['name']),

@@ -51,7 +51,7 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
       left: _position.x / ratio - _iconSize / 2,
       top: _position.y / ratio - _iconSize / 2,
       child: GestureDetector(
-        onTap: () => widget._openModal.call(widget._viirs),
+        onTap: () => widget._openModal(widget._viirs),
         child: Container(
           decoration:
               BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
@@ -81,8 +81,8 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
 
   @override
   void initState() {
-    _position = widget._initialPosition;
     super.initState();
+    _position = widget._initialPosition;
   }
 
   @override

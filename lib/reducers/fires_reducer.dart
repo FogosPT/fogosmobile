@@ -5,9 +5,8 @@ import 'package:fogosmobile/models/fire_details.dart';
 filtersReducer(List? filters, action) {
   if (action is SavedFireFiltersAction) {
     return action.filters;
-  } else {
-    return filters;
   }
+  return filters;
 }
 
 fireDetailsHistoryReducer(DetailsHistory? data, action) {
@@ -17,9 +16,8 @@ fireDetailsHistoryReducer(DetailsHistory? data, action) {
     return action.data;
   } else if (action is ClearFireDetailsAction) {
     return null;
-  } else {
-    return data;
   }
+  return data;
 }
 
 fireMeansHistoryReducer(MeansHistory? data, action) {
@@ -29,9 +27,8 @@ fireMeansHistoryReducer(MeansHistory? data, action) {
     return action.data;
   } else if (action is ClearFireMeansAction) {
     return null;
-  } else {
-    return data;
   }
+  return data;
 }
 
 fireReducer(Fire? fire, action) {
@@ -41,9 +38,8 @@ fireReducer(Fire? fire, action) {
     return action.fire;
   } else if (action is ClearFireAction) {
     return null;
-  } else {
-    return fire;
   }
+  return fire;
 }
 
 fireRiskReducer(String? data, action) {
@@ -53,9 +49,8 @@ fireRiskReducer(String? data, action) {
     return action.risk;
   } else if (action is ClearFireRiskAction) {
     return null;
-  } else {
-    return data;
   }
+  return data;
 }
 
 firesReducer(List<Fire>? fires, action) {
@@ -63,7 +58,6 @@ firesReducer(List<Fire>? fires, action) {
     return fires;
   } else if (action is FiresLoadedAction) {
     return action.fires;
-  } else {
-    return fires;
   }
+  return fires;
 }

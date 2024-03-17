@@ -6,9 +6,8 @@ lastHoursStatsReducer(LastHoursStats? stats, action) {
     return stats;
   } else if (action is LastHoursLoadedAction) {
     return action.lastHoursStats;
-  } else {
-    return stats;
   }
+  return stats;
 }
 
 lastNightStatsReducer(LastNightStats? stats, action) {
@@ -16,9 +15,8 @@ lastNightStatsReducer(LastNightStats? stats, action) {
     return stats;
   } else if (action is LastNightStatsLoadedAction) {
     return action.lastNightStats;
-  } else {
-    return stats;
   }
+  return stats;
 }
 
 nowStatsReducer(NowStats? stats, action) {
@@ -26,9 +24,8 @@ nowStatsReducer(NowStats? stats, action) {
     return stats;
   } else if (action is NowStatsLoadedAction) {
     return action.nowStats;
-  } else {
-    return stats;
   }
+  return stats;
 }
 
 todayStatsReducer(TodayStats? stats, action) {
@@ -36,9 +33,8 @@ todayStatsReducer(TodayStats? stats, action) {
     return stats;
   } else if (action is TodayStatsLoadedAction) {
     return action.todayStats;
-  } else {
-    return stats;
   }
+  return stats;
 }
 
 weekStatsReducer(WeekStats? stats, action) {
@@ -46,9 +42,8 @@ weekStatsReducer(WeekStats? stats, action) {
     return stats;
   } else if (action is WeekStatsLoadedAction) {
     return action.weekStats;
-  } else {
-    return stats;
   }
+  return stats;
 }
 
 yesterdayStatsReducer(YesterdayStats? stats, action) {
@@ -56,7 +51,6 @@ yesterdayStatsReducer(YesterdayStats? stats, action) {
     return stats;
   } else if (action is YesterdayStatsLoadedAction) {
     return action.yesterdayStats;
-  } else {
-    return stats;
   }
+  return stats;
 }

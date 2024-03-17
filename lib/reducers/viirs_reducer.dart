@@ -6,7 +6,6 @@ viirsReducer(List<Viirs>? viirs, action) {
     return viirs;
   } else if (action is ViirsLoadedAction) {
     return action.viirs;
-  } else {
-    return viirs;
   }
+  return viirs;
 }

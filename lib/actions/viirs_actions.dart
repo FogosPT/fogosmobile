@@ -1,11 +1,15 @@
 import 'package:fogosmobile/models/viirs.dart';
 
-class LoadViirsAction {}
+class LoadViirsAction {
+  const LoadViirsAction();
+}
 
 class ViirsLoadedAction {
   final List<Viirs> viirs;
 
-  ViirsLoadedAction(this.viirs);
+  const ViirsLoadedAction(this.viirs);
 }
 
-class ShowViirsAction {}
+class ShowViirsAction {
+  const ShowViirsAction();
+}

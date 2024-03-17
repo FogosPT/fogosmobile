@@ -33,7 +33,7 @@ class ModisButton extends StatelessWidget {
                     size: 18,
                     color: Colors.green,
                   ),
-                )
+                ),
             ],
           ),
         );

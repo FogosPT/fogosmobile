@@ -23,7 +23,8 @@ List<Middleware<AppState>> firesMiddleware() {
     TypedMiddleware<AppState, LoadFireAction>(loadFire),
     TypedMiddleware<AppState, LoadFireMeansHistoryAction>(loadFireMeansHistory),
     TypedMiddleware<AppState, LoadFireDetailsHistoryAction>(
-        loadFireDetailsHistory),
+      loadFireDetailsHistory,
+    ),
     TypedMiddleware<AppState, LoadFireRiskAction>(loadFireRisk),
     TypedMiddleware<AppState, SelectFireFiltersAction>(selectFireFilters),
   ];
@@ -202,7 +203,7 @@ Middleware<AppState> _createLoadFires() {
 }
 
 Middleware<AppState> _createSelectFireFilters() {
-  return (Store store, action, NextDispatcher next) async {
+  return (Store store, action, NextDispatcher next) {
     next(action);
     try {
       final prefs = SharedPreferencesManager.preferences;

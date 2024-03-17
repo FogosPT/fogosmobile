@@ -37,7 +37,7 @@ import 'package:logger/logger.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry/sentry.dart';
 
-void main() async {
+void main() {
   FlutterError.onError = (FlutterErrorDetails details) {
     if (isInDebugMode) {
       // In development mode, simply print to console.
@@ -67,13 +67,9 @@ void main() async {
   );
 }
 
-var logger = Logger(
-  printer: PrettyPrinter(),
-);
+var logger = Logger(printer: PrettyPrinter());
 
-var loggerNoStack = Logger(
-  printer: PrettyPrinter(methodCount: 0),
-);
+var loggerNoStack = Logger(printer: PrettyPrinter(methodCount: 0));
 
 final SentryClient _sentry = SentryClient(SentryOptions(dsn: SENTRY_DSN));
 
@@ -114,11 +110,13 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 class FirstPage extends StatefulWidget {
+  const FirstPage();
   @override
   _FirstPageState createState() => _FirstPageState();
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp();
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
@@ -127,7 +125,7 @@ class MyApp extends StatelessWidget {
         title: 'Fogos.pt',
         theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
-        routes: <String, WidgetBuilder>{
+        routes: {
           SETTINGS_ROUTE: (_) => Settings(),
           WARNINGS_ROUTE: (_) => Warnings(),
           WARNINGS_MADEIRA_ROUTE: (_) => WarningsMadeira(),
@@ -180,13 +178,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: FireGradientAppBar(
-            bottom: TabBar(
-              tabs: [],
-            ),
-            title: Text(
-              'Fogos.pt',
-              style: TextStyle(color: Colors.white),
-            ),
+            bottom: TabBar(tabs: []),
+            title: Text('Fogos.pt', style: TextStyle(color: Colors.white)),
             actions: [
               StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {
@@ -207,7 +200,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                       store.dispatch(LoadViirsAction());
                     },
                     builder: (BuildContext context, AppState state) {
-                      return Row(children: <Widget>[
+                      return Row(children: [
                         _buildFiltersMenu(state),
                         _buildRefreshButton(state, loadFiresAction),
                       ]);
@@ -220,23 +213,26 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
           drawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
-              children: <Widget>[
+              children: [
                 DrawerHeader(
                   child: Center(
-                    child: SvgPicture.asset(imgSvgLogoFlame,
-                        colorFilter:
-                            ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                    child: SvgPicture.asset(
+                      imgSvgLogoFlame,
+                      colorFilter:
+                          ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                    ),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        colors: [
-                          FogosTheme().accentColor,
-                          FogosTheme().primaryColor,
-                        ],
-                        begin: const FractionalOffset(0.0, 0.0),
-                        end: const FractionalOffset(1.0, 0.0),
-                        stops: [0.0, 1.0],
-                        tileMode: TileMode.clamp),
+                      colors: [
+                        FogosTheme().accentColor,
+                        FogosTheme().primaryColor,
+                      ],
+                      begin: const FractionalOffset(0.0, 0.0),
+                      end: const FractionalOffset(1.0, 0.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp,
+                    ),
                   ),
                 ),
                 ListTile(
@@ -334,7 +330,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   void firebaseCloudMessagingListeners() async {
     final result = await _firebaseMessaging.requestPermission(
-        sound: true, badge: true, alert: true);
+      sound: true,
+      badge: true,
+      alert: true,
+    );
 
     if (result.authorizationStatus != AuthorizationStatus.authorized) {
       return;
@@ -353,37 +352,40 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   Widget _buildFiltersMenu(AppState state) {
     return StoreConnector<AppState, SetFiltersCallback>(
-        converter: (Store<AppState> store) {
-      return (FireStatus filter) {
-        store.dispatch(SelectFireFiltersAction(filter));
-      };
-    }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
-      return PopupMenuButton<FireStatus>(
-        icon: Icon(Icons.filter_list),
-        onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
-        itemBuilder: (BuildContext context) => FireStatus.values
-            .map(
-              (status) => PopupMenuItem<FireStatus>(
-                value: status,
-                child: ListTileTheme(
-                  style: ListTileStyle.drawer,
-                  selectedColor: Theme.of(context).colorScheme.secondary,
-                  child: ListTile(
-                    dense: true,
-                    contentPadding: const EdgeInsets.all(0.0),
-                    selected: state.activeFilters?.contains(status) ?? false,
-                    trailing: state.activeFilters?.contains(status) ?? false
-                        ? Icon(Icons.check)
-                        : null,
-                    title: Text(
-                        FogosLocalizations.of(context).textFireStatus(status)),
+      converter: (Store<AppState> store) {
+        return (FireStatus filter) {
+          store.dispatch(SelectFireFiltersAction(filter));
+        };
+      },
+      builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
+        return PopupMenuButton<FireStatus>(
+          icon: Icon(Icons.filter_list),
+          onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
+          itemBuilder: (BuildContext context) => FireStatus.values
+              .map(
+                (status) => PopupMenuItem<FireStatus>(
+                  value: status,
+                  child: ListTileTheme(
+                    style: ListTileStyle.drawer,
+                    selectedColor: Theme.of(context).colorScheme.secondary,
+                    child: ListTile(
+                      dense: true,
+                      contentPadding: const EdgeInsets.all(0.0),
+                      selected: state.activeFilters?.contains(status) ?? false,
+                      trailing: state.activeFilters?.contains(status) ?? false
+                          ? Icon(Icons.check)
+                          : null,
+                      title: Text(
+                        FogosLocalizations.of(context).textFireStatus(status),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            )
-            .toList(),
-      );
-    });
+              )
+              .toList(),
+        );
+      },
+    );
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {
@@ -393,14 +395,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
             height: 48,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 2.0,
-              ),
+              child: CircularProgressIndicator(strokeWidth: 2.0),
             ),
           )
-        : IconButton(
-            onPressed: action,
-            icon: Icon(Icons.refresh),
-          );
+        : IconButton(onPressed: action, icon: Icon(Icons.refresh));
   }
 }

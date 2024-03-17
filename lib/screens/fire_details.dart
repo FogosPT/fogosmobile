@@ -35,36 +35,35 @@ class FireDetailsPage extends StatelessWidget {
 
         return Scaffold(
           appBar: FireGradientAppBar(
-            title: Text(
-              _title,
-              style: TextStyle(color: Colors.white),
-            ),
+            title: Text(_title, style: TextStyle(color: Colors.white)),
           ),
           body: Container(
             child: ListView(
-              children: <Widget>[
+              children: [
                 ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context)
-                            .textResources
-                            .toUpperCase(),
-                        style: _header)),
+                  title: Text(
+                    FogosLocalizations.of(context).textResources.toUpperCase(),
+                    style: _header,
+                  ),
+                ),
                 SizedBox(height: 15),
                 // MeansStatistics(),
                 SizedBox(height: 25),
                 ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context).textStatus.toUpperCase(),
-                        style: _header)),
+                  title: Text(
+                    FogosLocalizations.of(context).textStatus.toUpperCase(),
+                    style: _header,
+                  ),
+                ),
                 SizedBox(height: 15),
                 DetailsHistoryStats(),
                 SizedBox(height: 25),
                 ListTile(
-                    title: Text(
-                        FogosLocalizations.of(context)
-                            .textRiskOfFire
-                            .toUpperCase(),
-                        style: _header)),
+                  title: Text(
+                    FogosLocalizations.of(context).textRiskOfFire.toUpperCase(),
+                    style: _header,
+                  ),
+                ),
                 SizedBox(height: 15),
                 FireRisk(),
                 SizedBox(height: 25),

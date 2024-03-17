@@ -4,6 +4,7 @@ import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 
 class Partners extends StatelessWidget {
+  const Partners();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,28 +24,20 @@ class Partners extends StatelessWidget {
                 launchURL('https://www.mapbox.com/');
               },
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: 15.0,
-              ),
-            ),
+            Padding(padding: EdgeInsets.only(bottom: 15.0)),
             TextButton(
               child: Image.asset("assets/partners/officelan.png"),
               onPressed: () {
                 launchURL('https://officelan.pt/');
               },
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                bottom: 15.0,
-              ),
-            ),
+            Padding(padding: EdgeInsets.only(bottom: 15.0)),
             TextButton(
               child: Image.asset("assets/partners/fll.png"),
               onPressed: () {
                 launchURL('https://fundacaolapadolobo.pt/');
               },
-            )
+            ),
           ],
         ),
       ),

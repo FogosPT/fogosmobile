@@ -15,14 +15,15 @@ class FireGradientAppBar extends AppBar {
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                  colors: [
-                    FogosTheme().accentColor,
-                    FogosTheme().primaryColor,
-                  ],
-                  begin: const FractionalOffset(0.0, 0.0),
-                  end: const FractionalOffset(1.0, 0.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
+                colors: [
+                  FogosTheme().accentColor,
+                  FogosTheme().primaryColor,
+                ],
+                begin: const FractionalOffset(0.0, 0.0),
+                end: const FractionalOffset(1.0, 0.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              ),
             ),
           ),
         );

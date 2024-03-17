@@ -15,19 +15,14 @@ class NowStatistics extends StatelessWidget {
     return StoreConnector<AppState, NowStats>(
       converter: (Store<AppState> store) =>
           store.state.nowStats ??
-          NowStats(
-            man: '',
-            aerial: '',
-            cars: '',
-            total: '',
-          ),
+          NowStats(man: '', aerial: '', cars: '', total: ''),
       builder: (BuildContext context, NowStats stats) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
+            children: [
               _buildItem(imgSvgIconFire, stats.total, 35, Colors.red),
               _buildItem(imgSvgFireman, stats.man),
               _buildItem(imgSvgFireTruck, stats.cars),
@@ -39,19 +34,17 @@ class NowStatistics extends StatelessWidget {
     );
   }
 
-  Widget _buildItem(String imgPath, String text,
-      [double height = 50.0, Color? color]) {
+  Widget _buildItem(
+    String imgPath,
+    String text, [
+    double height = 50.0,
+    Color? color,
+  ]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        SvgPicture.asset(
-          imgPath,
-          height: height,
-          color: color,
-        ),
-        SizedBox(
-          width: 5,
-        ),
+      children: [
+        SvgPicture.asset(imgPath, height: height, color: color),
+        SizedBox(width: 5),
         Text(text, style: _body),
       ],
     );

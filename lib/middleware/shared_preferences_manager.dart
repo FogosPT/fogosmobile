@@ -7,7 +7,7 @@ class SharedPreferencesManager {
   static late SharedPreferences _instance;
   static late bool _showLogs;
 
-  SharedPreferencesManager._();
+  const SharedPreferencesManager._();
 
   /// Returns a `bool` value for the provided [key]
   bool getBool(String key) => _instance.getBool(key) ?? false;
@@ -27,12 +27,13 @@ class SharedPreferencesManager {
   /// Removes the [value] for the provided [key], thus setting it to `null`.
   ///
   /// The [key] must NOT be `null`.
-  Future<bool> remove(String key) async {
+  Future<bool> remove(String key) {
     if (_showLogs) print('$_tag: Removing value for key [$key].');
 
     return _instance.remove(key).catchError((error) {
       print(
-          '$_tag: Couldn\'t get remove the value for the key [$key]. Operation failed with the error: $error');
+        '$_tag: Couldn\'t get remove the value for the key [$key]. Operation failed with the error: $error',
+      );
     });
   }
 
@@ -55,13 +56,13 @@ class SharedPreferencesManager {
       return _instance.setString(key, value);
     } else if (value is List<String>) {
       return _instance.setStringList(key, value);
-    } else {
-      throw Exception('$_tag: Unsupported value type.');
     }
+    throw Exception('$_tag: Unsupported value type.');
   }
 
   _throwError() => throw Exception(
-      'Preferences not available. Make sure to call init() before using any other method');
+        'Preferences not available. Make sure to call init() before using any other method',
+      );
 
   /// Loads the shared preferences so they are immediately available to use.
   /// This should be called before accessing `preferences`.

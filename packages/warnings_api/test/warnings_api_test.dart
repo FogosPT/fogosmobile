@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import '../lib/warnings_api.dart';
+import 'package:warnings_api/warnings_api.dart';
 
 void main() {
   test('adds one to input values', () {

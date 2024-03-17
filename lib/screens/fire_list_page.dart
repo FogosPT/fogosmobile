@@ -189,14 +189,16 @@ class _FireListState extends State<FireList> {
                                             right: 16.0,
                                           ),
                                           child: SvgPicture.asset(
-                                            getCorrectStatusImage(
-                                              fire.statusCode,
-                                              fire.important,
-                                            ),
-                                            width: 25.0,
-                                            height: 25.0,
-                                            color: getFireColor(fire),
-                                          ),
+                                              getCorrectStatusImage(
+                                                fire.statusCode,
+                                                fire.important,
+                                              ),
+                                              width: 25.0,
+                                              height: 25.0,
+                                              colorFilter: ColorFilter.mode(
+                                                getFireColor(fire),
+                                                BlendMode.srcIn,
+                                              )),
                                         ),
                                         Expanded(
                                           child: Column(
@@ -234,7 +236,10 @@ class _FireListState extends State<FireList> {
                                             imgSvgFireman,
                                             width: 35.0,
                                             height: 35.0,
-                                            color: getFireColor(fire),
+                                            colorFilter: ColorFilter.mode(
+                                              getFireColor(fire),
+                                              BlendMode.srcIn,
+                                            ),
                                           ),
                                         ),
                                         Expanded(
@@ -379,6 +384,8 @@ class _FireListState extends State<FireList> {
     );
   }
 
+  /// TODO(FB): Currently not used but definitely should be.
+  // ignore: unused_element
   void _onMapCreated(MapboxMapController controller) {
     mapController = controller;
   }

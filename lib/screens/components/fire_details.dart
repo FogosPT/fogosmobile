@@ -195,12 +195,13 @@ class FireDetails extends StatelessWidget {
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(right: 16.0),
-                                      child: SvgPicture.asset(
-                                        imgSvgFireman,
-                                        width: 35.0,
-                                        height: 35.0,
-                                        color: getFireColor(fire),
-                                      ),
+                                      child: SvgPicture.asset(imgSvgFireman,
+                                          width: 35.0,
+                                          height: 35.0,
+                                          colorFilter: ColorFilter.mode(
+                                            getFireColor(fire),
+                                            BlendMode.srcIn,
+                                          )),
                                     ),
                                     Expanded(
                                       child: Column(

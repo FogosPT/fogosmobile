@@ -74,6 +74,10 @@ fixnum
 2.19
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/fixnum-1.1.0/
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/fixnum-1.1.0/lib/
+flutter_lints
+3.0
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1/
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1/lib/
 freezed
 2.17
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/freezed-2.4.7/
@@ -114,6 +118,10 @@ leak_tracker_testing
 3.1
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1/
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1/lib/
+lints
+3.0
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/lints-3.0.0/
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/lints-3.0.0/lib/
 logger
 2.17
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/logger-2.1.0/

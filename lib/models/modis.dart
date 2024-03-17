@@ -9,20 +9,20 @@ ModisResult modisFromJson(String str) => ModisResult.fromJson(json.decode(str));
 String modisToJson(ModisResult data) => json.encode(data.toJson());
 
 class Modis extends BaseMapboxModel implements Equatable {
-  double latitude;
+  final double latitude;
 
-  double longitude;
-  String brightness;
-  String scan;
-  String track;
-  DateTime acqDate;
-  String acqTime;
-  String satellite;
-  String confidence;
-  String version;
-  String brightT31;
-  String frp;
-  String daynight;
+  final double longitude;
+  final String brightness;
+  final String scan;
+  final String track;
+  final DateTime acqDate;
+  final String acqTime;
+  final String satellite;
+  final String confidence;
+  final String version;
+  final String brightT31;
+  final String frp;
+  final String daynight;
   Modis({
     required this.latitude,
     required this.longitude,
@@ -37,7 +37,7 @@ class Modis extends BaseMapboxModel implements Equatable {
     required this.brightT31,
     required this.frp,
     required this.daynight,
-  }) : super(LatLng(latitude ?? 0, longitude ?? 0), '$latitude');
+  }) : super(LatLng(latitude, longitude), '$latitude');
 
   factory Modis.fromJson(Map<String, dynamic> json) => Modis(
         latitude: json["latitude"] != null
@@ -83,7 +83,7 @@ class Modis extends BaseMapboxModel implements Equatable {
 
   @override
   bool skip<T>(List<T> filters) {
-    return !(longitude != null);
+    return true;
   }
 
   Map<String, dynamic> toJson() => {

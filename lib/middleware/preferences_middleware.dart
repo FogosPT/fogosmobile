@@ -36,10 +36,10 @@ Middleware<AppState> _createLoadPreferences() {
       final prefs = SharedPreferencesManager.preferences;
 
       for (Map location in locations) {
-        data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
+        data['pref-${location['key']}'] = prefs.getInt(location['key']);
       }
 
-      List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
+      List<String> subbedFires = prefs.getStringList('subscribedFires');
       List<Fire> fires = store.state.fires;
 
       if (fires.length > 0) {
@@ -49,10 +49,10 @@ Middleware<AppState> _createLoadPreferences() {
         data['subscribedFires'] = [];
       }
 
-      data['pref-important'] = prefs.getInt('important') ?? 0;
-      data['pref-warnings'] = prefs.getInt('warnings') ?? 0;
-      data['pref-satellite'] = prefs.getInt('satellite') ?? 0;
-      data['pref-planes'] = prefs.getInt('planes') ?? 0;
+      data['pref-important'] = prefs.getInt('important');
+      data['pref-warnings'] = prefs.getInt('warnings');
+      data['pref-satellite'] = prefs.getInt('satellite');
+      data['pref-planes'] = prefs.getInt('planes');
 
       store.dispatch(AllPreferencesLoadedAction(data));
     } catch (e) {
@@ -72,8 +72,7 @@ Middleware<AppState> _createSetNotification() {
 
     try {
       final prefs = SharedPreferencesManager.preferences;
-      List<String> subscribedFires =
-          prefs.getStringList('subscribedFires') ?? [];
+      List<String> subscribedFires = prefs.getStringList('subscribedFires');
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
         _firebaseMessaging.subscribeToTopic(topic);

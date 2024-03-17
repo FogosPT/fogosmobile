@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-import '../lib/fogos_api.dart';
+import 'package:fogos_api/fogos_api.dart';
 
 void main() {
   test('adds one to input values', () {

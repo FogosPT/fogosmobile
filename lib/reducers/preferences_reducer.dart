@@ -10,5 +10,4 @@ preferencesReducer(dynamic preferences, action) {
     return preferences;
   }
   return preferences;
-  return preferences;
 }

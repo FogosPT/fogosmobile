@@ -122,6 +122,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "flutter_lints",
+      "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/filipe.barroso/Software/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -198,6 +204,12 @@
       "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "3.1"
+    },
+    {
+      "name": "lints",
+      "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/lints-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "logger",
@@ -368,7 +380,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-03-17T16:38:06.769711Z",
+  "generated": "2024-03-17T17:05:51.779599Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

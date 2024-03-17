@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const double fullPinSize = 50.0;
 const String MAPBOX_ACCESS_TOKEN = "MAPBOX_ACCESS_TOKEN";
 const String MAPBOX_ID = "cjgppvcdp00aa2spjclz9sjst";

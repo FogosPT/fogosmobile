@@ -34,6 +34,7 @@ class SharedPreferencesManager {
       print(
         '$_tag: Couldn\'t get remove the value for the key [$key]. Operation failed with the error: $error',
       );
+      return true;
     });
   }
 
@@ -60,16 +61,12 @@ class SharedPreferencesManager {
     throw Exception('$_tag: Unsupported value type.');
   }
 
-  _throwError() => throw Exception(
-        'Preferences not available. Make sure to call init() before using any other method',
-      );
-
   /// Loads the shared preferences so they are immediately available to use.
   /// This should be called before accessing `preferences`.
   ///
   /// If [withLogs] param is set to `false`, most of the operations won't
   /// print any information.
   static Future<bool> init([bool withLogs = true]) async {
-    return _instance != null;
+    return true;
   }
 }

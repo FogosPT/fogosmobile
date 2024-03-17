@@ -14,7 +14,7 @@ class Lightning extends BaseMapboxModel {
   LightningData payload;
   Lightning({required this.timestamp, required this.payload})
       : super(
-          LatLng(payload.latitude ?? 0.0, payload.longitude ?? 0.0),
+          LatLng(payload.latitude, payload.longitude),
           timestamp,
         );
 
@@ -25,7 +25,7 @@ class Lightning extends BaseMapboxModel {
 
   @override
   bool skip<T>(List<T> filters) {
-    return !(payload.longitude != null ?? false);
+    return true;
   }
 
   Map<String, dynamic> toJson() => {

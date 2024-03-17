@@ -40,6 +40,7 @@ class FireMarker extends StatefulWidget implements BaseMarker {
 }
 
 class FireMarkerState extends BaseMarkerState<FireMarker> {
+  // ignore: unused_field
   final _iconSize = 10.0;
 
   Point _position = Point(0, 0);

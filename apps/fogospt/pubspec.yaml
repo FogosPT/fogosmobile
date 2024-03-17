@@ -20,8 +20,7 @@ dependencies:
   freezed: ^2.4.7
   sentry: ^7.18.0
 
-  fogos_api: 
-    path: ../packages/fogos_api/
+  fogos_api: 0.0.1
 
 dev_dependencies:
   flutter_test:

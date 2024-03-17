@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 const SETTINGS_ROUTE = '/settings';
 const WARNINGS_ROUTE = '/warnings';
 const WARNINGS_MADEIRA_ROUTE = '/warnings_madeira';

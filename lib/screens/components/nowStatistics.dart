@@ -23,7 +23,7 @@ class NowStatistics extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildItem(imgSvgIconFire, stats.total, 35, Colors.red),
+              _buildItem(imgSvgIconFire, stats.total, 35),
               _buildItem(imgSvgFireman, stats.man),
               _buildItem(imgSvgFireTruck, stats.cars),
               _buildItem(imgSvgPlane, stats.aerial),
@@ -38,12 +38,19 @@ class NowStatistics extends StatelessWidget {
     String imgPath,
     String text, [
     double height = 50.0,
-    Color? color,
+    Color color = Colors.red,
   ]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(imgPath, height: height, color: color),
+        SvgPicture.asset(
+          imgPath,
+          height: height,
+          colorFilter: ColorFilter.mode(
+            color,
+            BlendMode.srcIn,
+          ),
+        ),
         SizedBox(width: 5),
         Text(text, style: _body),
       ],

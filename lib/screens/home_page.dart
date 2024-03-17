@@ -20,7 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // ignore: unused_field
   final LatLng _center = LatLng(39.806251, -8.088591);
+  // ignore: unused_field
   final List<String> _stylesStrings = [
     MAPBOX_TEMPLATE_STYLE,
     MAPBOX_URL_SATTELITE_TEMPLATE,
@@ -28,6 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   var currentMapboxTemplate = 0;
 
+  // ignore: unused_field
   MapboxMapController? _mapController;
 
   @override
@@ -131,6 +134,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: unused_element
   void _onMapCreated(MapboxMapController controller) {
     _mapController = controller;
   }
@@ -142,6 +146,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: unused_element
   _openModisModal(BuildContext context, Modis modis) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -149,6 +154,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // ignore: unused_element
   _openViirsModal(BuildContext context, Viirs viirs) async {
     await showModalBottomSheet<void>(
       context: context,

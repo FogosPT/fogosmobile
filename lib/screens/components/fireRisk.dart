@@ -8,7 +8,7 @@ import 'package:redux/redux.dart';
 class FireRisk extends StatelessWidget {
   final TextStyle _body = TextStyle(color: Colors.white, fontSize: 20);
 
-  List<FireRiskStruct> _riskList = [
+  final List<FireRiskStruct> _riskList = [
     FireRiskStruct('Reduzido', Color(0xff6ABF59)),
     FireRiskStruct('Moderado', Color(0xffFFB202)),
     FireRiskStruct('Elevado', Color(0xffFF6E02)),

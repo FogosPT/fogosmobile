@@ -15,6 +15,32 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`fogospt` - `v1.0.3`](#fogospt---v103)
+ - [`fogospt_admin` - `v1.0.3`](#fogospt_admin---v103)
+
+---
+
+#### `fogospt` - `v1.0.3`
+
+ - **REFACTOR**: remove analysis options ([#176](https://github.com/FogosPT/fogospt.git/issues/176)). ([103bb892](https://github.com/FogosPT/fogospt.git/commit/103bb892c4a49c3e50be2442ddc530e367394f90))
+
+#### `fogospt_admin` - `v1.0.3`
+
+ - **REFACTOR**: remove analysis options ([#176](https://github.com/FogosPT/fogospt.git/issues/176)). ([103bb892](https://github.com/FogosPT/fogospt.git/commit/103bb892c4a49c3e50be2442ddc530e367394f90))
+
+
+## 2024-03-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fogos_api` - `v0.0.1+2`](#fogos_api---v0012)
  - [`fogospt` - `v1.0.2`](#fogospt---v102)
  - [`fogospt_admin` - `v1.0.2`](#fogospt_admin---v102)

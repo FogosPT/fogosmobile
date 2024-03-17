@@ -1,3 +1,7 @@
+## 1.0.3
+
+ - **REFACTOR**: remove analysis options ([#176](https://github.com/FogosPT/fogospt.git/issues/176)). ([103bb892](https://github.com/FogosPT/fogospt.git/commit/103bb892c4a49c3e50be2442ddc530e367394f90))
+
 ## 1.0.2
 
  - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))

@@ -55,7 +55,6 @@ class _HomePageState extends State<HomePage> {
 
         return Container();
 
-        //TODO When we need to show Lightning
         //   MarkerStack<Lightning, LightningMarker,
         //       LightningMarkerState, void>(
         //     mapController: _mapController,

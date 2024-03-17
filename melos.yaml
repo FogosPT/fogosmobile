@@ -24,7 +24,7 @@ command:
       build_runner: ^2.1.2
       bloc_test: ^9.1.6
       json_serializable: ^6.7.1
-      flutter_lints: ^3.0.0
+      flutter_lints: ^3.0.1
       
       
   version:

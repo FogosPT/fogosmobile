@@ -384,7 +384,6 @@ class _FireListState extends State<FireList> {
     );
   }
 
-  /// TODO(FB): Currently not used but definitely should be.
   // ignore: unused_element
   void _onMapCreated(MapboxMapController controller) {
     mapController = controller;

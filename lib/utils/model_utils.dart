@@ -65,7 +65,6 @@ double getPonderatedImportanceFactor(
   return importanceScale;
 }
 
-/// TODO(FB): Currently not used but definitely should be.
 // ignore: unused_element
 double _calculateImportanceValue(Fire data, Map<String, dynamic> status) {
   var manFactor = 1.0;

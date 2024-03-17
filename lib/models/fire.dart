@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
 import 'package:mapbox_gl/mapbox_gl.dart';
 
-//TODO Create FireEntity and separate Model from an Entity
 class Fire extends BaseMapboxModel implements Equatable {
   final String id;
   final int sharepointId;

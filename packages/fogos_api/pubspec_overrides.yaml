@@ -1,0 +1,4 @@
+# melos_managed_dependency_overrides: warnings_api
+dependency_overrides:
+  warnings_api:
+    path: ../warnings_api

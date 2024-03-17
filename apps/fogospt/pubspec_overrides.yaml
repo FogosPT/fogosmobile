@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: fogos_api,warnings_api
+dependency_overrides:
+  fogos_api:
+    path: ../../packages/fogos_api
+  warnings_api:
+    path: ../../packages/warnings_api

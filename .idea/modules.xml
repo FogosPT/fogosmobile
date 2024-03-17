@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/packages/fogos_api/melos_fogos_api.iml" filepath="$PROJECT_DIR$/packages/fogos_api/melos_fogos_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apps/fogospt/melos_fogospt.iml" filepath="$PROJECT_DIR$/apps/fogospt/melos_fogospt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/apps/fogospt_admin/melos_fogospt_admin.iml" filepath="$PROJECT_DIR$/apps/fogospt_admin/melos_fogospt_admin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/packages/warnings_api/melos_warnings_api.iml" filepath="$PROJECT_DIR$/packages/warnings_api/melos_warnings_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/melos_fogos.iml" filepath="$PROJECT_DIR$/melos_fogos.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,3 +1,7 @@
+## 0.0.1+2
+
+ - **REFACTOR**: format files and update dependencies. ([73f6ba83](https://github.com/FogosPT/fogospt.git/commit/73f6ba83afae33b0e7bb3f642975d359fbe4b07a))
+
 ## 0.0.1+1
 
  - **REFACTOR**: fix lint issues. ([d50019e0](https://github.com/FogosPT/fogospt.git/commit/d50019e0457b6fd454fbd0b3050d0574ef6e0e0e))

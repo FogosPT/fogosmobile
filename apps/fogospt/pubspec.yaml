@@ -2,7 +2,7 @@ name: fogospt
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.0.1
+version: 1.0.2
 
 environment:
   sdk: '^3.3.0'
@@ -20,7 +20,7 @@ dependencies:
   freezed: ^2.4.7
   sentry: ^7.18.0
 
-  fogos_api: 0.0.1+1
+  fogos_api: 0.0.1+2
 
 dev_dependencies:
   flutter_test:

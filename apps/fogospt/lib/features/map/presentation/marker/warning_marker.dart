@@ -80,9 +80,12 @@ class WarningMarkerWidget extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-            SvgPicture.asset(
-              height: 30,
-              type.icon,
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: SvgPicture.asset(
+                height: 30,
+                type.icon,
+              ),
             ),
           ],
         ),

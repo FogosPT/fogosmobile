@@ -62,17 +62,50 @@ class MapPage extends StatelessWidget {
           context.go('/warning-detail', extra: fire);
           context.pop();
         },
-        child: Text('Ver detalhes'),
+        child: FireModalSeeMore(fire: fire),
       ),
       isTopBarLayerAlwaysVisible: true,
-      topBarTitle: Text(
-        fire.location,
-        style: TextStyle(
-          color: Colors.black,
-        ),
+      topBarTitle: Row(
+        children: [
+          Icon(Icons.share),
+          Icon(Icons.notification_add),
+          Icon(Icons.close),
+        ],
       ),
       child: MapPageModalContent(
         fire: fire,
+      ),
+    );
+  }
+}
+
+class FireModalSeeMore extends StatelessWidget {
+  final Fire fire;
+  const FireModalSeeMore({
+    super.key,
+    required this.fire,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.go('/warning-detail', extra: fire);
+        context.pop();
+      },
+      child: Row(
+        children: [
+          Icon(
+            Icons.info_outline,
+            color: Colors.blue,
+          ),
+          Text(
+            'mais informações'.toUpperCase(),
+            style: TextStyle(
+              color: Colors.blue,
+            ),
+          ),
+        ],
       ),
     );
   }

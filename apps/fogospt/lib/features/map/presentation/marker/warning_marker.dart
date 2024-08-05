@@ -44,8 +44,9 @@ class WarningMarker extends Marker {
     required WarningMarkerType type,
     required MarkerTapped? onTap,
     required MarkerImportance importance,
+    required Color color,
   }) : super(
-          child: WarningMarkerWidget(type: type, onTap: onTap),
+          child: WarningMarkerWidget(type: type, onTap: onTap, color: color),
           point: point,
           width: importance.size,
           height: importance.size,
@@ -55,11 +56,13 @@ class WarningMarker extends Marker {
 class WarningMarkerWidget extends StatelessWidget {
   final WarningMarkerType type;
   final MarkerTapped? onTap;
+  final Color color;
 
   const WarningMarkerWidget({
     super.key,
     required this.type,
     this.onTap,
+    required this.color,
   });
 
   @override
@@ -69,7 +72,7 @@ class WarningMarkerWidget extends StatelessWidget {
       child: SvgPicture.asset(
         type.icon,
         colorFilter: ColorFilter.mode(
-          Colors.red,
+          color,
           BlendMode.srcIn,
         ),
       ),

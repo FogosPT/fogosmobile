@@ -36,6 +36,7 @@ class FlutterMapMarkers {
           point: LatLng(fire.lat, fire.lng),
           onTap: () => onMarkerTapped(fire),
           type: WarningMarkerType.fire,
+          color: fire.statusColor.toColor(),
           importance:
               fire.important ? MarkerImportance.high : MarkerImportance.medium,
         ),
@@ -44,4 +45,10 @@ class FlutterMapMarkers {
 
     return markers;
   }
+}
+
+int hexToInteger(String hex) => int.parse('FF$hex', radix: 16);
+
+extension StringColorExtensions on String {
+  Color toColor() => Color(hexToInteger(this));
 }

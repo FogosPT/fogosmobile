@@ -7,33 +7,30 @@ import 'package:latlong2/latlong.dart';
 typedef MarkerTapped = void Function();
 
 enum WarningMarkerType {
+  important,
   fire,
-  other;
+  alarm,
+  watch,
+  pointer,
+  fake,
+  unknown;
 
   String get icon {
     switch (this) {
       case WarningMarkerType.fire:
         return 'assets/icons/ico_fire.svg';
-      case WarningMarkerType.other:
+      case WarningMarkerType.pointer:
         return 'assets/icons/ico_pointer.svg';
-    }
-  }
-
-  Color get color {
-    switch (this) {
-      case WarningMarkerType.fire:
-        return const Color(0xFFFF0000);
-      case WarningMarkerType.other:
-        return const Color(0xFF0000FF);
-    }
-  }
-
-  from(String type) {
-    switch (type) {
-      case 'fire':
-        return WarningMarkerType.fire;
-      default:
-        return WarningMarkerType.other;
+      case WarningMarkerType.important:
+        return 'assets/icons/ico_fire.svg';
+      case WarningMarkerType.alarm:
+        return 'assets/icons/ico_alarm.svg';
+      case WarningMarkerType.watch:
+        return 'assets/icons/ico_watch.svg';
+      case WarningMarkerType.fake:
+        return 'assets/icons/ico_fake.svg';
+      case WarningMarkerType.unknown:
+        return 'assets/icons/ico_fire.svg';
     }
   }
 }
@@ -69,11 +66,25 @@ class WarningMarkerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: SvgPicture.asset(
-        type.icon,
-        colorFilter: ColorFilter.mode(
-          color,
-          BlendMode.srcIn,
+      child: SizedBox(
+        height: 50,
+        width: 50,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SvgPicture.asset(
+              height: 30,
+              type.icon,
+            ),
+          ],
         ),
       ),
     );

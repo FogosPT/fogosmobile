@@ -67,6 +67,7 @@ mixin _$Fire {
 // required String subRegiao,
   Created get created => throw _privateConstructorUsedError;
   Created get updated => throw _privateConstructorUsedError;
+  FireStatus? get fireStatus => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -106,7 +107,8 @@ abstract class $FireCopyWith<$Res> {
       String? extra,
       bool disappear,
       Created created,
-      Created updated});
+      Created updated,
+      FireStatus? fireStatus});
 
   $CreatedCopyWith<$Res> get dateTime;
   $CreatedCopyWith<$Res> get created;
@@ -154,6 +156,7 @@ class _$FireCopyWithImpl<$Res, $Val extends Fire>
     Object? disappear = null,
     Object? created = null,
     Object? updated = null,
+    Object? fireStatus = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -268,6 +271,10 @@ class _$FireCopyWithImpl<$Res, $Val extends Fire>
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
               as Created,
+      fireStatus: freezed == fireStatus
+          ? _value.fireStatus
+          : fireStatus // ignore: cast_nullable_to_non_nullable
+              as FireStatus?,
     ) as $Val);
   }
 
@@ -331,7 +338,8 @@ abstract class _$$FireImplCopyWith<$Res> implements $FireCopyWith<$Res> {
       String? extra,
       bool disappear,
       Created created,
-      Created updated});
+      Created updated,
+      FireStatus? fireStatus});
 
   @override
   $CreatedCopyWith<$Res> get dateTime;
@@ -379,6 +387,7 @@ class __$$FireImplCopyWithImpl<$Res>
     Object? disappear = null,
     Object? created = null,
     Object? updated = null,
+    Object? fireStatus = freezed,
   }) {
     return _then(_$FireImpl(
       id: null == id
@@ -493,6 +502,10 @@ class __$$FireImplCopyWithImpl<$Res>
           ? _value.updated
           : updated // ignore: cast_nullable_to_non_nullable
               as Created,
+      fireStatus: freezed == fireStatus
+          ? _value.fireStatus
+          : fireStatus // ignore: cast_nullable_to_non_nullable
+              as FireStatus?,
     ));
   }
 }
@@ -528,7 +541,8 @@ class _$FireImpl implements _Fire {
       this.extra,
       required this.disappear,
       required this.created,
-      required this.updated});
+      required this.updated,
+      this.fireStatus});
 
   factory _$FireImpl.fromJson(Map<String, dynamic> json) =>
       _$$FireImplFromJson(json);
@@ -609,10 +623,12 @@ class _$FireImpl implements _Fire {
   final Created created;
   @override
   final Created updated;
+  @override
+  final FireStatus? fireStatus;
 
   @override
   String toString() {
-    return 'Fire(id: $id, coords: $coords, dateTime: $dateTime, date: $date, hour: $hour, location: $location, aerial: $aerial, terrain: $terrain, man: $man, district: $district, concelho: $concelho, freguesia: $freguesia, dico: $dico, lat: $lat, lng: $lng, naturezaCode: $naturezaCode, natureza: $natureza, statusCode: $statusCode, statusColor: $statusColor, status: $status, important: $important, active: $active, sadoId: $sadoId, sharepointId: $sharepointId, extra: $extra, disappear: $disappear, created: $created, updated: $updated)';
+    return 'Fire(id: $id, coords: $coords, dateTime: $dateTime, date: $date, hour: $hour, location: $location, aerial: $aerial, terrain: $terrain, man: $man, district: $district, concelho: $concelho, freguesia: $freguesia, dico: $dico, lat: $lat, lng: $lng, naturezaCode: $naturezaCode, natureza: $natureza, statusCode: $statusCode, statusColor: $statusColor, status: $status, important: $important, active: $active, sadoId: $sadoId, sharepointId: $sharepointId, extra: $extra, disappear: $disappear, created: $created, updated: $updated, fireStatus: $fireStatus)';
   }
 
   @override
@@ -659,7 +675,9 @@ class _$FireImpl implements _Fire {
             (identical(other.disappear, disappear) ||
                 other.disappear == disappear) &&
             (identical(other.created, created) || other.created == created) &&
-            (identical(other.updated, updated) || other.updated == updated));
+            (identical(other.updated, updated) || other.updated == updated) &&
+            (identical(other.fireStatus, fireStatus) ||
+                other.fireStatus == fireStatus));
   }
 
   @JsonKey(ignore: true)
@@ -693,7 +711,8 @@ class _$FireImpl implements _Fire {
         extra,
         disappear,
         created,
-        updated
+        updated,
+        fireStatus
       ]);
 
   @JsonKey(ignore: true)
@@ -739,7 +758,8 @@ abstract class _Fire implements Fire {
       final String? extra,
       required final bool disappear,
       required final Created created,
-      required final Created updated}) = _$FireImpl;
+      required final Created updated,
+      final FireStatus? fireStatus}) = _$FireImpl;
 
   factory _Fire.fromJson(Map<String, dynamic> json) = _$FireImpl.fromJson;
 
@@ -811,6 +831,8 @@ abstract class _Fire implements Fire {
   Created get created;
   @override
   Created get updated;
+  @override
+  FireStatus? get fireStatus;
   @override
   @JsonKey(ignore: true)
   _$$FireImplCopyWith<_$FireImpl> get copyWith =>

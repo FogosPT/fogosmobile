@@ -53,7 +53,40 @@ class Fire with _$Fire {
     // required String subRegiao,
     required Created created,
     required Created updated,
+    FireStatus? fireStatus,
   }) = _Fire;
 
   factory Fire.fromJson(Map<String, dynamic> json) => _$FireFromJson(json);
+
+  static FireStatus fromStatusToFireStatus(String status) {
+    return switch (status) {
+      'Ocorrência Significativa' => FireStatus.significativeOcurrence,
+      'Vigilância' => FireStatus.vigilance,
+      'Despacho' => FireStatus.dispatch,
+      'Despacho de 1º Alerta' => FireStatus.firstAlertDispatch,
+      'Chegada ao TO' => FireStatus.arrival,
+      'Em Curso' => FireStatus.ongoing,
+      'Em Resolução' => FireStatus.inResolution,
+      'Conclusão' => FireStatus.inConclusion,
+      'Encerrada' => FireStatus.done,
+      'Falso Alarme' => FireStatus.falseAlarm,
+      'Falso Alerta' => FireStatus.falseAlert,
+      _ => FireStatus.unknown,
+    };
+  }
+}
+
+enum FireStatus {
+  dispatch,
+  significativeOcurrence,
+  vigilance,
+  firstAlertDispatch,
+  arrival,
+  ongoing,
+  inResolution,
+  inConclusion,
+  done,
+  falseAlarm,
+  falseAlert,
+  unknown,
 }

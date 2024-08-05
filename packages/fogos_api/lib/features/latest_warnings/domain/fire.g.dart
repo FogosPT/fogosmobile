@@ -35,6 +35,7 @@ _$FireImpl _$$FireImplFromJson(Map<String, dynamic> json) => _$FireImpl(
       disappear: json['disappear'] as bool,
       created: Created.fromJson(json['created'] as Map<String, dynamic>),
       updated: Created.fromJson(json['updated'] as Map<String, dynamic>),
+      fireStatus: $enumDecodeNullable(_$FireStatusEnumMap, json['fireStatus']),
     );
 
 Map<String, dynamic> _$$FireImplToJson(_$FireImpl instance) =>
@@ -67,4 +68,19 @@ Map<String, dynamic> _$$FireImplToJson(_$FireImpl instance) =>
       'disappear': instance.disappear,
       'created': instance.created,
       'updated': instance.updated,
+      'fireStatus': _$FireStatusEnumMap[instance.fireStatus],
     };
+
+const _$FireStatusEnumMap = {
+  FireStatus.dispatch: 'dispatch',
+  FireStatus.significativeOcurrence: 'significativeOcurrence',
+  FireStatus.vigilance: 'vigilance',
+  FireStatus.firstAlertDispatch: 'firstAlertDispatch',
+  FireStatus.arrival: 'arrival',
+  FireStatus.ongoing: 'ongoing',
+  FireStatus.inResolution: 'inResolution',
+  FireStatus.inConclusion: 'inConclusion',
+  FireStatus.done: 'done',
+  FireStatus.falseAlarm: 'falseAlarm',
+  FireStatus.falseAlert: 'falseAlert',
+};

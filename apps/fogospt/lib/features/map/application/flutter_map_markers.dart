@@ -35,7 +35,14 @@ class FlutterMapMarkers {
         WarningMarker(
           point: LatLng(fire.lat, fire.lng),
           onTap: () => onMarkerTapped(fire),
-          type: WarningMarkerType.fire,
+          type: switch (fire.statusCode) {
+            5 || 7 || 99 || 8 => WarningMarkerType.fire,
+            3 || 4 => WarningMarkerType.alarm,
+            9 => WarningMarkerType.watch,
+            6 || 10 => WarningMarkerType.pointer,
+            11 || 12 => WarningMarkerType.fake,
+            _ => WarningMarkerType.unknown,
+          },
           color: fire.statusColor.toColor(),
           importance:
               fire.important ? MarkerImportance.high : MarkerImportance.medium,

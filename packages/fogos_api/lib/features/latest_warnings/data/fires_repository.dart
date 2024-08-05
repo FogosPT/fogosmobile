@@ -26,6 +26,14 @@ class FiresRepository {
     final fires = Fires.fromJson(body);
     log(fires);
 
+    fires.data
+        .map(
+          (fire) => fire.copyWith(
+            fireStatus: Fire.fromStatusToFireStatus(fire.status),
+          ),
+        )
+        .toList();
+
     return fires;
   }
 

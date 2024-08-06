@@ -191,7 +191,7 @@ class WarningLoadedView extends StatelessWidget {
                     /// Inicio
                     AppFogosTitleWidget(title: "início"),
                     Text(
-                      state.fire.created.sec,
+                      state.fire.created.toString(),
                       style: context.textTheme.headlineSmall,
                     ),
                     SizedBox(height: 20),

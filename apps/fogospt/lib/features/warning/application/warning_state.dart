@@ -33,8 +33,8 @@ class WarningLoaded with WarningLoadedMappable implements WarningState {
     required this.rcm,
   });
 
-  Resources get latestResource => resources.first;
-  HistoryStatus get latestHistoryStatus => historyStatuses.first;
+  Resources get latestResource => resources.last;
+  HistoryStatus get latestHistoryStatus => historyStatuses.last;
 }
 
 @MappableClass()

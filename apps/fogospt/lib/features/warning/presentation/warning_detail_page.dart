@@ -4,12 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
+import 'package:fogospt/constants/assets.dart';
+import 'package:fogospt/constants/colors.dart';
 import 'package:fogospt/features/warning/application/warning_cubit.dart';
 import 'package:fogospt/features/warning/application/warning_flchart_data.dart';
 import 'package:fogospt/features/warning/application/warning_state.dart';
 import 'package:fogospt/features/warning/data/warning_service.dart';
+import 'package:fogospt/features/warning/presentation/resource_icon_value.dart';
 import 'package:fogospt/features/warning/presentation/warning_app_bar.dart';
 import 'package:fogospt/features/warning/presentation/warning_chart_label.dart';
+import 'package:fogospt/features/warning/presentation/warning_chart_labels.dart';
 
 class WarningDetailPage extends StatelessWidget {
   final Fire? warning;
@@ -117,26 +121,26 @@ class WarningLoadedView extends StatelessWidget {
                     height: 20,
                   ),
 
-                  /// Labels
+                  /// Resources
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      WarningChartLabel(
-                        color: Colors.yellow,
-                        label: 'Operacionais',
+                      ResourceIconValueWidget(
+                        icon: FogosAppAssets.getAsset(ResourcesType.man),
+                        value: state.latestResource.man,
                       ),
-                      WarningChartLabel(
-                        color: Colors.green,
-                        label: 'Terrestres',
+                      ResourceIconValueWidget(
+                        icon: FogosAppAssets.getAsset(ResourcesType.terrain),
+                        value: state.latestResource.terrain,
                       ),
-                      WarningChartLabel(
-                        color: Colors.blue,
-                        label: 'Aéreos',
+                      ResourceIconValueWidget(
+                        icon: FogosAppAssets.getAsset(ResourcesType.aerial),
+                        value: state.latestResource.aerial,
                       ),
                     ],
                   ),
 
-                  /// Graph
+                  /// Resources Graph
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final data = WarningFlChartData(
@@ -155,18 +159,18 @@ class WarningLoadedView extends StatelessWidget {
                               lineBarsData: [
                                 LineChartBarData(
                                   spots: data.manToFlSpots(),
-                                  color: Colors.yellow,
+                                  color: resourceManColor,
                                   barWidth: 4,
                                 ),
                                 LineChartBarData(
                                   spots: data.terrainToFlSpots(),
-                                  color: Colors.green,
+                                  color: resourceTerrainColor,
                                   barWidth: 4,
                                 ),
                                 LineChartBarData(
                                   spots: data.aerialToFlSpots(),
-                                  color: Colors.blue,
-                                  barWidth: 5,
+                                  color: resourceAerialColor,
+                                  barWidth: 4,
                                 )
                               ],
                             ),
@@ -174,6 +178,24 @@ class WarningLoadedView extends StatelessWidget {
                         ),
                       );
                     },
+                  ),
+
+                  /// Labels
+                  WarningChartLabels.spaceEvenly(
+                    labels: [
+                      WarningChartLabel(
+                        color: resourceManColor,
+                        label: 'Operacionais',
+                      ),
+                      WarningChartLabel(
+                        color: resourceTerrainColor,
+                        label: 'Terrestres',
+                      ),
+                      WarningChartLabel(
+                        color: resourceAerialColor,
+                        label: 'Aéreos',
+                      ),
+                    ],
                   ),
                   // Links
                 ],

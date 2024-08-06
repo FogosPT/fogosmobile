@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
@@ -10,10 +11,12 @@ import 'package:fogospt/features/warning/application/warning_cubit.dart';
 import 'package:fogospt/features/warning/application/warning_flchart_data.dart';
 import 'package:fogospt/features/warning/application/warning_state.dart';
 import 'package:fogospt/features/warning/data/warning_service.dart';
-import 'package:fogospt/features/warning/presentation/resource_icon_value.dart';
+import 'package:fogospt/features/warning/presentation/resource_icon_value_widget.dart';
 import 'package:fogospt/features/warning/presentation/warning_app_bar.dart';
-import 'package:fogospt/features/warning/presentation/warning_chart_label.dart';
-import 'package:fogospt/features/warning/presentation/warning_chart_labels.dart';
+import 'package:fogospt/features/warning/presentation/warning_chart_labels_item_widget.dart';
+import 'package:fogospt/features/warning/presentation/warning_chart_labels_widget.dart';
+import 'package:fogospt/utils/extensions/context_extensions.dart';
+import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 
 class WarningDetailPage extends StatelessWidget {
   final Fire? warning;
@@ -91,114 +94,134 @@ class WarningLoadedView extends StatelessWidget {
         if (state is WarningLoaded) {
           return Scaffold(
             appBar: WarningAppBar(warning: state.fire),
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // Notes
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Text('Bombeiros: ${state.resources.first.man}'),
-                          Text('Veículos: ${state.resources.first.terrain}'),
-                          Text('Meios Aéreos: ${state.resources.first.aerial}'),
-                          Divider(),
-                          Text(state.fire.updated.sec.toString()),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text('${state.fire.district}'),
-                          Text('${state.fire.concelho}'),
-                          Text('${state.fire.freguesia}'),
-                          Divider(),
-                          Text('${state.rcm.first.hoje}'),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppFogosTitleWidget(title: "LOCAL"),
+                    Text(
+                      state.fire.location,
+                      style: context.textTheme.headlineSmall,
+                    ),
+                    SizedBox(height: 20),
 
-                  /// Resources
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ResourceIconValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.man),
-                        value: state.latestResource.man,
-                      ),
-                      ResourceIconValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.terrain),
-                        value: state.latestResource.terrain,
-                      ),
-                      ResourceIconValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.aerial),
-                        value: state.latestResource.aerial,
-                      ),
-                    ],
-                  ),
+                    /// Resources
+                    AppFogosTitleWidget(title: "meios"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ResourceIconValueWidget(
+                          icon: FogosAppAssets.getAsset(ResourcesType.man),
+                          value: state.latestResource.man,
+                        ),
+                        ResourceIconValueWidget(
+                          icon: FogosAppAssets.getAsset(ResourcesType.terrain),
+                          value: state.latestResource.terrain,
+                        ),
+                        ResourceIconValueWidget(
+                          icon: FogosAppAssets.getAsset(ResourcesType.aerial),
+                          value: state.latestResource.aerial,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
 
-                  /// Resources Graph
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      final data = WarningFlChartData(
-                        resources: state.resources,
-                      );
-                      return SizedBox.fromSize(
-                        size: Size(constraints.maxWidth, 300),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: LineChart(
-                            LineChartData(
-                              minY: 0,
-                              maxY: data.axisY(),
-                              titlesData: titlesData(),
-                              lineTouchData: lineTouchData(),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: data.manToFlSpots(),
-                                  color: resourceManColor,
-                                  barWidth: 4,
-                                ),
-                                LineChartBarData(
-                                  spots: data.terrainToFlSpots(),
-                                  color: resourceTerrainColor,
-                                  barWidth: 4,
-                                ),
-                                LineChartBarData(
-                                  spots: data.aerialToFlSpots(),
-                                  color: resourceAerialColor,
-                                  barWidth: 4,
-                                )
-                              ],
+                    /// Resources Graph
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final data = WarningFlChartData(
+                          resources: state.resources,
+                        );
+                        return SizedBox.fromSize(
+                          size: Size(constraints.maxWidth, 300),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: LineChart(
+                              LineChartData(
+                                minY: 0,
+                                maxY: data.axisY(),
+                                titlesData: titlesData(),
+                                lineTouchData: lineTouchData(),
+                                lineBarsData: [
+                                  LineChartBarData(
+                                    spots: data.manToFlSpots(),
+                                    color: resourceManColor,
+                                    barWidth: 4,
+                                  ),
+                                  LineChartBarData(
+                                    spots: data.terrainToFlSpots(),
+                                    color: resourceTerrainColor,
+                                    barWidth: 4,
+                                  ),
+                                  LineChartBarData(
+                                    spots: data.aerialToFlSpots(),
+                                    color: resourceAerialColor,
+                                    barWidth: 4,
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 10),
 
-                  /// Labels
-                  WarningChartLabels.spaceEvenly(
-                    labels: [
-                      WarningChartLabel(
-                        color: resourceManColor,
-                        label: 'Operacionais',
-                      ),
-                      WarningChartLabel(
-                        color: resourceTerrainColor,
-                        label: 'Terrestres',
-                      ),
-                      WarningChartLabel(
-                        color: resourceAerialColor,
-                        label: 'Aéreos',
-                      ),
-                    ],
-                  ),
-                  // Links
-                ],
+                    /// Labels
+                    WarningChartLabels.spaceEvenly(
+                      labels: [
+                        WarningChartLabelsItem(
+                          color: resourceManColor,
+                          label: 'Operacionais',
+                        ),
+                        WarningChartLabelsItem(
+                          color: resourceTerrainColor,
+                          label: 'Terrestres',
+                        ),
+                        WarningChartLabelsItem(
+                          color: resourceAerialColor,
+                          label: 'Aéreos',
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+
+                    /// Inicio
+                    AppFogosTitleWidget(title: "início"),
+                    Text(
+                      state.fire.created.sec,
+                      style: context.textTheme.headlineSmall,
+                    ),
+                    SizedBox(height: 20),
+
+                    /// Natureza
+                    AppFogosTitleWidget(title: "natureza"),
+                    SizedBox(height: 20),
+
+                    /// Risco de Incêndio
+                    AppFogosTitleWidget(title: "fonte de alerta"),
+                    SizedBox(height: 20),
+
+                    /// ESTADO
+                    AppFogosTitleWidget(title: "risco de incêndio"),
+                    SizedBox(height: 20),
+
+                    ///
+                    /// METEO?
+                    Visibility(
+                      visible: kDebugMode,
+                      child: AppFogosTitleWidget(title: "meteo"),
+                    ),
+
+                    /// PARTILHAR
+                    Visibility(
+                      visible: kDebugMode,
+                      child: AppFogosTitleWidget(title: "partilhar"),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

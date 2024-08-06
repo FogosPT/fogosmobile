@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fogospt/features/warning/presentation/warning_chart_label.dart';
+import 'package:fogospt/features/warning/presentation/warning_chart_labels_item_widget.dart';
 
 class WarningChartLabels extends StatelessWidget {
-  final List<WarningChartLabel> labels;
+  final List<WarningChartLabelsItem> labels;
   final Axis direction;
   final MainAxisAlignment mainAxisAlignment;
 
@@ -14,7 +14,7 @@ class WarningChartLabels extends StatelessWidget {
   });
 
   WarningChartLabels.spaceEvenly({
-    required List<WarningChartLabel> labels,
+    required List<WarningChartLabelsItem> labels,
     Axis direction = Axis.horizontal,
   }) : this._(
           labels: labels,
@@ -23,7 +23,7 @@ class WarningChartLabels extends StatelessWidget {
         );
 
   WarningChartLabels.build({
-    required List<WarningChartLabel> labels,
+    required List<WarningChartLabelsItem> labels,
     required Axis direction,
     required MainAxisAlignment mainAxisAlignment,
   }) : this._(

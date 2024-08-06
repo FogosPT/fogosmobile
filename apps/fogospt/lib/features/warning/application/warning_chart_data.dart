@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
 
 class WarningChartData {
@@ -43,4 +42,3 @@ class WarningChartData {
     return maxY;
   }
 }
-

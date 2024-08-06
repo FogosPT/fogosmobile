@@ -12,14 +12,13 @@ class WarningAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      foregroundColor: Colors.deepPurple,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.of(context).pop();
         },
       ),
-      title: Text('Warning ${warning != null ? '- ${warning?.location}' : ''}'),
+      title: Text('Warning ${warning != null ? '- ${warning?.district}' : ''}'),
     );
   }
 

@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-class WarningChartLabel extends StatelessWidget {
+class WarningChartLabelsItem extends StatelessWidget {
   final Color color;
   final String label;
 
-  const WarningChartLabel({
+  const WarningChartLabelsItem({
     super.key,
     required this.color,
     required this.label,

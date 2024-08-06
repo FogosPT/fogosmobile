@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
@@ -29,7 +30,7 @@ class WarningDetailPage extends StatelessWidget {
             case Loading():
               return WarningLoadingView();
             case WarningLoaded():
-              return WarningLoadedView(warning: warning);
+              return WarningLoadedView();
             case WarningFailed():
               return WarningFailedView();
           }
@@ -74,49 +75,96 @@ class WarningLoadingView extends StatelessWidget {
 class WarningLoadedView extends StatelessWidget {
   const WarningLoadedView({
     super.key,
-    required this.warning,
   });
-
-  final Fire? warning;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: WarningAppBar(warning: warning),
-      body: Center(
-        child: Column(
-          children: [
-            Text("${warning?.active ?? null}"),
-            Text("${warning?.aerial ?? null}"),
-            Text("${warning?.concelho ?? null}"),
-            Text("${warning?.coords ?? null}"),
-            Text("${warning?.created ?? null}"),
-            Text("${warning?.date ?? null}"),
-            Text("${warning?.dateTime ?? null}"),
-            Text("${warning?.dico ?? null}"),
-            Text("${warning?.disappear ?? null}"),
-            Text("${warning?.district ?? null}"),
-            Text("${warning?.extra ?? null}"),
-            Text("${warning?.freguesia ?? null}"),
-            Text("${warning?.hour ?? null}"),
-            Text("${warning?.id ?? null}"),
-            Text("${warning?.important ?? null}"),
-            Text("${warning?.lat ?? null}"),
-            Text("${warning?.lng ?? null}"),
-            Text("${warning?.location ?? null}"),
-            Text("${warning?.man ?? null}"),
-            Text("${warning?.natureza ?? null}"),
-            Text("${warning?.naturezaCode ?? null}"),
-            Text("${warning?.sadoId ?? null}"),
-            Text("${warning?.sharepointId ?? null}"),
-            Text("${warning?.status ?? null}"),
-            Text("${warning?.statusCode ?? null}"),
-            Text("${warning?.statusColor ?? null}"),
-            Text("${warning?.terrain ?? null}"),
-            Text("${warning?.updated ?? null}"),
-          ],
-        ),
-      ),
+    return BlocBuilder<WarningCubit, WarningState>(
+      builder: (context, state) {
+        if (state is WarningLoaded) {
+          return Scaffold(
+            appBar: WarningAppBar(warning: state.fire),
+            body: Column(
+              children: [
+                // Notes
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text('Bombeiros: ${state.resources.first.man}'),
+                        Text('Veículos: ${state.resources.first.terrain}'),
+                        Text('Meios Aéreos: ${state.resources.first.aerial}'),
+                        Divider(),
+                        Text(state.fire.updated.sec.toString()),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text('${state.fire.district}'),
+                        Text('${state.fire.concelho}'),
+                        Text('${state.fire.freguesia}'),
+                        Divider(),
+                        Text('${state.rcm.first.hoje}'),
+                      ],
+                    ),
+                  ],
+                ),
+                // Graph
+                LineChart(
+                  LineChartData(
+                    lineBarsData: [
+                      LineChartBarData(
+                        spots: state.resources
+                            .asMap()
+                            .entries
+                            .map(
+                              (entry) => FlSpot(
+                                entry.key.toDouble(),
+                                entry.value.man.toDouble(),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      LineChartBarData(
+                        spots: state.resources
+                            .asMap()
+                            .entries
+                            .map(
+                              (entry) => FlSpot(
+                                entry.key.toDouble(),
+                                entry.value.aerial.toDouble(),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                      LineChartBarData(
+                        spots: state.resources
+                            .asMap()
+                            .entries
+                            .map(
+                              (entry) => FlSpot(
+                                entry.key.toDouble(),
+                                entry.value.terrain.toDouble(),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  ),
+                ),
+                // Links
+              ],
+            ),
+          );
+        } else {
+          return Scaffold(
+            appBar: WarningAppBar(),
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -132,6 +180,7 @@ class WarningAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      foregroundColor: Colors.deepPurple,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {

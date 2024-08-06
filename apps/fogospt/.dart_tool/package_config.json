@@ -242,6 +242,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "fl_chart",
+      "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/fl_chart-0.68.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "flutter",
       "rootUri": "file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter",
       "packageUri": "lib/",
@@ -800,7 +806,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-08-04T23:31:47.135728Z",
+  "generated": "2024-08-05T20:35:06.627735Z",
   "generator": "pub",
   "generatorVersion": "3.3.3"
 }

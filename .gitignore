@@ -47,6 +47,3 @@ ios/Flutter/.last_build_id
 
 # Melos
 pubspec_overrides.yaml
-
-api-keys.json
-.vscode

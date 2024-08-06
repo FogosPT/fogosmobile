@@ -1,0 +1,17 @@
+{
+	"recommendations": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+		"johnpapa.vscode-peacock",
+        "MS-vsliveshare.vsliveshare",
+        "humao.rest-client",
+        "FelixAngelov.bloc",
+        "FelixAngelov.mason",
+        "SushanShakya.bloc-extended",
+        "usernamehw.errorlens",
+        "blaugold.melos-code",
+        "SimonSiefke.svg-preview",
+        "Gruntfuggly.todo-tree",
+        "redhat.vscode-yaml"
+	]
+}

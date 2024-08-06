@@ -49,4 +49,4 @@ ios/Flutter/.last_build_id
 pubspec_overrides.yaml
 
 # Env
-api-keys.json
+keys.json

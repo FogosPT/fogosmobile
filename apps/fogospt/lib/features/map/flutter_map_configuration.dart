@@ -1,4 +1,5 @@
 import 'package:flutter_map/flutter_map.dart';
+import 'package:fogospt/constants/env.dart';
 import 'package:latlong2/latlong.dart';
 
 const LatLng centerOfPortugal = LatLng(39.3999, -8.2245);
@@ -31,10 +32,8 @@ class FlutterMapConfiguration {
       urlTemplate:
           "https://api.mapbox.com/styles/v1/fogospt/{id}/tiles/256/{z}/{x}/{y}?access_token={accessToken}",
       additionalOptions: {
-        "accessToken": const String.fromEnvironment('MAPBOX_ACCESS_TOKEN',
-            defaultValue: "-"),
-        'id':
-            const String.fromEnvironment('MAPBOX_ACCESS_ID', defaultValue: "-"),
+        "accessToken": Env.mapboxAccessToken,
+        'id': Env.mapboxAccessId,
       },
       retinaMode: true,
     );

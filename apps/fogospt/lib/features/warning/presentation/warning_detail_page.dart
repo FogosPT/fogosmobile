@@ -12,6 +12,7 @@ import 'package:fogospt/features/warning/application/warning_flchart_data.dart';
 import 'package:fogospt/features/warning/application/warning_state.dart';
 import 'package:fogospt/features/warning/data/warning_service.dart';
 import 'package:fogospt/features/warning/presentation/resource_icon_value_widget.dart';
+import 'package:fogospt/features/warning/presentation/risk_of_fire_widget.dart';
 import 'package:fogospt/features/warning/presentation/warning_app_bar.dart';
 import 'package:fogospt/features/warning/presentation/warning_chart_labels_item_widget.dart';
 import 'package:fogospt/features/warning/presentation/warning_chart_labels_widget.dart';
@@ -191,22 +192,31 @@ class WarningLoadedView extends StatelessWidget {
                     /// Inicio
                     AppFogosTitleWidget(title: "início"),
                     Text(
-                      state.fire.created.toString(),
+                      "${state.fire.date} ${state.fire.hour}",
                       style: context.textTheme.headlineSmall,
                     ),
                     SizedBox(height: 20),
 
                     /// Natureza
                     AppFogosTitleWidget(title: "natureza"),
+                    Text(
+                      state.fire.natureza,
+                      style: context.textTheme.headlineSmall,
+                    ),
                     SizedBox(height: 20),
 
+                    /// FONTE DE ALERTA
+                    // AppFogosTitleWidget(title: "fonte de alerta"),
+                    // SizedBox(height: 20),
+
                     /// Risco de Incêndio
-                    AppFogosTitleWidget(title: "fonte de alerta"),
+                    AppFogosTitleWidget(title: "risco de incêndio"),
+
+                    RiskOfFireWidget(rcm: state.latestRCM),
                     SizedBox(height: 20),
 
                     /// ESTADO
-                    AppFogosTitleWidget(title: "risco de incêndio"),
-                    SizedBox(height: 20),
+                    AppFogosTitleWidget(title: "estado"),
 
                     ///
                     /// METEO?

@@ -25,3 +25,19 @@ class FogosAppAssets {
     'assets/plane.svg',
   );
 }
+
+SvgPicture icoFire = SvgPicture.asset(
+  'assets/icons/ico_fire.svg',
+);
+SvgPicture icoPointer = SvgPicture.asset(
+  'assets/icons/ico_pointer.svg',
+);
+SvgPicture icoAlarm = SvgPicture.asset(
+  'assets/icons/ico_alarm.svg',
+);
+SvgPicture icoFake = SvgPicture.asset(
+  'assets/icons/ico_fake.svg',
+);
+SvgPicture icoWatch = SvgPicture.asset(
+  'assets/icons/ico_watch.svg',
+);

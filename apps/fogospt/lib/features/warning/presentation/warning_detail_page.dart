@@ -1,5 +1,4 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
@@ -12,6 +11,7 @@ import 'package:fogospt/features/warning/application/warning_flchart_data.dart';
 import 'package:fogospt/features/warning/application/warning_state.dart';
 import 'package:fogospt/features/warning/data/warning_service.dart';
 import 'package:fogospt/features/warning/presentation/resource_icon_value_widget.dart';
+import 'package:fogospt/features/warning/presentation/risk_fire_state_icon_widget.dart';
 import 'package:fogospt/features/warning/presentation/risk_of_fire_widget.dart';
 import 'package:fogospt/features/warning/presentation/warning_app_bar.dart';
 import 'package:fogospt/features/warning/presentation/warning_chart_labels_item_widget.dart';
@@ -217,17 +217,55 @@ class WarningLoadedView extends StatelessWidget {
 
                     /// ESTADO
                     AppFogosTitleWidget(title: "estado"),
+                    Column(
+                      children: [
+                        ...state.historyStatuses.map<Widget>(
+                          (status) {
+                            return Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                IntrinsicHeight(
+                                  child: Stack(
+                                    alignment: AlignmentDirectional.topCenter,
+                                    children: [
+                                      RiskFireStateIconWidget(status: status),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 1.5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      status.label,
+                                      style: context.textTheme.bodyLarge
+                                          ?.copyWith(color: appFogosOrange),
+                                    ),
+                                    Text(
+                                      status.status,
+                                      style: context.textTheme.bodyMedium,
+                                    ),
+                                    SizedBox(height: 20),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ).toList(),
+                      ],
+                    ),
 
-                    ///
                     /// METEO?
                     Visibility(
-                      visible: kDebugMode,
+                      // visible: kDebugMode,
+                      visible: false,
                       child: AppFogosTitleWidget(title: "meteo"),
                     ),
 
                     /// PARTILHAR
                     Visibility(
-                      visible: kDebugMode,
+                      // visible: kDebugMode,
+                      visible: false,
                       child: AppFogosTitleWidget(title: "partilhar"),
                     ),
                   ],

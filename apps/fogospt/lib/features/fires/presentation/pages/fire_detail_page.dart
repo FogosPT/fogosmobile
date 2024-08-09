@@ -40,13 +40,13 @@ class FireDetailPage extends StatelessWidget {
             case FiresStateInitial():
               BlocProvider.of<FiresCubit>(context)
                   .fetchAllFireInformation(fireId);
-              return WarningLoadingView();
+              return FireLoadingView();
             case FiresStateLoading():
-              return WarningLoadingView();
+              return FireLoadingView();
             case FiresStateLoaded():
-              return WarningLoadedView();
+              return FireLoadedView();
             case FiresStateFailed():
-              return WarningFailedView();
+              return FireFailedView();
           }
         },
       ),
@@ -54,8 +54,8 @@ class FireDetailPage extends StatelessWidget {
   }
 }
 
-class WarningFailedView extends StatelessWidget {
-  const WarningFailedView({
+class FireFailedView extends StatelessWidget {
+  const FireFailedView({
     super.key,
   });
 
@@ -64,14 +64,14 @@ class WarningFailedView extends StatelessWidget {
     return Scaffold(
       appBar: FireAppBar(),
       body: Center(
-        child: Text('Failed to load warning'),
+        child: Text('Não encontramos esse fogo.'),
       ),
     );
   }
 }
 
-class WarningLoadingView extends StatelessWidget {
-  const WarningLoadingView({
+class FireLoadingView extends StatelessWidget {
+  const FireLoadingView({
     super.key,
   });
 
@@ -86,8 +86,8 @@ class WarningLoadingView extends StatelessWidget {
   }
 }
 
-class WarningLoadedView extends StatelessWidget {
-  const WarningLoadedView({
+class FireLoadedView extends StatelessWidget {
+  const FireLoadedView({
     super.key,
   });
 
@@ -95,203 +95,261 @@ class WarningLoadedView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FiresCubit, FiresState>(
       builder: (context, state) {
-        if (state is FiresStateLoaded) {
-          return Scaffold(
-            appBar: FireAppBar(warning: state.fire),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppFogosTitleWidget(title: "LOCAL"),
-                    Text(
-                      state.fire?.location ?? '-',
-                      style: context.textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: 20),
-
-                    /// Resources
-                    AppFogosTitleWidget(title: "meios"),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconAndValueWidget(
-                          icon: FogosAppAssets.getAsset(ResourcesType.man),
-                          value: state.latestResource?.man ?? 0,
-                        ),
-                        IconAndValueWidget(
-                          icon: FogosAppAssets.getAsset(ResourcesType.terrain),
-                          value: state.latestResource?.terrain ?? 0,
-                        ),
-                        IconAndValueWidget(
-                          icon: FogosAppAssets.getAsset(ResourcesType.aerial),
-                          value: state.latestResource?.aerial ?? 0,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-
-                    /// Resources Graph
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        final data = WarningFlChartData(
-                          resources: state.resources ?? [],
+        return Scaffold(
+          appBar: FireAppBar(
+              warning: state is FiresStateLoaded ? state.fire : null),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppFogosTitleWidget(title: "LOCAL"),
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateFailed) {
+                        throw Exception('Failed to load fire');
+                      }
+                      if (state is FiresStateLoaded) {
+                        return Text(
+                          state.fire?.location ?? '-',
+                          style: context.textTheme.headlineSmall,
                         );
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                        return SizedBox.fromSize(
-                          size: Size(constraints.maxWidth, 300),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: LineChart(
-                              LineChartData(
-                                minY: 0,
-                                maxY: data.axisY(),
-                                titlesData: titlesData(),
-                                lineTouchData: lineTouchData(),
-                                lineBarsData: [
-                                  LineChartBarData(
-                                    spots: data.manToFlSpots(),
-                                    color: resourceManColor,
-                                    barWidth: 4,
-                                  ),
-                                  LineChartBarData(
-                                    spots: data.terrainToFlSpots(),
-                                    color: resourceTerrainColor,
-                                    barWidth: 4,
-                                  ),
-                                  LineChartBarData(
-                                    spots: data.aerialToFlSpots(),
-                                    color: resourceAerialColor,
-                                    barWidth: 4,
-                                  )
-                                ],
-                              ),
+                  /// Resources
+                  AppFogosTitleWidget(title: "meios"),
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateFailed) {
+                        throw Exception('Failed to load fire');
+                      }
+                      if (state is FiresStateLoaded) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            IconAndValueWidget(
+                              icon: FogosAppAssets.getAsset(ResourcesType.man),
+                              value: state.latestResource?.man ?? 0,
                             ),
-                          ),
+                            IconAndValueWidget(
+                              icon: FogosAppAssets.getAsset(
+                                  ResourcesType.terrain),
+                              value: state.latestResource?.terrain ?? 0,
+                            ),
+                            IconAndValueWidget(
+                              icon:
+                                  FogosAppAssets.getAsset(ResourcesType.aerial),
+                              value: state.latestResource?.aerial ?? 0,
+                            ),
+                          ],
                         );
-                      },
-                    ),
-                    SizedBox(height: 10),
+                      }
+                      return Center(child: CircularProgressIndicator());
+                    },
+                  ),
+                  SizedBox(height: 20),
 
-                    /// Labels
-                    WarningChartLabels.spaceEvenly(
-                      labels: [
-                        WarningChartLabelsItemWidget(
-                          color: resourceManColor,
-                          label: 'Operacionais',
-                        ),
-                        WarningChartLabelsItemWidget(
-                          color: resourceTerrainColor,
-                          label: 'Terrestres',
-                        ),
-                        WarningChartLabelsItemWidget(
-                          color: resourceAerialColor,
-                          label: 'Aéreos',
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
+                  /// Resources Graph
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateFailed) {
+                        throw Exception('Failed to load fire');
+                      }
+                      if (state is FiresStateLoaded) {
+                        return LayoutBuilder(
+                          builder: (context, constraints) {
+                            final data = WarningFlChartData(
+                              resources: state.resources ?? [],
+                            );
 
-                    /// Inicio
-                    AppFogosTitleWidget(title: "início"),
-                    Text(
-                      "${state.fire?.date} ${state.fire?.hour}",
-                      style: context.textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: 20),
-
-                    /// Natureza
-                    AppFogosTitleWidget(title: "natureza"),
-                    Text(
-                      state.fire?.natureza ?? '-',
-                      style: context.textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: 20),
-
-                    /// FONTE DE ALERTA
-                    // AppFogosTitleWidget(title: "fonte de alerta"),
-                    // SizedBox(height: 20),
-
-                    /// Risco de Incêndio
-                    AppFogosTitleWidget(title: "risco de incêndio"),
-
-                    if (state.latestRCM != null)
-                      FireRiskWidget(rcm: state.latestRCM!),
-                    SizedBox(height: 20),
-
-                    /// ESTADO
-                    AppFogosTitleWidget(title: "estado"),
-                    Column(
-                      children: [
-                        ...state.historyStatuses?.map<Widget>(
-                              (status) {
-                                return Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    IntrinsicHeight(
-                                      child: Stack(
-                                        alignment:
-                                            AlignmentDirectional.topCenter,
-                                        children: [
-                                          RiskFireStateIconWidget(
-                                            status: status,
-                                            icon: icoFire,
-                                          ),
-                                        ],
+                            return SizedBox.fromSize(
+                              size: Size(constraints.maxWidth, 300),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: LineChart(
+                                  LineChartData(
+                                    minY: 0,
+                                    maxY: data.axisY(),
+                                    titlesData: titlesData(),
+                                    lineTouchData: lineTouchData(),
+                                    lineBarsData: [
+                                      LineChartBarData(
+                                        spots: data.manToFlSpots(),
+                                        color: resourceManColor,
+                                        barWidth: 4,
                                       ),
-                                    ),
-                                    SizedBox(width: 1.5),
-                                    Column(
+                                      LineChartBarData(
+                                        spots: data.terrainToFlSpots(),
+                                        color: resourceTerrainColor,
+                                        barWidth: 4,
+                                      ),
+                                      LineChartBarData(
+                                        spots: data.aerialToFlSpots(),
+                                        color: resourceAerialColor,
+                                        barWidth: 4,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10),
+
+                  /// Labels
+                  WarningChartLabels.spaceEvenly(
+                    labels: [
+                      WarningChartLabelsItemWidget(
+                        color: resourceManColor,
+                        label: 'Operacionais',
+                      ),
+                      WarningChartLabelsItemWidget(
+                        color: resourceTerrainColor,
+                        label: 'Terrestres',
+                      ),
+                      WarningChartLabelsItemWidget(
+                        color: resourceAerialColor,
+                        label: 'Aéreos',
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+
+                  /// Inicio
+                  AppFogosTitleWidget(title: "início"),
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateLoaded) {
+                        return Text(
+                          "${state.fire?.date} ${state.fire?.hour}",
+                          style: context.textTheme.headlineSmall,
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
+                  SizedBox(height: 20),
+
+                  /// Natureza
+                  AppFogosTitleWidget(title: "natureza"),
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateLoaded) {
+                        return Text(
+                          state.fire?.natureza ?? '-',
+                          style: context.textTheme.headlineSmall,
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
+                  SizedBox(height: 20),
+
+                  /// FONTE DE ALERTA
+                  // AppFogosTitleWidget(title: "fonte de alerta"),
+                  // SizedBox(height: 20),
+
+                  /// Risco de Incêndio
+                  AppFogosTitleWidget(title: "risco de incêndio"),
+
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateLoaded) {
+                        if (state.latestRCM != null) {
+                          return FireRiskWidget(rcm: state.latestRCM!);
+                        }
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
+                  SizedBox(height: 20),
+
+                  /// ESTADO
+                  AppFogosTitleWidget(title: "estado"),
+                  BlocBuilder<FiresCubit, FiresState>(
+                    builder: (context, state) {
+                      if (state is FiresStateLoaded) {
+                        return Column(
+                          children: [
+                            ...state.historyStatuses?.map<Widget>(
+                                  (status) {
+                                    return Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          status.label,
-                                          style: context.textTheme.bodyLarge
-                                              ?.copyWith(color: appFogosOrange),
+                                        IntrinsicHeight(
+                                          child: Stack(
+                                            alignment:
+                                                AlignmentDirectional.topCenter,
+                                            children: [
+                                              RiskFireStateIconWidget(
+                                                status: status,
+                                                icon: icoFire,
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Text(
-                                          status.status,
-                                          style: context.textTheme.bodyMedium,
+                                        SizedBox(width: 1.5),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              status.label,
+                                              style: context.textTheme.bodyLarge
+                                                  ?.copyWith(
+                                                      color: appFogosOrange),
+                                            ),
+                                            Text(
+                                              status.status,
+                                              style:
+                                                  context.textTheme.bodyMedium,
+                                            ),
+                                            SizedBox(height: 20),
+                                          ],
                                         ),
-                                        SizedBox(height: 20),
                                       ],
-                                    ),
-                                  ],
-                                );
-                              },
-                            ).toList() ??
-                            [],
-                      ],
-                    ),
+                                    );
+                                  },
+                                ).toList() ??
+                                [],
+                          ],
+                        );
+                      }
+                      return SizedBox.shrink();
+                    },
+                  ),
 
-                    /// METEO?
-                    Visibility(
-                      // visible: kDebugMode,
-                      visible: false,
-                      child: AppFogosTitleWidget(title: "meteo"),
-                    ),
+                  /// METEO?
+                  Visibility(
+                    // visible: kDebugMode,
+                    visible: false,
+                    child: AppFogosTitleWidget(title: "meteo"),
+                  ),
 
-                    /// PARTILHAR
-                    Visibility(
-                      // visible: kDebugMode,
-                      visible: false,
-                      child: AppFogosTitleWidget(title: "partilhar"),
-                    ),
-                  ],
-                ),
+                  /// PARTILHAR
+                  Visibility(
+                    // visible: kDebugMode,
+                    visible: false,
+                    child: AppFogosTitleWidget(title: "partilhar"),
+                  ),
+                ],
               ),
             ),
-          );
-        } else {
-          return Scaffold(
-            appBar: FireAppBar(),
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
+          ),
+        );
       },
     );
   }

@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/app.dart';
 import 'package:fogospt/firebase_options.dart';
-import 'package:fogospt/utils/notifications/firebase_push_notifications_helper.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 
 final messaging = FirebaseMessaging.instance;
@@ -22,7 +21,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  configureFirebaseMessaging();
+  // configureFirebaseMessaging();
   NotificationHelpers().initializeNotifications();
 
   runApp(const FogosApp());

@@ -274,17 +274,19 @@ class FiresStateLoadedMapper extends ClassMapperBase<FiresStateLoaded> {
   @override
   final String id = 'FiresStateLoaded';
 
-  static Fire _$fire(FiresStateLoaded v) => v.fire;
-  static const Field<FiresStateLoaded, Fire> _f$fire = Field('fire', _$fire);
-  static List<Resources> _$resources(FiresStateLoaded v) => v.resources;
+  static Fire? _$fire(FiresStateLoaded v) => v.fire;
+  static const Field<FiresStateLoaded, Fire> _f$fire =
+      Field('fire', _$fire, opt: true);
+  static List<Resources>? _$resources(FiresStateLoaded v) => v.resources;
   static const Field<FiresStateLoaded, List<Resources>> _f$resources =
-      Field('resources', _$resources);
-  static List<HistoryStatus> _$historyStatuses(FiresStateLoaded v) =>
+      Field('resources', _$resources, opt: true);
+  static List<HistoryStatus>? _$historyStatuses(FiresStateLoaded v) =>
       v.historyStatuses;
   static const Field<FiresStateLoaded, List<HistoryStatus>> _f$historyStatuses =
-      Field('historyStatuses', _$historyStatuses);
-  static List<RCM> _$rcm(FiresStateLoaded v) => v.rcm;
-  static const Field<FiresStateLoaded, List<RCM>> _f$rcm = Field('rcm', _$rcm);
+      Field('historyStatuses', _$historyStatuses, opt: true);
+  static List<RCM>? _$rcm(FiresStateLoaded v) => v.rcm;
+  static const Field<FiresStateLoaded, List<RCM>> _f$rcm =
+      Field('rcm', _$rcm, opt: true);
 
   @override
   final MappableFields<FiresStateLoaded> fields = const {
@@ -356,11 +358,11 @@ extension FiresStateLoadedValueCopy<$R, $Out>
 
 abstract class FiresStateLoadedCopyWith<$R, $In extends FiresStateLoaded, $Out>
     implements FiresStateCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>
+  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>?
       get resources;
   ListCopyWith<$R, HistoryStatus,
-      ObjectCopyWith<$R, HistoryStatus, HistoryStatus>> get historyStatuses;
-  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>> get rcm;
+      ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>? get historyStatuses;
+  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>>? get rcm;
   @override
   $R call(
       {Fire? fire,
@@ -380,32 +382,39 @@ class _FiresStateLoadedCopyWithImpl<$R, $Out>
   late final ClassMapperBase<FiresStateLoaded> $mapper =
       FiresStateLoadedMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>
-      get resources => ListCopyWith($value.resources,
-          (v, t) => ObjectCopyWith(v, $identity, t), (v) => call(resources: v));
+  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>?
+      get resources => $value.resources != null
+          ? ListCopyWith(
+              $value.resources!,
+              (v, t) => ObjectCopyWith(v, $identity, t),
+              (v) => call(resources: v))
+          : null;
   @override
   ListCopyWith<$R, HistoryStatus,
-          ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>
-      get historyStatuses => ListCopyWith(
-          $value.historyStatuses,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(historyStatuses: v));
+          ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>?
+      get historyStatuses => $value.historyStatuses != null
+          ? ListCopyWith(
+              $value.historyStatuses!,
+              (v, t) => ObjectCopyWith(v, $identity, t),
+              (v) => call(historyStatuses: v))
+          : null;
   @override
-  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>> get rcm => ListCopyWith(
-      $value.rcm,
-      (v, t) => ObjectCopyWith(v, $identity, t),
-      (v) => call(rcm: v));
+  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>>? get rcm => $value.rcm !=
+          null
+      ? ListCopyWith($value.rcm!, (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(rcm: v))
+      : null;
   @override
   $R call(
-          {Fire? fire,
-          List<Resources>? resources,
-          List<HistoryStatus>? historyStatuses,
-          List<RCM>? rcm}) =>
+          {Object? fire = $none,
+          Object? resources = $none,
+          Object? historyStatuses = $none,
+          Object? rcm = $none}) =>
       $apply(FieldCopyWithData({
-        if (fire != null) #fire: fire,
-        if (resources != null) #resources: resources,
-        if (historyStatuses != null) #historyStatuses: historyStatuses,
-        if (rcm != null) #rcm: rcm
+        if (fire != $none) #fire: fire,
+        if (resources != $none) #resources: resources,
+        if (historyStatuses != $none) #historyStatuses: historyStatuses,
+        if (rcm != $none) #rcm: rcm
       }));
   @override
   FiresStateLoaded $make(CopyWithData data) => FiresStateLoaded(

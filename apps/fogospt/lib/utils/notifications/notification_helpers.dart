@@ -29,19 +29,25 @@ class NotificationHelpers {
 
     await notificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (details) {
-        print('onDidReceiveNotificationResponse - $details');
+      onDidReceiveNotificationResponse: (notificationResponse) async {
+        print('onDidReceiveNotificationResponse - $notificationResponse');
       },
-      onDidReceiveBackgroundNotificationResponse: (details) {
-        print('onDidReceiveBackgroundNotificationResponse - $details');
+      onDidReceiveBackgroundNotificationResponse: (notificationResponse) async {
+        print(
+            'onDidReceiveBackgroundNotificationResponse - $notificationResponse');
       },
     );
   }
 
+  @pragma('vm:entry-point')
+  void notificationTapBackground(NotificationResponse notificationResponse) {
+    print('notificationTapBackground - $notificationResponse');
+  }
+
   static Future<void> showNotification(RemoteMessage message) async {
     AndroidNotificationChannel channel = AndroidNotificationChannel(
-      message.notification!.android!.channelId?.toString() ?? "fogospt",
-      message.notification!.android!.channelId?.toString() ?? "fogospt",
+      message.notification!.android!.channelId ?? "fogospt",
+      message.notification!.android!.channelId ?? "fogospt",
       importance: Importance.max,
       showBadge: true,
       playSound: true,

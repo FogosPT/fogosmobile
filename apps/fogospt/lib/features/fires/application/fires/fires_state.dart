@@ -21,21 +21,21 @@ class FiresStateLoading with FiresStateLoadingMappable implements FiresState {
 
 @MappableClass()
 class FiresStateLoaded with FiresStateLoadedMappable implements FiresState {
-  final Fire fire;
-  final List<Resources> resources;
-  final List<HistoryStatus> historyStatuses;
-  final List<RCM> rcm;
+  final Fire? fire;
+  final List<Resources>? resources;
+  final List<HistoryStatus>? historyStatuses;
+  final List<RCM>? rcm;
 
   const FiresStateLoaded({
-    required this.fire,
-    required this.resources,
-    required this.historyStatuses,
-    required this.rcm,
+    this.fire,
+    this.resources,
+    this.historyStatuses,
+    this.rcm,
   });
 
-  Resources get latestResource => resources.last;
-  HistoryStatus get latestHistoryStatus => historyStatuses.last;
-  RCM get latestRCM => rcm.last;
+  Resources? get latestResource => resources?.last;
+  HistoryStatus? get latestHistoryStatus => historyStatuses?.last;
+  RCM? get latestRCM => rcm?.last;
 }
 
 @MappableClass()

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogospt/constants/assets.dart';
-import 'package:fogospt/features/fires/presentation/pages/warning_detail_page.dart';
+import 'package:fogospt/features/fires/presentation/pages/fire_detail_page.dart';
 import 'package:fogospt/features/map/presentation/pages/fires_map_page.dart';
 import 'package:fogospt/features/see_partners/presentation/partners_page.dart';
 import 'package:go_router/go_router.dart';
@@ -13,17 +12,14 @@ final fogos_router = GoRouter(
       builder: (context, state) => FiresMapPage(),
       routes: [
         GoRoute(
-          path: 'warning-detail',
+          path: 'fire-detail',
           builder: (context, state) {
-            final warning = state.extra;
-            if (warning == null) {
-              return const WarningDetailPage();
-            }
-            if (warning is! Fire) {
-              return const WarningDetailPage();
+            if (state.extra is! String) {
+              throw Exception('Invalid fire id');
             }
 
-            return WarningDetailPage(warning: warning);
+            final fireId = state.extra as String;
+            return FireDetailPage(fireId: fireId);
           },
         ),
         GoRoute(

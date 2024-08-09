@@ -4,10 +4,10 @@ import 'package:fogos_api/features/latest_warnings/domain/history_status.dart';
 import 'package:fogos_api/features/latest_warnings/domain/rcm.dart';
 import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
 
-class WarningService {
+class FireService {
   final FiresRepository firesRepository;
 
-  const WarningService(this.firesRepository);
+  const FireService.FireService(this.firesRepository);
 
   Future<Fire> fetchFire(String id) async {
     try {

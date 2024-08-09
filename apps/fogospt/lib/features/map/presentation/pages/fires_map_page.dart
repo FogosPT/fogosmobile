@@ -11,12 +11,32 @@ import 'package:fogospt/features/map/presentation/pages/views/map_page_initial_v
 import 'package:fogospt/features/map/presentation/pages/views/map_page_loading_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_modal_content_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_view.dart';
+import 'package:fogospt/routing/message_watcher.dart';
+import 'package:fogospt/utils/notifications/notification_helpers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:warnings/warnings.dart';
 import 'package:warnings_core/warnings_core.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
-class FiresMapPage extends StatelessWidget {
+class FiresMapPage extends StatefulWidget {
+  @override
+  State<FiresMapPage> createState() => _FiresMapPageState();
+}
+
+class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
+  @override
+  void initState() {
+    super.initState();
+    setupFirebaseMessaging();
+
+    processMessage = (message) {
+      final fireId = message.data['fireId'];
+      context.go('/fire-detail', extra: fireId);
+
+      NotificationHelpers.showNotification(message);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

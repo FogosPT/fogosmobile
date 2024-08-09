@@ -52,7 +52,7 @@ class MapPageModalContentView extends StatelessWidget {
           ),
           TextButton.icon(
               onPressed: () {
-                _navigateToDetail(context);
+                _navigateToDetail(context, fire.id);
               },
               icon: Icon(
                 Icons.info_outline,
@@ -69,9 +69,9 @@ class MapPageModalContentView extends StatelessWidget {
     );
   }
 
-  void _navigateToDetail(BuildContext context) {
+  void _navigateToDetail(BuildContext context, String fireId) {
     /// Navigates to detail.
-    context.go('/warning-detail', extra: fire);
+    context.go('/fire-detail', extra: fireId);
 
     /// Pops the bottom sheet opened.
     context.pop();

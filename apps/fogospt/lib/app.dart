@@ -7,9 +7,14 @@ import 'package:fogospt/features/map/data/fires_latest_service.dart';
 import 'package:fogospt/routing/fogos_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class FogosApp extends StatelessWidget {
+class FogosApp extends StatefulWidget {
   const FogosApp({super.key});
 
+  @override
+  State<FogosApp> createState() => _FogosAppState();
+}
+
+class _FogosAppState extends State<FogosApp> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -20,6 +25,7 @@ class FogosApp extends StatelessWidget {
       ),
       child: MaterialApp.router(
         routerConfig: fogos_router,
+        debugShowCheckedModeBanner: false,
         builder: (context, child) {
           return ResponsiveBreakpoints.builder(
             child: child!,

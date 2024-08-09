@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 
-class WarningAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const WarningAppBar({
+class FireAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const FireAppBar({
     super.key,
     this.warning,
   });

@@ -2,15 +2,15 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
-import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/constants/colors.dart';
+import 'package:fogospt/constants/date_formats.dart';
 import 'package:fogospt/features/fires/application/fires/fires_cubit.dart';
 import 'package:fogospt/features/fires/application/fires/fires_state.dart';
+import 'package:fogospt/features/fires/data/fire_service.dart';
 import 'package:fogospt/features/fires/data/fires_flchart_data.dart';
-import 'package:fogospt/features/fires/data/warning_service.dart';
-import 'package:fogospt/features/fires/presentation/warning_app_bar.dart';
+import 'package:fogospt/features/fires/presentation/fire_app_bar.dart';
 import 'package:fogospt/features/fires/presentation/widgets/fire_risk_state_icon_widget.dart';
 import 'package:fogospt/features/fires/presentation/widgets/fire_risk_widget.dart';
 import 'package:fogospt/features/fires/presentation/widgets/warning_chart_labels_item_widget.dart';
@@ -19,15 +19,18 @@ import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:warnings/warnings.dart';
 
-class WarningDetailPage extends StatelessWidget {
-  final Fire? warning;
-  const WarningDetailPage({super.key, this.warning});
+class FireDetailPage extends StatelessWidget {
+  final String fireId;
+  const FireDetailPage({
+    super.key,
+    required this.fireId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FiresCubit(
-        WarningService(
+        FireService.FireService(
           getIt<FiresRepository>(),
         ),
       ),
@@ -36,7 +39,7 @@ class WarningDetailPage extends StatelessWidget {
           switch (state) {
             case FiresStateInitial():
               BlocProvider.of<FiresCubit>(context)
-                  .fetchWarning(warning?.id ?? '');
+                  .fetchAllFireInformation(fireId);
               return WarningLoadingView();
             case FiresStateLoading():
               return WarningLoadingView();
@@ -59,7 +62,7 @@ class WarningFailedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WarningAppBar(),
+      appBar: FireAppBar(),
       body: Center(
         child: Text('Failed to load warning'),
       ),
@@ -75,7 +78,7 @@ class WarningLoadingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: WarningAppBar(),
+      appBar: FireAppBar(),
       body: Center(
         child: CircularProgressIndicator(),
       ),
@@ -94,7 +97,7 @@ class WarningLoadedView extends StatelessWidget {
       builder: (context, state) {
         if (state is FiresStateLoaded) {
           return Scaffold(
-            appBar: WarningAppBar(warning: state.fire),
+            appBar: FireAppBar(warning: state.fire),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
@@ -103,7 +106,7 @@ class WarningLoadedView extends StatelessWidget {
                   children: [
                     AppFogosTitleWidget(title: "LOCAL"),
                     Text(
-                      state.fire.location,
+                      state.fire?.location ?? '-',
                       style: context.textTheme.headlineSmall,
                     ),
                     SizedBox(height: 20),
@@ -115,15 +118,15 @@ class WarningLoadedView extends StatelessWidget {
                       children: [
                         IconAndValueWidget(
                           icon: FogosAppAssets.getAsset(ResourcesType.man),
-                          value: state.latestResource.man,
+                          value: state.latestResource?.man ?? 0,
                         ),
                         IconAndValueWidget(
                           icon: FogosAppAssets.getAsset(ResourcesType.terrain),
-                          value: state.latestResource.terrain,
+                          value: state.latestResource?.terrain ?? 0,
                         ),
                         IconAndValueWidget(
                           icon: FogosAppAssets.getAsset(ResourcesType.aerial),
-                          value: state.latestResource.aerial,
+                          value: state.latestResource?.aerial ?? 0,
                         ),
                       ],
                     ),
@@ -133,7 +136,7 @@ class WarningLoadedView extends StatelessWidget {
                     LayoutBuilder(
                       builder: (context, constraints) {
                         final data = WarningFlChartData(
-                          resources: state.resources,
+                          resources: state.resources ?? [],
                         );
 
                         return SizedBox.fromSize(
@@ -193,7 +196,7 @@ class WarningLoadedView extends StatelessWidget {
                     /// Inicio
                     AppFogosTitleWidget(title: "início"),
                     Text(
-                      "${state.fire.date} ${state.fire.hour}",
+                      "${state.fire?.date} ${state.fire?.hour}",
                       style: context.textTheme.headlineSmall,
                     ),
                     SizedBox(height: 20),
@@ -201,7 +204,7 @@ class WarningLoadedView extends StatelessWidget {
                     /// Natureza
                     AppFogosTitleWidget(title: "natureza"),
                     Text(
-                      state.fire.natureza,
+                      state.fire?.natureza ?? '-',
                       style: context.textTheme.headlineSmall,
                     ),
                     SizedBox(height: 20),
@@ -213,49 +216,53 @@ class WarningLoadedView extends StatelessWidget {
                     /// Risco de Incêndio
                     AppFogosTitleWidget(title: "risco de incêndio"),
 
-                    FireRiskWidget(rcm: state.latestRCM),
+                    if (state.latestRCM != null)
+                      FireRiskWidget(rcm: state.latestRCM!),
                     SizedBox(height: 20),
 
                     /// ESTADO
                     AppFogosTitleWidget(title: "estado"),
                     Column(
                       children: [
-                        ...state.historyStatuses.map<Widget>(
-                          (status) {
-                            return Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                IntrinsicHeight(
-                                  child: Stack(
-                                    alignment: AlignmentDirectional.topCenter,
-                                    children: [
-                                      RiskFireStateIconWidget(
-                                        status: status,
-                                        icon: icoFire,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 1.5),
-                                Column(
+                        ...state.historyStatuses?.map<Widget>(
+                              (status) {
+                                return Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      status.label,
-                                      style: context.textTheme.bodyLarge
-                                          ?.copyWith(color: appFogosOrange),
+                                    IntrinsicHeight(
+                                      child: Stack(
+                                        alignment:
+                                            AlignmentDirectional.topCenter,
+                                        children: [
+                                          RiskFireStateIconWidget(
+                                            status: status,
+                                            icon: icoFire,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Text(
-                                      status.status,
-                                      style: context.textTheme.bodyMedium,
+                                    SizedBox(width: 1.5),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          status.label,
+                                          style: context.textTheme.bodyLarge
+                                              ?.copyWith(color: appFogosOrange),
+                                        ),
+                                        Text(
+                                          status.status,
+                                          style: context.textTheme.bodyMedium,
+                                        ),
+                                        SizedBox(height: 20),
+                                      ],
                                     ),
-                                    SizedBox(height: 20),
                                   ],
-                                ),
-                              ],
-                            );
-                          },
-                        ).toList(),
+                                );
+                              },
+                            ).toList() ??
+                            [],
                       ],
                     ),
 
@@ -279,7 +286,7 @@ class WarningLoadedView extends StatelessWidget {
           );
         } else {
           return Scaffold(
-            appBar: WarningAppBar(),
+            appBar: FireAppBar(),
             body: Center(
               child: CircularProgressIndicator(),
             ),
@@ -332,7 +339,8 @@ class WarningLoadedView extends StatelessWidget {
         return SideTitleWidget(
           axisSide: meta.axisSide,
           angle: 125,
-          child: Text(DateFormat("dd/MM hh:mm").format(dateTime)),
+          child:
+              Text(DateFormat(dateFormatDayMonthHourMinutes).format(dateTime)),
         );
       },
     );

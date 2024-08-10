@@ -57,24 +57,13 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
               ),
             ),
 
-            /// About
-            // ListTile(
-            //   title: Text(
-            //     'Sobre',
-            //     style: context.textTheme.bodyLarge,
-            //   ),
-            //   onTap: () {
-            //     context.go('/about');
-            //   },
-            // ),
-            /// Partners
             ListTile(
               title: Text(
-                'Parceiros',
+                'Notificações',
                 style: context.textTheme.bodyLarge,
               ),
               onTap: () {
-                context.go('/partners');
+                context.go('/notifications');
               },
             ),
           ],

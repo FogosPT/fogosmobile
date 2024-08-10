@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/features/fires/presentation/pages/fire_detail_page.dart';
 import 'package:fogospt/features/map/presentation/pages/fires_map_page.dart';
+import 'package:fogospt/features/notifications/presentation/pages/notifications_municipalities_page.dart';
 import 'package:fogospt/features/see_partners/presentation/partners_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,6 +46,12 @@ final fogos_router = GoRouter(
                 partnerFundacaoLapalobo,
               ],
             );
+          },
+        ),
+        GoRoute(
+          path: 'notifications',
+          builder: (context, state) {
+            return NotificationsMunicipalitiesPage();
           },
         )
       ],

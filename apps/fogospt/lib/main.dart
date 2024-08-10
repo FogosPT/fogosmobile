@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/app.dart';
+import 'package:fogospt/app_dependency_injection.dart';
 import 'package:fogospt/firebase_options.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 
@@ -13,15 +14,15 @@ const topic = 'warning_fogos';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Dependency Injection
+  /// Dependency Injection
   setupFogosAPIDependencyInjection();
+  setupAppDependencyInjection();
 
-  // Firebase initialize
+  /// Firebase initialize
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // configureFirebaseMessaging();
   NotificationHelpers().initializeNotifications();
 
   runApp(const FogosApp());

@@ -4,20 +4,24 @@ import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 part 'selected_fire_state.mapper.dart';
 
 @MappableClass()
-sealed class SelectedFireState {}
+sealed class SelectedFireState with SelectedFireStateMappable {}
 
 @MappableClass()
-class SelectedFireInitialState extends SelectedFireState {}
+class SelectedFireInitialState extends SelectedFireState
+    with SelectedFireInitialStateMappable {}
 
 @MappableClass()
-class SelectedFireLoadingState extends SelectedFireState {}
+class SelectedFireLoadingState extends SelectedFireState
+    with SelectedFireLoadingStateMappable {}
 
 @MappableClass()
-class SelectedFireLoadedState extends SelectedFireState {
+class SelectedFireLoadedState extends SelectedFireState
+    with SelectedFireLoadedStateMappable {
   final Fire fire;
 
   SelectedFireLoadedState(this.fire);
 }
 
 @MappableClass()
-class SelectedFireFailedState extends SelectedFireState {}
+class SelectedFireFailedState extends SelectedFireState
+    with SelectedFireFailedStateMappable {}

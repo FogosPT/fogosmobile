@@ -13,7 +13,7 @@ dependencies:
 
   go_router: ^14.2.1
 
-  sentry: ^7.18.0
+  sentry: ^8.8.0
 
   fogos_api: 0.0.4+1
   flutter_bloc: ^8.1.6

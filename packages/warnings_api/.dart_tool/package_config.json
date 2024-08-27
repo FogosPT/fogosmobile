@@ -129,7 +129,7 @@
     },
     {
       "name": "sentry",
-      "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/sentry-7.18.0",
+      "rootUri": "file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/sentry-8.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -218,7 +218,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-08-08T12:10:14.889996Z",
+  "generated": "2024-08-27T19:41:51.248105Z",
   "generator": "pub",
   "generatorVersion": "3.3.3"
 }

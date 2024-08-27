@@ -39,6 +39,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_native_splash: ^2.4.0
   shared_preferences: ^2.2.3
+  mason: ^0.1.0-dev.57
   
 dev_dependencies:
   flutter_test:

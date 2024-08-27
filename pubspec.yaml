@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   mason: ^0.1.0-dev.57
+  sentry_flutter: ^8.8.0
 
 dev_dependencies:
   build_runner: ^2.4.9

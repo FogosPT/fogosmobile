@@ -1,3 +1,17 @@
+## 1.4.0
+
+ - **FIX**: hide graph axis x labels. ([52143bb9](https://github.com/FogosPT/fogospt.git/commit/52143bb9eab6bb0905f9b967c6c77ddf5f6cb493))
+ - **FEAT**: add Sentry. ([b7a5fff1](https://github.com/FogosPT/fogospt.git/commit/b7a5fff1e4dc31f43a5973a313da44647fc8920a))
+ - **FEAT**: add mason and first brick. ([1b701157](https://github.com/FogosPT/fogospt.git/commit/1b70115774ac9638163d49e24bc854f1118d7126))
+ - **FEAT**: notifications page. ([122cf94e](https://github.com/FogosPT/fogospt.git/commit/122cf94e0f96f406210c8421ef4294d46246f510))
+ - **FEAT**: improve fire detail loading. ([01e88477](https://github.com/FogosPT/fogospt.git/commit/01e8847703bf0b63de5e00bd7820174263e2fdf3))
+ - **FEAT**: onTap navigation goes to fire detail. ([1e8ed9a9](https://github.com/FogosPT/fogospt.git/commit/1e8ed9a951b941f7c6af5f6b8d1f3c6e14e92eb5))
+ - **FEAT**: turn off map rotation. ([0294c909](https://github.com/FogosPT/fogospt.git/commit/0294c909c436c0f71b8b289eb799582a6c34a59e))
+ - **FEAT**: add about page. ([be59fdeb](https://github.com/FogosPT/fogospt.git/commit/be59fdebf8b69818f4d95a30d66ec67ac26ac115))
+ - **FEAT**: add splash screen. ([a66a58b9](https://github.com/FogosPT/fogospt.git/commit/a66a58b9bbcbcee818cf02f522bcc91011b145ab))
+ - **FEAT**: improve ui of map bottom sheet. ([76010368](https://github.com/FogosPT/fogospt.git/commit/760103689e5c1b710101c3405a38ea889a075b46))
+ - **FEAT**: add app icon. ([f71530f0](https://github.com/FogosPT/fogospt.git/commit/f71530f06ee958e1465c3b79a676ba0ab4716fdb))
+
 ## 1.3.2
 
  - **FIX**: fire_map_page. ([50f5a4c4](https://github.com/FogosPT/fogospt.git/commit/50f5a4c4574e0bef8223fa8ba3b539ea0875f359))

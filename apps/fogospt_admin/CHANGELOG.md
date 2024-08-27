@@ -1,3 +1,7 @@
+## 1.3.0
+
+ - **FEAT**: add Sentry. ([b7a5fff1](https://github.com/FogosPT/fogospt.git/commit/b7a5fff1e4dc31f43a5973a313da44647fc8920a))
+
 ## 1.2.0
 
  - **FEAT**: FCM configuration. ([09247d74](https://github.com/FogosPT/fogospt.git/commit/09247d74826def88c906f670cfb81036a356a3ba))

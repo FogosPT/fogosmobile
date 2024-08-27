@@ -1,32 +1,42 @@
 import 'package:http/http.dart' as http;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'fogos_base_client.dart';
 
 class FogosApi extends FogosBaseClient {
-  FogosApi({required super.fogosEnvironment});
+  late final SentryHttpClient client;
+
+  FogosApi({required super.fogosEnvironment}) {
+    client = SentryHttpClient(client: http.Client());
+  }
 
   @override
   Future<http.Response> listActiveFires() {
-    return http.get(Uri.parse("${environment.baseUrl}/v2/incidents/active"));
+    return client.get(Uri.parse("${environment.baseUrl}/v2/incidents/active"));
   }
 
   @override
   Future<http.Response> getFireHistoryResourcesManAerialTerrain(String id) {
-    return http.get(Uri.parse("${environment.baseUrl}/fires/data?id=$id"));
+    return client.get(Uri.parse("${environment.baseUrl}/fires/data?id=$id"));
   }
 
   @override
   Future<http.Response> getFireHistoryStatus(String id) {
-    return http.get(Uri.parse("${environment.baseUrl}/fires/status?id=$id"));
+    return client.get(Uri.parse("${environment.baseUrl}/fires/status?id=$id"));
   }
 
   @override
   Future<http.Response> getFireRCMForTodayTomorrowAndAfter(String id) {
-    return http.get(Uri.parse("${environment.baseUrl}/fires/danger?id=$id"));
+    return client.get(Uri.parse("${environment.baseUrl}/fires/danger?id=$id"));
   }
 
   @override
   Future<http.Response> getSingleFireInformation(String id) {
-    return http.get(Uri.parse("${environment.baseUrl}/fires?id=$id"));
+    return client.get(Uri.parse("${environment.baseUrl}/fires?id=$id"));
+  }
+
+  @override
+  void dispose() {
+    client.close();
   }
 }

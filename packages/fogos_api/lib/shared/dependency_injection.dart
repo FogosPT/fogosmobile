@@ -10,5 +10,6 @@ void setupFogosAPIDependencyInjection() {
     () => FiresRepository(
       FogosApi(fogosEnvironment: FogosEnvironment.dev()),
     ),
+    dispose: (obj) => obj.dispose(),
   );
 }

@@ -12,4 +12,6 @@ abstract class FogosBaseClient extends BaseClient {
   Future<http.Response> getFireRCMForTodayTomorrowAndAfter(String id);
   Future<http.Response> getFireHistoryResourcesManAerialTerrain(String id);
   Future<http.Response> getFireHistoryStatus(String id);
+
+  void dispose();
 }

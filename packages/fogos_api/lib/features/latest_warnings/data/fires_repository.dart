@@ -125,4 +125,8 @@ class FiresRepository {
       throw Exception('Failed to fetch fire information');
     }
   }
+
+  void dispose() {
+    _fogosApi.dispose();
+  }
 }

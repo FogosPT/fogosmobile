@@ -14,6 +14,8 @@ dependencies:
   http: ^1.2.1
   json_annotation: ^4.9.0
 
+  sentry: ^8.8.0
+  sentry_flutter: ^8.8.0
   warnings_api: 0.0.3
   warnings_core: 0.0.1
 

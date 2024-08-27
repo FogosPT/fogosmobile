@@ -1,3 +1,9 @@
 showNotificationdart_code_metrics:
   extends:
     - recommended
+  
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.mapper.dart"
+    - "**/__brick__/**"

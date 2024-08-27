@@ -17,6 +17,7 @@ Future<void> main() async {
   /// Dependency Injection
   setupFogosAPIDependencyInjection();
   setupAppDependencyInjection();
+  setupAppDependencyInjectionData();
 
   /// Firebase initialize
   await Firebase.initializeApp(

@@ -14,9 +14,9 @@ class MunicipalityCubit extends Cubit<MunicipalityState> {
 
     try {
       final municipalities =
-          await _municipalitiesService.fetchAllMunicipalities();
+          await _municipalitiesService.getMunicipalitiesPerDistrict();
 
-      emit(MunicipalityStateLoaded(municipalities: municipalities));
+      emit(MunicipalityStateLoaded(municipalitiesPerDistrict: municipalities));
     } on Exception catch (_) {
       emit(MunicipalityStateFailed());
     }

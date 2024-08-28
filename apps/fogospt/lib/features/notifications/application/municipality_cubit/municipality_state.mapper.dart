@@ -291,18 +291,21 @@ class MunicipalityStateLoadedMapper
   @override
   final String id = 'MunicipalityStateLoaded';
 
-  static List<Municipality> _$municipalities(MunicipalityStateLoaded v) =>
-      v.municipalities;
-  static const Field<MunicipalityStateLoaded, List<Municipality>>
-      _f$municipalities = Field('municipalities', _$municipalities);
+  static Map<String, List<Municipality>> _$municipalitiesPerDistrict(
+          MunicipalityStateLoaded v) =>
+      v.municipalitiesPerDistrict;
+  static const Field<MunicipalityStateLoaded, Map<String, List<Municipality>>>
+      _f$municipalitiesPerDistrict =
+      Field('municipalitiesPerDistrict', _$municipalitiesPerDistrict);
 
   @override
   final MappableFields<MunicipalityStateLoaded> fields = const {
-    #municipalities: _f$municipalities,
+    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
   };
 
   static MunicipalityStateLoaded _instantiate(DecodingData data) {
-    return MunicipalityStateLoaded(municipalities: data.dec(_f$municipalities));
+    return MunicipalityStateLoaded(
+        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict));
   }
 
   @override
@@ -362,10 +365,11 @@ abstract class MunicipalityStateLoadedCopyWith<
     $R,
     $In extends MunicipalityStateLoaded,
     $Out> implements MunicipalityStateCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, Municipality,
-      MunicipalityCopyWith<$R, Municipality, Municipality>> get municipalities;
+  MapCopyWith<$R, String, List<Municipality>,
+          ObjectCopyWith<$R, List<Municipality>, List<Municipality>>>
+      get municipalitiesPerDistrict;
   @override
-  $R call({List<Municipality>? municipalities});
+  $R call({Map<String, List<Municipality>>? municipalitiesPerDistrict});
   MunicipalityStateLoadedCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -380,16 +384,22 @@ class _MunicipalityStateLoadedCopyWithImpl<$R, $Out>
   late final ClassMapperBase<MunicipalityStateLoaded> $mapper =
       MunicipalityStateLoadedMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, Municipality,
-          MunicipalityCopyWith<$R, Municipality, Municipality>>
-      get municipalities => ListCopyWith($value.municipalities,
-          (v, t) => v.copyWith.$chain(t), (v) => call(municipalities: v));
+  MapCopyWith<$R, String, List<Municipality>,
+          ObjectCopyWith<$R, List<Municipality>, List<Municipality>>>
+      get municipalitiesPerDistrict => MapCopyWith(
+          $value.municipalitiesPerDistrict,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(municipalitiesPerDistrict: v));
   @override
-  $R call({List<Municipality>? municipalities}) => $apply(FieldCopyWithData(
-      {if (municipalities != null) #municipalities: municipalities}));
+  $R call({Map<String, List<Municipality>>? municipalitiesPerDistrict}) =>
+      $apply(FieldCopyWithData({
+        if (municipalitiesPerDistrict != null)
+          #municipalitiesPerDistrict: municipalitiesPerDistrict
+      }));
   @override
   MunicipalityStateLoaded $make(CopyWithData data) => MunicipalityStateLoaded(
-      municipalities: data.get(#municipalities, or: $value.municipalities));
+      municipalitiesPerDistrict: data.get(#municipalitiesPerDistrict,
+          or: $value.municipalitiesPerDistrict));
 
   @override
   MunicipalityStateLoadedCopyWith<$R2, MunicipalityStateLoaded, $Out2>

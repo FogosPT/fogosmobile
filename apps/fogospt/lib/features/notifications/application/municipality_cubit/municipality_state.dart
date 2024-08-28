@@ -17,9 +17,9 @@ class MunicipalityStateLoading extends MunicipalityState
 @MappableClass()
 class MunicipalityStateLoaded extends MunicipalityState
     with MunicipalityStateLoadedMappable {
-  final List<Municipality> municipalities;
+  final Map<District, List<Municipality>> municipalitiesPerDistrict;
 
-  MunicipalityStateLoaded({required this.municipalities});
+  MunicipalityStateLoaded({required this.municipalitiesPerDistrict});
 }
 
 @MappableClass()

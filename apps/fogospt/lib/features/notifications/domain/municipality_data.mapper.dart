@@ -358,3 +358,106 @@ class _MunicipalityValueCopyWithImpl<$R, $Out>
           Then<$Out2, $R2> t) =>
       _MunicipalityValueCopyWithImpl($value, $cast, t);
 }
+
+class DistrictMapper extends ClassMapperBase<District> {
+  DistrictMapper._();
+
+  static DistrictMapper? _instance;
+  static DistrictMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(_instance = DistrictMapper._());
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'District';
+
+  static String _$id(District v) => v.id;
+  static const Field<District, String> _f$id = Field('id', _$id);
+  static String _$name(District v) => v.name;
+  static const Field<District, String> _f$name = Field('name', _$name);
+
+  @override
+  final MappableFields<District> fields = const {
+    #id: _f$id,
+    #name: _f$name,
+  };
+
+  static District _instantiate(DecodingData data) {
+    return District(id: data.dec(_f$id), name: data.dec(_f$name));
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static District fromMap(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<District>(map);
+  }
+
+  static District fromJson(String json) {
+    return ensureInitialized().decodeJson<District>(json);
+  }
+}
+
+mixin DistrictMappable {
+  String toJson() {
+    return DistrictMapper.ensureInitialized()
+        .encodeJson<District>(this as District);
+  }
+
+  Map<String, dynamic> toMap() {
+    return DistrictMapper.ensureInitialized()
+        .encodeMap<District>(this as District);
+  }
+
+  DistrictCopyWith<District, District, District> get copyWith =>
+      _DistrictCopyWithImpl(this as District, $identity, $identity);
+  @override
+  String toString() {
+    return DistrictMapper.ensureInitialized().stringifyValue(this as District);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return DistrictMapper.ensureInitialized()
+        .equalsValue(this as District, other);
+  }
+
+  @override
+  int get hashCode {
+    return DistrictMapper.ensureInitialized().hashValue(this as District);
+  }
+}
+
+extension DistrictValueCopy<$R, $Out> on ObjectCopyWith<$R, District, $Out> {
+  DistrictCopyWith<$R, District, $Out> get $asDistrict =>
+      $base.as((v, t, t2) => _DistrictCopyWithImpl(v, t, t2));
+}
+
+abstract class DistrictCopyWith<$R, $In extends District, $Out>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({String? id, String? name});
+  DistrictCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
+}
+
+class _DistrictCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, District, $Out>
+    implements DistrictCopyWith<$R, District, $Out> {
+  _DistrictCopyWithImpl(super.value, super.then, super.then2);
+
+  @override
+  late final ClassMapperBase<District> $mapper =
+      DistrictMapper.ensureInitialized();
+  @override
+  $R call({String? id, String? name}) => $apply(FieldCopyWithData(
+      {if (id != null) #id: id, if (name != null) #name: name}));
+  @override
+  District $make(CopyWithData data) => District(
+      id: data.get(#id, or: $value.id), name: data.get(#name, or: $value.name));
+
+  @override
+  DistrictCopyWith<$R2, District, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _DistrictCopyWithImpl($value, $cast, t);
+}

@@ -1,3 +1,10 @@
+## 1.5.0
+
+ - **FIX**: Notifications & Municipality cubits. ([1d13121c](https://github.com/FogosPT/fogospt.git/commit/1d13121cb88ecd798516c6a8ec1d4600cdeadf4f))
+ - **FEAT**: group by municipality. ([a0a697b0](https://github.com/FogosPT/fogospt.git/commit/a0a697b0036fa8de409896195626d38a90f64ec8))
+ - **FEAT**: add notification cubit. ([6d652d9a](https://github.com/FogosPT/fogospt.git/commit/6d652d9a0c650630bf7707454be21eb2e4fd3e31))
+ - **FEAT**: add sentry to http calls. ([57190da4](https://github.com/FogosPT/fogospt.git/commit/57190da49fde667cab67694d0ffb420b24d7c5b0))
+
 ## 1.4.0
 
  - **FIX**: hide graph axis x labels. ([52143bb9](https://github.com/FogosPT/fogospt.git/commit/52143bb9eab6bb0905f9b967c6c77ddf5f6cb493))

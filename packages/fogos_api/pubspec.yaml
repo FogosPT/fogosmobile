@@ -1,6 +1,6 @@
 name: fogos_api
 description: "This package holds everything related to Fogos API"
-version: 0.0.4+1
+version: 0.0.5
 publish_to: none
 
 environment:

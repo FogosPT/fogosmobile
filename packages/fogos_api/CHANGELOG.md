@@ -1,3 +1,7 @@
+## 0.0.5
+
+ - **FEAT**: add sentry to http calls. ([57190da4](https://github.com/FogosPT/fogospt.git/commit/57190da49fde667cab67694d0ffb420b24d7c5b0))
+
 ## 0.0.4+1
 
  - **FIX**: missing import. ([73d76edf](https://github.com/FogosPT/fogospt.git/commit/73d76edf0931e26311d27704f907b74b3157e6a3))

@@ -1,3 +1,7 @@
+## 0.0.2+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.2
 
  - **FEAT**: notifications page. ([122cf94e](https://github.com/FogosPT/fogospt.git/commit/122cf94e0f96f406210c8421ef4294d46246f510))

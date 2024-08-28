@@ -3,6 +3,42 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-08-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fogos_api` - `v0.0.5`](#fogos_api---v005)
+ - [`fogospt` - `v1.5.0`](#fogospt---v150)
+ - [`warnings` - `v0.0.2+1`](#warnings---v0021)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `warnings` - `v0.0.2+1`
+
+---
+
+#### `fogos_api` - `v0.0.5`
+
+ - **FEAT**: add sentry to http calls. ([57190da4](https://github.com/FogosPT/fogospt.git/commit/57190da49fde667cab67694d0ffb420b24d7c5b0))
+
+#### `fogospt` - `v1.5.0`
+
+ - **FIX**: Notifications & Municipality cubits. ([1d13121c](https://github.com/FogosPT/fogospt.git/commit/1d13121cb88ecd798516c6a8ec1d4600cdeadf4f))
+ - **FEAT**: group by municipality. ([a0a697b0](https://github.com/FogosPT/fogospt.git/commit/a0a697b0036fa8de409896195626d38a90f64ec8))
+ - **FEAT**: add notification cubit. ([6d652d9a](https://github.com/FogosPT/fogospt.git/commit/6d652d9a0c650630bf7707454be21eb2e4fd3e31))
+ - **FEAT**: add sentry to http calls. ([57190da4](https://github.com/FogosPT/fogospt.git/commit/57190da49fde667cab67694d0ffb420b24d7c5b0))
+
+
 ## 2024-08-27
 
 ### Changes

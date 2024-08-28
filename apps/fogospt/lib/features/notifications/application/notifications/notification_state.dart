@@ -19,8 +19,13 @@ class NotificationLoading extends NotificationState
 @MappableClass()
 class NotificationSuccessful extends NotificationState
     with NotificationSuccessfulMappable {
-  final List<Municipality> municipalities;
-  NotificationSuccessful(this.municipalities);
+  final List<Municipality>? allMunicipalities;
+  final Map<String, List<Municipality>>? municipalitiesPerDistrict;
+
+  NotificationSuccessful({
+    this.allMunicipalities,
+    this.municipalitiesPerDistrict,
+  });
 }
 
 @MappableClass()

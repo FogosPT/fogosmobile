@@ -278,18 +278,29 @@ class NotificationSuccessfulMapper
   @override
   final String id = 'NotificationSuccessful';
 
-  static List<Municipality> _$municipalities(NotificationSuccessful v) =>
-      v.municipalities;
+  static List<Municipality>? _$allMunicipalities(NotificationSuccessful v) =>
+      v.allMunicipalities;
   static const Field<NotificationSuccessful, List<Municipality>>
-      _f$municipalities = Field('municipalities', _$municipalities);
+      _f$allMunicipalities =
+      Field('allMunicipalities', _$allMunicipalities, opt: true);
+  static Map<String, List<Municipality>>? _$municipalitiesPerDistrict(
+          NotificationSuccessful v) =>
+      v.municipalitiesPerDistrict;
+  static const Field<NotificationSuccessful, Map<String, List<Municipality>>>
+      _f$municipalitiesPerDistrict = Field(
+          'municipalitiesPerDistrict', _$municipalitiesPerDistrict,
+          opt: true);
 
   @override
   final MappableFields<NotificationSuccessful> fields = const {
-    #municipalities: _f$municipalities,
+    #allMunicipalities: _f$allMunicipalities,
+    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
   };
 
   static NotificationSuccessful _instantiate(DecodingData data) {
-    return NotificationSuccessful(data.dec(_f$municipalities));
+    return NotificationSuccessful(
+        allMunicipalities: data.dec(_f$allMunicipalities),
+        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict));
   }
 
   @override
@@ -350,9 +361,15 @@ abstract class NotificationSuccessfulCopyWith<
     $In extends NotificationSuccessful,
     $Out> implements NotificationStateCopyWith<$R, $In, $Out> {
   ListCopyWith<$R, Municipality,
-      MunicipalityCopyWith<$R, Municipality, Municipality>> get municipalities;
+          MunicipalityCopyWith<$R, Municipality, Municipality>>?
+      get allMunicipalities;
+  MapCopyWith<$R, String, List<Municipality>,
+          ObjectCopyWith<$R, List<Municipality>, List<Municipality>>>?
+      get municipalitiesPerDistrict;
   @override
-  $R call({List<Municipality>? municipalities});
+  $R call(
+      {List<Municipality>? allMunicipalities,
+      Map<String, List<Municipality>>? municipalitiesPerDistrict});
   NotificationSuccessfulCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -368,15 +385,35 @@ class _NotificationSuccessfulCopyWithImpl<$R, $Out>
       NotificationSuccessfulMapper.ensureInitialized();
   @override
   ListCopyWith<$R, Municipality,
-          MunicipalityCopyWith<$R, Municipality, Municipality>>
-      get municipalities => ListCopyWith($value.municipalities,
-          (v, t) => v.copyWith.$chain(t), (v) => call(municipalities: v));
+          MunicipalityCopyWith<$R, Municipality, Municipality>>?
+      get allMunicipalities => $value.allMunicipalities != null
+          ? ListCopyWith($value.allMunicipalities!,
+              (v, t) => v.copyWith.$chain(t), (v) => call(allMunicipalities: v))
+          : null;
   @override
-  $R call({List<Municipality>? municipalities}) => $apply(FieldCopyWithData(
-      {if (municipalities != null) #municipalities: municipalities}));
+  MapCopyWith<$R, String, List<Municipality>,
+          ObjectCopyWith<$R, List<Municipality>, List<Municipality>>>?
+      get municipalitiesPerDistrict => $value.municipalitiesPerDistrict != null
+          ? MapCopyWith(
+              $value.municipalitiesPerDistrict!,
+              (v, t) => ObjectCopyWith(v, $identity, t),
+              (v) => call(municipalitiesPerDistrict: v))
+          : null;
+  @override
+  $R call(
+          {Object? allMunicipalities = $none,
+          Object? municipalitiesPerDistrict = $none}) =>
+      $apply(FieldCopyWithData({
+        if (allMunicipalities != $none) #allMunicipalities: allMunicipalities,
+        if (municipalitiesPerDistrict != $none)
+          #municipalitiesPerDistrict: municipalitiesPerDistrict
+      }));
   @override
   NotificationSuccessful $make(CopyWithData data) => NotificationSuccessful(
-      data.get(#municipalities, or: $value.municipalities));
+      allMunicipalities:
+          data.get(#allMunicipalities, or: $value.allMunicipalities),
+      municipalitiesPerDistrict: data.get(#municipalitiesPerDistrict,
+          or: $value.municipalitiesPerDistrict));
 
   @override
   NotificationSuccessfulCopyWith<$R2, NotificationSuccessful, $Out2>

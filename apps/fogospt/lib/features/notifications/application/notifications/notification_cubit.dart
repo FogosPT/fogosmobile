@@ -16,7 +16,19 @@ class NotificationCubit extends Cubit<NotificationState> {
 
     emit(NotificationLoading());
     try {
-      emit(NotificationSuccessful(_municipalities));
+      final municipalitiesPerDistrict = Map<String, List<Municipality>>();
+
+      _municipalities.forEach((element) {
+        if (municipalitiesPerDistrict.containsKey(element.value.districtId)) {
+          municipalitiesPerDistrict[element.value.districtId]!.add(element);
+        } else {
+          municipalitiesPerDistrict[element.value.districtId] = [element];
+        }
+      });
+
+      emit(NotificationSuccessful(
+          allMunicipalities: _municipalities,
+          municipalitiesPerDistrict: municipalitiesPerDistrict));
     } on Exception catch (e) {
       emit(NotificationFailed(error: e.toString()));
     }

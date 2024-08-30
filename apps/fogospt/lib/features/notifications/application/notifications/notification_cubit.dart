@@ -23,7 +23,7 @@ class NotificationCubit extends Cubit<NotificationState> {
           await MunicipalitiesSharedPreferences.getTopicNotifications(
               municipality.key);
       if (isActive) {
-        _municipalitiesKeys.add(municipality.key);
+        _municipalitiesKeys.add(municipality.value.name);
       }
     }
 

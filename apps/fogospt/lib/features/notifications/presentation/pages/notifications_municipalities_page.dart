@@ -9,9 +9,9 @@ class NotificationsMunicipalitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => MunicipalityCubit()..loadMunicipalities(),
+      create: (context) => NotificationCubit()..fetchNotifications(),
       child: BlocProvider(
-        create: (context) => NotificationCubit()..fetchNotifications(),
+        create: (context) => MunicipalityCubit()..loadMunicipalities(),
         child: BlocBuilder<MunicipalityCubit, MunicipalityState>(
           builder: (context, state) {
             return Scaffold(

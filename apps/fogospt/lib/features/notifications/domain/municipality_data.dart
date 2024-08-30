@@ -27,18 +27,19 @@ class MunicipalityValue with MunicipalityValueMappable {
   @MappableField(key: 'dName')
   final String districtName;
 
-  MunicipalityValue(
-      {required this.name,
-      required this.districtId,
-      required this.districtName});
+  MunicipalityValue({
+    required this.name,
+    required this.districtId,
+    required this.districtName,
+  });
 }
 
 @MappableClass()
-class District {
+class District with DistrictMappable {
   final String id;
   final String name;
 
-  District({
+  const District({
     required this.id,
     required this.name,
   });

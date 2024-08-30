@@ -52,17 +52,20 @@ class MunicipalitiesService {
     final municipalities = await _municipalitiesRepository.getMunicipalities();
     final municipalitiesPerDistrict = Map<District, List<Municipality>>();
 
-    municipalities.forEach((element) {
-      final districtId = element.value.districtId;
-      final districtName = element.value.districtName;
-      final district = District(id: districtId, name: districtName);
+    municipalities.forEach(
+      (municip) {
+        final district = District(
+          id: municip.value.districtId,
+          name: municip.value.districtName,
+        );
 
-      if (municipalitiesPerDistrict.containsKey(district)) {
-        municipalitiesPerDistrict[element.value.districtId]!.add(element);
-      } else {
-        municipalitiesPerDistrict[district] = [element];
-      }
-    });
+        if (municipalitiesPerDistrict.containsKey(district)) {
+          municipalitiesPerDistrict[district]!.add(municip);
+        } else {
+          municipalitiesPerDistrict[district] = [municip];
+        }
+      },
+    );
 
     return municipalitiesPerDistrict;
   }

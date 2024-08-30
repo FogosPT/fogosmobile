@@ -13,36 +13,31 @@ class NotificationsMunicipalitiesView extends StatelessWidget {
         return switch (notificationState) {
           NotificationSuccessful() =>
             BlocBuilder<MunicipalityCubit, MunicipalityState>(
-              builder: (context, state) {
-                if (state is MunicipalityStateLoaded) {
-                  final municipalities = state.municipalitiesPerDistrict;
+              builder: (context, municipalitiesState) {
+                if (municipalitiesState is MunicipalityStateLoaded) {
+                  final municipalities =
+                      municipalitiesState.municipalitiesPerDistrict;
 
-                  /// TODO(FB): Map Municipalities to a PageView List or something
-                  // return ListView.builder(
-                  //   itemCount: municipalities.length,
-                  //   itemBuilder: (context, index) {
-                  //     final municipality = municipalities[index];
-                  //     return ListTile(
-                  //       trailing: Text(municipality),
-                  //       title: Text(municipality.value.name),
-                  //       subtitle: Text(municipality.value.districtName),
-                  //       leading: FutureBuilder(
-                  //         future: MunicipalitiesSharedPreferences.getTopicNotifications(
-                  //             municipality.key),
-                  //         builder: (context, snapshot) {
-                  //           return Checkbox(
-                  //             value: snapshot.data ?? false,
-                  //             onChanged: (bool? value) =>
-                  //                 MunicipalitiesSharedPreferences.setTopicNotifications(
-                  //                     municipality.key, value ?? false),
-                  //           );
-                  //         },
-                  //       ),
-                  //     );
-                  //   },
-                  // );
-
-                  return Container();
+                  return ListView.builder(
+                    itemCount: municipalities.keys.length,
+                    itemBuilder: (context, index) {
+                      final district = municipalities.keys.elementAt(index);
+                      return ListTile(
+                        title: Text(district.name),
+                        trailing: Icon(Icons.arrow_right),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return NotificationsMunicipalitiesPerDistrictView();
+                              },
+                            ),
+                          );
+                          //
+                        },
+                      );
+                    },
+                  );
                 }
                 return Center(
                   child: CircularProgressIndicator(),
@@ -54,6 +49,20 @@ class NotificationsMunicipalitiesView extends StatelessWidget {
             ),
         };
       },
+    );
+  }
+}
+
+class NotificationsMunicipalitiesPerDistrictView extends StatelessWidget {
+  const NotificationsMunicipalitiesPerDistrictView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Notificações por Municipio'),
+      ),
+      body: const Placeholder(),
     );
   }
 }

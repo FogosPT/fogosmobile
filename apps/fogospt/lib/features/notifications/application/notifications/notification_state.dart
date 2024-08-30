@@ -1,5 +1,4 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:fogospt/features/notifications/domain/municipality_data.dart';
 
 part 'notification_state.mapper.dart';
 

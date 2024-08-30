@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fogospt/features/notifications/application/district_selected_cubit/district_selected_cubit.dart';
 import 'package:fogospt/features/notifications/application/municipality_cubit/municipality_cubit.dart';
 import 'package:fogospt/features/notifications/application/municipality_cubit/municipality_state.dart';
 import 'package:fogospt/features/notifications/application/notifications/notification_cubit.dart';
 import 'package:fogospt/features/notifications/application/notifications/notification_state.dart';
+import 'package:fogospt/features/notifications/presentation/pages/notifications_municipalities_per_district_page.dart';
 
-class NotificationsMunicipalitiesView extends StatelessWidget {
+class NotificationsMunicipalitiesPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NotificationCubit, NotificationState>(
@@ -26,14 +28,18 @@ class NotificationsMunicipalitiesView extends StatelessWidget {
                         title: Text(district.name),
                         trailing: Icon(Icons.arrow_right),
                         onTap: () {
+                          context
+                              .read<DistrictSelectedCubit>()
+                              .selectDistrict(district);
+
+                          ///TODO(FB) - Use GoRouter
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) {
-                                return NotificationsMunicipalitiesPerDistrictView();
+                                return NotificationsMunicipalitiesPerDistrictPage();
                               },
                             ),
                           );
-                          //
                         },
                       );
                     },
@@ -49,20 +55,6 @@ class NotificationsMunicipalitiesView extends StatelessWidget {
             ),
         };
       },
-    );
-  }
-}
-
-class NotificationsMunicipalitiesPerDistrictView extends StatelessWidget {
-  const NotificationsMunicipalitiesPerDistrictView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Notificações por Municipio'),
-      ),
-      body: const Placeholder(),
     );
   }
 }

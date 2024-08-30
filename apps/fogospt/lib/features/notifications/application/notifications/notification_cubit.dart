@@ -21,7 +21,7 @@ class NotificationCubit extends Cubit<NotificationState> {
     for (Municipality municipality in _municipalities) {
       final isActive =
           await MunicipalitiesSharedPreferences.getTopicNotifications(
-              municipality.key);
+              municipality.value.name);
       if (isActive) {
         _municipalitiesKeys.add(municipality.value.name);
       }
@@ -32,5 +32,11 @@ class NotificationCubit extends Cubit<NotificationState> {
         activeMunicipalities: _municipalitiesKeys,
       ),
     );
+  }
+
+  Future<void> toggleNotification(String key, bool? value) async {
+    if (value == null) return;
+    await MunicipalitiesSharedPreferences.setTopicNotifications(key, value);
+    await fetchNotifications();
   }
 }

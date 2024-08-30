@@ -3,7 +3,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/app.dart';
-import 'package:fogospt/app_dependency_injection.dart';
+import 'package:fogospt/dependency_injection/app_dependency_injection.dart';
+import 'package:fogospt/dependency_injection/app_dependency_injection_data_sources.dart';
 import 'package:fogospt/constants/variables.dart';
 import 'package:fogospt/firebase_options.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
@@ -19,7 +20,7 @@ Future<void> main() async {
   /// Dependency Injection
   setupFogosAPIDependencyInjection();
   setupAppDependencyInjection();
-  setupAppDependencyInjectionData();
+  setupAppDependencyInjectionDataSources();
 
   /// Firebase initialize
   await Firebase.initializeApp(

@@ -10,42 +10,42 @@ class MunicipalitiesService {
     return _municipalitiesRepository.getMunicipalities();
   }
 
-  Future<Municipality?> getMunicipalityById(String key) async {
-    final municipalities = await _municipalitiesRepository.getMunicipalities();
-    return municipalities.firstWhere(
-      (element) => element.key == key,
-    );
-  }
+  // Future<Municipality?> getMunicipalityById(String key) async {
+  //   final municipalities = await _municipalitiesRepository.getMunicipalities();
+  //   return municipalities.firstWhere(
+  //     (element) => element.key == key,
+  //   );
+  // }
 
-  Future<List<Municipality>> getMunicipalitiesByDistrictId(
-    String districtId,
-  ) async {
-    final municipalities = await _municipalitiesRepository.getMunicipalities();
-    return municipalities
-        .where((element) => element.value.districtId == districtId)
-        .toList();
-  }
+  // Future<List<Municipality>> getMunicipalitiesByDistrictId(
+  //   String districtId,
+  // ) async {
+  //   final municipalities = await _municipalitiesRepository.getMunicipalities();
+  //   return municipalities
+  //       .where((element) => element.value.districtId == districtId)
+  //       .toList();
+  // }
 
-  Future<List<Municipality>> getMunicipalitiesByDistrictName(
-    String districtName,
-  ) async {
-    final municipalities = await _municipalitiesRepository.getMunicipalities();
-    return municipalities
-        .where((element) => element.value.districtName == districtName)
-        .toList();
-  }
+  // Future<List<Municipality>> getMunicipalitiesByDistrictName(
+  //   String districtName,
+  // ) async {
+  //   final municipalities = await _municipalitiesRepository.getMunicipalities();
+  //   return municipalities
+  //       .where((element) => element.value.districtName == districtName)
+  //       .toList();
+  // }
 
-  Future<List<Municipality>> getMunicipalitiesByDistrictIdAndDistrictName(
-    String districtId,
-    String districtName,
-  ) async {
-    final municipalities = await _municipalitiesRepository.getMunicipalities();
-    return municipalities
-        .where((element) =>
-            element.value.districtId == districtId &&
-            element.value.districtName == districtName)
-        .toList();
-  }
+  // Future<List<Municipality>> getMunicipalitiesByDistrictIdAndDistrictName(
+  //   String districtId,
+  //   String districtName,
+  // ) async {
+  //   final municipalities = await _municipalitiesRepository.getMunicipalities();
+  //   return municipalities
+  //       .where((element) =>
+  //           element.value.districtId == districtId &&
+  //           element.value.districtName == districtName)
+  //       .toList();
+  // }
 
   Future<Map<District, List<Municipality>>>
       getMunicipalitiesPerDistrict() async {

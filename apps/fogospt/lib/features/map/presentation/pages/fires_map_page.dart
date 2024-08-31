@@ -31,7 +31,12 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
 
     processMessage = (message) {
       final fireId = message.data['fireId'];
-      context.go('/fire-detail', extra: fireId);
+
+      if (fireId != null) {
+        context.go('/fire-detail', extra: fireId);
+      } else {
+        context.go('/');
+      }
 
       NotificationHelpers.showNotification(message);
     };

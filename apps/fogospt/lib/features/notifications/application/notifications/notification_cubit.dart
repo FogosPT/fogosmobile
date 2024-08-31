@@ -51,11 +51,10 @@ class NotificationCubit extends Cubit<NotificationState> {
     await fetchNotifications();
 
     if (result) {
-      if (toggleValue) {
-        MunicipalityNotificationsManager.enableMunicipality(municipality);
-      } else {
-        MunicipalityNotificationsManager.disableMunicipality(municipality);
-      }
+      MunicipalityNotificationsManager.toggleMunicipality(
+        municipality: municipality,
+        enabled: toggleValue,
+      );
     }
   }
 }

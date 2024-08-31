@@ -13,21 +13,15 @@ class NotificationsMunicipalitiesPage extends StatelessWidget {
           appBar: AppBar(
             title: Text('Notificações por Concelho'),
           ),
-          body: Center(
-            child: switch (state) {
-              MunicipalityStateInitial() => Center(
-                  child: CircularProgressIndicator(),
-                ),
-              MunicipalityStateLoading() => Center(
-                  child: CircularProgressIndicator(),
-                ),
-              MunicipalityStateLoaded() =>
-                NotificationsMunicipalitiesPageView(),
-              MunicipalityStateFailed() => Center(
-                  child: Text('Failed to load Municipalities'),
-                ),
-            },
-          ),
+          body: switch (state) {
+            MunicipalityStateLoaded() => NotificationsMunicipalitiesPageView(),
+            MunicipalityStateFailed() => Center(
+                child: Text('Failed to load Municipalities'),
+              ),
+            _ => Center(
+                child: CircularProgressIndicator(),
+              )
+          },
         );
       },
     );

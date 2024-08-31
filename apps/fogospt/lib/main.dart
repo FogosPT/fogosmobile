@@ -29,6 +29,8 @@ Future<void> main() async {
 
   NotificationHelpers().initializeNotifications();
 
+  subscribeToFirebaseMessageTopics();
+
   /// Sentry + Run App
   SentryFlutter.init(
     (options) => options.dsn = SENTRY_DSN,

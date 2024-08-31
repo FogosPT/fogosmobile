@@ -13,10 +13,8 @@ class MunicipalityStateMapper extends ClassMapperBase<MunicipalityState> {
   static MunicipalityStateMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = MunicipalityStateMapper._());
-      MunicipalityStateInitialMapper.ensureInitialized();
-      MunicipalityStateLoadingMapper.ensureInitialized();
-      MunicipalityStateLoadedMapper.ensureInitialized();
-      MunicipalityStateFailedMapper.ensureInitialized();
+      DistrictValueMapper.ensureInitialized();
+      MunicipalityValueMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -24,11 +22,28 @@ class MunicipalityStateMapper extends ClassMapperBase<MunicipalityState> {
   @override
   final String id = 'MunicipalityState';
 
+  static Map<DistrictValue, List<MunicipalityValue>>
+      _$municipalitiesPerDistrict(MunicipalityState v) =>
+          v.municipalitiesPerDistrict;
+  static const Field<MunicipalityState,
+          Map<DistrictValue, List<MunicipalityValue>>>
+      _f$municipalitiesPerDistrict = Field(
+          'municipalitiesPerDistrict', _$municipalitiesPerDistrict,
+          opt: true);
+  static StateStatus _$status(MunicipalityState v) => v.status;
+  static const Field<MunicipalityState, StateStatus> _f$status =
+      Field('status', _$status, opt: true, def: StateStatus.initial);
+
   @override
-  final MappableFields<MunicipalityState> fields = const {};
+  final MappableFields<MunicipalityState> fields = const {
+    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
+    #status: _f$status,
+  };
 
   static MunicipalityState _instantiate(DecodingData data) {
-    throw MapperException.missingConstructor('MunicipalityState');
+    return MunicipalityState(
+        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict),
+        status: data.dec(_f$status));
   }
 
   @override
@@ -44,348 +59,66 @@ class MunicipalityStateMapper extends ClassMapperBase<MunicipalityState> {
 }
 
 mixin MunicipalityStateMappable {
-  String toJson();
-  Map<String, dynamic> toMap();
+  String toJson() {
+    return MunicipalityStateMapper.ensureInitialized()
+        .encodeJson<MunicipalityState>(this as MunicipalityState);
+  }
+
+  Map<String, dynamic> toMap() {
+    return MunicipalityStateMapper.ensureInitialized()
+        .encodeMap<MunicipalityState>(this as MunicipalityState);
+  }
+
   MunicipalityStateCopyWith<MunicipalityState, MunicipalityState,
-      MunicipalityState> get copyWith;
+          MunicipalityState>
+      get copyWith => _MunicipalityStateCopyWithImpl(
+          this as MunicipalityState, $identity, $identity);
+  @override
+  String toString() {
+    return MunicipalityStateMapper.ensureInitialized()
+        .stringifyValue(this as MunicipalityState);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return MunicipalityStateMapper.ensureInitialized()
+        .equalsValue(this as MunicipalityState, other);
+  }
+
+  @override
+  int get hashCode {
+    return MunicipalityStateMapper.ensureInitialized()
+        .hashValue(this as MunicipalityState);
+  }
+}
+
+extension MunicipalityStateValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, MunicipalityState, $Out> {
+  MunicipalityStateCopyWith<$R, MunicipalityState, $Out>
+      get $asMunicipalityState =>
+          $base.as((v, t, t2) => _MunicipalityStateCopyWithImpl(v, t, t2));
 }
 
 abstract class MunicipalityStateCopyWith<$R, $In extends MunicipalityState,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  $R call();
+  MapCopyWith<$R, DistrictValue, List<MunicipalityValue>,
+          ObjectCopyWith<$R, List<MunicipalityValue>, List<MunicipalityValue>>>
+      get municipalitiesPerDistrict;
+  $R call(
+      {Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict,
+      StateStatus? status});
   MunicipalityStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
 
-class MunicipalityStateInitialMapper
-    extends ClassMapperBase<MunicipalityStateInitial> {
-  MunicipalityStateInitialMapper._();
+class _MunicipalityStateCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, MunicipalityState, $Out>
+    implements MunicipalityStateCopyWith<$R, MunicipalityState, $Out> {
+  _MunicipalityStateCopyWithImpl(super.value, super.then, super.then2);
 
-  static MunicipalityStateInitialMapper? _instance;
-  static MunicipalityStateInitialMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals
-          .use(_instance = MunicipalityStateInitialMapper._());
+  @override
+  late final ClassMapperBase<MunicipalityState> $mapper =
       MunicipalityStateMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'MunicipalityStateInitial';
-
-  @override
-  final MappableFields<MunicipalityStateInitial> fields = const {};
-
-  static MunicipalityStateInitial _instantiate(DecodingData data) {
-    return MunicipalityStateInitial();
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static MunicipalityStateInitial fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<MunicipalityStateInitial>(map);
-  }
-
-  static MunicipalityStateInitial fromJson(String json) {
-    return ensureInitialized().decodeJson<MunicipalityStateInitial>(json);
-  }
-}
-
-mixin MunicipalityStateInitialMappable {
-  String toJson() {
-    return MunicipalityStateInitialMapper.ensureInitialized()
-        .encodeJson<MunicipalityStateInitial>(this as MunicipalityStateInitial);
-  }
-
-  Map<String, dynamic> toMap() {
-    return MunicipalityStateInitialMapper.ensureInitialized()
-        .encodeMap<MunicipalityStateInitial>(this as MunicipalityStateInitial);
-  }
-
-  MunicipalityStateInitialCopyWith<MunicipalityStateInitial,
-          MunicipalityStateInitial, MunicipalityStateInitial>
-      get copyWith => _MunicipalityStateInitialCopyWithImpl(
-          this as MunicipalityStateInitial, $identity, $identity);
-  @override
-  String toString() {
-    return MunicipalityStateInitialMapper.ensureInitialized()
-        .stringifyValue(this as MunicipalityStateInitial);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return MunicipalityStateInitialMapper.ensureInitialized()
-        .equalsValue(this as MunicipalityStateInitial, other);
-  }
-
-  @override
-  int get hashCode {
-    return MunicipalityStateInitialMapper.ensureInitialized()
-        .hashValue(this as MunicipalityStateInitial);
-  }
-}
-
-extension MunicipalityStateInitialValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, MunicipalityStateInitial, $Out> {
-  MunicipalityStateInitialCopyWith<$R, MunicipalityStateInitial, $Out>
-      get $asMunicipalityStateInitial => $base
-          .as((v, t, t2) => _MunicipalityStateInitialCopyWithImpl(v, t, t2));
-}
-
-abstract class MunicipalityStateInitialCopyWith<
-    $R,
-    $In extends MunicipalityStateInitial,
-    $Out> implements MunicipalityStateCopyWith<$R, $In, $Out> {
-  @override
-  $R call();
-  MunicipalityStateInitialCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _MunicipalityStateInitialCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, MunicipalityStateInitial, $Out>
-    implements
-        MunicipalityStateInitialCopyWith<$R, MunicipalityStateInitial, $Out> {
-  _MunicipalityStateInitialCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<MunicipalityStateInitial> $mapper =
-      MunicipalityStateInitialMapper.ensureInitialized();
-  @override
-  $R call() => $apply(FieldCopyWithData({}));
-  @override
-  MunicipalityStateInitial $make(CopyWithData data) =>
-      MunicipalityStateInitial();
-
-  @override
-  MunicipalityStateInitialCopyWith<$R2, MunicipalityStateInitial, $Out2>
-      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalityStateInitialCopyWithImpl($value, $cast, t);
-}
-
-class MunicipalityStateLoadingMapper
-    extends ClassMapperBase<MunicipalityStateLoading> {
-  MunicipalityStateLoadingMapper._();
-
-  static MunicipalityStateLoadingMapper? _instance;
-  static MunicipalityStateLoadingMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals
-          .use(_instance = MunicipalityStateLoadingMapper._());
-      MunicipalityStateMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'MunicipalityStateLoading';
-
-  @override
-  final MappableFields<MunicipalityStateLoading> fields = const {};
-
-  static MunicipalityStateLoading _instantiate(DecodingData data) {
-    return MunicipalityStateLoading();
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static MunicipalityStateLoading fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<MunicipalityStateLoading>(map);
-  }
-
-  static MunicipalityStateLoading fromJson(String json) {
-    return ensureInitialized().decodeJson<MunicipalityStateLoading>(json);
-  }
-}
-
-mixin MunicipalityStateLoadingMappable {
-  String toJson() {
-    return MunicipalityStateLoadingMapper.ensureInitialized()
-        .encodeJson<MunicipalityStateLoading>(this as MunicipalityStateLoading);
-  }
-
-  Map<String, dynamic> toMap() {
-    return MunicipalityStateLoadingMapper.ensureInitialized()
-        .encodeMap<MunicipalityStateLoading>(this as MunicipalityStateLoading);
-  }
-
-  MunicipalityStateLoadingCopyWith<MunicipalityStateLoading,
-          MunicipalityStateLoading, MunicipalityStateLoading>
-      get copyWith => _MunicipalityStateLoadingCopyWithImpl(
-          this as MunicipalityStateLoading, $identity, $identity);
-  @override
-  String toString() {
-    return MunicipalityStateLoadingMapper.ensureInitialized()
-        .stringifyValue(this as MunicipalityStateLoading);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return MunicipalityStateLoadingMapper.ensureInitialized()
-        .equalsValue(this as MunicipalityStateLoading, other);
-  }
-
-  @override
-  int get hashCode {
-    return MunicipalityStateLoadingMapper.ensureInitialized()
-        .hashValue(this as MunicipalityStateLoading);
-  }
-}
-
-extension MunicipalityStateLoadingValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, MunicipalityStateLoading, $Out> {
-  MunicipalityStateLoadingCopyWith<$R, MunicipalityStateLoading, $Out>
-      get $asMunicipalityStateLoading => $base
-          .as((v, t, t2) => _MunicipalityStateLoadingCopyWithImpl(v, t, t2));
-}
-
-abstract class MunicipalityStateLoadingCopyWith<
-    $R,
-    $In extends MunicipalityStateLoading,
-    $Out> implements MunicipalityStateCopyWith<$R, $In, $Out> {
-  @override
-  $R call();
-  MunicipalityStateLoadingCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _MunicipalityStateLoadingCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, MunicipalityStateLoading, $Out>
-    implements
-        MunicipalityStateLoadingCopyWith<$R, MunicipalityStateLoading, $Out> {
-  _MunicipalityStateLoadingCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<MunicipalityStateLoading> $mapper =
-      MunicipalityStateLoadingMapper.ensureInitialized();
-  @override
-  $R call() => $apply(FieldCopyWithData({}));
-  @override
-  MunicipalityStateLoading $make(CopyWithData data) =>
-      MunicipalityStateLoading();
-
-  @override
-  MunicipalityStateLoadingCopyWith<$R2, MunicipalityStateLoading, $Out2>
-      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalityStateLoadingCopyWithImpl($value, $cast, t);
-}
-
-class MunicipalityStateLoadedMapper
-    extends ClassMapperBase<MunicipalityStateLoaded> {
-  MunicipalityStateLoadedMapper._();
-
-  static MunicipalityStateLoadedMapper? _instance;
-  static MunicipalityStateLoadedMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals
-          .use(_instance = MunicipalityStateLoadedMapper._());
-      MunicipalityStateMapper.ensureInitialized();
-      DistrictValueMapper.ensureInitialized();
-      MunicipalityValueMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'MunicipalityStateLoaded';
-
-  static Map<DistrictValue, List<MunicipalityValue>>
-      _$municipalitiesPerDistrict(MunicipalityStateLoaded v) =>
-          v.municipalitiesPerDistrict;
-  static const Field<MunicipalityStateLoaded,
-          Map<DistrictValue, List<MunicipalityValue>>>
-      _f$municipalitiesPerDistrict =
-      Field('municipalitiesPerDistrict', _$municipalitiesPerDistrict);
-
-  @override
-  final MappableFields<MunicipalityStateLoaded> fields = const {
-    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
-  };
-
-  static MunicipalityStateLoaded _instantiate(DecodingData data) {
-    return MunicipalityStateLoaded(
-        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict));
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static MunicipalityStateLoaded fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<MunicipalityStateLoaded>(map);
-  }
-
-  static MunicipalityStateLoaded fromJson(String json) {
-    return ensureInitialized().decodeJson<MunicipalityStateLoaded>(json);
-  }
-}
-
-mixin MunicipalityStateLoadedMappable {
-  String toJson() {
-    return MunicipalityStateLoadedMapper.ensureInitialized()
-        .encodeJson<MunicipalityStateLoaded>(this as MunicipalityStateLoaded);
-  }
-
-  Map<String, dynamic> toMap() {
-    return MunicipalityStateLoadedMapper.ensureInitialized()
-        .encodeMap<MunicipalityStateLoaded>(this as MunicipalityStateLoaded);
-  }
-
-  MunicipalityStateLoadedCopyWith<MunicipalityStateLoaded,
-          MunicipalityStateLoaded, MunicipalityStateLoaded>
-      get copyWith => _MunicipalityStateLoadedCopyWithImpl(
-          this as MunicipalityStateLoaded, $identity, $identity);
-  @override
-  String toString() {
-    return MunicipalityStateLoadedMapper.ensureInitialized()
-        .stringifyValue(this as MunicipalityStateLoaded);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return MunicipalityStateLoadedMapper.ensureInitialized()
-        .equalsValue(this as MunicipalityStateLoaded, other);
-  }
-
-  @override
-  int get hashCode {
-    return MunicipalityStateLoadedMapper.ensureInitialized()
-        .hashValue(this as MunicipalityStateLoaded);
-  }
-}
-
-extension MunicipalityStateLoadedValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, MunicipalityStateLoaded, $Out> {
-  MunicipalityStateLoadedCopyWith<$R, MunicipalityStateLoaded, $Out>
-      get $asMunicipalityStateLoaded => $base
-          .as((v, t, t2) => _MunicipalityStateLoadedCopyWithImpl(v, t, t2));
-}
-
-abstract class MunicipalityStateLoadedCopyWith<
-    $R,
-    $In extends MunicipalityStateLoaded,
-    $Out> implements MunicipalityStateCopyWith<$R, $In, $Out> {
-  MapCopyWith<$R, DistrictValue, List<MunicipalityValue>,
-          ObjectCopyWith<$R, List<MunicipalityValue>, List<MunicipalityValue>>>
-      get municipalitiesPerDistrict;
-  @override
-  $R call(
-      {Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict});
-  MunicipalityStateLoadedCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _MunicipalityStateLoadedCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, MunicipalityStateLoaded, $Out>
-    implements
-        MunicipalityStateLoadedCopyWith<$R, MunicipalityStateLoaded, $Out> {
-  _MunicipalityStateLoadedCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<MunicipalityStateLoaded> $mapper =
-      MunicipalityStateLoadedMapper.ensureInitialized();
   @override
   MapCopyWith<$R, DistrictValue, List<MunicipalityValue>,
           ObjectCopyWith<$R, List<MunicipalityValue>, List<MunicipalityValue>>>
@@ -394,127 +127,20 @@ class _MunicipalityStateLoadedCopyWithImpl<$R, $Out>
           (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(municipalitiesPerDistrict: v));
   @override
-  $R call(
-          {Map<DistrictValue, List<MunicipalityValue>>?
-              municipalitiesPerDistrict}) =>
+  $R call({Object? municipalitiesPerDistrict = $none, StateStatus? status}) =>
       $apply(FieldCopyWithData({
-        if (municipalitiesPerDistrict != null)
-          #municipalitiesPerDistrict: municipalitiesPerDistrict
+        if (municipalitiesPerDistrict != $none)
+          #municipalitiesPerDistrict: municipalitiesPerDistrict,
+        if (status != null) #status: status
       }));
   @override
-  MunicipalityStateLoaded $make(CopyWithData data) => MunicipalityStateLoaded(
+  MunicipalityState $make(CopyWithData data) => MunicipalityState(
       municipalitiesPerDistrict: data.get(#municipalitiesPerDistrict,
-          or: $value.municipalitiesPerDistrict));
+          or: $value.municipalitiesPerDistrict),
+      status: data.get(#status, or: $value.status));
 
   @override
-  MunicipalityStateLoadedCopyWith<$R2, MunicipalityStateLoaded, $Out2>
-      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalityStateLoadedCopyWithImpl($value, $cast, t);
-}
-
-class MunicipalityStateFailedMapper
-    extends ClassMapperBase<MunicipalityStateFailed> {
-  MunicipalityStateFailedMapper._();
-
-  static MunicipalityStateFailedMapper? _instance;
-  static MunicipalityStateFailedMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals
-          .use(_instance = MunicipalityStateFailedMapper._());
-      MunicipalityStateMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'MunicipalityStateFailed';
-
-  @override
-  final MappableFields<MunicipalityStateFailed> fields = const {};
-
-  static MunicipalityStateFailed _instantiate(DecodingData data) {
-    return MunicipalityStateFailed();
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static MunicipalityStateFailed fromMap(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<MunicipalityStateFailed>(map);
-  }
-
-  static MunicipalityStateFailed fromJson(String json) {
-    return ensureInitialized().decodeJson<MunicipalityStateFailed>(json);
-  }
-}
-
-mixin MunicipalityStateFailedMappable {
-  String toJson() {
-    return MunicipalityStateFailedMapper.ensureInitialized()
-        .encodeJson<MunicipalityStateFailed>(this as MunicipalityStateFailed);
-  }
-
-  Map<String, dynamic> toMap() {
-    return MunicipalityStateFailedMapper.ensureInitialized()
-        .encodeMap<MunicipalityStateFailed>(this as MunicipalityStateFailed);
-  }
-
-  MunicipalityStateFailedCopyWith<MunicipalityStateFailed,
-          MunicipalityStateFailed, MunicipalityStateFailed>
-      get copyWith => _MunicipalityStateFailedCopyWithImpl(
-          this as MunicipalityStateFailed, $identity, $identity);
-  @override
-  String toString() {
-    return MunicipalityStateFailedMapper.ensureInitialized()
-        .stringifyValue(this as MunicipalityStateFailed);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return MunicipalityStateFailedMapper.ensureInitialized()
-        .equalsValue(this as MunicipalityStateFailed, other);
-  }
-
-  @override
-  int get hashCode {
-    return MunicipalityStateFailedMapper.ensureInitialized()
-        .hashValue(this as MunicipalityStateFailed);
-  }
-}
-
-extension MunicipalityStateFailedValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, MunicipalityStateFailed, $Out> {
-  MunicipalityStateFailedCopyWith<$R, MunicipalityStateFailed, $Out>
-      get $asMunicipalityStateFailed => $base
-          .as((v, t, t2) => _MunicipalityStateFailedCopyWithImpl(v, t, t2));
-}
-
-abstract class MunicipalityStateFailedCopyWith<
-    $R,
-    $In extends MunicipalityStateFailed,
-    $Out> implements MunicipalityStateCopyWith<$R, $In, $Out> {
-  @override
-  $R call();
-  MunicipalityStateFailedCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-      Then<$Out2, $R2> t);
-}
-
-class _MunicipalityStateFailedCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, MunicipalityStateFailed, $Out>
-    implements
-        MunicipalityStateFailedCopyWith<$R, MunicipalityStateFailed, $Out> {
-  _MunicipalityStateFailedCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<MunicipalityStateFailed> $mapper =
-      MunicipalityStateFailedMapper.ensureInitialized();
-  @override
-  $R call() => $apply(FieldCopyWithData({}));
-  @override
-  MunicipalityStateFailed $make(CopyWithData data) => MunicipalityStateFailed();
-
-  @override
-  MunicipalityStateFailedCopyWith<$R2, MunicipalityStateFailed, $Out2>
-      $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalityStateFailedCopyWithImpl($value, $cast, t);
+  MunicipalityStateCopyWith<$R2, MunicipalityState, $Out2> $chain<$R2, $Out2>(
+          Then<$Out2, $R2> t) =>
+      _MunicipalityStateCopyWithImpl($value, $cast, t);
 }

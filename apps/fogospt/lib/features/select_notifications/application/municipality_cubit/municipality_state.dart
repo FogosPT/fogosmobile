@@ -1,27 +1,42 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
+import 'package:warnings/state_management/state.dart';
+import 'package:warnings/state_management/state_status.dart';
 
 part 'municipality_state.mapper.dart';
 
 @MappableClass()
-sealed class MunicipalityState with MunicipalityStateMappable {}
-
-@MappableClass()
-class MunicipalityStateInitial extends MunicipalityState
-    with MunicipalityStateInitialMappable {}
-
-@MappableClass()
-class MunicipalityStateLoading extends MunicipalityState
-    with MunicipalityStateLoadingMappable {}
-
-@MappableClass()
-class MunicipalityStateLoaded extends MunicipalityState
-    with MunicipalityStateLoadedMappable {
+final class MunicipalityState extends BaseState with MunicipalityStateMappable {
   final Map<DistrictValue, List<MunicipalityValue>> municipalitiesPerDistrict;
 
-  MunicipalityStateLoaded({required this.municipalitiesPerDistrict});
+  MunicipalityState({
+    Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict,
+    super.status = StateStatus.initial,
+  }) : municipalitiesPerDistrict = municipalitiesPerDistrict ?? {};
 }
 
-@MappableClass()
-class MunicipalityStateFailed extends MunicipalityState
-    with MunicipalityStateFailedMappable {}
+extension MunicipalityStateExtension on MunicipalityState {
+  MunicipalityState loading() {
+    return MunicipalityState(
+      status: StateStatus.loading,
+      municipalitiesPerDistrict: municipalitiesPerDistrict,
+    );
+  }
+
+  MunicipalityState success({
+    required Map<DistrictValue, List<MunicipalityValue>>
+        municipalitiesPerDistrict,
+  }) {
+    return MunicipalityState(
+      status: StateStatus.success,
+      municipalitiesPerDistrict: municipalitiesPerDistrict,
+    );
+  }
+
+  MunicipalityState failure() {
+    return MunicipalityState(
+      status: StateStatus.failure,
+      municipalitiesPerDistrict: municipalitiesPerDistrict,
+    );
+  }
+}

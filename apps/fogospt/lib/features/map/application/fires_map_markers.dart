@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
-import 'package:fogos_api/features/latest_warnings/domain/fires.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:warnings/markers/marker_importance.dart';
 import 'package:warnings/markers/warning_marker.dart';
@@ -8,7 +7,7 @@ import 'package:warnings/markers/warning_marker.dart';
 typedef MarkerTapped = void Function(Fire fire);
 
 class FiresMapMarkers {
-  final Fires fires;
+  final List<Fire> fires;
 
   final MarkerTapped onMarkerTapped;
 
@@ -28,7 +27,7 @@ class FiresMapMarkers {
   List<WarningMarker> processMarkers({bool isActive = true}) {
     final List<WarningMarker> markers = [];
 
-    for (final fire in fires.data.where(
+    for (final fire in fires.where(
       (fire) => fire.active == isActive,
     )) {
       markers.add(

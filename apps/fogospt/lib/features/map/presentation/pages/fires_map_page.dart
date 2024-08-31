@@ -76,24 +76,24 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       ),
       body: BlocBuilder<MapLatestFiresCubit, MapLatestFiresState>(
         builder: (context, state) {
-          switch (state) {
-            case MapLatestFiresStateInitial():
-              context.read<MapLatestFiresCubit>().fetchLatestFires();
-              return MapPageInitialView();
-            case MapLatestFiresStateLoading():
-              return MapPageLoadingView();
-            case MapLatestFiresStateLoaded():
-              FiresMapMarkers mapMarkers = FiresMapMarkers(
-                fires: state.fires,
-                onMarkerTapped: (Fire fire) {
-                  log(fire);
-                  _showBottomModal(context, fire);
-                },
-              );
-              return MapPageView(mapMarkers: mapMarkers);
-            case MapLatestFiresStateFailed():
-              return MapPageErrorView();
+          if (state.isInitial) {
+            context.read<MapLatestFiresCubit>().fetchLatestFires();
+            return MapPageInitialView();
+          } else if (state.isSuccess) {
+            FiresMapMarkers mapMarkers = FiresMapMarkers(
+              fires: state.fires,
+              onMarkerTapped: (Fire fire) {
+                log(fire);
+                _showBottomModal(context, fire);
+              },
+            );
+            return MapPageView(mapMarkers: mapMarkers);
+          } else if (state.isFailure) {
+            return MapPageErrorView();
+          } else if (state.isLoading) {
+            return MapPageLoadingView();
           }
+          return MapPageLoadingView();
         },
       ),
     );

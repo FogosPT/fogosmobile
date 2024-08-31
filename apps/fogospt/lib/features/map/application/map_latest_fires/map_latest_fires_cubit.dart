@@ -5,17 +5,16 @@ import 'package:fogospt/features/map/data/fires_latest_service.dart';
 class MapLatestFiresCubit extends Cubit<MapLatestFiresState> {
   FiresLatestService service;
 
-  MapLatestFiresCubit(this.service) : super(MapLatestFiresStateInitial());
+  MapLatestFiresCubit(this.service) : super(MapLatestFiresState());
 
   Future<void> fetchLatestFires() async {
-    emit(MapLatestFiresStateLoading());
+    emit(state.loading());
 
-    final fires = await service.fetchLatestFires();
-
-    if (fires.success) {
-      emit(MapLatestFiresStateLoaded(fires: fires));
-    } else {
-      emit(MapLatestFiresStateFailed());
+    try {
+      final fires = await service.fetchLatestFires();
+      emit(state.success(fires: fires));
+    } on Exception catch (_) {
+      emit(state.failure());
     }
   }
 }

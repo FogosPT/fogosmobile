@@ -1,5 +1,5 @@
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
-import 'package:fogos_api/features/latest_warnings/domain/fires.dart';
+import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:warnings_core/warnings_core.dart';
 
 class FiresLatestService {
@@ -7,9 +7,10 @@ class FiresLatestService {
 
   const FiresLatestService(this.firesRepository);
 
-  Future<Fires> fetchLatestFires() async {
+  Future<List<Fire>> fetchLatestFires() async {
     try {
-      return await firesRepository.listActiveFires();
+      final firesData = await firesRepository.listActiveFires();
+      return firesData.data;
     } catch (e) {
       log(e);
       rethrow;

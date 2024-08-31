@@ -9,6 +9,7 @@ class BaseState {
 }
 
 extension StateExtension on BaseState {
+  bool get isInitial => status == StateStatus.initial;
   bool get isLoading => status == StateStatus.loading;
   bool get isSuccess => status == StateStatus.success;
   bool get isFailure => status == StateStatus.failure;

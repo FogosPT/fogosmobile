@@ -33,6 +33,8 @@ dependencies:
   svg_flutter: 
 
   warnings_core: 
+  flutter_localizations:
+    sdk: flutter
   
 
 dev_dependencies:
@@ -45,5 +47,6 @@ dev_dependencies:
   dart_mappable_builder: ^4.2.3
 
 flutter:
+  generate: true
 
   uses-material-design: true

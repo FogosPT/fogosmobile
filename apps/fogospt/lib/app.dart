@@ -23,7 +23,7 @@ class _FogosAppState extends State<FogosApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => SelectedDistrictCubit(),
+          create: (context) => NotificationsSelectedDistrictCubit(),
         ),
         BlocProvider(
           create: (context) => MapLatestFiresCubit(

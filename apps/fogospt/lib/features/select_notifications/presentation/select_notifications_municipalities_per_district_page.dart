@@ -19,7 +19,8 @@ class NotificationsMunicipalitiesPerDistrictPage extends StatelessWidget {
             SelectedNotificationsState>(
           builder: (context, state) {
             final activeMunicipalities = state.enabledMunicipalityNotifications;
-            return BlocBuilder<SelectedDistrictCubit, DistrictSelectedState>(
+            return BlocBuilder<NotificationsSelectedDistrictCubit,
+                DistrictSelectedState>(
               builder: (context, selectedDistrictState) {
                 final currentDistrict =
                     municipalityState.municipalitiesPerDistrict[

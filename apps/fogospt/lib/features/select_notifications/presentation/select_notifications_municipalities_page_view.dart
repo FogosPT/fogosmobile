@@ -28,7 +28,7 @@ class SelectNotificationsMunicipalitiesPageView extends StatelessWidget {
                       trailing: Icon(Icons.arrow_right),
                       onTap: () {
                         context
-                            .read<SelectedDistrictCubit>()
+                            .read<NotificationsSelectedDistrictCubit>()
                             .selectDistrict(district);
 
                         ///TODO(FB) - Use GoRouter

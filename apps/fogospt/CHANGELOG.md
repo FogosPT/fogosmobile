@@ -1,3 +1,7 @@
+## 1.6.1
+
+ - **FIX**: missing state set. ([f69f3c03](https://github.com/FogosPT/fogospt.git/commit/f69f3c037ea0f03a803a294bacbe0568db33c104))
+
 ## 1.6.0
 
  - **FIX**: improve cubits notifications and municipalities. ([c3838402](https://github.com/FogosPT/fogospt.git/commit/c38384027a945608addf19b15e82d69fe3bebebe))

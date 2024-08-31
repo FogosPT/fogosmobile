@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`fogospt` - `v1.6.1`](#fogospt---v161)
+
+---
+
+#### `fogospt` - `v1.6.1`
+
+ - **FIX**: missing state set. ([f69f3c03](https://github.com/FogosPT/fogospt.git/commit/f69f3c037ea0f03a803a294bacbe0568db33c104))
+
+
+## 2024-08-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fogospt` - `v1.6.0`](#fogospt---v160)
 
 ---

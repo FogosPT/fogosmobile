@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:fogospt/features/notifications/domain/municipality_data.dart';
+import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
 import 'package:warnings/warnings.dart';
 
-class MunicipalitiesRepository {
+class LoadMunicipalitiesRepository {
   MunicipalitiesData? _municipalitiesData;
 
-  Future<List<Municipality>> getMunicipalities() async {
+  Future<List<MunicipalityValue>> getMunicipalities() async {
     if (_municipalitiesData == null) {
       _municipalitiesData = await _processMunicipalitiesData();
     }

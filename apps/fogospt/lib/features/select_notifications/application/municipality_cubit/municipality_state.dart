@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:fogospt/features/notifications/domain/municipality_data.dart';
+import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
 
 part 'municipality_state.mapper.dart';
 
@@ -17,7 +17,7 @@ class MunicipalityStateLoading extends MunicipalityState
 @MappableClass()
 class MunicipalityStateLoaded extends MunicipalityState
     with MunicipalityStateLoadedMappable {
-  final Map<District, List<Municipality>> municipalitiesPerDistrict;
+  final Map<DistrictValue, List<MunicipalityValue>> municipalitiesPerDistrict;
 
   MunicipalityStateLoaded({required this.municipalitiesPerDistrict});
 }

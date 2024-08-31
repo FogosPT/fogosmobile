@@ -4,9 +4,9 @@ import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
 import 'package:fogospt/features/map/data/fires_latest_service.dart';
-import 'package:fogospt/features/notifications/application/district_selected_cubit/district_selected_cubit.dart';
-import 'package:fogospt/features/notifications/application/municipality_cubit/municipality_cubit.dart';
-import 'package:fogospt/features/notifications/application/notifications/notification_cubit.dart';
+import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
+import 'package:fogospt/features/select_notifications/application/notifications_selected_district_cubit/notifications_selected_district_cubit.dart';
+import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
 import 'package:fogospt/routing/fogos_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -23,7 +23,7 @@ class _FogosAppState extends State<FogosApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => DistrictSelectedCubit(),
+          create: (context) => SelectedDistrictCubit(),
         ),
         BlocProvider(
           create: (context) => MapLatestFiresCubit(
@@ -33,10 +33,11 @@ class _FogosAppState extends State<FogosApp> {
           ),
         ),
         BlocProvider(
-          create: (context) => NotificationCubit()..fetchNotifications(),
+          create: (context) =>
+              SelectedNotificationsCubit()..fetchNotifications(),
         ),
         BlocProvider(
-          create: (context) => MunicipalityCubit()..loadMunicipalities(),
+          create: (context) => MunicipalitiesCubit()..loadMunicipalities(),
         ),
       ],
       child: MaterialApp.router(

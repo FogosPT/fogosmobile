@@ -1,12 +1,12 @@
-import 'package:fogospt/features/notifications/data/municipalities_repository.dart';
-import 'package:fogospt/features/notifications/domain/municipality_data.dart';
+import 'package:fogospt/features/select_notifications/data/load_municipalities_repository.dart';
+import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
 import 'package:get_it/get_it.dart';
 
-class MunicipalitiesService {
-  MunicipalitiesRepository _municipalitiesRepository =
-      GetIt.I.get<MunicipalitiesRepository>();
+class FetchMunicipalitiesService {
+  LoadMunicipalitiesRepository _municipalitiesRepository =
+      GetIt.I.get<LoadMunicipalitiesRepository>();
 
-  Future<List<Municipality>> fetchAllMunicipalities() async {
+  Future<List<MunicipalityValue>> fetchAllMunicipalities() async {
     return _municipalitiesRepository.getMunicipalities();
   }
 
@@ -47,14 +47,15 @@ class MunicipalitiesService {
   //       .toList();
   // }
 
-  Future<Map<District, List<Municipality>>>
+  Future<Map<DistrictValue, List<MunicipalityValue>>>
       getMunicipalitiesPerDistrict() async {
     final municipalities = await _municipalitiesRepository.getMunicipalities();
-    final municipalitiesPerDistrict = Map<District, List<Municipality>>();
+    final municipalitiesPerDistrict =
+        Map<DistrictValue, List<MunicipalityValue>>();
 
     municipalities.forEach(
       (municip) {
-        final district = District(
+        final district = DistrictValue(
           id: municip.value.districtId,
           name: municip.value.districtName,
         );

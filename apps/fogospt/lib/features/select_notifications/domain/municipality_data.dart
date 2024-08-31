@@ -5,25 +5,25 @@ part 'municipality_data.mapper.dart';
 @MappableClass()
 class MunicipalitiesData with MunicipalitiesDataMappable {
   @MappableField(key: 'rows')
-  final List<Municipality> data;
+  final List<MunicipalityValue> data;
 
   MunicipalitiesData({required this.data});
 }
 
 @MappableClass()
-class Municipality with MunicipalityMappable {
+class MunicipalityValue with MunicipalityValueMappable {
   /// aka DICO
   final String key;
-  final MunicipalityValue value;
+  final MunicipalityInformationValue value;
 
-  Municipality({
+  MunicipalityValue({
     required this.key,
     required this.value,
   });
 }
 
 @MappableClass()
-class MunicipalityValue with MunicipalityValueMappable {
+class MunicipalityInformationValue with MunicipalityInformationValueMappable {
   final String name;
 
   @MappableField(key: 'dId')
@@ -31,7 +31,7 @@ class MunicipalityValue with MunicipalityValueMappable {
   @MappableField(key: 'dName')
   final String districtName;
 
-  MunicipalityValue({
+  MunicipalityInformationValue({
     required this.name,
     required this.districtId,
     required this.districtName,
@@ -39,11 +39,11 @@ class MunicipalityValue with MunicipalityValueMappable {
 }
 
 @MappableClass()
-class District with DistrictMappable {
+class DistrictValue with DistrictValueMappable {
   final String id;
   final String name;
 
-  const District({
+  const DistrictValue({
     required this.id,
     required this.name,
   });

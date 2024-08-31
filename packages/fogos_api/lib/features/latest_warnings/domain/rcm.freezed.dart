@@ -20,7 +20,6 @@ RCM _$RCMFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RCM {
-// ignore: invalid_annotation_target
   @JsonKey(name: '_id')
   String get id => throw _privateConstructorUsedError;
   String get concelho => throw _privateConstructorUsedError;
@@ -264,7 +263,6 @@ class _$RCMImpl implements _RCM {
   factory _$RCMImpl.fromJson(Map<String, dynamic> json) =>
       _$$RCMImplFromJson(json);
 
-// ignore: invalid_annotation_target
   @override
   @JsonKey(name: '_id')
   final String id;
@@ -348,7 +346,6 @@ abstract class _RCM implements RCM {
 
   factory _RCM.fromJson(Map<String, dynamic> json) = _$RCMImpl.fromJson;
 
-  @override // ignore: invalid_annotation_target
   @JsonKey(name: '_id')
   String get id;
   @override

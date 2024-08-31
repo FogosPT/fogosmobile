@@ -1,3 +1,9 @@
+## 1.7.0
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+ - **FEAT**: add en and pt translations. ([2130be37](https://github.com/FogosPT/fogospt.git/commit/2130be37771bb12fcdfadec4b2ac96f6f08fe5a4))
+ - **FEAT**: configure l18n. ([7f940bb6](https://github.com/FogosPT/fogospt.git/commit/7f940bb688fafb932b0212b6d9de3e297c01a3aa))
+
 ## 1.6.1
 
  - **FIX**: missing state set. ([f69f3c03](https://github.com/FogosPT/fogospt.git/commit/f69f3c037ea0f03a803a294bacbe0568db33c104))

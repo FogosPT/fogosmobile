@@ -1,3 +1,7 @@
+## 0.0.5+1
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+
 ## 0.0.5
 
  - **FEAT**: add sentry to http calls. ([57190da4](https://github.com/FogosPT/fogospt.git/commit/57190da49fde667cab67694d0ffb420b24d7c5b0))

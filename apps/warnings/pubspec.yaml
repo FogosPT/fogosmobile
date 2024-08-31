@@ -2,7 +2,7 @@ name: warnings
 description: "A base project to support the development of the Warning Apps"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 0.0.2+1
+version: 0.0.3
 
 environment:
   sdk: ^3.3.0
@@ -15,7 +15,7 @@ dependencies:
 
   sentry: ^8.8.0
 
-  fogos_api: 0.0.5
+  fogos_api: 0.0.5+1
   flutter_bloc: ^8.1.6
   flutter_map: ^7.0.2
   latlong2: ^0.9.1

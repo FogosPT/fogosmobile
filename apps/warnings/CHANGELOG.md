@@ -1,3 +1,8 @@
+## 0.0.3
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+ - **FEAT**: configure l18n. ([7f940bb6](https://github.com/FogosPT/fogospt.git/commit/7f940bb688fafb932b0212b6d9de3e297c01a3aa))
+
 ## 0.0.2+1
 
  - Update a dependency to the latest release.

@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-09-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fogos_api` - `v0.0.5+1`](#fogos_api---v0051)
+ - [`fogospt` - `v1.7.0`](#fogospt---v170)
+ - [`warnings` - `v0.0.3`](#warnings---v003)
+
+---
+
+#### `fogos_api` - `v0.0.5+1`
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+
+#### `fogospt` - `v1.7.0`
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+ - **FEAT**: add en and pt translations. ([2130be37](https://github.com/FogosPT/fogospt.git/commit/2130be37771bb12fcdfadec4b2ac96f6f08fe5a4))
+ - **FEAT**: configure l18n. ([7f940bb6](https://github.com/FogosPT/fogospt.git/commit/7f940bb688fafb932b0212b6d9de3e297c01a3aa))
+
+#### `warnings` - `v0.0.3`
+
+ - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))
+ - **FEAT**: configure l18n. ([7f940bb6](https://github.com/FogosPT/fogospt.git/commit/7f940bb688fafb932b0212b6d9de3e297c01a3aa))
+
+
 ## 2024-08-31
 
 ### Changes

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-08-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fogospt` - `v1.6.0`](#fogospt---v160)
+
+---
+
+#### `fogospt` - `v1.6.0`
+
+ - **FIX**: improve cubits notifications and municipalities. ([c3838402](https://github.com/FogosPT/fogospt.git/commit/c38384027a945608addf19b15e82d69fe3bebebe))
+ - **FEAT**: add working notifications per municipalities. ([48b566d2](https://github.com/FogosPT/fogospt.git/commit/48b566d2a9d463ae7848f0754412ac431007afef))
+ - **FEAT**: add notifications municipalities by districts. ([4e0b659e](https://github.com/FogosPT/fogospt.git/commit/4e0b659e7979a72cca6ef3d7dbe6841bac989577))
+ - **FEAT**: improve notifications screen to show all districts. ([3f5ebf4a](https://github.com/FogosPT/fogospt.git/commit/3f5ebf4a7a931d9287d488f18b90b45b6cb3d30c))
+
+
 ## 2024-08-28
 
 ### Changes

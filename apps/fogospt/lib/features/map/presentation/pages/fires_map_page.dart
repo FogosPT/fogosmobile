@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/constants/colors.dart';
@@ -48,7 +49,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: appFogosOrange,
-        title: Text('Fogos.pt'),
+        title: Text(AppLocalizations.of(context)!.helloWorld),
       ),
       drawer: Drawer(
         child: ListView(

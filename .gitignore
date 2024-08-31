@@ -202,3 +202,4 @@ app.*.symbols
 # Melos
 pubspec_overrides.yaml
 apps/fogospt/ios/Flutter/flutter_export_environment.sh
+apps/fogospt/.dart_tool/package_config_subset

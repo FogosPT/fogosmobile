@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
@@ -43,6 +44,8 @@ class _FogosAppState extends State<FogosApp> {
       child: MaterialApp.router(
         routerConfig: fogos_router,
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) {
           return ResponsiveBreakpoints.builder(
             child: child!,

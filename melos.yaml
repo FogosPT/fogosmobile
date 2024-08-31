@@ -59,3 +59,9 @@ scripts:
     description: Get the dependencies
     packageFilters:
       dependsOn: flutter
+
+  l10n:
+    exec: flutter gen-l10n
+    description: Generate localization files
+    packageFilters:
+      dependsOn: flutter

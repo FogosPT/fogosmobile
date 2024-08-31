@@ -28,7 +28,7 @@ dependencies:
   dart_mappable: ^4.2.2
   wolt_modal_sheet: ^0.8.0
   fl_chart: ^0.68.0
-  intl: ^0.19.0
+  intl: any
 
   svg_flutter: 
 

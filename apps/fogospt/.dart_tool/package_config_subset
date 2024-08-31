@@ -6,6 +6,10 @@ flutter
 3.2
 file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter/
 file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter/lib/
+flutter_localizations
+3.2
+file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter_localizations/
+file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter_localizations/lib/
 flutter_test
 3.2
 file:///USERS/FILIPE.BARROSO/SOFTWARE/FLUTTER/packages/flutter_test/
@@ -291,9 +295,9 @@ image
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/image-4.2.0/
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/image-4.2.0/lib/
 intl
-3.0
-file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/intl-0.19.0/
-file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/intl-0.19.0/lib/
+2.12
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/intl-0.18.1/
+file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/intl-0.18.1/lib/
 io
 2.12
 file:///Users/filipe.barroso/.pub-cache/hosted/pub.dev/io-1.0.4/

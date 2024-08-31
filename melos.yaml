@@ -65,3 +65,4 @@ scripts:
     description: Generate localization files
     packageFilters:
       dependsOn: flutter
+      dirExists: lib/l10n

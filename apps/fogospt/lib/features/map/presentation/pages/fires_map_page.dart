@@ -64,7 +64,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
 
             ListTile(
               title: Text(
-                'Notificações',
+                context.l10n.fires_map_page_notifications,
                 style: context.textTheme.bodyLarge,
               ),
               onTap: () {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warnings/warnings.dart';
 
 class PartnersPage extends StatelessWidget {
   final List<Image> partners;
@@ -12,7 +13,7 @@ class PartnersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Partners'),
+        title: Text(context.l10n.partners_page_title),
       ),
       body: SingleChildScrollView(
         child: Column(

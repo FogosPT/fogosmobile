@@ -1,6 +1,17 @@
 {
-  "fogospt": "Fogos.pt",
-  "@helloWorld": {
-    "description": "The conventional newborn programmer greeting"
-  }
+    "@@locale": "pt",
+    "fogospt": "Fogos.pt",
+    "fires_map_page_notifications": "Notificações",
+    "fires_map_page_error": "Notifications",
+    "fires_map_page_more_informations": "mais informações",
+    "fires_map_page_local": "local",
+    "fires_map_page_state": "estado",
+    "fires_map_page_means_of_transportation": "meios",
+    "fires_map_page_start": "Início",
+    "partners_page_title": "Parceiros",
+    "select_notifications_per_municipality": "Notificações por Concelho",
+    "select_notifications_per_municipality_error": "Falhou o descarregar da informação do Concelho",
+    "@helloWorld": {
+        "description": "The conventional newborn programmer greeting!"
+    }
 }

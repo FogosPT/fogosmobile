@@ -59,7 +59,8 @@ class MapPageModalContentView extends StatelessWidget {
                 color: Colors.blue,
               ),
               label: Text(
-                'mais informações'.toUpperCase(),
+                context.l10n.fires_map_page_means_of_transportation
+                    .toUpperCase(),
                 style: TextStyle(
                   color: Colors.blue,
                 ),
@@ -90,7 +91,7 @@ class _FireModalLocationWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: "local",
+          title: context.l10n.fires_map_page_local,
         ),
         Text(
           fire.location,
@@ -113,7 +114,7 @@ class _FireModalStatusWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: "estado",
+          title: context.l10n.fires_map_page_state,
         ),
         Text(
           fire.status,
@@ -136,7 +137,7 @@ class _FireModalResourcesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: "meios",
+          title: context.l10n.fires_map_page_means_of_transportation,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -172,7 +173,7 @@ class _FireModalUpdatedWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: "Início",
+          title: context.l10n.fires_map_page_start,
         ),
         Text(
           "${fire.date} ${fire.hour}",

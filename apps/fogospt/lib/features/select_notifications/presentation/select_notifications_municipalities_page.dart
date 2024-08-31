@@ -4,6 +4,7 @@ import 'package:fogospt/features/select_notifications/application/municipalities
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_state.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_page_view.dart';
 import 'package:warnings/state_management/state.dart';
+import 'package:warnings/utils/extensions/context_extensions.dart';
 
 class SelectNotificationsMunicipalitiesPage extends StatelessWidget {
   @override
@@ -12,13 +13,14 @@ class SelectNotificationsMunicipalitiesPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Notificações por Concelho'),
+            title: Text(context.l10n.select_notifications_per_municipality),
           ),
           body: switch (state) {
             _ when state.isSuccess =>
               SelectNotificationsMunicipalitiesPageView(),
             _ when state.isFailure => Center(
-                child: Text('Failed to load Municipalities'),
+                child: Text(
+                    context.l10n.select_notifications_per_municipality_error),
               ),
             _ => Center(
                 child: CircularProgressIndicator(),

@@ -12,31 +12,29 @@ final class MapLatestFiresState extends BaseState
 
   MapLatestFiresState({
     super.status = StateStatus.initial,
-    this.fires = const [],
-  });
+    List<Fire>? fires,
+  }) : fires = fires ?? [];
 }
 
-extension MunicipalitiesStateExtension on MapLatestFiresState {
+extension MapLatestFiresStateExtension on MapLatestFiresState {
   MapLatestFiresState loading() {
     return MapLatestFiresState(
       status: StateStatus.loading,
-      fires: fires,
     );
   }
 
   MapLatestFiresState success({
-    required List<Fire> fires,
+    List<Fire>? fires,
   }) {
     return MapLatestFiresState(
-      status: StateStatus.success,
       fires: fires,
+      status: StateStatus.success,
     );
   }
 
   MapLatestFiresState failure() {
     return MapLatestFiresState(
       status: StateStatus.failure,
-      fires: fires,
     );
   }
 }

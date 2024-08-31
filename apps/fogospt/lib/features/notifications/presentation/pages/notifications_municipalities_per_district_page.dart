@@ -23,30 +23,38 @@ class NotificationsMunicipalitiesPerDistrictPage extends StatelessWidget {
                     DistrictSelectedState>(
                   builder: (context, selectedDistrictState) {
                     if (selectedDistrictState is DistrictSelected) {
-                      // setup
+                      /// setup
                       final currentDistrict =
                           municipalityState.municipalitiesPerDistrict[
-                              selectedDistrictState.district];
-                      // build
+                                  selectedDistrictState.district] ??
+                              [];
+
+                      /// build
                       return Scaffold(
                         appBar: AppBar(
                           title: Text('${selectedDistrictState.district.name}'),
                         ),
                         body: ListView.builder(
-                          itemCount: currentDistrict?.length ?? 0,
+                          itemCount: currentDistrict.length,
                           itemBuilder: (context, index) {
-                            final municip = currentDistrict?[index];
+                            final municipality = currentDistrict[index];
 
                             return ListTile(
-                              title: Text(municip!.value.name),
+                              title: Text(municipality.value.name),
                               trailing: Checkbox(
                                 value: activeMunicipalities
-                                    ?.contains(municip.value.name),
+                                    ?.contains(municipality.key),
                                 onChanged: (value) {
+                                  if (value == null) return;
+                                  final municipalityCubit =
+                                      context.read<MunicipalityCubit>();
                                   context
                                       .read<NotificationCubit>()
                                       .toggleNotification(
-                                          municip.value.name, value);
+                                        municipality: municipality,
+                                        toggleValue: value,
+                                        municipalityCubit: municipalityCubit,
+                                      );
                                 },
                               ),
                             );

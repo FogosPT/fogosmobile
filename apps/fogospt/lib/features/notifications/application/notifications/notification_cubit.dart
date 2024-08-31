@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fogospt/features/notifications/application/municipalities_service.dart';
+import 'package:fogospt/features/notifications/application/municipality_cubit/municipality_cubit.dart';
+import 'package:fogospt/features/notifications/application/municipality_notifications_manager.dart';
 import 'package:fogospt/features/notifications/application/notifications/notification_state.dart';
 import 'package:fogospt/features/notifications/application/notifications_shared_preferences.dart';
 import 'package:fogospt/features/notifications/domain/municipality_data.dart';
@@ -20,10 +22,11 @@ class NotificationCubit extends Cubit<NotificationState> {
 
     for (Municipality municipality in _municipalities) {
       final isActive =
-          await MunicipalitiesSharedPreferences.getTopicNotifications(
-              municipality.value.name);
+          await MunicipalitiesSharedPreferences.loadTopicNotificationKey(
+        key: municipality.key,
+      );
       if (isActive) {
-        _municipalitiesKeys.add(municipality.value.name);
+        _municipalitiesKeys.add(municipality.key);
       }
     }
 
@@ -34,9 +37,25 @@ class NotificationCubit extends Cubit<NotificationState> {
     );
   }
 
-  Future<void> toggleNotification(String key, bool? value) async {
-    if (value == null) return;
-    await MunicipalitiesSharedPreferences.setTopicNotifications(key, value);
+  Future<void> toggleNotification({
+    required Municipality municipality,
+    required bool toggleValue,
+    required MunicipalityCubit municipalityCubit,
+  }) async {
+    final result =
+        await MunicipalitiesSharedPreferences.saveTopicNotificationKey(
+      key: municipality.key,
+      value: toggleValue,
+    );
+
     await fetchNotifications();
+
+    if (result) {
+      if (toggleValue) {
+        MunicipalityNotificationsManager.enableMunicipality(municipality);
+      } else {
+        MunicipalityNotificationsManager.disableMunicipality(municipality);
+      }
+    }
   }
 }

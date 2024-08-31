@@ -12,10 +12,14 @@ class MunicipalitiesData with MunicipalitiesDataMappable {
 
 @MappableClass()
 class Municipality with MunicipalityMappable {
+  /// aka DICO
   final String key;
   final MunicipalityValue value;
 
-  Municipality({required this.key, required this.value});
+  Municipality({
+    required this.key,
+    required this.value,
+  });
 }
 
 @MappableClass()

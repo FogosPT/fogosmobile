@@ -2,6 +2,7 @@
 	"recommendations": [
         "Dart-Code.flutter",
         "Dart-Code.dart-code",
+        "Google.arb-editor",
 		"johnpapa.vscode-peacock",
         "MS-vsliveshare.vsliveshare",
         "humao.rest-client",
@@ -13,6 +14,7 @@
         "SimonSiefke.svg-preview",
         "Gruntfuggly.todo-tree",
         "yzhang.markdown-all-in-one",
-        "redhat.vscode-yaml"
+        "redhat.vscode-yaml",
+
 	]
 }

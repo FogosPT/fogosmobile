@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +47,9 @@ class _FogosAppState extends State<FogosApp> {
         debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        theme: FlexThemeData.light(scheme: FlexScheme.redM3),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.redM3),
+        themeMode: ThemeMode.system,
         builder: (context, child) {
           return ResponsiveBreakpoints.builder(
             child: child!,

@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+ - **REFACTOR**: simplify how we handle state with StateWidget. ([15af70e6](https://github.com/FogosPT/fogospt.git/commit/15af70e6067fad7fc33f1c509680366b85cf3c00))
+
 ## 0.0.3
 
  - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))

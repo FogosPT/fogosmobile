@@ -15,6 +15,33 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`fogospt` - `v1.7.1`](#fogospt---v171)
+ - [`warnings` - `v0.0.3+1`](#warnings---v0031)
+
+---
+
+#### `fogospt` - `v1.7.1`
+
+ - **REFACTOR**: simplify all current state files. ([49abc5d7](https://github.com/FogosPT/fogospt.git/commit/49abc5d700c043e0391fec78477612c1a6b266b9))
+ - **REFACTOR**: simplify how we handle state with StateWidget. ([15af70e6](https://github.com/FogosPT/fogospt.git/commit/15af70e6067fad7fc33f1c509680366b85cf3c00))
+
+#### `warnings` - `v0.0.3+1`
+
+ - **REFACTOR**: simplify how we handle state with StateWidget. ([15af70e6](https://github.com/FogosPT/fogospt.git/commit/15af70e6067fad7fc33f1c509680366b85cf3c00))
+
+
+## 2024-09-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fogos_api` - `v0.0.5+1`](#fogos_api---v0051)
  - [`fogospt` - `v1.7.0`](#fogospt---v170)
  - [`warnings` - `v0.0.3`](#warnings---v003)

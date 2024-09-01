@@ -1,3 +1,8 @@
+## 1.7.1
+
+ - **REFACTOR**: simplify all current state files. ([49abc5d7](https://github.com/FogosPT/fogospt.git/commit/49abc5d700c043e0391fec78477612c1a6b266b9))
+ - **REFACTOR**: simplify how we handle state with StateWidget. ([15af70e6](https://github.com/FogosPT/fogospt.git/commit/15af70e6067fad7fc33f1c509680366b85cf3c00))
+
 ## 1.7.0
 
  - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))

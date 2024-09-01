@@ -26,14 +26,14 @@ class FiresStateMapper extends ClassMapperBase<FiresState> {
   static Fire? _$fire(FiresState v) => v.fire;
   static const Field<FiresState, Fire> _f$fire =
       Field('fire', _$fire, opt: true);
-  static List<Resources>? _$resources(FiresState v) => v.resources;
+  static List<Resources> _$resources(FiresState v) => v.resources;
   static const Field<FiresState, List<Resources>> _f$resources =
       Field('resources', _$resources, opt: true);
-  static List<HistoryStatus>? _$historyStatuses(FiresState v) =>
+  static List<HistoryStatus> _$historyStatuses(FiresState v) =>
       v.historyStatuses;
   static const Field<FiresState, List<HistoryStatus>> _f$historyStatuses =
       Field('historyStatuses', _$historyStatuses, opt: true);
-  static List<RCM>? _$rcm(FiresState v) => v.rcm;
+  static List<RCM> _$rcm(FiresState v) => v.rcm;
   static const Field<FiresState, List<RCM>> _f$rcm =
       Field('rcm', _$rcm, opt: true);
 
@@ -106,11 +106,11 @@ extension FiresStateValueCopy<$R, $Out>
 
 abstract class FiresStateCopyWith<$R, $In extends FiresState, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>?
+  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>
       get resources;
   ListCopyWith<$R, HistoryStatus,
-      ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>? get historyStatuses;
-  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>>? get rcm;
+      ObjectCopyWith<$R, HistoryStatus, HistoryStatus>> get historyStatuses;
+  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>> get rcm;
   $R call(
       {StateStatus? status,
       Fire? fire,
@@ -129,28 +129,21 @@ class _FiresStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<FiresState> $mapper =
       FiresStateMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>?
-      get resources => $value.resources != null
-          ? ListCopyWith(
-              $value.resources!,
-              (v, t) => ObjectCopyWith(v, $identity, t),
-              (v) => call(resources: v))
-          : null;
+  ListCopyWith<$R, Resources, ObjectCopyWith<$R, Resources, Resources>>
+      get resources => ListCopyWith($value.resources,
+          (v, t) => ObjectCopyWith(v, $identity, t), (v) => call(resources: v));
   @override
   ListCopyWith<$R, HistoryStatus,
-          ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>?
-      get historyStatuses => $value.historyStatuses != null
-          ? ListCopyWith(
-              $value.historyStatuses!,
-              (v, t) => ObjectCopyWith(v, $identity, t),
-              (v) => call(historyStatuses: v))
-          : null;
+          ObjectCopyWith<$R, HistoryStatus, HistoryStatus>>
+      get historyStatuses => ListCopyWith(
+          $value.historyStatuses,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(historyStatuses: v));
   @override
-  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>>? get rcm => $value.rcm !=
-          null
-      ? ListCopyWith($value.rcm!, (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(rcm: v))
-      : null;
+  ListCopyWith<$R, RCM, ObjectCopyWith<$R, RCM, RCM>> get rcm => ListCopyWith(
+      $value.rcm,
+      (v, t) => ObjectCopyWith(v, $identity, t),
+      (v) => call(rcm: v));
   @override
   $R call(
           {StateStatus? status,

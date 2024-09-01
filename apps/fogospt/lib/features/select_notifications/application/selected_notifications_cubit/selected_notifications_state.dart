@@ -17,26 +17,13 @@ final class SelectedNotificationsState extends BaseState
 }
 
 extension SelectedNotificationsStateExtension on SelectedNotificationsState {
-  SelectedNotificationsState loading() {
-    return SelectedNotificationsState(
-      status: StateStatus.loading,
-      enabledMunicipalityNotifications: enabledMunicipalityNotifications,
-    );
-  }
-
+  SelectedNotificationsState loading() => copyWith(status: StateStatus.loading);
+  SelectedNotificationsState failure() => copyWith(status: StateStatus.failure);
   SelectedNotificationsState success({
     required Set<String> activeMunicipalities,
-  }) {
-    return SelectedNotificationsState(
-      status: StateStatus.success,
-      enabledMunicipalityNotifications: activeMunicipalities,
-    );
-  }
-
-  SelectedNotificationsState failure() {
-    return SelectedNotificationsState(
-      status: StateStatus.failure,
-      enabledMunicipalityNotifications: enabledMunicipalityNotifications,
-    );
-  }
+  }) =>
+      copyWith(
+        status: StateStatus.success,
+        enabledMunicipalityNotifications: activeMunicipalities,
+      );
 }

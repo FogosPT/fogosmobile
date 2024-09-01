@@ -17,26 +17,13 @@ final class DistrictSelectedState extends BaseState
 }
 
 extension DistrictSelectedStateExtension on DistrictSelectedState {
-  DistrictSelectedState loading() {
-    return DistrictSelectedState(
-      status: StateStatus.loading,
-      district: district,
-    );
-  }
-
+  DistrictSelectedState loading() => copyWith(status: StateStatus.loading);
+  DistrictSelectedState failure() => copyWith(status: StateStatus.failure);
   DistrictSelectedState success({
     required DistrictValue district,
-  }) {
-    return DistrictSelectedState(
-      status: StateStatus.success,
-      district: district,
-    );
-  }
-
-  DistrictSelectedState failure() {
-    return DistrictSelectedState(
-      status: StateStatus.failure,
-      district: district,
-    );
-  }
+  }) =>
+      copyWith(
+        status: StateStatus.success,
+        district: district,
+      );
 }

@@ -1,27 +1,27 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
+import 'package:warnings/warnings.dart';
 
 part 'selected_fire_state.mapper.dart';
 
 @MappableClass()
-sealed class SelectedFireState with SelectedFireStateMappable {}
+final class SelectedFireState extends BaseState with SelectedFireStateMappable {
+  final Fire? fire;
 
-@MappableClass()
-class SelectedFireInitialState extends SelectedFireState
-    with SelectedFireInitialStateMappable {}
-
-@MappableClass()
-class SelectedFireLoadingState extends SelectedFireState
-    with SelectedFireLoadingStateMappable {}
-
-@MappableClass()
-class SelectedFireLoadedState extends SelectedFireState
-    with SelectedFireLoadedStateMappable {
-  final Fire fire;
-
-  SelectedFireLoadedState(this.fire);
+  SelectedFireState({
+    super.status = StateStatus.initial,
+    Fire? fire,
+  }) : fire = fire;
 }
 
-@MappableClass()
-class SelectedFireFailedState extends SelectedFireState
-    with SelectedFireFailedStateMappable {}
+extension SelectedFireStateExtension on SelectedFireState {
+  SelectedFireState failure() => copyWith(status: StateStatus.failure);
+  SelectedFireState loading() => copyWith(status: StateStatus.loading);
+  SelectedFireState success({
+    Fire? fire,
+  }) =>
+      copyWith(
+        status: StateStatus.success,
+        fire: fire,
+      );
+}

@@ -17,27 +17,13 @@ final class MunicipalitiesState extends BaseState
 }
 
 extension MunicipalitiesStateExtension on MunicipalitiesState {
-  MunicipalitiesState loading() {
-    return MunicipalitiesState(
-      status: StateStatus.loading,
-      municipalitiesPerDistrict: municipalitiesPerDistrict,
-    );
-  }
-
-  MunicipalitiesState success({
-    required Map<DistrictValue, List<MunicipalityValue>>
-        municipalitiesPerDistrict,
-  }) {
-    return MunicipalitiesState(
-      status: StateStatus.success,
-      municipalitiesPerDistrict: municipalitiesPerDistrict,
-    );
-  }
-
-  MunicipalitiesState failure() {
-    return MunicipalitiesState(
-      status: StateStatus.failure,
-      municipalitiesPerDistrict: municipalitiesPerDistrict,
-    );
-  }
+  MunicipalitiesState failure() => copyWith(status: StateStatus.failure);
+  MunicipalitiesState loading() => copyWith(status: StateStatus.loading);
+  MunicipalitiesState sucess({
+    Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict,
+  }) =>
+      copyWith(
+        status: StateStatus.success,
+        municipalitiesPerDistrict: municipalitiesPerDistrict,
+      );
 }

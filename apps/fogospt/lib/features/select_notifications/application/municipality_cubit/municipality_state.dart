@@ -17,9 +17,7 @@ final class MunicipalityState extends BaseState with MunicipalityStateMappable {
 
 extension MunicipalityStateExtension on MunicipalityState {
   MunicipalityState failure() => copyWith(status: StateStatus.failure);
-
   MunicipalityState loading() => copyWith(status: StateStatus.loading);
-
   MunicipalityState success({
     required Map<DistrictValue, List<MunicipalityValue>>
         municipalitiesPerDistrict,

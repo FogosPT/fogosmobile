@@ -1,96 +1,57 @@
 import 'package:bloc/bloc.dart';
 import 'package:fogospt/features/fires/application/fires/fires_state.dart';
 import 'package:fogospt/features/fires/data/fire_service.dart';
+import 'package:warnings/state_management/base_state.dart';
 
 class FiresCubit extends Cubit<FiresState> {
   FireService service;
 
-  FiresCubit(this.service) : super(FiresStateInitial());
+  FiresCubit(this.service) : super(FiresState());
 
+  /// Fetches all the information for a fire
+  ///
+  /// TODO(FB): Better error handling.
+  ///
   Future<void> fetchAllFireInformation(String fireId) async {
-    emit(FiresStateLoading());
+    emit(state.loading());
 
-    try {
-      _updateFire(fireId);
-      _updateResources(fireId);
-      _updateHistoryStatuses(fireId);
-      _updateRCM(fireId);
-    } catch (e) {
-      emit(FiresStateFailed());
-    }
+    Future.wait([
+      _updateFire(fireId),
+      _updateResources(fireId),
+      _updateHistoryStatuses(fireId),
+      _updateRCM(fireId)
+    ]);
   }
 
   Future<void> _updateFire(String fireId) {
     return service.fetchFire(fireId).then(
-      (fire) {
-        if (state is FiresStateLoaded) {
-          emit(
-            (state as FiresStateLoaded).copyWith(
-              fire: fire,
-            ),
-          );
-        } else {
-          emit(
-            FiresStateLoaded(
-              fire: fire,
-            ),
-          );
-        }
-      },
-    );
+          (fire) => state.isSuccess
+              ? emit(state.success(fire: fire))
+              : emit(state.failure()),
+        );
   }
 
   Future<void> _updateResources(String fireId) {
     return service.fetchResources(fireId).then(
-      (resources) {
-        if (state is FiresStateLoaded) {
-          emit(
-            (state as FiresStateLoaded).copyWith(resources: resources),
-          );
-        } else {
-          emit(
-            FiresStateLoaded(
-              resources: resources,
-            ),
-          );
-        }
-      },
-    );
+          (resources) => state.isSuccess
+              ? emit(state.success(resources: resources))
+              : emit(state.failure()),
+        );
   }
 
   Future<void> _updateHistoryStatuses(String fireId) {
     return service.fetchHistoryStatuses(fireId).then(
-      (history) {
-        if (state is FiresStateLoaded) {
-          emit(
-            (state as FiresStateLoaded).copyWith(historyStatuses: history),
-          );
-        } else {
-          emit(
-            FiresStateLoaded(
-              historyStatuses: history,
-            ),
-          );
-        }
-      },
-    );
+          (history) => state.isSuccess
+              ? emit(state.success(historyStatuses: history))
+              : emit(state.failure()),
+        );
   }
 
   Future<void> _updateRCM(String fireId) {
     return service.fetchRCM(fireId).then(
-      (rcm) {
-        if (state is FiresStateLoaded) {
-          emit(
-            (state as FiresStateLoaded).copyWith(rcm: rcm),
-          );
-        } else {
-          emit(
-            FiresStateLoaded(
-              rcm: rcm,
-            ),
-          );
-        }
-      },
-    );
+          (rcm) => state.isSuccess
+              ? emit(state.success(rcm: rcm))
+              : emit(state.failure()),
+        );
   }
 }

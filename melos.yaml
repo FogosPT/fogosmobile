@@ -49,8 +49,14 @@ scripts:
   #   exec: dart fix . && dcm fix .
 
   build:
-    exec: dart run build_runner build -d
-    description: Run build runner on the projects
+    exec: dart run build_runner build
+    description: Run build runner on the projects and delete all dependencies
+    packageFilters:
+      dependsOn: build_runner
+
+  buildAll:
+    exec: dart run build_runner build --delete-conflicting-outputs
+    description: Run build runner on the projects and delete all dependencies
     packageFilters:
       dependsOn: build_runner
   

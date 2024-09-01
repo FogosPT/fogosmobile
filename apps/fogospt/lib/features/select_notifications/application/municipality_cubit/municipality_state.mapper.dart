@@ -22,6 +22,9 @@ class MunicipalityStateMapper extends ClassMapperBase<MunicipalityState> {
   @override
   final String id = 'MunicipalityState';
 
+  static StateStatus _$status(MunicipalityState v) => v.status;
+  static const Field<MunicipalityState, StateStatus> _f$status =
+      Field('status', _$status, opt: true, def: StateStatus.initial);
   static Map<DistrictValue, List<MunicipalityValue>>
       _$municipalitiesPerDistrict(MunicipalityState v) =>
           v.municipalitiesPerDistrict;
@@ -30,20 +33,17 @@ class MunicipalityStateMapper extends ClassMapperBase<MunicipalityState> {
       _f$municipalitiesPerDistrict = Field(
           'municipalitiesPerDistrict', _$municipalitiesPerDistrict,
           opt: true);
-  static StateStatus _$status(MunicipalityState v) => v.status;
-  static const Field<MunicipalityState, StateStatus> _f$status =
-      Field('status', _$status, opt: true, def: StateStatus.initial);
 
   @override
   final MappableFields<MunicipalityState> fields = const {
-    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
     #status: _f$status,
+    #municipalitiesPerDistrict: _f$municipalitiesPerDistrict,
   };
 
   static MunicipalityState _instantiate(DecodingData data) {
     return MunicipalityState(
-        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict),
-        status: data.dec(_f$status));
+        status: data.dec(_f$status),
+        municipalitiesPerDistrict: data.dec(_f$municipalitiesPerDistrict));
   }
 
   @override
@@ -105,8 +105,8 @@ abstract class MunicipalityStateCopyWith<$R, $In extends MunicipalityState,
           ObjectCopyWith<$R, List<MunicipalityValue>, List<MunicipalityValue>>>
       get municipalitiesPerDistrict;
   $R call(
-      {Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict,
-      StateStatus? status});
+      {StateStatus? status,
+      Map<DistrictValue, List<MunicipalityValue>>? municipalitiesPerDistrict});
   MunicipalityStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -127,17 +127,17 @@ class _MunicipalityStateCopyWithImpl<$R, $Out>
           (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(municipalitiesPerDistrict: v));
   @override
-  $R call({Object? municipalitiesPerDistrict = $none, StateStatus? status}) =>
+  $R call({StateStatus? status, Object? municipalitiesPerDistrict = $none}) =>
       $apply(FieldCopyWithData({
+        if (status != null) #status: status,
         if (municipalitiesPerDistrict != $none)
-          #municipalitiesPerDistrict: municipalitiesPerDistrict,
-        if (status != null) #status: status
+          #municipalitiesPerDistrict: municipalitiesPerDistrict
       }));
   @override
   MunicipalityState $make(CopyWithData data) => MunicipalityState(
+      status: data.get(#status, or: $value.status),
       municipalitiesPerDistrict: data.get(#municipalitiesPerDistrict,
-          or: $value.municipalitiesPerDistrict),
-      status: data.get(#status, or: $value.status));
+          or: $value.municipalitiesPerDistrict));
 
   @override
   MunicipalityStateCopyWith<$R2, MunicipalityState, $Out2> $chain<$R2, $Out2>(

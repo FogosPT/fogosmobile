@@ -1,5 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:warnings/state_management/state.dart';
+import 'package:warnings/state_management/base_state.dart';
 import 'package:warnings/state_management/state_status.dart';
 
 part 'selected_notifications_state.mapper.dart';

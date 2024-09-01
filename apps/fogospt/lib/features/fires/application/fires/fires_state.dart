@@ -3,42 +3,62 @@ import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/features/latest_warnings/domain/history_status.dart';
 import 'package:fogos_api/features/latest_warnings/domain/rcm.dart';
 import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
+import 'package:warnings/state_management/base_state.dart';
+import 'package:warnings/state_management/state_status.dart';
 
 part 'fires_state.mapper.dart';
 
 @MappableClass()
-sealed class FiresState with FiresStateMappable {}
-
-@MappableClass()
-class FiresStateInitial with FiresStateInitialMappable implements FiresState {
-  const FiresStateInitial();
-}
-
-@MappableClass()
-class FiresStateLoading with FiresStateLoadingMappable implements FiresState {
-  const FiresStateLoading();
-}
-
-@MappableClass()
-class FiresStateLoaded with FiresStateLoadedMappable implements FiresState {
+final class FiresState extends BaseState with FiresStateMappable {
   final Fire? fire;
-  final List<Resources>? resources;
-  final List<HistoryStatus>? historyStatuses;
-  final List<RCM>? rcm;
+  final List<Resources> resources;
+  final List<HistoryStatus> historyStatuses;
+  final List<RCM> rcm;
 
-  const FiresStateLoaded({
-    this.fire,
-    this.resources,
-    this.historyStatuses,
-    this.rcm,
-  });
+  FiresState({
+    super.status = StateStatus.initial,
+    Fire? fire,
+    List<Resources>? resources,
+    List<HistoryStatus>? historyStatuses,
+    List<RCM>? rcm,
+  })  : fire = fire,
+        resources = resources ?? [],
+        historyStatuses = historyStatuses ?? [],
+        rcm = rcm ?? [];
 
-  Resources? get latestResource => resources?.last;
-  HistoryStatus? get latestHistoryStatus => historyStatuses?.last;
-  RCM? get latestRCM => rcm?.last;
+  /// Returns the latest resource from the resources list if the state is success and the resources list is not empty or null
+  ///
+  /// Given the API the latest resource is the last element of the resources list
+  ///
+  /// Throws an exception if the state is not success, or the resources list is empty or null
+  ///
+  /// TODO(FB): Add specific exception
+  ///
+  Resources get latestResource => switch (this) {
+        _ when isSuccess && resources.isNotEmpty => resources.last,
+        _ => throw Exception('No resources available'),
+      };
+
+  RCM get latestRCM => switch (this) {
+        _ when isSuccess && rcm.isNotEmpty => rcm.last,
+        _ => throw Exception('No RCM available'),
+      };
 }
 
-@MappableClass()
-class FiresStateFailed with FiresStateFailedMappable implements FiresState {
-  const FiresStateFailed();
+extension FiresStateExtension on FiresState {
+  FiresState failure() => copyWith(status: StateStatus.failure);
+  FiresState loading() => copyWith(status: StateStatus.loading);
+  FiresState success({
+    Fire? fire,
+    List<Resources>? resources,
+    List<HistoryStatus>? historyStatuses,
+    List<RCM>? rcm,
+  }) =>
+      copyWith(
+        status: StateStatus.success,
+        fire: fire,
+        resources: resources,
+        historyStatuses: historyStatuses,
+        rcm: rcm,
+      );
 }

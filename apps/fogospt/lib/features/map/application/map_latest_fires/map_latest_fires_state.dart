@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
-import 'package:warnings/state_management/state.dart';
+import 'package:warnings/state_management/base_state.dart';
 import 'package:warnings/state_management/state_status.dart';
 
 part 'map_latest_fires_state.mapper.dart';

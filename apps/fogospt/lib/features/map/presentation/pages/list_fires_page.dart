@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_state.dart';
-import 'package:warnings/state_management/state.dart';
+import 'package:warnings/state_management/base_state.dart';
 import 'package:warnings/utils/extensions/context_extensions.dart';
 
 class ListFiresPage extends StatelessWidget {

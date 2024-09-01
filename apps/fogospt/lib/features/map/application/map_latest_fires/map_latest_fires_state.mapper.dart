@@ -25,7 +25,7 @@ class MapLatestFiresStateMapper extends ClassMapperBase<MapLatestFiresState> {
       Field('status', _$status, opt: true, def: StateStatus.initial);
   static List<Fire> _$fires(MapLatestFiresState v) => v.fires;
   static const Field<MapLatestFiresState, List<Fire>> _f$fires =
-      Field('fires', _$fires, opt: true, def: const []);
+      Field('fires', _$fires, opt: true);
 
   @override
   final MappableFields<MapLatestFiresState> fields = const {
@@ -112,8 +112,11 @@ class _MapLatestFiresStateCopyWithImpl<$R, $Out>
       ListCopyWith($value.fires, (v, t) => ObjectCopyWith(v, $identity, t),
           (v) => call(fires: v));
   @override
-  $R call({StateStatus? status, List<Fire>? fires}) => $apply(FieldCopyWithData(
-      {if (status != null) #status: status, if (fires != null) #fires: fires}));
+  $R call({StateStatus? status, Object? fires = $none}) =>
+      $apply(FieldCopyWithData({
+        if (status != null) #status: status,
+        if (fires != $none) #fires: fires
+      }));
   @override
   MapLatestFiresState $make(CopyWithData data) => MapLatestFiresState(
       status: data.get(#status, or: $value.status),

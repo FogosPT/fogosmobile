@@ -1,6 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
-import 'package:warnings/state_management/state.dart';
+import 'package:warnings/state_management/base_state.dart';
 import 'package:warnings/state_management/state_status.dart';
 
 part 'municipalities_state.mapper.dart';

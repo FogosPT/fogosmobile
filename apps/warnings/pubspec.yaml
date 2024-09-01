@@ -30,7 +30,8 @@ dependencies:
   wolt_modal_sheet: ^0.8.0
 
   svg_flutter: 
-  warnings_core: 
+
+  warnings_core:
 
   flutter_localizations:
     sdk: flutter

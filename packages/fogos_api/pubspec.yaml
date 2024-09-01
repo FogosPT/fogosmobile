@@ -16,8 +16,8 @@ dependencies:
 
   sentry: ^8.8.0
   sentry_flutter: ^8.8.0
-  warnings_api: 0.0.3
-  warnings_core: 0.0.1
+  warnings_api:
+  warnings_core: 
 
 dev_dependencies:
   flutter_test:
@@ -27,5 +27,3 @@ dev_dependencies:
   freezed: ^2.5.2
   json_serializable: ^6.7.1
   mockito: ^5.4.4
-
-flutter:

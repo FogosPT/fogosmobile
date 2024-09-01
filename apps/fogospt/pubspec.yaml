@@ -33,12 +33,13 @@ dependencies:
   sentry_flutter: ^8.8.0
   sentry: ^8.8.0
   shared_preferences: ^2.2.3
-  warnings_core:
-  warnings:
   wolt_modal_sheet: ^0.8.0
   flutter_localizations:
     sdk: flutter
   flex_color_scheme: ^7.3.1
+
+  warnings_core:
+  warnings: 
   
 dev_dependencies:
   flutter_test:

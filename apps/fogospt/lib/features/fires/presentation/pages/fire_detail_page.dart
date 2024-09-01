@@ -31,12 +31,10 @@ class FireDetailPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => FiresCubit(
         FireService.FireService(getIt<FiresRepository>()),
-      ),
+      )..fetchAllFireInformation(fireId),
       child: BlocBuilder<FiresCubit, FiresState>(
+        buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
-          if (state.isInitial) {
-            context.read<FiresCubit>().fetchAllFireInformation(fireId);
-          }
           return switch (state) {
             _ when state.isSuccess => FireDetailPageViewSuccess(),
             _ when state.isFailure => FireDetailPageViewFailed(),

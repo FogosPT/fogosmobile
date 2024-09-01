@@ -1199,7 +1199,7 @@ packages:
       path: "../warnings"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.3+1"
   warnings_api:
     dependency: "direct overridden"
     description:

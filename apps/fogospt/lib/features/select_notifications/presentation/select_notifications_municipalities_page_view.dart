@@ -5,7 +5,8 @@ import 'package:fogospt/features/select_notifications/application/municipalities
 import 'package:fogospt/features/select_notifications/application/notifications_selected_district_cubit/notifications_selected_district_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_state.dart';
-import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_per_district_page.dart';
+import 'package:fogospt/routing/app_go_router.dart';
+import 'package:go_router/go_router.dart';
 
 class SelectNotificationsMunicipalitiesPageView extends StatelessWidget {
   @override
@@ -31,14 +32,7 @@ class SelectNotificationsMunicipalitiesPageView extends StatelessWidget {
                             .read<NotificationsSelectedDistrictCubit>()
                             .selectDistrict(district);
 
-                        ///TODO(FB) - Use GoRouter
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return NotificationsMunicipalitiesPerDistrictPage();
-                            },
-                          ),
-                        );
+                        context.go(AppRoutes.notifications_per_municipality);
                       },
                     );
                   },

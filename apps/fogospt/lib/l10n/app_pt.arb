@@ -2,6 +2,7 @@
     "@@locale": "pt",
     "fogospt": "Fogos.pt",
     "fires_map_page_notifications": "Notificações",
+    "fires_map_page_notifications_list_municipalities": "Notificações por Concelho",
     "fires_map_page_error": "Notifications",
     "fires_map_page_more_informations": "mais informações",
     "fires_map_page_local": "local",

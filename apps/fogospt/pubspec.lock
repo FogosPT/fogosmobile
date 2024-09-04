@@ -908,14 +908,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
-  responsive_framework:
-    dependency: "direct main"
-    description:
-      name: responsive_framework
-      sha256: "52367ab0c3479b3a5342dec3b74a3d47c4cc1b45bb5d38f720c2e002ebccd4ee"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   sentry:
     dependency: "direct main"
     description:

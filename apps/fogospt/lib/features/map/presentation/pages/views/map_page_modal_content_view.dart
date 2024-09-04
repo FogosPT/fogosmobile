@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogospt/constants/assets.dart';
+import 'package:fogospt/routing/app_go_router.dart';
 import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:warnings/warnings.dart';
@@ -72,7 +73,7 @@ class MapPageModalContentView extends StatelessWidget {
 
   void _navigateToDetail(BuildContext context, String fireId) {
     /// Navigates to detail.
-    context.go('/fire-detail', extra: fireId);
+    context.go(AppRoutes.fireDetail, extra: fireId);
 
     /// Pops the bottom sheet opened.
     context.pop();

@@ -25,7 +25,6 @@ dependencies:
   go_router: ^14.2.1
   intl: any
   latlong2: ^0.9.1
-  responsive_framework: ^1.4.0
   sentry: ^8.8.0
   wolt_modal_sheet: ^0.8.0
 

@@ -2,6 +2,7 @@
     "@@locale": "en",
     "fogospt": "Fogos.pt",
     "fires_map_page_notifications": "Notificações",
+    "fires_map_page_notifications_list_municipalities": "Notificações por Concelho",
     "fires_map_page_error": "Notifications",
     "fires_map_page_more_informations": "mais informações",
     "fires_map_page_local": "local",
@@ -13,6 +14,7 @@
     "fires_map_page_means_of_transportation": "means",
     "fires_map_page_start": "Start",
     "partners_page_title": "Partners",
+    "fire_detail_means":"Types sent",
     "select_notifications_per_municipality": "Notificatonn per Municipality",
     "select_notifications_per_municipality_error": "Falhou o descarregar da informação do Concelho",
     "@helloWorld": {

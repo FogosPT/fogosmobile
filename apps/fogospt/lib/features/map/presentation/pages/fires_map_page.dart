@@ -11,6 +11,7 @@ import 'package:fogospt/features/map/presentation/pages/views/map_page_initial_v
 import 'package:fogospt/features/map/presentation/pages/views/map_page_loading_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_modal_content_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_view.dart';
+import 'package:fogospt/routing/app_go_router.dart';
 import 'package:fogospt/routing/message_watcher.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 import 'package:go_router/go_router.dart';
@@ -31,11 +32,10 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
 
     processMessage = (message) {
       final fireId = message.data['fireId'];
-
-      if (fireId != null) {
-        context.go('/fire-detail', extra: fireId);
+      if (fireId == null) {
+        context.go(AppRoutes.root);
       } else {
-        context.go('/');
+        context.go(AppRoutes.fireDetail, extra: fireId);
       }
 
       NotificationHelpers.showNotification(message);
@@ -52,7 +52,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       ),
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.all(8),
           children: <Widget>[
             /// Header
             DrawerHeader(
@@ -62,14 +62,20 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
               ),
             ),
 
-            ListTile(
-              title: Text(
+            ElevatedButton(
+              onPressed: () =>
+                  context.go(AppRoutes.notifications_list_municipalities),
+              child: Text(
+                context.l10n.fires_map_page_notifications_list_municipalities,
+                style: context.textTheme.bodyLarge,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => context.go(AppRoutes.notifications_generic),
+              child: Text(
                 context.l10n.fires_map_page_notifications,
                 style: context.textTheme.bodyLarge,
               ),
-              onTap: () {
-                context.go('/notifications');
-              },
             ),
           ],
         ),

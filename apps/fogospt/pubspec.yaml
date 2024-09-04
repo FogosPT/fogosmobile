@@ -29,7 +29,6 @@ dependencies:
   json_annotation: ^4.9.0
   latlong2: ^0.9.1
   mason: ^0.1.0-dev.57
-  responsive_framework: ^1.4.0
   sentry_flutter: ^8.8.0
   sentry: ^8.8.0
   shared_preferences: ^2.2.3

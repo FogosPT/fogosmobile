@@ -8,12 +8,16 @@ part 'notifications_selected_district_state.mapper.dart';
 @MappableClass()
 final class DistrictSelectedState extends BaseState
     with DistrictSelectedStateMappable {
-  final DistrictValue? district;
+  final DistrictValue? _district;
 
   DistrictSelectedState({
-    this.district,
+    DistrictValue? district,
     super.status = StateStatus.initial,
-  });
+  }) : _district = district;
+
+  DistrictValue? get district {
+    return _district;
+  }
 }
 
 extension DistrictSelectedStateExtension on DistrictSelectedState {

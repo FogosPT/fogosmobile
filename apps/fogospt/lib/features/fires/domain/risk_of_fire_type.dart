@@ -28,6 +28,7 @@ enum RiskOfFireType {
     };
   }
 
+  /// TODO(FB): Add translations
   String get text {
     return switch (this) {
       RiskOfFireType.reduced => "Reduzido",

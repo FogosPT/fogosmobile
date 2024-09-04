@@ -1,5 +1,5 @@
 import 'package:flutter_map/flutter_map.dart';
-import 'package:fogospt/constants/env.dart';
+import 'package:warnings_core/constants/env.dart';
 import 'package:latlong2/latlong.dart';
 
 const LatLng centerOfPortugal = LatLng(39.3999, -8.2245);

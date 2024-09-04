@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:warnings_core/constants/strings.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/notifications_selected_district_cubit/notifications_selected_district_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
@@ -21,12 +22,8 @@ class NotificationsMunicipalitiesPerDistrictPage extends StatelessWidget {
     final currentDistrict =
         municipalityCubit.state.municipalitiesPerDistrict[selectedDistrit] ??
             [];
-    final districtName = selectedDistrit?.name;
+    String districtName = selectedDistrit?.name ?? Strings.empty;
 
-    if (districtName == null) {
-      /// TODO(FB): What do to here?
-      return Container();
-    }
     return NotificationsMunicipalitiesPerDistrictPageView(
       currentDistrict: currentDistrict,
       activeMunicipalities: activeMunicipalities,

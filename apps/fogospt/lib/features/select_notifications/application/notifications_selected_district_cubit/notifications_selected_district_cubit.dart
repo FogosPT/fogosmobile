@@ -6,6 +6,8 @@ class NotificationsSelectedDistrictCubit extends Cubit<DistrictSelectedState> {
   NotificationsSelectedDistrictCubit() : super(DistrictSelectedState());
 
   void selectDistrict(DistrictValue district) {
-    emit(state.success(district: district));
+    emit(
+      state.success(district: district),
+    );
   }
 }

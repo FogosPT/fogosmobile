@@ -5,7 +5,6 @@ import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/constants/colors.dart';
-import 'package:fogospt/constants/date_formats.dart';
 import 'package:fogospt/features/fires/application/fires/fires_cubit.dart';
 import 'package:fogospt/features/fires/application/fires/fires_state.dart';
 import 'package:fogospt/features/fires/data/fire_service.dart';
@@ -18,6 +17,7 @@ import 'package:fogospt/features/fires/presentation/widgets/warning_chart_labels
 import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:warnings/warnings.dart';
+import 'package:warnings_core/constants/date_formats.dart';
 
 class FireDetailPage extends StatelessWidget {
   final String fireId;
@@ -96,7 +96,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppFogosTitleWidget(title: "LOCAL"),
+              AppFogosTitleWidget(title: context.l10n.fires_map_page_local),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) => previous.fire != current.fire,
                 builder: (context, state) => StateWidget.simpleWithConditionals(
@@ -112,7 +112,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// Resources
-              AppFogosTitleWidget(title: "meios"),
+              AppFogosTitleWidget(title: context.l10n.fire_detail_means),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) =>
                     previous.latestResource != current.latestResource,
@@ -208,7 +208,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 10),
 
               /// Inicio
-              AppFogosTitleWidget(title: "início"),
+              AppFogosTitleWidget(title: context.l10n.fires_map_page_start),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) => previous.fire != current.fire,
                 builder: (context, state) => StateWidget.simpleWithConditionals(
@@ -223,7 +223,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// Natureza
-              AppFogosTitleWidget(title: "natureza"),
+              AppFogosTitleWidget(title: context.l10n.fires_map_page_nature),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) => previous.fire != current.fire,
                 builder: (context, state) => StateWidget.simpleWithConditionals(
@@ -243,7 +243,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               // SizedBox(height: 20),
 
               /// Risco de Incêndio
-              AppFogosTitleWidget(title: "risco de incêndio"),
+              AppFogosTitleWidget(
+                  title: context.l10n.fires_map_page_risk_of_fire),
 
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) =>
@@ -256,7 +257,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// ESTADO
-              AppFogosTitleWidget(title: "estado"),
+              AppFogosTitleWidget(title: context.l10n.fires_map_page_state),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) =>
                     previous.historyStatuses != current.historyStatuses,
@@ -307,14 +308,17 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               Visibility(
                 // visible: kDebugMode,
                 visible: false,
-                child: AppFogosTitleWidget(title: "meteo"),
+                child: AppFogosTitleWidget(
+                    title: context.l10n.fires_map_page_meteo),
               ),
 
               /// PARTILHAR
               Visibility(
                 // visible: kDebugMode,
                 visible: false,
-                child: AppFogosTitleWidget(title: "partilhar"),
+                child: AppFogosTitleWidget(
+                  title: context.l10n.fires_map_page_share,
+                ),
               ),
             ],
           ),
@@ -357,7 +361,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
   }
 
   SideTitles daysOfWeekBottomTitle() {
-    // final data = getIt<WarningFlChartData>();
+    /// If we need to show more information we can use WarningFlChartData
+    /// final data = getIt<WarningFlChartData>();
     return SideTitles(
       showTitles: false,
       getTitlesWidget: (value, meta) {

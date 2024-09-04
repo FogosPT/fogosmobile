@@ -15,7 +15,7 @@ import 'package:fogospt/routing/message_watcher.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 import 'package:go_router/go_router.dart';
 import 'package:warnings/warnings.dart';
-import 'package:warnings_core/warnings_core.dart';
+import 'package:warnings_core/logger.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class FiresMapPage extends StatefulWidget {

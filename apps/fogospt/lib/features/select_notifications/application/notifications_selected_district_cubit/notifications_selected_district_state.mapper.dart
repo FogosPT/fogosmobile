@@ -22,22 +22,22 @@ class DistrictSelectedStateMapper
   @override
   final String id = 'DistrictSelectedState';
 
-  static DistrictValue? _$district(DistrictSelectedState v) => v.district;
-  static const Field<DistrictSelectedState, DistrictValue> _f$district =
-      Field('district', _$district, opt: true);
+  static DistrictValue? _$_district(DistrictSelectedState v) => v._district;
+  static const Field<DistrictSelectedState, DistrictValue> _f$_district =
+      Field('_district', _$_district, key: 'district', opt: true);
   static StateStatus _$status(DistrictSelectedState v) => v.status;
   static const Field<DistrictSelectedState, StateStatus> _f$status =
       Field('status', _$status, opt: true, def: StateStatus.initial);
 
   @override
   final MappableFields<DistrictSelectedState> fields = const {
-    #district: _f$district,
+    #_district: _f$_district,
     #status: _f$status,
   };
 
   static DistrictSelectedState _instantiate(DecodingData data) {
     return DistrictSelectedState(
-        district: data.dec(_f$district), status: data.dec(_f$status));
+        district: data.dec(_f$_district), status: data.dec(_f$status));
   }
 
   @override
@@ -97,7 +97,7 @@ abstract class DistrictSelectedStateCopyWith<
     $R,
     $In extends DistrictSelectedState,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  DistrictValueCopyWith<$R, DistrictValue, DistrictValue>? get district;
+  DistrictValueCopyWith<$R, DistrictValue, DistrictValue>? get _district;
   $R call({DistrictValue? district, StateStatus? status});
   DistrictSelectedStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
@@ -112,8 +112,8 @@ class _DistrictSelectedStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<DistrictSelectedState> $mapper =
       DistrictSelectedStateMapper.ensureInitialized();
   @override
-  DistrictValueCopyWith<$R, DistrictValue, DistrictValue>? get district =>
-      $value.district?.copyWith.$chain((v) => call(district: v));
+  DistrictValueCopyWith<$R, DistrictValue, DistrictValue>? get _district =>
+      $value._district?.copyWith.$chain((v) => call(district: v));
   @override
   $R call({Object? district = $none, StateStatus? status}) =>
       $apply(FieldCopyWithData({
@@ -122,7 +122,7 @@ class _DistrictSelectedStateCopyWithImpl<$R, $Out>
       }));
   @override
   DistrictSelectedState $make(CopyWithData data) => DistrictSelectedState(
-      district: data.get(#district, or: $value.district),
+      district: data.get(#district, or: $value._district),
       status: data.get(#status, or: $value.status));
 
   @override

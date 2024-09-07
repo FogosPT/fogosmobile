@@ -8,24 +8,26 @@ class FiresCubit extends Cubit<FiresState> {
   FiresCubit(this.service) : super(FiresState());
 
   /// Fetches all the information for a fire
-  ///
-  /// TODO(FB): Better error handling.
-  ///
   Future<void> fetchAllFireInformation(String fireId) async {
     emit(state.loading());
 
-    final fire = await service.fetchFire(fireId);
-    final resources = await service.fetchResources(fireId);
-    final history = await service.fetchHistoryStatuses(fireId);
-    final rcm = await service.fetchRCM(fireId);
+    try {
+      final fire = await service.fetchFire(fireId);
+      final resources = await service.fetchResources(fireId);
+      final history = await service.fetchHistoryStatuses(fireId);
+      final rcm = await service.fetchRCM(fireId);
 
-    emit(
-      state.success(
-        fire: fire,
-        resources: resources,
-        historyStatuses: history,
-        rcm: rcm,
-      ),
-    );
+      emit(
+        state.success(
+          fire: fire,
+          resources: resources,
+          historyStatuses: history,
+          rcm: rcm,
+        ),
+      );
+    } catch (e) {
+      emit(state.error(
+          errorMessage: 'Failed to fetch fire information: ${e.toString()}'));
+    }
   }
 }

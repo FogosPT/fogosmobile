@@ -21,6 +21,7 @@ final class FiresState extends BaseState with FiresStateMappable {
     List<Resources>? resources,
     List<HistoryStatus>? historyStatuses,
     List<RCM>? rcm,
+    String? errorMessage,
   })  : fire = fire,
         resources = resources ?? [],
         historyStatuses = historyStatuses ?? [],
@@ -61,4 +62,11 @@ extension FiresStateExtension on FiresState {
         historyStatuses: historyStatuses,
         rcm: rcm,
       );
+
+  FiresState error({required String errorMessage}) {
+    return FiresState(
+      status: StateStatus.failure,
+      errorMessage: errorMessage,
+    );
+  }
 }

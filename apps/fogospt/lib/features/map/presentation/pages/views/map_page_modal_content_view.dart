@@ -73,7 +73,7 @@ class MapPageModalContentView extends StatelessWidget {
 
   void _navigateToDetail(BuildContext context, String fireId) {
     /// Navigates to detail.
-    context.go(AppRoutes.fireDetail, extra: fireId);
+    FireDetailRoute(fireId: fireId).go(context);
 
     /// Pops the bottom sheet opened.
     context.pop();

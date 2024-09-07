@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:warnings_core/constants/strings.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/notifications_selected_district_cubit/notifications_selected_district_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_per_district_page_view.dart';
+import 'package:warnings_core/constants/strings.dart';
 
-class NotificationsMunicipalitiesPerDistrictPage extends StatelessWidget {
-  const NotificationsMunicipalitiesPerDistrictPage({super.key});
+class SelectNotificationsMunicipalitiesPerDistrictPage extends StatelessWidget {
+  const SelectNotificationsMunicipalitiesPerDistrictPage({super.key});
 
   @override
   Widget build(BuildContext context) {

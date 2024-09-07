@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fogospt/main.dart';
 
-class SelectNotificationsGeneralPage extends StatelessWidget {
-  const SelectNotificationsGeneralPage({super.key});
+class SelectNotificationsGenericPage extends StatelessWidget {
+  const SelectNotificationsGenericPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,6 @@ import 'package:fogospt/features/map/presentation/pages/views/map_page_view.dart
 import 'package:fogospt/routing/app_go_router.dart';
 import 'package:fogospt/routing/message_watcher.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
-import 'package:go_router/go_router.dart';
 import 'package:warnings/warnings.dart';
 import 'package:warnings_core/logger.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
@@ -31,11 +30,11 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
     setupFirebaseMessaging();
 
     processMessage = (message) {
-      final fireId = message.data['fireId'];
+      var fireId = message.data['fireId'];
       if (fireId == null) {
-        context.go(AppRoutes.root);
+        RootRoute().go(context);
       } else {
-        context.go(AppRoutes.fireDetail, extra: fireId);
+        FireDetailRoute(fireId: fireId).go(context);
       }
 
       NotificationHelpers.showNotification(message);
@@ -64,14 +63,14 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
 
             ElevatedButton(
               onPressed: () =>
-                  context.go(AppRoutes.notifications_list_municipalities),
+                  NotificationsListMunicipalitiesRoute().go(context),
               child: Text(
                 context.l10n.fires_map_page_notifications_list_municipalities,
                 style: context.textTheme.bodyLarge,
               ),
             ),
             ElevatedButton(
-              onPressed: () => context.go(AppRoutes.notifications_generic),
+              onPressed: () => NotificationsGenericRoute().go(context),
               child: Text(
                 context.l10n.fires_map_page_notifications,
                 style: context.textTheme.bodyLarge,

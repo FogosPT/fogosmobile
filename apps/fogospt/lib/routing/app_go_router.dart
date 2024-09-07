@@ -7,126 +7,127 @@ import 'package:fogospt/features/select_notifications/presentation/select_notifi
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_page.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_per_district_page.dart';
 import 'package:go_router/go_router.dart';
-import 'package:warnings_core/warnings_core.dart';
 
-class AppRoutes {
-  static final String root = _AppRouting.root.navigationName;
-  static final String fireDetail = _AppRouting.fireDetail.navigationName;
+part 'app_go_router.g.dart';
 
-  static final String about = _AppRouting.about.navigationName;
+// class AppRoutes {
+//   static final String root = _AppRouting.root.navigationName;
+//   static final String fireDetail = _AppRouting.fireDetail.navigationName;
 
-  static final String partners = _AppRouting.partners.navigationName;
+//   static final String about = _AppRouting.about.navigationName;
 
-  static final String notifications_per_municipality =
-      _AppRouting.notifications_per_municipality.navigationName;
+//   static final String partners = _AppRouting.partners.navigationName;
 
-  static final String notifications_list_municipalities =
-      _AppRouting.notifications_list_municipalities.navigationName;
+//   static final String notifications_per_municipality =
+//       _AppRouting.notifications_per_municipality.navigationName;
 
-  static final String notifications_generic =
-      _AppRouting.notifications_generic.navigationName;
-}
+//   static final String notifications_list_municipalities =
+//       _AppRouting.notifications_list_municipalities.navigationName;
 
-class _AppRouting {
-  static final WarningCoreRoute root = WarningCoreRoute(
-    navigationName: "root",
-    path: "/",
-  );
+//   static final String notifications_generic =
+//       _AppRouting.notifications_generic.navigationName;
+// }
 
-  static final WarningCoreRoute fireDetail = WarningCoreRoute(
-    navigationName: '/fire-detail',
-    path: 'fire-detail',
-  );
+// @TypedGoRoute<HomeScreenRoute>(
+//   path: '/',
+//   routes: [
+//     TypedGoRoute<SongRoute>(
+//       path: 'song/:id',
+//     )
+//   ],
+// )
 
-  static final WarningCoreRoute about = WarningCoreRoute(
-    navigationName: '/about',
-    path: 'about',
-  );
+//==============================================================================
+// Long comment divider
+//==============================================================================
 
-  static final WarningCoreRoute partners = WarningCoreRoute(
-    navigationName: '/partners',
-    path: 'partners',
-  );
-
-  static final WarningCoreRoute notifications_list_municipalities =
-      WarningCoreRoute(
-    navigationName: '/notifications_list_municipalities',
-    path: 'notifications_list_municipalities',
-  );
-
-  static final WarningCoreRoute notifications_generic = WarningCoreRoute(
-    navigationName: '/notifications_generic',
-    path: 'notifications_generic',
-  );
-
-  static final WarningCoreRoute notifications_per_municipality =
-      WarningCoreRoute(
-    navigationName: '/notifications_per_municipality',
-    path: 'notifications_per_municipality',
-  );
-}
-
-final app_go_router = GoRouter(
+@TypedGoRoute<RootRoute>(
+  path: '/',
   routes: [
-    GoRoute(
-      // path: _AppRouting.root.route,
-      path: '/',
-      builder: (context, state) => FiresMapPage(),
-      routes: [
-        GoRoute(
-          path: _AppRouting.fireDetail.path,
-          builder: (context, state) {
-            if (state.extra is! String) {
-              throw Exception('Invalid fire id');
-            }
-
-            final fireId = state.extra as String;
-            return FireDetailPage(fireId: fireId);
-          },
-        ),
-        GoRoute(
-          path: _AppRouting.about.path,
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('About'),
-              ),
-              body: const Center(
-                child: Text('About'),
-              ),
-            );
-          },
-        ),
-        GoRoute(
-          path: _AppRouting.partners.path,
-          builder: (context, state) {
-            return PartnersPage(
-              partners: [
-                partnerMapbox,
-                partnerOfficelan,
-                partnerFundacaoLapalobo,
-              ],
-            );
-          },
-        ),
-        GoRoute(
-          path: _AppRouting.notifications_list_municipalities.path,
-          builder: (context, state) => SelectNotificationsMunicipalitiesPage(),
-          routes: [
-            GoRoute(
-              path: _AppRouting.notifications_per_municipality.path,
-              builder: (context, state) =>
-                  NotificationsMunicipalitiesPerDistrictPage(),
-            )
-          ],
-        ),
-        GoRoute(
-          path: _AppRouting.notifications_generic.path,
-          builder: (context, state) {
-            return SelectNotificationsGeneralPage();
-          },
-        )
-      ],
+    TypedGoRoute<FireDetailRoute>(
+      path: 'fire-detail',
+    ),
+    // TypedGoRoute<AboutRoute>(
+    //   path: 'about',
+    // ),
+    TypedGoRoute<PartnersRoute>(
+      path: 'partners',
+    ),
+    TypedGoRoute<NotificationsListMunicipalitiesRoute>(
+      path: 'notifications_list_municipalities',
+    ),
+    TypedGoRoute<NotificationsGenericRoute>(
+      path: 'notifications_generic',
+    ),
+    TypedGoRoute<NotificationsPerMunicipalityRoute>(
+      path: 'notifications_per_municipality',
     ),
   ],
-);
+)
+class RootRoute extends GoRouteData {
+  const RootRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => FiresMapPage();
+}
+
+@immutable
+class FireDetailRoute extends GoRouteData {
+  final String fireId;
+  const FireDetailRoute({
+    required this.fireId,
+  });
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    if (state.extra == null || state.extra is! String) {
+      throw Exception('Invalid fire ID');
+    } else {
+      String fireId = state.extra as String;
+      return FireDetailPage(
+        fireId: fireId,
+      );
+    }
+  }
+}
+
+@immutable
+class PartnersRoute extends GoRouteData {
+  const PartnersRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => PartnersPage(
+        partners: [
+          partnerMapbox,
+          partnerOfficelan,
+          partnerFundacaoLapalobo,
+        ],
+      );
+}
+
+@immutable
+class NotificationsListMunicipalitiesRoute extends GoRouteData {
+  const NotificationsListMunicipalitiesRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      SelectNotificationsMunicipalitiesPage();
+}
+
+@immutable
+class NotificationsGenericRoute extends GoRouteData {
+  const NotificationsGenericRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      SelectNotificationsGenericPage();
+}
+
+@immutable
+class NotificationsPerMunicipalityRoute extends GoRouteData {
+  const NotificationsPerMunicipalityRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      SelectNotificationsMunicipalitiesPerDistrictPage();
+}

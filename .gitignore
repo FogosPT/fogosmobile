@@ -206,3 +206,6 @@ apps/fogospt/.dart_tool/package_config_subset
 apps/fogospt/.dart_tool/package_config_subset
 apps/fogospt/lib/l10n/l10n-untranslated-messages-file.txt
 apps/fogospt/.dart_tool/package_config_subset
+apps/fogospt/.dart_tool/package_config_subset
+apps/fogospt/ios/Flutter/flutter_export_environment.sh
+apps/fogospt/ios/Flutter/Generated.xcconfig

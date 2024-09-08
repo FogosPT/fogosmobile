@@ -26,22 +26,19 @@ class NotificationsMunicipalitiesPerDistrictPageView extends StatelessWidget {
         itemBuilder: (context, index) {
           final municipality = currentDistrict[index];
 
-          return ListTile(
+          return SwitchListTile(
             title: Text(municipality.value.name),
-            trailing: Checkbox(
-              value: activeMunicipalities.contains(municipality.key),
-              onChanged: (value) {
-                if (value == null) return;
-                final municipalityCubit = context.read<MunicipalitiesCubit>();
-                final notificationCubit =
-                    context.read<SelectedNotificationsCubit>();
-                notificationCubit.toggleNotification(
-                  municipality: municipality,
-                  toggleValue: value,
-                  municipalityCubit: municipalityCubit,
-                );
-              },
-            ),
+            value: activeMunicipalities.contains(municipality.key),
+            onChanged: (value) {
+              final municipalityCubit = context.read<MunicipalitiesCubit>();
+              final notificationCubit =
+                  context.read<SelectedNotificationsCubit>();
+              notificationCubit.toggleNotification(
+                municipality: municipality,
+                toggleValue: value,
+                municipalityCubit: municipalityCubit,
+              );
+            },
           );
         },
       ),

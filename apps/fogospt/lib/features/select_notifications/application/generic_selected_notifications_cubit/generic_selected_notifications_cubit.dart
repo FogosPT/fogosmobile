@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:fogospt/features/select_notifications/application/generic_notifications_manager.dart';
 import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_state.dart';
 import 'package:fogospt/features/select_notifications/data/generic_shared_preferences.dart';
 import 'package:fogospt/main.dart';
@@ -35,11 +36,13 @@ class GenericSelectedNotificationsCubit
     try {
       for (String topic in appNotificationTopics.keys) {
         _topicsStatus[topic] =
-            await GenericNotificationPreferences.getTopicSubscription(
-          topic: topic,
+            await GenericNotificationPreferences.loadTopicNotificationKey(
+          key: topic,
         );
       }
-      emit(state.success(notificationsStatus: _topicsStatus));
+      emit(state.success(
+        notificationsStatus: _topicsStatus,
+      ));
     } catch (e) {
       emit(state.failure());
     }
@@ -60,28 +63,35 @@ class GenericSelectedNotificationsCubit
   }
 
   /// Handle the subscription to the topic
-  Future<void> handleSubscription(
-    String topic,
-    bool isSubscribing,
-  ) async {
+  Future<void> toggleNotification({
+    required String topic,
+    required bool toggleValue,
+  }) async {
     emit(state.loading());
     try {
-      /// Toggle the subscription to the topic in Firebase
-      await toggleFirebaseMessageByTopic(
-        topic: topic,
-        toggleValue: isSubscribing,
-      );
-
       /// Toggle the subscription to the topic in the local storage
-      await GenericNotificationPreferences.saveTopicSubscription(
-        topic: topic,
-        isSubscribed: isSubscribing,
+      final result =
+          await GenericNotificationPreferences.saveTopicNotificationKey(
+        key: topic,
+        value: toggleValue,
       );
 
-      if (_topicsStatus[topic] != isSubscribing) {
-        _topicsStatus[topic] = isSubscribing;
+      if (_topicsStatus[topic] != toggleValue) {
+        _topicsStatus[topic] = toggleValue;
       }
-      emit(state.success(notificationsStatus: _topicsStatus));
+
+      if (result) {
+        GenericNotificationsManager.toggleNotification(
+          topic: topic,
+          enabled: toggleValue,
+        );
+      }
+
+      emit(
+        state.success(
+          notificationsStatus: _topicsStatus,
+        ),
+      );
     } catch (e) {
       log('Error toggling subscription for $topic: $e');
       emit(state.failure());

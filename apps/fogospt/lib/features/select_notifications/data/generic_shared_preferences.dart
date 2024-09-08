@@ -1,16 +1,17 @@
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GenericNotificationPreferences {
-  static Future<bool> saveTopicSubscription({
-    required String topic,
-    required bool isSubscribed,
+  static Future<bool> saveTopicNotificationKey({
+    required String key,
+    required bool value,
   }) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.setBool(topic, isSubscribed);
+    final SharedPreferences prefs = await GetIt.I.getAsync<SharedPreferences>();
+    return await prefs.setBool(key, value);
   }
 
-  static Future<bool> getTopicSubscription({required String topic}) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(topic) ?? false;
+  static Future<bool> loadTopicNotificationKey({required String key}) async {
+    final SharedPreferences prefs = await GetIt.I.getAsync<SharedPreferences>();
+    return prefs.getBool(key) ?? false;
   }
 }

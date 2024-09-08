@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
 import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
 
@@ -30,14 +29,10 @@ class NotificationsMunicipalitiesPerDistrictPageView extends StatelessWidget {
             title: Text(municipality.value.name),
             value: activeMunicipalities.contains(municipality.key),
             onChanged: (value) {
-              final municipalityCubit = context.read<MunicipalitiesCubit>();
-              final notificationCubit =
-                  context.read<SelectedNotificationsCubit>();
-              notificationCubit.toggleNotification(
-                municipality: municipality,
-                toggleValue: value,
-                municipalityCubit: municipalityCubit,
-              );
+              context.read<SelectedNotificationsCubit>().toggleNotification(
+                    municipality: municipality,
+                    toggleValue: value,
+                  );
             },
           );
         },

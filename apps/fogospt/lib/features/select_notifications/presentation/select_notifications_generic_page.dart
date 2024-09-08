@@ -20,12 +20,11 @@ class _SelectNotificationsGenericPageState
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<GenericSelectedNotificationsCubit>().state;
     return Scaffold(
       appBar: AppBar(
         title: Text('Subscrições de Notificações'),
       ),
-      body: BlocListener<GenericSelectedNotificationsCubit,
+      body: BlocConsumer<GenericSelectedNotificationsCubit,
           GenericSelectedNotificationsState>(
         listener: (context, state) {
           if (state.status == StateStatus.failure) {
@@ -36,40 +35,40 @@ class _SelectNotificationsGenericPageState
             );
           }
         },
-        child: ListView.builder(
-          itemCount: state.notificationsStatus.length,
-          itemBuilder: (context, index) {
-            String topicKey = state.notificationsStatus.keys.elementAt(index);
+        builder: (context, state) {
+          return ListView.builder(
+            itemCount: state.notificationsStatus.length,
+            itemBuilder: (context, index) {
+              String topicKey = state.notificationsStatus.keys.elementAt(index);
 
-            /// Has no topic description, so we don't show it.
-            if (!appNotificationTopics.containsKey(topicKey)) {
-              log('Has no topic description for $topicKey, so we show nothing.');
-              return SizedBox.shrink();
-            }
+              /// Has no topic description, so we don't show it.
+              if (!appNotificationTopics.containsKey(topicKey)) {
+                log('Has no topic description for $topicKey, so we show nothing.');
+                return SizedBox.shrink();
+              }
 
-            String topicDescription = appNotificationTopics[topicKey]!;
+              String topicDescription = appNotificationTopics[topicKey]!;
 
-            return Visibility(
-              visible: state.status != StateStatus.loading, 
-              child: SwitchListTile(
-                title: Text(topicDescription),
-                value: state.notificationsStatus[topicKey] ?? false,
-                onChanged: (bool value) {
-                  /// If the state is loading, we don't want to change the state.
-                  if (state.status == StateStatus.loading) {
-                    return;
-                  }
-                  context
-                      .read<GenericSelectedNotificationsCubit>()
-                      .handleSubscription(topicKey, value);
+              return BlocBuilder<GenericSelectedNotificationsCubit,
+                  GenericSelectedNotificationsState>(
+                builder: (context, state) {
+                  return SwitchListTile(
+                    title: Text(topicDescription),
+                    value: state.notificationsStatus[topicKey] ?? false,
+                    onChanged: (bool value) {
+                      context
+                          .read<GenericSelectedNotificationsCubit>()
+                          .toggleNotification(
+                            topic: topicKey,
+                            toggleValue: value,
+                          );
+                    },
+                  );
                 },
-              ),
-              replacement: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }

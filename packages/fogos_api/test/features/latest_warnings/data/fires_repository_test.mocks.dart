@@ -188,4 +188,13 @@ class MockFogosBaseClient extends _i1.Mock implements _i4.FogosBaseClient {
           ),
         )),
       ) as _i5.Future<_i3.Response>);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }

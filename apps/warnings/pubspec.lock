@@ -467,7 +467,7 @@ packages:
       path: "../../packages/fogos_api"
       relative: true
     source: path
-    version: "0.0.5+1"
+    version: "0.0.5+2"
   freezed_annotation:
     dependency: transitive
     description:
@@ -1015,14 +1015,14 @@ packages:
       path: "../../packages/warnings_api"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.3+1"
   warnings_core:
     dependency: "direct main"
     description:
       path: "../../packages/warnings_core"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.1+1"
   watcher:
     dependency: transitive
     description:

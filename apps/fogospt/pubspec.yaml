@@ -39,6 +39,7 @@ dependencies:
 
   warnings_core:
   warnings: 
+  package_info_plus: ^8.0.2
   
 dev_dependencies:
   flutter_test:

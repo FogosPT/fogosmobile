@@ -635,14 +635,14 @@ packages:
       path: "../warnings_api"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.3+1"
   warnings_core:
     dependency: "direct main"
     description:
       path: "../warnings_core"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.1+1"
   watcher:
     dependency: transitive
     description:

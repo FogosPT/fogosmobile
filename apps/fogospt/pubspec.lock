@@ -523,7 +523,7 @@ packages:
       path: "../../packages/fogos_api"
       relative: true
     source: path
-    version: "0.0.5+1"
+    version: "0.0.5+2"
   freezed_annotation:
     dependency: transitive
     description:
@@ -813,7 +813,7 @@ packages:
     source: hosted
     version: "2.1.0"
   package_info_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: package_info_plus
       sha256: a75164ade98cb7d24cfd0a13c6408927c6b217fa60dee5a7ff5c116a58f28918
@@ -1271,21 +1271,21 @@ packages:
       path: "../warnings"
       relative: true
     source: path
-    version: "0.0.3+1"
+    version: "0.0.3+2"
   warnings_api:
     dependency: "direct overridden"
     description:
       path: "../../packages/warnings_api"
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.3+1"
   warnings_core:
     dependency: "direct main"
     description:
       path: "../../packages/warnings_core"
       relative: true
     source: path
-    version: "0.0.1"
+    version: "0.0.1+1"
   watcher:
     dependency: transitive
     description:

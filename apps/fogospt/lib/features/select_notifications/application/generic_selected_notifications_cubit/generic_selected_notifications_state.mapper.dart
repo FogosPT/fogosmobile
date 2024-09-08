@@ -22,23 +22,27 @@ class GenericSelectedNotificationsStateMapper
   @override
   final String id = 'GenericSelectedNotificationsState';
 
-  static List<String> _$notifications(GenericSelectedNotificationsState v) =>
-      v.notifications;
-  static const Field<GenericSelectedNotificationsState, List<String>>
-      _f$notifications = Field('notifications', _$notifications);
-  static const Field<GenericSelectedNotificationsState, dynamic> _f$status =
-      Field('status', null,
-          mode: FieldMode.param, opt: true, def: StateStatus.initial);
+  static Map<String, bool> _$notificationsStatus(
+          GenericSelectedNotificationsState v) =>
+      v.notificationsStatus;
+  static const Field<GenericSelectedNotificationsState, Map<String, bool>>
+      _f$notificationsStatus = Field(
+          'notificationsStatus', _$notificationsStatus,
+          opt: true, def: const {});
+  static StateStatus _$status(GenericSelectedNotificationsState v) => v.status;
+  static const Field<GenericSelectedNotificationsState, StateStatus> _f$status =
+      Field('status', _$status, opt: true, def: StateStatus.initial);
 
   @override
   final MappableFields<GenericSelectedNotificationsState> fields = const {
-    #notifications: _f$notifications,
+    #notificationsStatus: _f$notificationsStatus,
     #status: _f$status,
   };
 
   static GenericSelectedNotificationsState _instantiate(DecodingData data) {
     return GenericSelectedNotificationsState(
-        notifications: data.dec(_f$notifications), status: data.dec(_f$status));
+        notificationsStatus: data.dec(_f$notificationsStatus),
+        status: data.dec(_f$status));
   }
 
   @override
@@ -103,9 +107,9 @@ abstract class GenericSelectedNotificationsStateCopyWith<
     $R,
     $In extends GenericSelectedNotificationsState,
     $Out> implements ClassCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
-      get notifications;
-  $R call({List<String>? notifications, required dynamic status});
+  MapCopyWith<$R, String, bool, ObjectCopyWith<$R, bool, bool>>
+      get notificationsStatus;
+  $R call({Map<String, bool>? notificationsStatus, StateStatus? status});
   GenericSelectedNotificationsStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
       Then<$Out2, $R2> t);
 }
@@ -122,22 +126,24 @@ class _GenericSelectedNotificationsStateCopyWithImpl<$R, $Out>
   late final ClassMapperBase<GenericSelectedNotificationsState> $mapper =
       GenericSelectedNotificationsStateMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>
-      get notifications => ListCopyWith(
-          $value.notifications,
+  MapCopyWith<$R, String, bool, ObjectCopyWith<$R, bool, bool>>
+      get notificationsStatus => MapCopyWith(
+          $value.notificationsStatus,
           (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(notifications: v));
+          (v) => call(notificationsStatus: v));
   @override
-  $R call({List<String>? notifications, required dynamic status}) =>
+  $R call({Map<String, bool>? notificationsStatus, StateStatus? status}) =>
       $apply(FieldCopyWithData({
-        if (notifications != null) #notifications: notifications,
-        #status: status
+        if (notificationsStatus != null)
+          #notificationsStatus: notificationsStatus,
+        if (status != null) #status: status
       }));
   @override
   GenericSelectedNotificationsState $make(CopyWithData data) =>
       GenericSelectedNotificationsState(
-          notifications: data.get(#notifications, or: $value.notifications),
-          status: data.get(#status));
+          notificationsStatus:
+              data.get(#notificationsStatus, or: $value.notificationsStatus),
+          status: data.get(#status, or: $value.status));
 
   @override
   GenericSelectedNotificationsStateCopyWith<$R2,

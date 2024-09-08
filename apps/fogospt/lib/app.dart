@@ -7,6 +7,7 @@ import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
 import 'package:fogospt/features/map/data/fires_latest_service.dart';
+import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/notifications_selected_district_cubit/notifications_selected_district_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_cubit.dart';
@@ -19,6 +20,10 @@ class FogosApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) =>
+              GenericSelectedNotificationsCubit()..fetchTopicsStatus(),
+        ),
         BlocProvider(
           create: (context) => NotificationsSelectedDistrictCubit(),
         ),

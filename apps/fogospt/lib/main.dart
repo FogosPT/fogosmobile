@@ -41,10 +41,7 @@ Future<void> main() async {
   );
 }
 
-Future<void> subscribeToFirebaseMessageTopics() async {
-  await messaging.subscribeToTopic(topicWarningFogos);
-}
-
+/// Toggle the subscription to the topic
 Future<void> toggleFirebaseMessageByTopic({
   required String topic,
   required bool toggleValue,

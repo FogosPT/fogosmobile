@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fogospt/features/select_notifications/application/generic_shared_preferences.dart';
-import 'package:fogospt/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_cubit.dart';
+import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_state.dart';
+import 'package:warnings/state_management/state_status.dart';
+import 'package:warnings_core/logger.dart';
 
 class SelectNotificationsGenericPage extends StatefulWidget {
   @override
@@ -10,82 +13,64 @@ class SelectNotificationsGenericPage extends StatefulWidget {
 
 class _SelectNotificationsGenericPageState
     extends State<SelectNotificationsGenericPage> {
-  final Map<String, String> topics = {
-    // 'incident-<id-incidente>': 'Tópico por Incidente',
-    'notification-warnings': 'Tópico por Avisos',
-    'incident-important': 'Tópico incidentes importantes',
-    'notification-all': 'Tópico para todos avisos',
-  };
-
-  Map<String, bool> subscriptionStatus = {};
-
   @override
   void initState() {
     super.initState();
-    _loadSubscriptionStatus();
-  }
-
-  Future<void> _loadSubscriptionStatus() async {
-    for (String key in topics.keys) {
-      bool status =
-          await NotificationPreferences.getTopicSubscription(topic: key);
-      setState(() {
-        subscriptionStatus[key] = status;
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<GenericSelectedNotificationsCubit>().state;
     return Scaffold(
       appBar: AppBar(
         title: Text('Subscrições de Notificações'),
       ),
-      body: ListView.builder(
-        itemCount: topics.length,
-        itemBuilder: (context, index) {
-          String topicKey = topics.keys.elementAt(index);
-          String topicDescription = topics[topicKey]!;
-          return SwitchListTile(
-            title: Text(topicDescription),
-            value: subscriptionStatus[topicKey] ?? false,
-            onChanged: (bool value) {
-              _handleSubscription(topicKey, value);
-            },
-          );
+      body: BlocListener<GenericSelectedNotificationsCubit,
+          GenericSelectedNotificationsState>(
+        listener: (context, state) {
+          if (state.status == StateStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Subscrição não atualizadas'),
+              ),
+            );
+          }
         },
+        child: ListView.builder(
+          itemCount: state.notificationsStatus.length,
+          itemBuilder: (context, index) {
+            String topicKey = state.notificationsStatus.keys.elementAt(index);
+
+            /// Has no topic description, so we don't show it.
+            if (!appNotificationTopics.containsKey(topicKey)) {
+              log('Has no topic description for $topicKey, so we show nothing.');
+              return SizedBox.shrink();
+            }
+
+            String topicDescription = appNotificationTopics[topicKey]!;
+
+            return Visibility(
+              visible: state.status != StateStatus.loading, 
+              child: SwitchListTile(
+                title: Text(topicDescription),
+                value: state.notificationsStatus[topicKey] ?? false,
+                onChanged: (bool value) {
+                  /// If the state is loading, we don't want to change the state.
+                  if (state.status == StateStatus.loading) {
+                    return;
+                  }
+                  context
+                      .read<GenericSelectedNotificationsCubit>()
+                      .handleSubscription(topicKey, value);
+                },
+              ),
+              replacement: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          },
+        ),
       ),
     );
-  }
-
-  void _handleSubscription(String topic, bool isSubscribing) async {
-    try {
-      await toggleFirebaseMessageByTopic(
-        topic: topic,
-        toggleValue: isSubscribing,
-      );
-
-      // Save the subscription status locally
-      await NotificationPreferences.saveTopicSubscription(
-        topic: topic,
-        isSubscribed: isSubscribing,
-      );
-
-      setState(() {
-        subscriptionStatus[topic] = isSubscribing;
-      });
-
-      if (isSubscribing) {
-        print('Subscribed to $topic');
-      } else {
-        print('Unsubscribed from $topic');
-      }
-    } catch (e) {
-      print('Error toggling subscription for $topic: $e');
-      // Show error message to user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao alterar subscrição. Tente novamente.')),
-      );
-    }
   }
 }

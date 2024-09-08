@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fogospt/features/select_notifications/application/fetch_municipalities_service.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_notifications_manager.dart';
-import 'package:fogospt/features/select_notifications/application/municipalities_shared_preferences.dart';
+import 'package:fogospt/features/select_notifications/data/municipalities_shared_preferences.dart';
 import 'package:fogospt/features/select_notifications/application/selected_notifications_cubit/selected_notifications_state.dart';
 import 'package:fogospt/features/select_notifications/domain/municipality_data.dart';
 import 'package:get_it/get_it.dart';

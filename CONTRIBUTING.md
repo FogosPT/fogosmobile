@@ -135,3 +135,100 @@ If you want to know more about Dart and Flutter, follow this useful links:
 ### Still have a question?
 
 If you need to know anything that is not on this document, feel free to reach out via [Slack](https://communityinviter.com/apps/fogospt/fogos-pt) or [Twitter](https://twitter.com/fogosPT).
+
+
+
+### Building Cubits in this Project
+
+In this project, we use the BLoC (Business Logic Component) pattern with Cubits for state management. Cubits are a simplified version of BLoCs that provide a way to manage state in Flutter applications. Here's an explanation of how Cubits are built in this project, using the `GenericSelectedNotificationsCubit` as an example:
+
+1. **Create the State Class:**
+   First, we define a state class that extends `BaseState`. This class represents the data and status of our feature.
+
+   ```dart
+   @MappableClass()
+   final class GenericSelectedNotificationsState extends BaseState
+       with GenericSelectedNotificationsStateMappable {
+     final List<String> notifications;
+
+     GenericSelectedNotificationsState({
+       this.notifications = const [],
+       super.status = StateStatus.initial,
+     });
+   }
+   ```
+
+2. **Add State Extensions:**
+   We create extension methods on the state class to easily create new states with different statuses or data.
+
+   ```dart
+   extension GenericSelectedNotificationsStateExtension
+       on GenericSelectedNotificationsState {
+     GenericSelectedNotificationsState loading() =>
+         copyWith(status: StateStatus.loading);
+
+     GenericSelectedNotificationsState success({
+       required List<String> notifications,
+     }) =>
+         copyWith(
+           status: StateStatus.success,
+           notifications: notifications,
+         );
+
+     GenericSelectedNotificationsState failure() =>
+         copyWith(status: StateStatus.failure);
+   }
+   ```
+
+3. **Create the Cubit Class:**
+   We then create a Cubit class that extends `Cubit<StateClass>`. This class will contain the business logic and emit new states.
+
+   ```dart
+   import 'package:bloc/bloc.dart';
+   import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_state.dart';
+
+   class GenericSelectedNotificationsCubit
+       extends Cubit<GenericSelectedNotificationsState> {
+     GenericSelectedNotificationsCubit()
+         : super(GenericSelectedNotificationsState());
+   }
+   ```
+
+4. **Implement Business Logic:**
+   Inside the Cubit class, we add methods that perform actions and emit new states. For example:
+
+   ```dart
+   void loadNotifications() async {
+     emit(state.loading());
+     try {
+       // Fetch notifications logic here
+       final notifications = await fetchNotifications();
+       emit(state.success(notifications: notifications));
+     } catch (e) {
+       emit(state.failure());
+     }
+   }
+   ```
+
+5. **Use the Cubit:**
+   Finally, we use the Cubit in our UI, typically with a `BlocBuilder` or `BlocConsumer` widget.
+
+   ```dart
+   BlocBuilder<GenericSelectedNotificationsCubit, GenericSelectedNotificationsState>(
+     builder: (context, state) {
+       return switch (state.status) {
+         StateStatus.loading => CircularProgressIndicator(),
+         StateStatus.success => ListView(
+             children: state.notifications.map((n) => Text(n)).toList(),
+           ),
+         _ => Text('Error loading notifications'),
+       };
+     },
+   )
+   ```
+
+This structure allows for a clean separation of concerns, testable business logic, and reactive UI updates based on state changes.
+
+
+
+****

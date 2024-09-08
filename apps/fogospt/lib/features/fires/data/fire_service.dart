@@ -3,11 +3,13 @@ import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/features/latest_warnings/domain/history_status.dart';
 import 'package:fogos_api/features/latest_warnings/domain/rcm.dart';
 import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
+import 'package:get_it/get_it.dart';
 
 class FireService {
-  final FiresRepository firesRepository;
+  late final FiresRepository firesRepository;
 
-  const FireService.FireService(this.firesRepository);
+  FireService.FireService()
+      : this.firesRepository = GetIt.I.get<FiresRepository>();
 
   Future<Fire> fetchFire(String id) async {
     try {

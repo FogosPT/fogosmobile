@@ -1,8 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
-import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/constants/colors.dart';
 import 'package:fogospt/features/fires/application/fires/fires_cubit.dart';
@@ -30,7 +28,7 @@ class FireDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FiresCubit(
-        FireService.FireService(getIt<FiresRepository>()),
+        FireService.FireService(),
       )..fetchAllFireInformation(fireId),
       child: BlocBuilder<FiresCubit, FiresState>(
         buildWhen: (previous, current) => previous != current,
@@ -87,8 +85,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firesCubit = context.watch<FiresCubit>();
-    final state = firesCubit.state;
+    final state = context.watch<FiresCubit>().state;
     return Scaffold(
       appBar: FireAppBar(warning: state.fire),
       body: Padding(
@@ -103,7 +100,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
                 builder: (context, state) => StateWidget.simpleWithConditionals(
                   state,
                   child: Text(
-                    state.fire!.location,
+                    state.fire?.location ?? '-',
                     style: context.textTheme.headlineSmall,
                   ),
                   onSuccessExtraConditionals: state.fire != null,
@@ -114,77 +111,69 @@ class FireDetailPageViewSuccess extends StatelessWidget {
 
               /// Resources
               AppFogosTitleWidget(title: context.l10n.fire_detail_means),
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) =>
-                    previous.latestResource != current.latestResource,
-                builder: (context, state) => StateWidget.simple(
-                  state,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconAndValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.man),
-                        value: state.latestResource.man,
-                      ),
-                      IconAndValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.terrain),
-                        value: state.latestResource.terrain,
-                      ),
-                      IconAndValueWidget(
-                        icon: FogosAppAssets.getAsset(ResourcesType.aerial),
-                        value: state.latestResource.aerial,
-                      ),
-                    ],
-                  ),
+              StateWidget.simple(
+                state,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    IconAndValueWidget(
+                      icon: FogosAppAssets.getAsset(ResourcesType.man),
+                      value: state.latestResourceMan,
+                    ),
+                    IconAndValueWidget(
+                      icon: FogosAppAssets.getAsset(ResourcesType.terrain),
+                      value: state.latestResourceTerrain,
+                    ),
+                    IconAndValueWidget(
+                      icon: FogosAppAssets.getAsset(ResourcesType.aerial),
+                      value: state.latestResourceAerial,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),
 
               /// Resources Graph
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) =>
-                    previous.resources != current.resources,
-                builder: (context, state) => StateWidget.simple(
-                  state,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final data = WarningFlChartData(
-                        resources: state.resources,
-                      );
+              StateWidget.simple(
+                state,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final data = WarningFlChartData(
+                      resources: state.resources,
+                    );
 
-                      return SizedBox.fromSize(
-                        size: Size(constraints.maxWidth, 300),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: LineChart(
-                            LineChartData(
-                              minY: 0,
-                              maxY: data.axisY(),
-                              titlesData: titlesData(),
-                              lineTouchData: lineTouchData(),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: data.manToFlSpots(),
-                                  color: resourceManColor,
-                                  barWidth: 4,
-                                ),
-                                LineChartBarData(
-                                  spots: data.terrainToFlSpots(),
-                                  color: resourceTerrainColor,
-                                  barWidth: 4,
-                                ),
-                                LineChartBarData(
-                                  spots: data.aerialToFlSpots(),
-                                  color: resourceAerialColor,
-                                  barWidth: 4,
-                                )
-                              ],
-                            ),
+                    return SizedBox.fromSize(
+                      size: Size(constraints.maxWidth, 300),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: LineChart(
+                          LineChartData(
+                            minY: 0,
+                            maxY: data.axisY(),
+                            titlesData: titlesData(),
+                            lineTouchData: lineTouchData(),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: data.manToFlSpots(),
+                                color: resourceManColor,
+                                barWidth: 4,
+                              ),
+                              LineChartBarData(
+                                spots: data.terrainToFlSpots(),
+                                color: resourceTerrainColor,
+                                barWidth: 4,
+                              ),
+                              LineChartBarData(
+                                spots: data.aerialToFlSpots(),
+                                color: resourceAerialColor,
+                                barWidth: 4,
+                              )
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 10),
@@ -210,31 +199,25 @@ class FireDetailPageViewSuccess extends StatelessWidget {
 
               /// Inicio
               AppFogosTitleWidget(title: context.l10n.fires_map_page_start),
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) => previous.fire != current.fire,
-                builder: (context, state) => StateWidget.simpleWithConditionals(
-                  state,
-                  child: Text(
-                    "${state.fire!.date} ${state.fire!.hour}",
-                    style: context.textTheme.headlineSmall,
-                  ),
-                  onSuccessExtraConditionals: state.fire != null,
+              StateWidget.simpleWithConditionals(
+                state,
+                child: Text(
+                  "${state.fire?.date ?? '-'} ${state.fire?.hour ?? '-'}",
+                  style: context.textTheme.headlineSmall,
                 ),
+                onSuccessExtraConditionals: state.fire != null,
               ),
               SizedBox(height: 20),
 
               /// Natureza
               AppFogosTitleWidget(title: context.l10n.fires_map_page_nature),
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) => previous.fire != current.fire,
-                builder: (context, state) => StateWidget.simpleWithConditionals(
-                  state,
-                  onSuccessExtraConditionals:
-                      state.isSuccess && state.fire != null,
-                  child: Text(
-                    state.fire!.natureza,
-                    style: context.textTheme.headlineSmall,
-                  ),
+              StateWidget.simpleWithConditionals(
+                state,
+                onSuccessExtraConditionals:
+                    state.isSuccess && state.fire != null,
+                child: Text(
+                  state.fire?.natureza ?? '-',
+                  style: context.textTheme.headlineSmall,
                 ),
               ),
               SizedBox(height: 20),
@@ -247,62 +230,52 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               AppFogosTitleWidget(
                   title: context.l10n.fires_map_page_risk_of_fire),
 
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) =>
-                    previous.latestRCM != current.latestRCM,
-                builder: (context, state) => StateWidget.simple(
+              if (state.latestRCM != null)
+                StateWidget.simple(
                   state,
-                  child: FireRiskWidget(rcm: state.latestRCM),
+                  child: FireRiskWidget(rcm: state.latestRCM!),
                 ),
-              ),
               SizedBox(height: 20),
 
               /// ESTADO
               AppFogosTitleWidget(title: context.l10n.fires_map_page_state),
-              BlocBuilder<FiresCubit, FiresState>(
-                buildWhen: (previous, current) =>
-                    previous.historyStatuses != current.historyStatuses,
-                builder: (context, state) => StateWidget.simple(
-                  state,
-                  child: Column(
-                    children: state.historyStatuses
-                        .map<Widget>(
-                          (status) => Row(
+              Column(
+                children: state.historyStatuses
+                    .map<Widget>(
+                      (status) => Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IntrinsicHeight(
+                            child: Stack(
+                              alignment: AlignmentDirectional.topCenter,
+                              children: [
+                                RiskFireStateIconWidget(
+                                  status: status,
+                                  icon: icoFire,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 1.5),
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              IntrinsicHeight(
-                                child: Stack(
-                                  alignment: AlignmentDirectional.topCenter,
-                                  children: [
-                                    RiskFireStateIconWidget(
-                                      status: status,
-                                      icon: icoFire,
-                                    ),
-                                  ],
-                                ),
+                              Text(
+                                status.label,
+                                style: context.textTheme.bodyLarge
+                                    ?.copyWith(color: appFogosOrange),
                               ),
-                              SizedBox(width: 1.5),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    status.label,
-                                    style: context.textTheme.bodyLarge
-                                        ?.copyWith(color: appFogosOrange),
-                                  ),
-                                  Text(
-                                    status.status,
-                                    style: context.textTheme.bodyMedium,
-                                  ),
-                                  SizedBox(height: 20),
-                                ],
+                              Text(
+                                status.status,
+                                style: context.textTheme.bodyMedium,
                               ),
+                              SizedBox(height: 20),
                             ],
                           ),
-                        )
-                        .toList(),
-                  ),
-                ),
+                        ],
+                      ),
+                    )
+                    .toList(),
               ),
 
               /// METEO?

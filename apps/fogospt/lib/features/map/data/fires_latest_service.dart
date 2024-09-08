@@ -14,7 +14,6 @@ class FiresLatestService {
     } catch (e) {
       log(e);
       rethrow;
-      // return Fires(data: [], success: false);
     }
   }
 }

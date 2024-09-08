@@ -12,7 +12,7 @@ class MapLatestFiresCubit extends Cubit<MapLatestFiresState> {
 
     try {
       final fires = await service.fetchLatestFires();
-      emit(state.success(fires: fires));
+      emit(state.copyWith(fires: fires));
     } on Exception catch (_) {
       emit(state.failure());
     }

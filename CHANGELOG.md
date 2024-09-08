@@ -3,6 +3,64 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-09-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fogos_api` - `v0.0.5+2`](#fogos_api---v0052)
+ - [`fogospt` - `v1.8.0`](#fogospt---v180)
+ - [`warnings` - `v0.0.3+2`](#warnings---v0032)
+ - [`warnings_api` - `v0.0.3+1`](#warnings_api---v0031)
+ - [`warnings_core` - `v0.0.1+1`](#warnings_core---v0011)
+
+---
+
+#### `fogos_api` - `v0.0.5+2`
+
+ - **PERF**: drastically improves perf of generic notifications selection. ([4cf57ed4](https://github.com/FogosPT/fogospt.git/commit/4cf57ed43be73ff398036d6390f9e60a84cc7845))
+
+#### `fogospt` - `v1.8.0`
+
+ - **REFACTOR**: use switch expressions with status. ([d8a9f9f7](https://github.com/FogosPT/fogospt.git/commit/d8a9f9f7d8cabe9173915c70700a119fb41b2f0a))
+ - **REFACTOR**: improve state managemente in map page. ([3e4e8403](https://github.com/FogosPT/fogospt.git/commit/3e4e84035f7d1d7c6d1a84a5ba1035995d0ab30d))
+ - **REFACTOR**: use SwitchListTile instead of checkboxes. ([d7d8ae85](https://github.com/FogosPT/fogospt.git/commit/d7d8ae85bea3540b3f9371647f32236125acdd83))
+ - **REFACTOR**: use go_router typesafe. ([45d50fc3](https://github.com/FogosPT/fogospt.git/commit/45d50fc314637531af8920d5b1ce6937bfed4b6e))
+ - **REFACTOR**: use go_router typesafe. ([5ae53528](https://github.com/FogosPT/fogospt.git/commit/5ae535281cf01edfc3851636c93651e233ef3526))
+ - **REFACTOR**: improve navigation. ([6ff948ef](https://github.com/FogosPT/fogospt.git/commit/6ff948ef7f2d587cfc650585306f99f9f3941927))
+ - **REFACTOR**: moving files hierarchically by importance. ([500eeae2](https://github.com/FogosPT/fogospt.git/commit/500eeae2221bc8ffbfe10fe7c06343ed65f25640))
+ - **PERF**: improve loading of fire detail. ([b80acdfb](https://github.com/FogosPT/fogospt.git/commit/b80acdfb61b02a02834c10513c218f8d3ac16666))
+ - **PERF**: drastically improves perf of generic notifications selection. ([4cf57ed4](https://github.com/FogosPT/fogospt.git/commit/4cf57ed43be73ff398036d6390f9e60a84cc7845))
+ - **FIX**: fire detail not loading, issue with service calls. ([a6ddd3c6](https://github.com/FogosPT/fogospt.git/commit/a6ddd3c6df13198a69d5b492a6c5987b6b2d4782))
+ - **FEAT**: add GenericSelectedNotifications to respective page. ([ca69f258](https://github.com/FogosPT/fogospt.git/commit/ca69f258820882b647ad1522702dff85f21a477e))
+ - **FEAT**: add generic_selected_notifications subit. ([c9a05825](https://github.com/FogosPT/fogospt.git/commit/c9a05825e03fecc5bc76a7112a7f53a37fdd213e))
+ - **FEAT**: better error handling of fetchAllFire. ([766f2b08](https://github.com/FogosPT/fogospt.git/commit/766f2b080618a2eec02574ed21c6ef8452e7061c))
+
+#### `warnings` - `v0.0.3+2`
+
+ - **REFACTOR**: use switch expressions with status. ([d8a9f9f7](https://github.com/FogosPT/fogospt.git/commit/d8a9f9f7d8cabe9173915c70700a119fb41b2f0a))
+ - **REFACTOR**: use go_router typesafe. ([5ae53528](https://github.com/FogosPT/fogospt.git/commit/5ae535281cf01edfc3851636c93651e233ef3526))
+ - **REFACTOR**: improve navigation. ([6ff948ef](https://github.com/FogosPT/fogospt.git/commit/6ff948ef7f2d587cfc650585306f99f9f3941927))
+
+#### `warnings_api` - `v0.0.3+1`
+
+ - **REFACTOR**: moving files hierarchically by importance. ([500eeae2](https://github.com/FogosPT/fogospt.git/commit/500eeae2221bc8ffbfe10fe7c06343ed65f25640))
+
+#### `warnings_core` - `v0.0.1+1`
+
+ - **REFACTOR**: remove unused import. ([2bcad7d7](https://github.com/FogosPT/fogospt.git/commit/2bcad7d7b56a7779167a90a49a6f2fae1ad8f8b9))
+ - **REFACTOR**: use go_router typesafe. ([5ae53528](https://github.com/FogosPT/fogospt.git/commit/5ae535281cf01edfc3851636c93651e233ef3526))
+ - **REFACTOR**: improve navigation. ([6ff948ef](https://github.com/FogosPT/fogospt.git/commit/6ff948ef7f2d587cfc650585306f99f9f3941927))
+ - **REFACTOR**: moving files hierarchically by importance. ([500eeae2](https://github.com/FogosPT/fogospt.git/commit/500eeae2221bc8ffbfe10fe7c06343ed65f25640))
+
+
 ## 2024-09-01
 
 ### Changes

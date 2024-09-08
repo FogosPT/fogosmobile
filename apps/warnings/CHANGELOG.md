@@ -1,3 +1,9 @@
+## 0.0.3+2
+
+ - **REFACTOR**: use switch expressions with status. ([d8a9f9f7](https://github.com/FogosPT/fogospt.git/commit/d8a9f9f7d8cabe9173915c70700a119fb41b2f0a))
+ - **REFACTOR**: use go_router typesafe. ([5ae53528](https://github.com/FogosPT/fogospt.git/commit/5ae535281cf01edfc3851636c93651e233ef3526))
+ - **REFACTOR**: improve navigation. ([6ff948ef](https://github.com/FogosPT/fogospt.git/commit/6ff948ef7f2d587cfc650585306f99f9f3941927))
+
 ## 0.0.3+1
 
  - **REFACTOR**: simplify how we handle state with StateWidget. ([15af70e6](https://github.com/FogosPT/fogospt.git/commit/15af70e6067fad7fc33f1c509680366b85cf3c00))

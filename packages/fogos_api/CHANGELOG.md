@@ -1,3 +1,7 @@
+## 0.0.5+2
+
+ - **PERF**: drastically improves perf of generic notifications selection. ([4cf57ed4](https://github.com/FogosPT/fogospt.git/commit/4cf57ed43be73ff398036d6390f9e60a84cc7845))
+
 ## 0.0.5+1
 
  - **REFACTOR**: improve access l10n. ([c996862d](https://github.com/FogosPT/fogospt.git/commit/c996862da86a7898745038fe5a6581058dffbb31))

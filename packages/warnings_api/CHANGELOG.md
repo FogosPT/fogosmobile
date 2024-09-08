@@ -1,3 +1,7 @@
+## 0.0.3+1
+
+ - **REFACTOR**: moving files hierarchically by importance. ([500eeae2](https://github.com/FogosPT/fogospt.git/commit/500eeae2221bc8ffbfe10fe7c06343ed65f25640))
+
 ## 0.0.3
 
  - **FEAT**: FCM configuration. ([09247d74](https://github.com/FogosPT/fogospt.git/commit/09247d74826def88c906f670cfb81036a356a3ba))

@@ -35,11 +35,12 @@ class FireDetailPage extends StatelessWidget {
       child: BlocBuilder<FiresCubit, FiresState>(
         buildWhen: (previous, current) => previous != current,
         builder: (context, state) {
-          return switch (state) {
-            _ when state.isSuccess => FireDetailPageViewSuccess(),
-            _ when state.isFailure => FireDetailPageViewFailed(),
-            // Initial & Loading
-            _ => FireDetailPageViewLoading(),
+          return switch (state.status) {
+            StateStatus.success ||
+            StateStatus.initial ||
+            StateStatus.loading =>
+              FireDetailPageViewSuccess(),
+            StateStatus.failure => FireDetailPageViewFailed(),
           };
         },
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_state.dart';
-import 'package:warnings/state_management/base_state.dart';
+import 'package:warnings/state_management/state_status.dart';
 import 'package:warnings/utils/extensions/context_extensions.dart';
 
 class ListFiresPage extends StatelessWidget {
@@ -12,8 +12,8 @@ class ListFiresPage extends StatelessWidget {
       body: Center(
         child: BlocBuilder<MapLatestFiresCubit, MapLatestFiresState>(
           builder: (context, state) {
-            return switch (state) {
-              _ when state.isSuccess => ListView.builder(
+            return switch (state.status) {
+              StateStatus.success => ListView.builder(
                   itemCount: state.fires.length,
                   itemBuilder: (context, index) {
                     final fire = state.fires[index];
@@ -23,7 +23,7 @@ class ListFiresPage extends StatelessWidget {
                     );
                   },
                 ),
-              _ when state.isFailure => Center(
+              StateStatus.failure => Center(
                   child: Text(context.l10n.fires_map_page_error),
                 ),
               _ => Center(child: CircularProgressIndicator()),

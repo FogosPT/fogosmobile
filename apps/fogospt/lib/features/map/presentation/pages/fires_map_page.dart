@@ -9,7 +9,6 @@ import 'package:fogospt/constants/colors.dart';
 import 'package:fogospt/features/map/application/fires_map_markers.dart';
 import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_error_view.dart';
-import 'package:fogospt/features/map/presentation/pages/views/map_page_loading_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_modal_content_view.dart';
 import 'package:fogospt/features/map/presentation/pages/views/map_page_view.dart';
 import 'package:fogospt/routing/app_go_router.dart';
@@ -99,8 +98,11 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
           ],
         ),
       ),
-      body: switch (state) {
-        _ when state.isInitial || state.isSuccess || state.isLoading =>
+      body: switch (state.status) {
+        StateStatus.failure => MapPageErrorView(),
+        StateStatus.success ||
+        StateStatus.initial ||
+        StateStatus.loading =>
           MapPageView(
             mapMarkers: FiresMapMarkers(
               fires: state.fires,
@@ -110,8 +112,6 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
               },
             ),
           ),
-        _ when state.isFailure => MapPageErrorView(),
-        _ => MapPageLoadingView(),
       },
     );
   }

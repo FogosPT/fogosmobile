@@ -83,7 +83,7 @@ class StateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (state) {
+    return switch (state.status) {
       _ when state.isLoading =>
         customLoadingWidget ?? const Center(child: CircularProgressIndicator()),
       _ when state.isSuccess && onSuccessExtraConditionals => child,

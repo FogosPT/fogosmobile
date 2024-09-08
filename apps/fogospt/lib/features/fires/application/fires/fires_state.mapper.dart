@@ -36,6 +36,8 @@ class FiresStateMapper extends ClassMapperBase<FiresState> {
   static List<RCM> _$rcm(FiresState v) => v.rcm;
   static const Field<FiresState, List<RCM>> _f$rcm =
       Field('rcm', _$rcm, opt: true);
+  static const Field<FiresState, String> _f$errorMessage =
+      Field('errorMessage', null, mode: FieldMode.param, opt: true);
 
   @override
   final MappableFields<FiresState> fields = const {
@@ -44,6 +46,7 @@ class FiresStateMapper extends ClassMapperBase<FiresState> {
     #resources: _f$resources,
     #historyStatuses: _f$historyStatuses,
     #rcm: _f$rcm,
+    #errorMessage: _f$errorMessage,
   };
 
   static FiresState _instantiate(DecodingData data) {
@@ -52,7 +55,8 @@ class FiresStateMapper extends ClassMapperBase<FiresState> {
         fire: data.dec(_f$fire),
         resources: data.dec(_f$resources),
         historyStatuses: data.dec(_f$historyStatuses),
-        rcm: data.dec(_f$rcm));
+        rcm: data.dec(_f$rcm),
+        errorMessage: data.dec(_f$errorMessage));
   }
 
   @override
@@ -116,7 +120,8 @@ abstract class FiresStateCopyWith<$R, $In extends FiresState, $Out>
       Fire? fire,
       List<Resources>? resources,
       List<HistoryStatus>? historyStatuses,
-      List<RCM>? rcm});
+      List<RCM>? rcm,
+      String? errorMessage});
   FiresStateCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -150,13 +155,15 @@ class _FiresStateCopyWithImpl<$R, $Out>
           Object? fire = $none,
           Object? resources = $none,
           Object? historyStatuses = $none,
-          Object? rcm = $none}) =>
+          Object? rcm = $none,
+          String? errorMessage}) =>
       $apply(FieldCopyWithData({
         if (status != null) #status: status,
         if (fire != $none) #fire: fire,
         if (resources != $none) #resources: resources,
         if (historyStatuses != $none) #historyStatuses: historyStatuses,
-        if (rcm != $none) #rcm: rcm
+        if (rcm != $none) #rcm: rcm,
+        #errorMessage: errorMessage
       }));
   @override
   FiresState $make(CopyWithData data) => FiresState(
@@ -164,7 +171,8 @@ class _FiresStateCopyWithImpl<$R, $Out>
       fire: data.get(#fire, or: $value.fire),
       resources: data.get(#resources, or: $value.resources),
       historyStatuses: data.get(#historyStatuses, or: $value.historyStatuses),
-      rcm: data.get(#rcm, or: $value.rcm));
+      rcm: data.get(#rcm, or: $value.rcm),
+      errorMessage: data.get(#errorMessage));
 
   @override
   FiresStateCopyWith<$R2, FiresState, $Out2> $chain<$R2, $Out2>(

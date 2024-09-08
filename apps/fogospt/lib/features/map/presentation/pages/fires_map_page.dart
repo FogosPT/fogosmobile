@@ -34,7 +34,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       if (fireId == null) {
         RootRoute().go(context);
       } else {
-        FireDetailRoute(fireId: fireId).go(context);
+        FireDetailRoute(id: fireId).go(context);
       }
 
       NotificationHelpers.showNotification(message);

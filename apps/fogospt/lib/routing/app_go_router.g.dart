@@ -15,7 +15,7 @@ RouteBase get $rootRoute => GoRouteData.$route(
       factory: $RootRouteExtension._fromState,
       routes: [
         GoRouteData.$route(
-          path: 'fire-detail',
+          path: 'fire-detail/:id',
           factory: $FireDetailRouteExtension._fromState,
         ),
         GoRouteData.$route(
@@ -56,14 +56,11 @@ extension $RootRouteExtension on RootRoute {
 
 extension $FireDetailRouteExtension on FireDetailRoute {
   static FireDetailRoute _fromState(GoRouterState state) => FireDetailRoute(
-        fireId: state.uri.queryParameters['fire-id']!,
+        id: state.pathParameters['id']!,
       );
 
   String get location => GoRouteData.$location(
-        '/fire-detail',
-        queryParams: {
-          'fire-id': fireId,
-        },
+        '/fire-detail/${Uri.encodeComponent(id)}',
       );
 
   void go(BuildContext context) => context.go(location);

@@ -10,46 +10,21 @@ import 'package:go_router/go_router.dart';
 
 part 'app_go_router.g.dart';
 
-// class AppRoutes {
-//   static final String root = _AppRouting.root.navigationName;
-//   static final String fireDetail = _AppRouting.fireDetail.navigationName;
+/// Resources
+/// - https://pub.dev/packages/go_router
+/// - https://medium.com/@antonio.tioypedro1234/flutter-go-router-the-essential-guide-349ef39ec5b3
 
-//   static final String about = _AppRouting.about.navigationName;
-
-//   static final String partners = _AppRouting.partners.navigationName;
-
-//   static final String notifications_per_municipality =
-//       _AppRouting.notifications_per_municipality.navigationName;
-
-//   static final String notifications_list_municipalities =
-//       _AppRouting.notifications_list_municipalities.navigationName;
-
-//   static final String notifications_generic =
-//       _AppRouting.notifications_generic.navigationName;
-// }
-
-// @TypedGoRoute<HomeScreenRoute>(
-//   path: '/',
-//   routes: [
-//     TypedGoRoute<SongRoute>(
-//       path: 'song/:id',
-//     )
-//   ],
-// )
-
-//==============================================================================
-// Long comment divider
-//==============================================================================
+final appRouter = GoRouter(
+  debugLogDiagnostics: true,
+  routes: $appRoutes,
+);
 
 @TypedGoRoute<RootRoute>(
   path: '/',
   routes: [
     TypedGoRoute<FireDetailRoute>(
-      path: 'fire-detail',
+      path: 'fire-detail/:id',
     ),
-    // TypedGoRoute<AboutRoute>(
-    //   path: 'about',
-    // ),
     TypedGoRoute<PartnersRoute>(
       path: 'partners',
     ),
@@ -73,22 +48,14 @@ class RootRoute extends GoRouteData {
 
 @immutable
 class FireDetailRoute extends GoRouteData {
-  final String fireId;
-  const FireDetailRoute({
-    required this.fireId,
-  });
+  /// The fire ID
+  final String id;
+
+  const FireDetailRoute({required this.id});
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    if (state.extra == null || state.extra is! String) {
-      throw Exception('Invalid fire ID');
-    } else {
-      String fireId = state.extra as String;
-      return FireDetailPage(
-        fireId: fireId,
-      );
-    }
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      FireDetailPage(fireId: id);
 }
 
 @immutable

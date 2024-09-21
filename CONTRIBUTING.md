@@ -18,7 +18,7 @@ You don't need to code to help us. If you see some bugs or other things that cou
 
 ## Setup and run project
 
-This app is built with Flutter and Dart 2, follwing Redux's design Pattern.
+This app is built with Flutter version 3.19.5 and with Flutter Bloc as its state management of choice, we are pushing also a Feature First Architecture.
 
 Make sure you have installed Flutter following [these instructions](https://flutter.io/get-started/install/).
 
@@ -93,7 +93,7 @@ If you want to know more about Dart and Flutter, follow this useful links:
 
 ----
 
-- About Redux - [Introduction to Redux in Flutter](https://blog.novoda.com/introduction-to-redux-in-flutter/)
+- About Flutter Bloc - [Bloc Library ](https://bloclibrary.dev/)
 
 ----
 
@@ -135,7 +135,6 @@ If you want to know more about Dart and Flutter, follow this useful links:
 ### Still have a question?
 
 If you need to know anything that is not on this document, feel free to reach out via [Slack](https://communityinviter.com/apps/fogospt/fogos-pt) or [Twitter](https://twitter.com/fogosPT).
-
 
 
 ### Building Cubits in this Project
@@ -228,7 +227,6 @@ In this project, we use the BLoC (Business Logic Component) pattern with Cubits 
    ```
 
 This structure allows for a clean separation of concerns, testable business logic, and reactive UI updates based on state changes.
-
 
 
 ****

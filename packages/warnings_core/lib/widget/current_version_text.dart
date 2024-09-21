@@ -12,17 +12,22 @@ class CurrentVersionText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<PackageInfo>(
       future: PackageInfo.fromPlatform(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           log('Error loading version');
           return const SizedBox.shrink();
         }
-        return Text(
-          snapshot.data!.version,
-          style: style,
-        );
+
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data!.version,
+            style: style,
+          );
+        }
+
+        return const SizedBox.shrink();
       },
     );
   }

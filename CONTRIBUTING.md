@@ -90,8 +90,6 @@ The main branch contains the code for the current app in production. If you wish
 
 ## Creating a PR for an issue
 
-### Creating a PR for an issue
-
 Before starting to work on an issue, please comment on the respective ticket expressing your intention to work on it. Wait to be assigned to the ticket before proceeding. This ensures that multiple developers are not working on the same issue simultaneously.
 
 Once assigned, create a new branch from the `vega` branch. This is where you will make your changes and submit your PR. Please do not submit PRs to the main branch. When working on your changes, we prefer shorter but frequent PRs instead of big ones that close the ticket in one go. This approach helps us review and integrate changes more efficiently. Additionally, always rebase your branch instead of merging. This keeps our commit history clean and linear.

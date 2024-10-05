@@ -46,7 +46,7 @@ class FogosApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: FlexThemeData.light(scheme: FlexScheme.redM3),
-        darkTheme: FlexThemeData.dark(scheme: FlexScheme.redM3),
+        darkTheme: FlexThemeData.dark(scheme: FlexScheme.redWine),
         themeMode: ThemeMode.system,
         routerConfig: appRouter,
       ),

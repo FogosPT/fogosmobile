@@ -40,46 +40,45 @@ Fix anything `flutter doctor` asks.
 
 Now, you need configure some files and tokens to run app
 
-### Configure key.properties (android/key.properties)
+### Configure keys.json (<root>/apps/fogospt/keys.json)
 
-If file key.properties is created, ⚠ only if created, you need add some variables to run app
+If file keys.jsons is created, ⚠ only if created, you need add some variables to run app
 
-```shell
-# Config to firebase notifications
-FCI_KEYSTORE_PASSWORD=myKeystorePassword
-FCI_KEY_ALIAS=MyReleaseKey
-FCI_KEY_PASSWORD=myKeypassword
-# Config to create Android release
-storePassword=MyStorePassword
-keyPassword=MyKeyPassword
-keyAlias=MyKeyAlias
-storeFile=MyStoreFileRoute
+```json
+{
+"MAPBOX_ACCESS_TOKEN": "< YOUR MAP ACCESS TOKEN >",
+"MAPBOX_ACCESS_ID": "< YOUR MAPBOX ACCESS ID >",
+}
 ```
 
-This file is on `.gitignore` so it shouldn't show up on `git status`. If it does, be sure to not commit that file.
+This file is on `apps/fogospt/.gitignore` so it shouldn't show up on `git status`. If it does, be sure to NOT commit that file.
 After that, everything should be working normally.
 
 ### Configure mapbox
 
-Mapbox is a feature to use map into app. To use mapbox, you need config some enviroment variables and token. Follow [this Android page](https://docs.mapbox.com/android/maps/guides/install/) and [this iOS page](https://docs.mapbox.com/ios/maps/guides/) or this steps:
+Mapbox is a feature to use map into app. To use mapbox, you need config some enviroment variables and token. Follow [this Android page]() and [this iOS page](https://docs.mapbox.com/ios/maps/guides/) or this steps:
 
 - Create a mapbox account [here](https://account.mapbox.com/auth/signup/)
 - Create a API Token with all secret scopes selected ([ref](https://user-images.githubusercontent.com/21011641/122591350-240b6b80-d063-11eb-8f9b-a0228b65f321.png))
-- Add two enviroment variables into your OS. A variable with name `SDK_REGISTRY_TOKEN` and other with name `MAPBOX_DOWNLOADS_TOKEN`, both with same value: the api token generate in previous step. This is necessary because [this issue](https://github.com/tobrun/flutter-mapbox-gl/issues/604) with flutter-mapbox package
-- Replace `MAPBOX_DOWNLOADS_TOKEN` in `android/main/res/values/strings.xml` with the same api token generated in mapbox page
+- Add the `MAPBOX_ACCESS_TOKEN` and `MAPBOX_ACCESS_ID` to the `keys.json` file as follows:
+```json
+{
+"MAPBOX_ACCESS_TOKEN": "<YOUR_MAPBOX_ACCESS_TOKEN>",
+"MAPBOX_ACCESS_ID": "<YOUR_MAPBOX_ACCESS_ID>",
+}
+```
 
 ### Run project
 
-Make sure you have a device connected (Simulator or Emulator or a real device connected) and then run
+To run the project, you can use the IDE run method. If you are using VSCode, select the "fogos" configuration in the dropdown menu at the top of the editor and click the "Run" button or press F5.
 
-```shell
-flutter pub get
-flutter run
-```
+If you are using IntelliJ, select the "fogos" configuration in the "Run" dropdown menu at the top of the editor and click the green play button.
+
+Make sure to select the "fogos" configuration to run the project with the predefined settings.
 
 If when run don't work, please try this steps:
 
-- Run `flutter clean`
+- Run `melos run clean`
 - Reset your code editor (VS Code or Android Studio or whatever)
 
 ## Reading material

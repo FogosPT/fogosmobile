@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-10-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`warnings_core` - `v0.0.2`](#warnings_core---v002)
+
+---
+
+#### `warnings_core` - `v0.0.2`
+
+ - **FEAT**: add app version info in Drawer. ([b4a20c50](https://github.com/FogosPT/fogospt.git/commit/b4a20c5079ca6247fcd259761b65b233abbeb9e6))
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+
 ## 2024-09-08
 
 ### Changes

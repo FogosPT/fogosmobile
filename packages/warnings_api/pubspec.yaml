@@ -1,6 +1,6 @@
 name: warnings_api
 description: "A future implementation of generic Warnings API"
-version: 0.0.3+1
+version: 0.0.4
 publish_to: none
 
 environment:

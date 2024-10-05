@@ -15,6 +15,50 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`fogos_api` - `v0.0.6`](#fogos_api---v006)
+ - [`fogospt` - `v1.9.0`](#fogospt---v190)
+ - [`fogospt_admin` - `v1.4.0`](#fogospt_admin---v140)
+ - [`warnings` - `v0.0.4`](#warnings---v004)
+ - [`warnings_api` - `v0.0.4`](#warnings_api---v004)
+
+---
+
+#### `fogos_api` - `v0.0.6`
+
+ - **FEAT**: add app version info in Drawer. ([b4a20c50](https://github.com/FogosPT/fogospt.git/commit/b4a20c5079ca6247fcd259761b65b233abbeb9e6))
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+#### `fogospt` - `v1.9.0`
+
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+#### `fogospt_admin` - `v1.4.0`
+
+ - **FEAT**: add app version info in Drawer. ([b4a20c50](https://github.com/FogosPT/fogospt.git/commit/b4a20c5079ca6247fcd259761b65b233abbeb9e6))
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+#### `warnings` - `v0.0.4`
+
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+#### `warnings_api` - `v0.0.4`
+
+ - **FEAT**: add app version info in Drawer. ([b4a20c50](https://github.com/FogosPT/fogospt.git/commit/b4a20c5079ca6247fcd259761b65b233abbeb9e6))
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
+
+## 2024-10-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`warnings_core` - `v0.0.2`](#warnings_core---v002)
 
 ---

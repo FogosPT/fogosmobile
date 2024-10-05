@@ -1,3 +1,8 @@
+## 0.0.4
+
+ - **FEAT**: add app version info in Drawer. ([b4a20c50](https://github.com/FogosPT/fogospt.git/commit/b4a20c5079ca6247fcd259761b65b233abbeb9e6))
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
 ## 0.0.3+1
 
  - **REFACTOR**: moving files hierarchically by importance. ([500eeae2](https://github.com/FogosPT/fogospt.git/commit/500eeae2221bc8ffbfe10fe7c06343ed65f25640))

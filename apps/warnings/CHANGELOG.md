@@ -1,3 +1,7 @@
+## 0.0.4
+
+ - **FEAT**: add CurrentVersionText to warnings_core. ([bf8e5ba1](https://github.com/FogosPT/fogospt.git/commit/bf8e5ba1836b607e127ec23838d38e0f6d9fd2ef))
+
 ## 0.0.3+2
 
  - **REFACTOR**: use switch expressions with status. ([d8a9f9f7](https://github.com/FogosPT/fogospt.git/commit/d8a9f9f7d8cabe9173915c70700a119fb41b2f0a))

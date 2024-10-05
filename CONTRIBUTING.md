@@ -1,5 +1,8 @@
 # Contributing
 
+> [!WARNING]  
+> If you are contribution to Fogos v2, do please open the PR againts the branch named `vega` read the topic "Fogos v2" for more information.
+
 First of all, thank you for thinking about contributing. 🔥
 
 You're more than welcome to contribute to the project. When contributing, please keep in mind that the project is open source, therefore is maintained by several people - your code should be simple and readable. If there's a specific question you need to discuss with someone, please join [our Slack](https://communityinviter.com/apps/fogospt/fogos-pt).
@@ -80,6 +83,10 @@ If when run don't work, please try this steps:
 
 - Run `melos run clean`
 - Reset your code editor (VS Code or Android Studio or whatever)
+
+## Fogos v2
+
+The main branch contains the code for the current app in production. If you wish to contribute to the development of the app, please note that the main branch is not the primary focus for new contributions. Instead, we invite you to contribute to the project "Vega", which is located in the respective branch named "vega". This branch contains all the new code for the app version 2, and it is where we are actively working on new features and improvements.
 
 ## Reading material
 

@@ -49,7 +49,6 @@ app.*.map.json
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 ios/Flutter/.last_build_id
 
-
 ####################################################################
 ## Source: https://github.com/flutter/flutter/blob/master/.gitignore
 ####################################################################
@@ -206,3 +205,6 @@ pubspec_overrides.yaml
 apps/fogospt/lib/l10n/l10n-untranslated-messages-file.txt
 apps/fogospt/ios/*
 apps/fogospt/macos/*
+
+# FVM Version Cache
+.fvm/

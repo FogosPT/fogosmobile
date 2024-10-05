@@ -66,7 +66,14 @@ scripts:
       dependsOn: flutter
 
   l10n:
-    exec: flutter gen-l10n
+    exec: dart pub get && flutter gen-l10n
+    description: Generate localization files
+    packageFilters:
+      dependsOn: flutter
+      dirExists: lib/l10n
+
+  l10n-untranslated:
+    exec: dart pub get && flutter gen-l10n --no-update-arb-files --no-update-translations
     description: Generate localization files
     packageFilters:
       dependsOn: flutter

@@ -2,10 +2,9 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
 import 'package:fogos_api/shared/dependency_injection.dart';
-import 'package:fogospt/features/map/application/map_latest_fires/map_latest_fires_cubit.dart';
+import 'package:fogospt/features/map/application/map_latest_warnings/map_latest_warning_marker_cubit.dart';
 import 'package:fogospt/features/map/data/fires_latest_service.dart';
 import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_cubit.dart';
 import 'package:fogospt/features/select_notifications/application/municipalities_cubit/municipalities_cubit.dart';
@@ -28,7 +27,7 @@ class FogosApp extends StatelessWidget {
           create: (context) => NotificationsSelectedDistrictCubit(),
         ),
         BlocProvider(
-          create: (context) => MapLatestFiresCubit(
+          create: (context) => MapLatestWarningMarkerCubit(
             FiresLatestService(
               getIt<FiresRepository>(),
             ),
@@ -44,12 +43,7 @@ class FogosApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: FlexThemeData.light(scheme: FlexScheme.redM3),
         darkTheme: FlexThemeData.dark(scheme: FlexScheme.redM3),

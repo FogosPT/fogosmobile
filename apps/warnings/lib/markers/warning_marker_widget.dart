@@ -4,20 +4,17 @@ import 'package:warnings/markers/warning_marker.dart';
 
 class WarningMarkerWidget extends StatelessWidget {
   final WarningMarkerType type;
-  final MarkerTapped? onTap;
   final Color color;
 
   const WarningMarkerWidget({
     super.key,
     required this.type,
-    this.onTap,
     required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
       child: SizedBox(
         height: 50,
         width: 50,

@@ -14,7 +14,7 @@ dependencies:
   dart_mappable: ^4.2.2
   firebase_core: ^3.2.0
   firebase_messaging: ^15.0.3
-  fl_chart: ^0.68.0
+  fl_chart: ^0.69.0
   flex_color_scheme: ^7.3.1
   flutter_bloc: ^8.1.6
   flutter_local_notifications: ^17.2.1+2
@@ -26,7 +26,7 @@ dependencies:
   intl: any
   latlong2: ^0.9.1
   sentry: ^8.8.0
-  wolt_modal_sheet: ^0.8.0
+  wolt_modal_sheet: ^0.9.3
 
   svg_flutter: 
 
@@ -39,7 +39,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
   build_runner: ^2.1.2
   json_serializable: ^6.7.1
   dart_mappable_builder: ^4.2.3

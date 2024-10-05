@@ -3,8 +3,6 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:warnings/markers/marker_importance.dart';
 import 'package:warnings/markers/warning_marker_widget.dart';
 
-typedef MarkerTapped = void Function();
-
 enum WarningMarkerType {
   important,
   fire,
@@ -38,13 +36,11 @@ class WarningMarker extends Marker {
   WarningMarker({
     required super.point,
     required WarningMarkerType type,
-    required MarkerTapped? onTap,
     required MarkerImportance importance,
     required Color color,
   }) : super(
           child: WarningMarkerWidget(
             type: type,
-            onTap: onTap,
             color: color,
           ),
           width: importance.size,

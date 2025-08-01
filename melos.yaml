@@ -49,7 +49,7 @@ scripts:
 
   build:
     exec: dart run build_runner build
-    description: Run build runner on the projects and delete all dependencies
+    description: Run build runner on the projects 
     packageFilters:
       dependsOn: build_runner
 

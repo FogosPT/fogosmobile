@@ -27,11 +27,8 @@ dependencies:
   latlong2: ^0.9.1
   sentry: ^8.8.0
   wolt_modal_sheet: ^0.9.3
-
-  svg_flutter: 
-
   warnings_core:
-
+  svg_flutter: 
   flutter_localizations:
     sdk: flutter
 

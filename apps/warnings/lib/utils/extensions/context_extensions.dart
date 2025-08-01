@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:warnings/l10n/app_localizations.dart' as l10n_warnings;
 extension ContextExtensions on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
 
-  AppLocalizations get l10n => AppLocalizations.of(this)!;
+  l10n_warnings.AppLocalizations get l10nWarnings =>
+      l10n_warnings.AppLocalizations.of(this)!;
 }

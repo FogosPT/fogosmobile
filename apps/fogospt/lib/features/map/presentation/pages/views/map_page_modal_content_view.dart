@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/routing/app_go_router.dart';
+import 'package:fogospt/utils/extentions/build_context.dart';
 import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:warnings/warnings.dart';
@@ -60,7 +61,7 @@ class MapPageModalContentView extends StatelessWidget {
                 color: Colors.blue,
               ),
               label: Text(
-                context.l10n.fires_map_page_means_of_transportation
+                context.l10n_fogos.fires_map_page_means_of_transportation
                     .toUpperCase(),
                 style: TextStyle(
                   color: Colors.blue,
@@ -92,7 +93,7 @@ class _FireModalLocationWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: context.l10n.fires_map_page_local,
+          title: context.l10n_fogos.fires_map_page_local,
         ),
         Text(
           fire.location,
@@ -115,7 +116,7 @@ class _FireModalStatusWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: context.l10n.fires_map_page_state,
+          title: context.l10n_fogos.fires_map_page_state,
         ),
         Text(
           fire.status,
@@ -138,7 +139,7 @@ class _FireModalResourcesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: context.l10n.fires_map_page_means_of_transportation,
+          title: context.l10n_fogos.fires_map_page_means_of_transportation,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -174,7 +175,7 @@ class _FireModalUpdatedWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppFogosTitleWidget(
-          title: context.l10n.fires_map_page_start,
+          title: context.l10n_fogos.fires_map_page_start,
         ),
         Text(
           "${fire.date} ${fire.hour}",

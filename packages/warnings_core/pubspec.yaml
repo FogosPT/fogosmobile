@@ -1,7 +1,8 @@
 name: warnings_core
-description: "A new Flutter package project."
+description: "Core library for the Warning Apps"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
 version: 0.0.2
-homepage: none
 
 environment:
   sdk: ^3.3.0
@@ -18,3 +19,5 @@ dev_dependencies:
   flutter_lints: ^3.0.1
 
 flutter:
+  generate: true
+  uses-material-design: true

@@ -12,6 +12,7 @@ import 'package:fogospt/features/fires/presentation/widgets/fire_risk_state_icon
 import 'package:fogospt/features/fires/presentation/widgets/fire_risk_widget.dart';
 import 'package:fogospt/features/fires/presentation/widgets/warning_chart_labels_item_widget.dart';
 import 'package:fogospt/features/fires/presentation/widgets/warning_chart_labels_widget.dart';
+import 'package:fogospt/utils/extentions/build_context.dart';
 import 'package:fogospt/widgets/app_fogos_title_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:warnings/warnings.dart';
@@ -94,7 +95,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              AppFogosTitleWidget(title: context.l10n.fires_map_page_local),
+              AppFogosTitleWidget(
+                  title: context.l10n_fogos.fires_map_page_local),
               BlocBuilder<FiresCubit, FiresState>(
                 buildWhen: (previous, current) => previous.fire != current.fire,
                 builder: (context, state) => StateWidget.simpleWithConditionals(
@@ -110,7 +112,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// Resources
-              AppFogosTitleWidget(title: context.l10n.fire_detail_means),
+              AppFogosTitleWidget(title: context.l10n_fogos.fire_detail_means),
               StateWidget.simple(
                 state,
                 child: Row(
@@ -198,7 +200,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 10),
 
               /// Inicio
-              AppFogosTitleWidget(title: context.l10n.fires_map_page_start),
+              AppFogosTitleWidget(
+                  title: context.l10n_fogos.fires_map_page_start),
               StateWidget.simpleWithConditionals(
                 state,
                 child: Text(
@@ -210,7 +213,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// Natureza
-              AppFogosTitleWidget(title: context.l10n.fires_map_page_nature),
+              AppFogosTitleWidget(
+                  title: context.l10n_fogos.fires_map_page_nature),
               StateWidget.simpleWithConditionals(
                 state,
                 onSuccessExtraConditionals:
@@ -228,7 +232,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
 
               /// Risco de Incêndio
               AppFogosTitleWidget(
-                  title: context.l10n.fires_map_page_risk_of_fire),
+                  title: context.l10n_fogos.fires_map_page_risk_of_fire),
 
               if (state.latestRCM != null)
                 StateWidget.simple(
@@ -238,7 +242,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
               SizedBox(height: 20),
 
               /// ESTADO
-              AppFogosTitleWidget(title: context.l10n.fires_map_page_state),
+              AppFogosTitleWidget(
+                  title: context.l10n_fogos.fires_map_page_state),
               Column(
                 children: state.historyStatuses
                     .map<Widget>(
@@ -283,7 +288,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
                 // visible: kDebugMode,
                 visible: false,
                 child: AppFogosTitleWidget(
-                    title: context.l10n.fires_map_page_meteo),
+                    title: context.l10n_fogos.fires_map_page_meteo),
               ),
 
               /// PARTILHAR
@@ -291,7 +296,7 @@ class FireDetailPageViewSuccess extends StatelessWidget {
                 // visible: kDebugMode,
                 visible: false,
                 child: AppFogosTitleWidget(
-                  title: context.l10n.fires_map_page_share,
+                  title: context.l10n_fogos.fires_map_page_share,
                 ),
               ),
             ],

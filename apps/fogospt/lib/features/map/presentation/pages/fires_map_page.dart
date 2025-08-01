@@ -11,6 +11,7 @@ import 'package:fogospt/features/map/presentation/pages/views/map_page_error_vie
 import 'package:fogospt/features/map/presentation/pages/views/map_page_view.dart';
 import 'package:fogospt/routing/app_go_router.dart';
 import 'package:fogospt/routing/message_watcher.dart';
+import 'package:fogospt/utils/extentions/build_context.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 import 'package:warnings/warnings.dart';
 import 'package:warnings_core/widget/current_version_text.dart';
@@ -61,7 +62,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: appFogosOrange,
-        title: Text(context.l10n.fogospt),
+        title: Text(context.l10n_fogos.fogospt),
       ),
       drawer: Drawer(
         child: Padding(
@@ -81,7 +82,8 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
                 onPressed: () =>
                     NotificationsListMunicipalitiesRoute().go(context),
                 child: Text(
-                  context.l10n.fires_map_page_notifications_list_municipalities,
+                  context.l10n_fogos
+                      .fires_map_page_notifications_list_municipalities,
                   style: context.textTheme.bodyLarge,
                 ),
                 style: ElevatedButton.styleFrom(
@@ -92,7 +94,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
               ElevatedButton(
                 onPressed: () => NotificationsGenericRoute().go(context),
                 child: Text(
-                  context.l10n.fires_map_page_notifications,
+                  context.l10n_fogos.fires_map_page_notifications,
                   style: context.textTheme.bodyLarge,
                 ),
                 style: ElevatedButton.styleFrom(

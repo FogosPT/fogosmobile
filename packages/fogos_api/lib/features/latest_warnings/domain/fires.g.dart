@@ -6,15 +6,14 @@ part of 'fires.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$FiresImpl _$$FiresImplFromJson(Map<String, dynamic> json) => _$FiresImpl(
-      success: json['success'] as bool,
-      data: (json['data'] as List<dynamic>)
-          .map((e) => Fire.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+_Fires _$FiresFromJson(Map<String, dynamic> json) => _Fires(
+  success: json['success'] as bool,
+  data: (json['data'] as List<dynamic>)
+      .map((e) => Fire.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
-Map<String, dynamic> _$$FiresImplToJson(_$FiresImpl instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-      'data': instance.data,
-    };
+Map<String, dynamic> _$FiresToJson(_Fires instance) => <String, dynamic>{
+  'success': instance.success,
+  'data': instance.data,
+};

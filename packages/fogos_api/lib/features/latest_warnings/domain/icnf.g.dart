@@ -6,7 +6,6 @@ part of 'icnf.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$IcnfImpl _$$IcnfImplFromJson(Map<String, dynamic> json) => _$IcnfImpl();
+_Icnf _$IcnfFromJson(Map<String, dynamic> json) => _Icnf();
 
-Map<String, dynamic> _$$IcnfImplToJson(_$IcnfImpl instance) =>
-    <String, dynamic>{};
+Map<String, dynamic> _$IcnfToJson(_Icnf instance) => <String, dynamic>{};

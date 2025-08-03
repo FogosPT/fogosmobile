@@ -27,9 +27,9 @@ flutter_lints
 file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1/
 file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/flutter_lints-3.0.1/lib/
 go_router
-3.2
-file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-13.2.1/
-file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-13.2.1/lib/
+3.6
+file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-16.0.0/
+file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-16.0.0/lib/
 leak_tracker
 3.2
 file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/leak_tracker-10.0.9/
@@ -99,7 +99,7 @@ vm_service
 file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/vm_service-15.0.0/
 file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/vm_service-15.0.0/lib/
 fogospt_admin
-3.3
+3.8
 file:///Users/filipebarroso/Documents/Projects/FOGOS.pt/origin/fogosmobile/apps/fogospt_admin/
 file:///Users/filipebarroso/Documents/Projects/FOGOS.pt/origin/fogosmobile/apps/fogospt_admin/lib/
 sky_engine

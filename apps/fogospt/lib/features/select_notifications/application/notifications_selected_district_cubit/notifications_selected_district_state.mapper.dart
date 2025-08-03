@@ -24,7 +24,7 @@ class DistrictSelectedStateMapper
 
   static DistrictValue? _$_district(DistrictSelectedState v) => v._district;
   static const Field<DistrictSelectedState, DistrictValue> _f$_district =
-      Field('_district', _$_district, key: 'district', opt: true);
+      Field('_district', _$_district, key: r'district', opt: true);
   static StateStatus _$status(DistrictSelectedState v) => v.status;
   static const Field<DistrictSelectedState, StateStatus> _f$status =
       Field('status', _$status, opt: true, def: StateStatus.initial);
@@ -64,9 +64,9 @@ mixin DistrictSelectedStateMappable {
   }
 
   DistrictSelectedStateCopyWith<DistrictSelectedState, DistrictSelectedState,
-          DistrictSelectedState>
-      get copyWith => _DistrictSelectedStateCopyWithImpl(
-          this as DistrictSelectedState, $identity, $identity);
+      DistrictSelectedState> get copyWith => _DistrictSelectedStateCopyWithImpl<
+          DistrictSelectedState, DistrictSelectedState>(
+      this as DistrictSelectedState, $identity, $identity);
   @override
   String toString() {
     return DistrictSelectedStateMapper.ensureInitialized()
@@ -89,8 +89,8 @@ mixin DistrictSelectedStateMappable {
 extension DistrictSelectedStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, DistrictSelectedState, $Out> {
   DistrictSelectedStateCopyWith<$R, DistrictSelectedState, $Out>
-      get $asDistrictSelectedState =>
-          $base.as((v, t, t2) => _DistrictSelectedStateCopyWithImpl(v, t, t2));
+      get $asDistrictSelectedState => $base.as(
+          (v, t, t2) => _DistrictSelectedStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class DistrictSelectedStateCopyWith<
@@ -128,5 +128,5 @@ class _DistrictSelectedStateCopyWithImpl<$R, $Out>
   @override
   DistrictSelectedStateCopyWith<$R2, DistrictSelectedState, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _DistrictSelectedStateCopyWithImpl($value, $cast, t);
+          _DistrictSelectedStateCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

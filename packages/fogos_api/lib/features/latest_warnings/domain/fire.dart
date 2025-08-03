@@ -5,7 +5,7 @@ part 'fire.freezed.dart';
 part 'fire.g.dart';
 
 @freezed
-class Fire with _$Fire {
+abstract class Fire with _$Fire {
   const factory Fire({
     // @JsonKey(name: "_id") required Id id,
     required String id,

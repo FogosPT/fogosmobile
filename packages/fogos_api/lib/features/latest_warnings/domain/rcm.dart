@@ -5,7 +5,7 @@ part 'rcm.freezed.dart';
 part 'rcm.g.dart';
 
 @freezed
-class RCM with _$RCM {
+abstract class RCM with _$RCM {
   const factory RCM({
     // ignore: invalid_annotation_target
     @JsonKey(name: '_id') required String id,

@@ -74,7 +74,8 @@ mixin MapLatestWarningMarkerStateMappable {
 
   MapLatestWarningMarkerStateCopyWith<MapLatestWarningMarkerState,
           MapLatestWarningMarkerState, MapLatestWarningMarkerState>
-      get copyWith => _MapLatestWarningMarkerStateCopyWithImpl(
+      get copyWith => _MapLatestWarningMarkerStateCopyWithImpl<
+              MapLatestWarningMarkerState, MapLatestWarningMarkerState>(
           this as MapLatestWarningMarkerState, $identity, $identity);
   @override
   String toString() {
@@ -98,8 +99,8 @@ mixin MapLatestWarningMarkerStateMappable {
 extension MapLatestWarningMarkerStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, MapLatestWarningMarkerState, $Out> {
   MapLatestWarningMarkerStateCopyWith<$R, MapLatestWarningMarkerState, $Out>
-      get $asMapLatestWarningMarkerState => $base
-          .as((v, t, t2) => _MapLatestWarningMarkerStateCopyWithImpl(v, t, t2));
+      get $asMapLatestWarningMarkerState => $base.as((v, t, t2) =>
+          _MapLatestWarningMarkerStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class MapLatestWarningMarkerStateCopyWith<
@@ -143,5 +144,6 @@ class _MapLatestWarningMarkerStateCopyWithImpl<$R, $Out>
   @override
   MapLatestWarningMarkerStateCopyWith<$R2, MapLatestWarningMarkerState, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MapLatestWarningMarkerStateCopyWithImpl($value, $cast, t);
+          _MapLatestWarningMarkerStateCopyWithImpl<$R2, $Out2>(
+              $value, $cast, t);
 }

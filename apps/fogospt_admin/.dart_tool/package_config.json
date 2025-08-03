@@ -63,9 +63,9 @@
     },
     {
       "name": "go_router",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-13.2.1",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/go_router-16.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.6"
     },
     {
       "name": "leak_tracker",
@@ -179,12 +179,12 @@
       "name": "fogospt_admin",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.8"
     }
   ],
   "generator": "pub",
   "generatorVersion": "3.8.1",
   "flutterRoot": "file:///Users/filipebarroso/Documents/Software/flutter",
-  "flutterVersion": "3.32.5",
+  "flutterVersion": "3.32.8",
   "pubCache": "file:///Users/filipebarroso/.pub-cache"
 }

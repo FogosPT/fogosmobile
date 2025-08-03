@@ -5,7 +5,7 @@ part 'history_status.freezed.dart';
 part 'history_status.g.dart';
 
 @freezed
-class HistoryStatus with _$HistoryStatus {
+abstract class HistoryStatus with _$HistoryStatus {
   const factory HistoryStatus({
     String? id,
     int? sharepointId,

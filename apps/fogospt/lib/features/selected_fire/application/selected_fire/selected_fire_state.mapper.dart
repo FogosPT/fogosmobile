@@ -63,8 +63,9 @@ mixin SelectedFireStateMappable {
 
   SelectedFireStateCopyWith<SelectedFireState, SelectedFireState,
           SelectedFireState>
-      get copyWith => _SelectedFireStateCopyWithImpl(
-          this as SelectedFireState, $identity, $identity);
+      get copyWith =>
+          _SelectedFireStateCopyWithImpl<SelectedFireState, SelectedFireState>(
+              this as SelectedFireState, $identity, $identity);
   @override
   String toString() {
     return SelectedFireStateMapper.ensureInitialized()
@@ -87,8 +88,8 @@ mixin SelectedFireStateMappable {
 extension SelectedFireStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, SelectedFireState, $Out> {
   SelectedFireStateCopyWith<$R, SelectedFireState, $Out>
-      get $asSelectedFireState =>
-          $base.as((v, t, t2) => _SelectedFireStateCopyWithImpl(v, t, t2));
+      get $asSelectedFireState => $base
+          .as((v, t, t2) => _SelectedFireStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class SelectedFireStateCopyWith<$R, $In extends SelectedFireState,
@@ -120,5 +121,5 @@ class _SelectedFireStateCopyWithImpl<$R, $Out>
   @override
   SelectedFireStateCopyWith<$R2, SelectedFireState, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _SelectedFireStateCopyWithImpl($value, $cast, t);
+      _SelectedFireStateCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

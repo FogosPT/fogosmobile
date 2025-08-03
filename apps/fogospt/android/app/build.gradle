@@ -30,7 +30,12 @@ android {
 
     compileOptions {
         // Flag to enable support for the new language APIs
-        coreLibraryDesugaringEnabled true
+
+        // For AGP 4.1+
+        // isCoreLibraryDesugaringEnabled = true
+        // For AGP 4.0
+        coreLibraryDesugaringEnabled = true
+
 
         // Sets Java compatibility to Java 8
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,8 +56,8 @@ android {
         applicationId "com.tomahock.fogos"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 31
-        targetSdkVersion 34
+        minSdkVersion 34
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
 
@@ -75,6 +80,6 @@ flutter {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:33.1.2')
     implementation 'com.google.firebase:firebase-analytics'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 
 }

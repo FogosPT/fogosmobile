@@ -4,7 +4,7 @@ part 'created.freezed.dart';
 part 'created.g.dart';
 
 @freezed
-class Created with _$Created {
+abstract class Created with _$Created {
   factory Created({
     required int sec,
   }) = _Created;

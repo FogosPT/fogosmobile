@@ -74,7 +74,9 @@ mixin GenericSelectedNotificationsStateMappable {
 
   GenericSelectedNotificationsStateCopyWith<GenericSelectedNotificationsState,
           GenericSelectedNotificationsState, GenericSelectedNotificationsState>
-      get copyWith => _GenericSelectedNotificationsStateCopyWithImpl(
+      get copyWith => _GenericSelectedNotificationsStateCopyWithImpl<
+              GenericSelectedNotificationsState,
+              GenericSelectedNotificationsState>(
           this as GenericSelectedNotificationsState, $identity, $identity);
   @override
   String toString() {
@@ -100,7 +102,7 @@ extension GenericSelectedNotificationsStateValueCopy<$R, $Out>
   GenericSelectedNotificationsStateCopyWith<$R,
           GenericSelectedNotificationsState, $Out>
       get $asGenericSelectedNotificationsState => $base.as((v, t, t2) =>
-          _GenericSelectedNotificationsStateCopyWithImpl(v, t, t2));
+          _GenericSelectedNotificationsStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class GenericSelectedNotificationsStateCopyWith<
@@ -149,5 +151,6 @@ class _GenericSelectedNotificationsStateCopyWithImpl<$R, $Out>
   GenericSelectedNotificationsStateCopyWith<$R2,
       GenericSelectedNotificationsState, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _GenericSelectedNotificationsStateCopyWithImpl($value, $cast, t);
+      _GenericSelectedNotificationsStateCopyWithImpl<$R2, $Out2>(
+          $value, $cast, t);
 }

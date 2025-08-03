@@ -74,7 +74,8 @@ mixin SelectedNotificationsStateMappable {
 
   SelectedNotificationsStateCopyWith<SelectedNotificationsState,
           SelectedNotificationsState, SelectedNotificationsState>
-      get copyWith => _SelectedNotificationsStateCopyWithImpl(
+      get copyWith => _SelectedNotificationsStateCopyWithImpl<
+              SelectedNotificationsState, SelectedNotificationsState>(
           this as SelectedNotificationsState, $identity, $identity);
   @override
   String toString() {
@@ -98,8 +99,8 @@ mixin SelectedNotificationsStateMappable {
 extension SelectedNotificationsStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, SelectedNotificationsState, $Out> {
   SelectedNotificationsStateCopyWith<$R, SelectedNotificationsState, $Out>
-      get $asSelectedNotificationsState => $base
-          .as((v, t, t2) => _SelectedNotificationsStateCopyWithImpl(v, t, t2));
+      get $asSelectedNotificationsState => $base.as((v, t, t2) =>
+          _SelectedNotificationsStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class SelectedNotificationsStateCopyWith<
@@ -142,5 +143,5 @@ class _SelectedNotificationsStateCopyWithImpl<$R, $Out>
   @override
   SelectedNotificationsStateCopyWith<$R2, SelectedNotificationsState, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _SelectedNotificationsStateCopyWithImpl($value, $cast, t);
+          _SelectedNotificationsStateCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

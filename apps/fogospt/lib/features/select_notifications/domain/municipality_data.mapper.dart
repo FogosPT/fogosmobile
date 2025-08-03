@@ -23,7 +23,7 @@ class MunicipalitiesDataMapper extends ClassMapperBase<MunicipalitiesData> {
 
   static List<MunicipalityValue> _$data(MunicipalitiesData v) => v.data;
   static const Field<MunicipalitiesData, List<MunicipalityValue>> _f$data =
-      Field('data', _$data, key: 'rows');
+      Field('data', _$data, key: r'rows');
 
   @override
   final MappableFields<MunicipalitiesData> fields = const {
@@ -59,8 +59,8 @@ mixin MunicipalitiesDataMappable {
 
   MunicipalitiesDataCopyWith<MunicipalitiesData, MunicipalitiesData,
           MunicipalitiesData>
-      get copyWith => _MunicipalitiesDataCopyWithImpl(
-          this as MunicipalitiesData, $identity, $identity);
+      get copyWith => _MunicipalitiesDataCopyWithImpl<MunicipalitiesData,
+          MunicipalitiesData>(this as MunicipalitiesData, $identity, $identity);
   @override
   String toString() {
     return MunicipalitiesDataMapper.ensureInitialized()
@@ -83,8 +83,8 @@ mixin MunicipalitiesDataMappable {
 extension MunicipalitiesDataValueCopy<$R, $Out>
     on ObjectCopyWith<$R, MunicipalitiesData, $Out> {
   MunicipalitiesDataCopyWith<$R, MunicipalitiesData, $Out>
-      get $asMunicipalitiesData =>
-          $base.as((v, t, t2) => _MunicipalitiesDataCopyWithImpl(v, t, t2));
+      get $asMunicipalitiesData => $base.as(
+          (v, t, t2) => _MunicipalitiesDataCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class MunicipalitiesDataCopyWith<$R, $In extends MunicipalitiesData,
@@ -120,7 +120,7 @@ class _MunicipalitiesDataCopyWithImpl<$R, $Out>
   @override
   MunicipalitiesDataCopyWith<$R2, MunicipalitiesData, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _MunicipalitiesDataCopyWithImpl($value, $cast, t);
+      _MunicipalitiesDataCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
 class MunicipalityValueMapper extends ClassMapperBase<MunicipalityValue> {
@@ -179,8 +179,9 @@ mixin MunicipalityValueMappable {
 
   MunicipalityValueCopyWith<MunicipalityValue, MunicipalityValue,
           MunicipalityValue>
-      get copyWith => _MunicipalityValueCopyWithImpl(
-          this as MunicipalityValue, $identity, $identity);
+      get copyWith =>
+          _MunicipalityValueCopyWithImpl<MunicipalityValue, MunicipalityValue>(
+              this as MunicipalityValue, $identity, $identity);
   @override
   String toString() {
     return MunicipalityValueMapper.ensureInitialized()
@@ -203,8 +204,8 @@ mixin MunicipalityValueMappable {
 extension MunicipalityValueValueCopy<$R, $Out>
     on ObjectCopyWith<$R, MunicipalityValue, $Out> {
   MunicipalityValueCopyWith<$R, MunicipalityValue, $Out>
-      get $asMunicipalityValue =>
-          $base.as((v, t, t2) => _MunicipalityValueCopyWithImpl(v, t, t2));
+      get $asMunicipalityValue => $base
+          .as((v, t, t2) => _MunicipalityValueCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class MunicipalityValueCopyWith<$R, $In extends MunicipalityValue,
@@ -240,7 +241,7 @@ class _MunicipalityValueCopyWithImpl<$R, $Out>
   @override
   MunicipalityValueCopyWith<$R2, MunicipalityValue, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _MunicipalityValueCopyWithImpl($value, $cast, t);
+      _MunicipalityValueCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
 class MunicipalityInformationValueMapper
@@ -264,11 +265,11 @@ class MunicipalityInformationValueMapper
       Field('name', _$name);
   static String _$districtId(MunicipalityInformationValue v) => v.districtId;
   static const Field<MunicipalityInformationValue, String> _f$districtId =
-      Field('districtId', _$districtId, key: 'dId');
+      Field('districtId', _$districtId, key: r'dId');
   static String _$districtName(MunicipalityInformationValue v) =>
       v.districtName;
   static const Field<MunicipalityInformationValue, String> _f$districtName =
-      Field('districtName', _$districtName, key: 'dName');
+      Field('districtName', _$districtName, key: r'dName');
 
   @override
   final MappableFields<MunicipalityInformationValue> fields = const {
@@ -311,7 +312,8 @@ mixin MunicipalityInformationValueMappable {
 
   MunicipalityInformationValueCopyWith<MunicipalityInformationValue,
           MunicipalityInformationValue, MunicipalityInformationValue>
-      get copyWith => _MunicipalityInformationValueCopyWithImpl(
+      get copyWith => _MunicipalityInformationValueCopyWithImpl<
+              MunicipalityInformationValue, MunicipalityInformationValue>(
           this as MunicipalityInformationValue, $identity, $identity);
   @override
   String toString() {
@@ -335,8 +337,8 @@ mixin MunicipalityInformationValueMappable {
 extension MunicipalityInformationValueValueCopy<$R, $Out>
     on ObjectCopyWith<$R, MunicipalityInformationValue, $Out> {
   MunicipalityInformationValueCopyWith<$R, MunicipalityInformationValue, $Out>
-      get $asMunicipalityInformationValue => $base.as(
-          (v, t, t2) => _MunicipalityInformationValueCopyWithImpl(v, t, t2));
+      get $asMunicipalityInformationValue => $base.as((v, t, t2) =>
+          _MunicipalityInformationValueCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class MunicipalityInformationValueCopyWith<
@@ -376,7 +378,8 @@ class _MunicipalityInformationValueCopyWithImpl<$R, $Out>
   @override
   MunicipalityInformationValueCopyWith<$R2, MunicipalityInformationValue, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalityInformationValueCopyWithImpl($value, $cast, t);
+          _MunicipalityInformationValueCopyWithImpl<$R2, $Out2>(
+              $value, $cast, t);
 }
 
 class DistrictValueMapper extends ClassMapperBase<DistrictValue> {
@@ -432,7 +435,7 @@ mixin DistrictValueMappable {
   }
 
   DistrictValueCopyWith<DistrictValue, DistrictValue, DistrictValue>
-      get copyWith => _DistrictValueCopyWithImpl(
+      get copyWith => _DistrictValueCopyWithImpl<DistrictValue, DistrictValue>(
           this as DistrictValue, $identity, $identity);
   @override
   String toString() {
@@ -456,7 +459,7 @@ mixin DistrictValueMappable {
 extension DistrictValueValueCopy<$R, $Out>
     on ObjectCopyWith<$R, DistrictValue, $Out> {
   DistrictValueCopyWith<$R, DistrictValue, $Out> get $asDistrictValue =>
-      $base.as((v, t, t2) => _DistrictValueCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _DistrictValueCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class DistrictValueCopyWith<$R, $In extends DistrictValue, $Out>
@@ -483,5 +486,5 @@ class _DistrictValueCopyWithImpl<$R, $Out>
   @override
   DistrictValueCopyWith<$R2, DistrictValue, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _DistrictValueCopyWithImpl($value, $cast, t);
+      _DistrictValueCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

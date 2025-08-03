@@ -14,12 +14,13 @@ class NotificationHelpers {
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
-      onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {
-        //
-        print(
-            'onDidReceiveLocalNotification\nid: $id\ntitle: $title\nbody: $body\npayload: $payload');
-      },
+      // onDidReceiveLocalNotification:
+      //     (int id, String? title, String? body, String? payload) async {
+      //   //
+      //   print(
+      //       'onDidReceiveLocalNotification\nid: $id\ntitle: $title\nbody: $body\npayload: $payload');
+      // },
+
     );
 
     var initializationSettings = InitializationSettings(

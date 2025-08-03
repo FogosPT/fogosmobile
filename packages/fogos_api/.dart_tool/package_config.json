@@ -3,15 +3,15 @@
   "packages": [
     {
       "name": "_fe_analyzer_shared",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-67.0.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/_fe_analyzer_shared-85.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.5"
     },
     {
       "name": "analyzer",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/analyzer-6.4.1",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/analyzer-7.7.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.5"
     },
     {
       "name": "args",
@@ -33,9 +33,9 @@
     },
     {
       "name": "build",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build-2.4.1",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.7"
     },
     {
       "name": "build_config",
@@ -51,21 +51,21 @@
     },
     {
       "name": "build_resolvers",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_resolvers-2.4.2",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_resolvers-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "build_runner",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_runner-2.4.9",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_runner-2.6.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "build_runner_core",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_runner_core-7.3.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/build_runner_core-9.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "built_collection",
@@ -75,7 +75,7 @@
     },
     {
       "name": "built_value",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/built_value-8.9.2",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/built_value-8.11.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -123,9 +123,9 @@
     },
     {
       "name": "dart_style",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/dart_style-2.3.6",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/dart_style-3.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "fake_async",
@@ -177,13 +177,13 @@
     },
     {
       "name": "freezed",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/freezed-2.5.2",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/freezed-3.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.8"
     },
     {
       "name": "freezed_annotation",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/freezed_annotation-2.4.3",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/freezed_annotation-3.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -195,7 +195,7 @@
     },
     {
       "name": "get_it",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/get_it-7.7.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/get_it-8.1.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -213,9 +213,9 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/http-1.2.1",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/http-1.4.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "http_multi_server",
@@ -236,10 +236,10 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "js",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/js-0.7.1",
+      "name": "jni",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/jni-0.14.1",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.3"
     },
     {
       "name": "json_annotation",
@@ -249,9 +249,9 @@
     },
     {
       "name": "json_serializable",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/json_serializable-6.8.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/json_serializable-6.10.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.8"
     },
     {
       "name": "leak_tracker",
@@ -309,9 +309,9 @@
     },
     {
       "name": "mockito",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/mockito-5.4.4",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/mockito-5.5.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.7"
     },
     {
       "name": "package_config",
@@ -351,9 +351,9 @@
     },
     {
       "name": "pub_semver",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/pub_semver-2.1.4",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/pub_semver-2.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "pubspec_parse",
@@ -363,15 +363,15 @@
     },
     {
       "name": "sentry",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-8.8.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-9.5.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.5"
     },
     {
       "name": "sentry_flutter",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry_flutter-8.8.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry_flutter-9.5.0",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.5"
     },
     {
       "name": "shelf",
@@ -393,15 +393,15 @@
     },
     {
       "name": "source_gen",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/source_gen-1.5.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/source_gen-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.0"
+      "languageVersion": "3.7"
     },
     {
       "name": "source_helper",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/source_helper-1.3.4",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/source_helper-1.3.6",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.6"
     },
     {
       "name": "source_span",
@@ -485,13 +485,13 @@
       "name": "warnings_api",
       "rootUri": "../../warnings_api",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.8"
     },
     {
       "name": "warnings_core",
       "rootUri": "../../warnings_core",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.8"
     },
     {
       "name": "watcher",
@@ -501,15 +501,15 @@
     },
     {
       "name": "web",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/web-0.5.1",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/web-1.1.1",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "web_socket_channel",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.5",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/web_socket_channel-2.4.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "2.15"
     },
     {
       "name": "win32",
@@ -527,12 +527,12 @@
       "name": "fogos_api",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.8"
     }
   ],
   "generator": "pub",
   "generatorVersion": "3.8.1",
   "flutterRoot": "file:///Users/filipebarroso/Documents/Software/flutter",
-  "flutterVersion": "3.32.5",
+  "flutterVersion": "3.32.8",
   "pubCache": "file:///Users/filipebarroso/.pub-cache"
 }

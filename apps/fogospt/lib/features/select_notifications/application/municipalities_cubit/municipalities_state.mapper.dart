@@ -70,9 +70,9 @@ mixin MunicipalitiesStateMappable {
   }
 
   MunicipalitiesStateCopyWith<MunicipalitiesState, MunicipalitiesState,
-          MunicipalitiesState>
-      get copyWith => _MunicipalitiesStateCopyWithImpl(
-          this as MunicipalitiesState, $identity, $identity);
+      MunicipalitiesState> get copyWith => _MunicipalitiesStateCopyWithImpl<
+          MunicipalitiesState, MunicipalitiesState>(
+      this as MunicipalitiesState, $identity, $identity);
   @override
   String toString() {
     return MunicipalitiesStateMapper.ensureInitialized()
@@ -95,8 +95,8 @@ mixin MunicipalitiesStateMappable {
 extension MunicipalitiesStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, MunicipalitiesState, $Out> {
   MunicipalitiesStateCopyWith<$R, MunicipalitiesState, $Out>
-      get $asMunicipalitiesState =>
-          $base.as((v, t, t2) => _MunicipalitiesStateCopyWithImpl(v, t, t2));
+      get $asMunicipalitiesState => $base.as(
+          (v, t, t2) => _MunicipalitiesStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class MunicipalitiesStateCopyWith<$R, $In extends MunicipalitiesState,
@@ -142,5 +142,5 @@ class _MunicipalitiesStateCopyWithImpl<$R, $Out>
   @override
   MunicipalitiesStateCopyWith<$R2, MunicipalitiesState, $Out2>
       $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-          _MunicipalitiesStateCopyWithImpl($value, $cast, t);
+          _MunicipalitiesStateCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

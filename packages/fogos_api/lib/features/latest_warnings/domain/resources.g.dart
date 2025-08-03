@@ -6,19 +6,18 @@ part of 'resources.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ResourcesImpl _$$ResourcesImplFromJson(Map<String, dynamic> json) =>
-    _$ResourcesImpl(
-      label: json['label'] as String,
-      man: (json['man'] as num).toInt(),
-      terrain: (json['terrain'] as num).toInt(),
-      aerial: (json['aerial'] as num).toInt(),
-      created: (json['created'] as num).toInt(),
-      location: json['location'] as String?,
-      personId: json['personId'] as String?,
-      id: json['id'] as String?,
-    );
+_Resources _$ResourcesFromJson(Map<String, dynamic> json) => _Resources(
+  label: json['label'] as String,
+  man: (json['man'] as num).toInt(),
+  terrain: (json['terrain'] as num).toInt(),
+  aerial: (json['aerial'] as num).toInt(),
+  created: (json['created'] as num).toInt(),
+  location: json['location'] as String?,
+  personId: json['personId'] as String?,
+  id: json['id'] as String?,
+);
 
-Map<String, dynamic> _$$ResourcesImplToJson(_$ResourcesImpl instance) =>
+Map<String, dynamic> _$ResourcesToJson(_Resources instance) =>
     <String, dynamic>{
       'label': instance.label,
       'man': instance.man,

@@ -39,7 +39,7 @@ final appRouter = GoRouter(
     ),
   ],
 )
-class RootRoute extends GoRouteData {
+class RootRoute extends GoRouteData with _$RootRoute {
   const RootRoute();
 
   @override
@@ -47,7 +47,7 @@ class RootRoute extends GoRouteData {
 }
 
 @immutable
-class FireDetailRoute extends GoRouteData {
+class FireDetailRoute extends GoRouteData with _$FireDetailRoute {
   /// The fire ID
   final String id;
 
@@ -59,7 +59,7 @@ class FireDetailRoute extends GoRouteData {
 }
 
 @immutable
-class PartnersRoute extends GoRouteData {
+class PartnersRoute extends GoRouteData with _$PartnersRoute {
   const PartnersRoute();
 
   @override
@@ -73,7 +73,8 @@ class PartnersRoute extends GoRouteData {
 }
 
 @immutable
-class NotificationsListMunicipalitiesRoute extends GoRouteData {
+class NotificationsListMunicipalitiesRoute extends GoRouteData
+    with _$NotificationsListMunicipalitiesRoute {
   const NotificationsListMunicipalitiesRoute();
 
   @override
@@ -82,7 +83,8 @@ class NotificationsListMunicipalitiesRoute extends GoRouteData {
 }
 
 @immutable
-class NotificationsGenericRoute extends GoRouteData {
+class NotificationsGenericRoute extends GoRouteData
+    with _$NotificationsGenericRoute {
   const NotificationsGenericRoute();
 
   @override
@@ -91,7 +93,8 @@ class NotificationsGenericRoute extends GoRouteData {
 }
 
 @immutable
-class NotificationsPerMunicipalityRoute extends GoRouteData {
+class NotificationsPerMunicipalityRoute extends GoRouteData
+    with _$NotificationsPerMunicipalityRoute {
   const NotificationsPerMunicipalityRoute();
 
   @override

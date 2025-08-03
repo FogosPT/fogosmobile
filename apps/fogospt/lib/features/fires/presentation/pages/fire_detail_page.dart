@@ -347,7 +347,8 @@ class FireDetailPageViewSuccess extends StatelessWidget {
       getTitlesWidget: (value, meta) {
         final dateTime = DateTime.fromMillisecondsSinceEpoch(value.toInt());
         return SideTitleWidget(
-          axisSide: meta.axisSide,
+          meta: meta,
+          // axisSide: meta.axisSide,
           angle: 125,
           child: Text(
             DateFormat(dateFormatDayMonthHourMinutes).format(dateTime),

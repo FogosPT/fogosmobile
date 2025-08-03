@@ -5,7 +5,7 @@ part 'icnf.freezed.dart';
 part 'icnf.g.dart';
 
 @freezed
-class Icnf with _$Icnf {
+abstract class Icnf with _$Icnf {
   factory Icnf() = _Icnf;
 	
   factory Icnf.fromJson(Map<String, dynamic> json) =>

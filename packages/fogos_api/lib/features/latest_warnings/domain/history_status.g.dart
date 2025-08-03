@@ -6,8 +6,8 @@ part of 'history_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$HistoryStatusImpl _$$HistoryStatusImplFromJson(Map<String, dynamic> json) =>
-    _$HistoryStatusImpl(
+_HistoryStatus _$HistoryStatusFromJson(Map<String, dynamic> json) =>
+    _HistoryStatus(
       id: json['id'] as String?,
       sharepointId: (json['sharepointId'] as num?)?.toInt(),
       location: json['location'] as String?,
@@ -20,7 +20,7 @@ _$HistoryStatusImpl _$$HistoryStatusImplFromJson(Map<String, dynamic> json) =>
           : Ated.fromJson(json['updated'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$HistoryStatusImplToJson(_$HistoryStatusImpl instance) =>
+Map<String, dynamic> _$HistoryStatusToJson(_HistoryStatus instance) =>
     <String, dynamic>{
       'id': instance.id,
       'sharepointId': instance.sharepointId,

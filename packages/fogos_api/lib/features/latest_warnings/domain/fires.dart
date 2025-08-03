@@ -5,7 +5,7 @@ part 'fires.freezed.dart';
 part 'fires.g.dart';
 
 @freezed
-class Fires with _$Fires {
+abstract class Fires with _$Fires {
   const factory Fires({
     required bool success,
     required List<Fire> data,

@@ -4,7 +4,7 @@ part 'resources.freezed.dart';
 part 'resources.g.dart';
 
 @freezed
-class Resources with _$Resources {
+abstract class Resources with _$Resources {
   const factory Resources({
     required String label,
     required int man,

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,316 +9,314 @@ part of 'history_status.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
-HistoryStatus _$HistoryStatusFromJson(Map<String, dynamic> json) {
-  return _HistoryStatus.fromJson(json);
-}
 
 /// @nodoc
 mixin _$HistoryStatus {
-  String? get id => throw _privateConstructorUsedError;
-  int? get sharepointId => throw _privateConstructorUsedError;
-  String? get location => throw _privateConstructorUsedError;
-  String get status => throw _privateConstructorUsedError;
-  int get statusCode => throw _privateConstructorUsedError;
-  String get label => throw _privateConstructorUsedError;
-  dynamic get created => throw _privateConstructorUsedError;
-  Ated? get updated => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $HistoryStatusCopyWith<HistoryStatus> get copyWith =>
-      throw _privateConstructorUsedError;
+ String? get id; int? get sharepointId; String? get location; String get status; int get statusCode; String get label; dynamic get created; Ated? get updated;
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$HistoryStatusCopyWith<HistoryStatus> get copyWith => _$HistoryStatusCopyWithImpl<HistoryStatus>(this as HistoryStatus, _$identity);
+
+  /// Serializes this HistoryStatus to a JSON map.
+  Map<String, dynamic> toJson();
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HistoryStatus&&(identical(other.id, id) || other.id == id)&&(identical(other.sharepointId, sharepointId) || other.sharepointId == sharepointId)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.statusCode, statusCode) || other.statusCode == statusCode)&&(identical(other.label, label) || other.label == label)&&const DeepCollectionEquality().equals(other.created, created)&&(identical(other.updated, updated) || other.updated == updated));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,sharepointId,location,status,statusCode,label,const DeepCollectionEquality().hash(created),updated);
+
+@override
+String toString() {
+  return 'HistoryStatus(id: $id, sharepointId: $sharepointId, location: $location, status: $status, statusCode: $statusCode, label: $label, created: $created, updated: $updated)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $HistoryStatusCopyWith<$Res> {
-  factory $HistoryStatusCopyWith(
-          HistoryStatus value, $Res Function(HistoryStatus) then) =
-      _$HistoryStatusCopyWithImpl<$Res, HistoryStatus>;
-  @useResult
-  $Res call(
-      {String? id,
-      int? sharepointId,
-      String? location,
-      String status,
-      int statusCode,
-      String label,
-      dynamic created,
-      Ated? updated});
+abstract mixin class $HistoryStatusCopyWith<$Res>  {
+  factory $HistoryStatusCopyWith(HistoryStatus value, $Res Function(HistoryStatus) _then) = _$HistoryStatusCopyWithImpl;
+@useResult
+$Res call({
+ String? id, int? sharepointId, String? location, String status, int statusCode, String label, dynamic created, Ated? updated
+});
 
-  $AtedCopyWith<$Res>? get updated;
+
+$AtedCopyWith<$Res>? get updated;
+
 }
-
 /// @nodoc
-class _$HistoryStatusCopyWithImpl<$Res, $Val extends HistoryStatus>
+class _$HistoryStatusCopyWithImpl<$Res>
     implements $HistoryStatusCopyWith<$Res> {
-  _$HistoryStatusCopyWithImpl(this._value, this._then);
+  _$HistoryStatusCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final HistoryStatus _self;
+  final $Res Function(HistoryStatus) _then;
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? sharepointId = freezed,
-    Object? location = freezed,
-    Object? status = null,
-    Object? statusCode = null,
-    Object? label = null,
-    Object? created = freezed,
-    Object? updated = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sharepointId: freezed == sharepointId
-          ? _value.sharepointId
-          : sharepointId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: null == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as int,
-      label: null == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
-              as String,
-      created: freezed == created
-          ? _value.created
-          : created // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      updated: freezed == updated
-          ? _value.updated
-          : updated // ignore: cast_nullable_to_non_nullable
-              as Ated?,
-    ) as $Val);
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? sharepointId = freezed,Object? location = freezed,Object? status = null,Object? statusCode = null,Object? label = null,Object? created = freezed,Object? updated = freezed,}) {
+  return _then(_self.copyWith(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,sharepointId: freezed == sharepointId ? _self.sharepointId : sharepointId // ignore: cast_nullable_to_non_nullable
+as int?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,statusCode: null == statusCode ? _self.statusCode : statusCode // ignore: cast_nullable_to_non_nullable
+as int,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,created: freezed == created ? _self.created : created // ignore: cast_nullable_to_non_nullable
+as dynamic,updated: freezed == updated ? _self.updated : updated // ignore: cast_nullable_to_non_nullable
+as Ated?,
+  ));
+}
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AtedCopyWith<$Res>? get updated {
+    if (_self.updated == null) {
+    return null;
   }
 
-  @override
-  @pragma('vm:prefer-inline')
-  $AtedCopyWith<$Res>? get updated {
-    if (_value.updated == null) {
-      return null;
-    }
-
-    return $AtedCopyWith<$Res>(_value.updated!, (value) {
-      return _then(_value.copyWith(updated: value) as $Val);
-    });
-  }
+  return $AtedCopyWith<$Res>(_self.updated!, (value) {
+    return _then(_self.copyWith(updated: value));
+  });
+}
 }
 
-/// @nodoc
-abstract class _$$HistoryStatusImplCopyWith<$Res>
-    implements $HistoryStatusCopyWith<$Res> {
-  factory _$$HistoryStatusImplCopyWith(
-          _$HistoryStatusImpl value, $Res Function(_$HistoryStatusImpl) then) =
-      __$$HistoryStatusImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String? id,
-      int? sharepointId,
-      String? location,
-      String status,
-      int statusCode,
-      String label,
-      dynamic created,
-      Ated? updated});
 
-  @override
-  $AtedCopyWith<$Res>? get updated;
+/// Adds pattern-matching-related methods to [HistoryStatus].
+extension HistoryStatusPatterns on HistoryStatus {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _HistoryStatus value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _HistoryStatus() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _HistoryStatus value)  $default,){
+final _that = this;
+switch (_that) {
+case _HistoryStatus():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _HistoryStatus value)?  $default,){
+final _that = this;
+switch (_that) {
+case _HistoryStatus() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  int? sharepointId,  String? location,  String status,  int statusCode,  String label,  dynamic created,  Ated? updated)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _HistoryStatus() when $default != null:
+return $default(_that.id,_that.sharepointId,_that.location,_that.status,_that.statusCode,_that.label,_that.created,_that.updated);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  int? sharepointId,  String? location,  String status,  int statusCode,  String label,  dynamic created,  Ated? updated)  $default,) {final _that = this;
+switch (_that) {
+case _HistoryStatus():
+return $default(_that.id,_that.sharepointId,_that.location,_that.status,_that.statusCode,_that.label,_that.created,_that.updated);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  int? sharepointId,  String? location,  String status,  int statusCode,  String label,  dynamic created,  Ated? updated)?  $default,) {final _that = this;
+switch (_that) {
+case _HistoryStatus() when $default != null:
+return $default(_that.id,_that.sharepointId,_that.location,_that.status,_that.statusCode,_that.label,_that.created,_that.updated);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-class __$$HistoryStatusImplCopyWithImpl<$Res>
-    extends _$HistoryStatusCopyWithImpl<$Res, _$HistoryStatusImpl>
-    implements _$$HistoryStatusImplCopyWith<$Res> {
-  __$$HistoryStatusImplCopyWithImpl(
-      _$HistoryStatusImpl _value, $Res Function(_$HistoryStatusImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? sharepointId = freezed,
-    Object? location = freezed,
-    Object? status = null,
-    Object? statusCode = null,
-    Object? label = null,
-    Object? created = freezed,
-    Object? updated = freezed,
-  }) {
-    return _then(_$HistoryStatusImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      sharepointId: freezed == sharepointId
-          ? _value.sharepointId
-          : sharepointId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      location: freezed == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as String,
-      statusCode: null == statusCode
-          ? _value.statusCode
-          : statusCode // ignore: cast_nullable_to_non_nullable
-              as int,
-      label: null == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
-              as String,
-      created: freezed == created
-          ? _value.created
-          : created // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      updated: freezed == updated
-          ? _value.updated
-          : updated // ignore: cast_nullable_to_non_nullable
-              as Ated?,
-    ));
-  }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$HistoryStatusImpl implements _HistoryStatus {
-  const _$HistoryStatusImpl(
-      {this.id,
-      this.sharepointId,
-      this.location,
-      required this.status,
-      required this.statusCode,
-      required this.label,
-      required this.created,
-      this.updated});
 
-  factory _$HistoryStatusImpl.fromJson(Map<String, dynamic> json) =>
-      _$$HistoryStatusImplFromJson(json);
+class _HistoryStatus implements HistoryStatus {
+  const _HistoryStatus({this.id, this.sharepointId, this.location, required this.status, required this.statusCode, required this.label, required this.created, this.updated});
+  factory _HistoryStatus.fromJson(Map<String, dynamic> json) => _$HistoryStatusFromJson(json);
 
-  @override
-  final String? id;
-  @override
-  final int? sharepointId;
-  @override
-  final String? location;
-  @override
-  final String status;
-  @override
-  final int statusCode;
-  @override
-  final String label;
-  @override
-  final dynamic created;
-  @override
-  final Ated? updated;
+@override final  String? id;
+@override final  int? sharepointId;
+@override final  String? location;
+@override final  String status;
+@override final  int statusCode;
+@override final  String label;
+@override final  dynamic created;
+@override final  Ated? updated;
 
-  @override
-  String toString() {
-    return 'HistoryStatus(id: $id, sharepointId: $sharepointId, location: $location, status: $status, statusCode: $statusCode, label: $label, created: $created, updated: $updated)';
-  }
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$HistoryStatusCopyWith<_HistoryStatus> get copyWith => __$HistoryStatusCopyWithImpl<_HistoryStatus>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HistoryStatusImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.sharepointId, sharepointId) ||
-                other.sharepointId == sharepointId) &&
-            (identical(other.location, location) ||
-                other.location == location) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.statusCode, statusCode) ||
-                other.statusCode == statusCode) &&
-            (identical(other.label, label) || other.label == label) &&
-            const DeepCollectionEquality().equals(other.created, created) &&
-            (identical(other.updated, updated) || other.updated == updated));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      sharepointId,
-      location,
-      status,
-      statusCode,
-      label,
-      const DeepCollectionEquality().hash(created),
-      updated);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$HistoryStatusImplCopyWith<_$HistoryStatusImpl> get copyWith =>
-      __$$HistoryStatusImplCopyWithImpl<_$HistoryStatusImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$HistoryStatusImplToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$HistoryStatusToJson(this, );
 }
 
-abstract class _HistoryStatus implements HistoryStatus {
-  const factory _HistoryStatus(
-      {final String? id,
-      final int? sharepointId,
-      final String? location,
-      required final String status,
-      required final int statusCode,
-      required final String label,
-      required final dynamic created,
-      final Ated? updated}) = _$HistoryStatusImpl;
-
-  factory _HistoryStatus.fromJson(Map<String, dynamic> json) =
-      _$HistoryStatusImpl.fromJson;
-
-  @override
-  String? get id;
-  @override
-  int? get sharepointId;
-  @override
-  String? get location;
-  @override
-  String get status;
-  @override
-  int get statusCode;
-  @override
-  String get label;
-  @override
-  dynamic get created;
-  @override
-  Ated? get updated;
-  @override
-  @JsonKey(ignore: true)
-  _$$HistoryStatusImplCopyWith<_$HistoryStatusImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HistoryStatus&&(identical(other.id, id) || other.id == id)&&(identical(other.sharepointId, sharepointId) || other.sharepointId == sharepointId)&&(identical(other.location, location) || other.location == location)&&(identical(other.status, status) || other.status == status)&&(identical(other.statusCode, statusCode) || other.statusCode == statusCode)&&(identical(other.label, label) || other.label == label)&&const DeepCollectionEquality().equals(other.created, created)&&(identical(other.updated, updated) || other.updated == updated));
 }
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,id,sharepointId,location,status,statusCode,label,const DeepCollectionEquality().hash(created),updated);
+
+@override
+String toString() {
+  return 'HistoryStatus(id: $id, sharepointId: $sharepointId, location: $location, status: $status, statusCode: $statusCode, label: $label, created: $created, updated: $updated)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$HistoryStatusCopyWith<$Res> implements $HistoryStatusCopyWith<$Res> {
+  factory _$HistoryStatusCopyWith(_HistoryStatus value, $Res Function(_HistoryStatus) _then) = __$HistoryStatusCopyWithImpl;
+@override @useResult
+$Res call({
+ String? id, int? sharepointId, String? location, String status, int statusCode, String label, dynamic created, Ated? updated
+});
+
+
+@override $AtedCopyWith<$Res>? get updated;
+
+}
+/// @nodoc
+class __$HistoryStatusCopyWithImpl<$Res>
+    implements _$HistoryStatusCopyWith<$Res> {
+  __$HistoryStatusCopyWithImpl(this._self, this._then);
+
+  final _HistoryStatus _self;
+  final $Res Function(_HistoryStatus) _then;
+
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? sharepointId = freezed,Object? location = freezed,Object? status = null,Object? statusCode = null,Object? label = null,Object? created = freezed,Object? updated = freezed,}) {
+  return _then(_HistoryStatus(
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,sharepointId: freezed == sharepointId ? _self.sharepointId : sharepointId // ignore: cast_nullable_to_non_nullable
+as int?,location: freezed == location ? _self.location : location // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String,statusCode: null == statusCode ? _self.statusCode : statusCode // ignore: cast_nullable_to_non_nullable
+as int,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
+as String,created: freezed == created ? _self.created : created // ignore: cast_nullable_to_non_nullable
+as dynamic,updated: freezed == updated ? _self.updated : updated // ignore: cast_nullable_to_non_nullable
+as Ated?,
+  ));
+}
+
+/// Create a copy of HistoryStatus
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$AtedCopyWith<$Res>? get updated {
+    if (_self.updated == null) {
+    return null;
+  }
+
+  return $AtedCopyWith<$Res>(_self.updated!, (value) {
+    return _then(_self.copyWith(updated: value));
+  });
+}
+}
+
+// dart format on

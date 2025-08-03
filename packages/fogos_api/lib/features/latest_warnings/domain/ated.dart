@@ -4,10 +4,11 @@ part 'ated.freezed.dart';
 part 'ated.g.dart';
 
 @freezed
-class Ated with _$Ated {
+abstract class Ated with _$Ated {
   const factory Ated({
     required int sec,
   }) = _Ated;
 
   factory Ated.fromJson(Map<String, dynamic> json) => _$AtedFromJson(json);
+  
 }

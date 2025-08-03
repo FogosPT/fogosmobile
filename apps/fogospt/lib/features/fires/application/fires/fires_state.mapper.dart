@@ -83,7 +83,8 @@ mixin FiresStateMappable {
   }
 
   FiresStateCopyWith<FiresState, FiresState, FiresState> get copyWith =>
-      _FiresStateCopyWithImpl(this as FiresState, $identity, $identity);
+      _FiresStateCopyWithImpl<FiresState, FiresState>(
+          this as FiresState, $identity, $identity);
   @override
   String toString() {
     return FiresStateMapper.ensureInitialized()
@@ -105,7 +106,7 @@ mixin FiresStateMappable {
 extension FiresStateValueCopy<$R, $Out>
     on ObjectCopyWith<$R, FiresState, $Out> {
   FiresStateCopyWith<$R, FiresState, $Out> get $asFiresState =>
-      $base.as((v, t, t2) => _FiresStateCopyWithImpl(v, t, t2));
+      $base.as((v, t, t2) => _FiresStateCopyWithImpl<$R, $Out>(v, t, t2));
 }
 
 abstract class FiresStateCopyWith<$R, $In extends FiresState, $Out>
@@ -177,5 +178,5 @@ class _FiresStateCopyWithImpl<$R, $Out>
   @override
   FiresStateCopyWith<$R2, FiresState, $Out2> $chain<$R2, $Out2>(
           Then<$Out2, $R2> t) =>
-      _FiresStateCopyWithImpl($value, $cast, t);
+      _FiresStateCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }

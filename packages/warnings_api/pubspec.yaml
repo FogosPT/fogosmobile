@@ -4,11 +4,11 @@ version: 0.0.4
 publish_to: none
 
 environment:
-  sdk: ^3.3.0
+  sdk: '^3.8.0'
 
 
 dependencies: 
-  sentry: ^8.8.0
+  sentry: ^9.5.0
 
 dev_dependencies:
   flutter_test:

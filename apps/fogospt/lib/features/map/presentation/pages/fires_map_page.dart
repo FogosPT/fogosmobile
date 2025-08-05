@@ -65,48 +65,40 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
         title: Text(context.l10n_fogos.fogospt),
       ),
       drawer: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              /// Header
-              DrawerHeader(
-                child: Center(child: icoFire),
-                decoration: BoxDecoration(
-                  color: appFogosOrange,
-                ),
-              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            /// Header
+            DrawerHeader(
+              child: Center(child: icoFire),
+              decoration: BoxDecoration(color: appFogosOrange),
+            ),
 
-              ElevatedButton(
-                onPressed: () =>
-                    NotificationsListMunicipalitiesRoute().go(context),
-                child: Text(
-                  context.l10n_fogos
-                      .fires_map_page_notifications_list_municipalities,
-                  style: context.textTheme.bodyLarge,
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: appFogosOrange,
-                ),
+            ElevatedButton(
+              onPressed: () =>
+                  NotificationsListMunicipalitiesRoute().go(context),
+              child: Text(
+                context
+                    .l10n_fogos
+                    .fires_map_page_notifications_list_municipalities,
+                style: context.textTheme.bodyLarge,
               ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () => NotificationsGenericRoute().go(context),
-                child: Text(
-                  context.l10n_fogos.fires_map_page_notifications,
-                  style: context.textTheme.bodyLarge,
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: appFogosOrange,
-                ),
+              style: ElevatedButton.styleFrom(backgroundColor: appFogosOrange),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () => NotificationsGenericRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_notifications,
+                style: context.textTheme.bodyLarge,
               ),
-              Spacer(),
-              CurrentVersionText(
-                style: context.textTheme.bodyMedium?.apply(color: Colors.white),
-              ),
-            ],
-          ),
+              style: ElevatedButton.styleFrom(backgroundColor: appFogosOrange),
+            ),
+            Spacer(),
+            CurrentVersionText(
+              style: context.textTheme.bodyMedium?.apply(color: Colors.white),
+            ),
+          ],
         ),
       ),
       body:

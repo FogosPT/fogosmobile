@@ -28,3 +28,15 @@ dev_dependencies:
 flutter:
   generate: true
   uses-material-design: true
+
+  fonts:
+    - family: Urbanist
+      fonts:
+        - asset: assets/fonts/urbanist/Urbanist-Italic-VariableFont.ttf
+        - asset: assets/fonts/urbanist/Urbanist-VariableFont.ttf
+    - family: Londrina
+      fonts:
+        - asset: assets/fonts/londrina/LondrinaSolid-Black.ttf
+        - asset: assets/fonts/londrina/LondrinaSolid-Light.ttf
+        - asset: assets/fonts/londrina/LondrinaSolid-Regular.ttf
+        - asset: assets/fonts/londrina/LondrinaSolid-Thin.ttf

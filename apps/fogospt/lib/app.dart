@@ -31,7 +31,7 @@ class FogosApp extends StatelessWidget {
             FiresLatestService(
               getIt<FiresRepository>(),
             ),
-          )..fetchLatestFires(),
+          ),
         ),
         BlocProvider(
           create: (context) =>

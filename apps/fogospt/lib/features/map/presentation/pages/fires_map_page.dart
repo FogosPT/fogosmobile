@@ -48,10 +48,14 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
   }
 
   void _startFetchTimer() {
+    context.read<MapLatestWarningMarkerCubit>().fetchLatestFires();
     _timer = Timer.periodic(
       kDebugMode ? Duration(seconds: 10) : refreshInterval,
       (timer) {
         context.read<MapLatestWarningMarkerCubit>().fetchLatestFires();
+        if (kDebugMode) {
+          debugPrint('Fetching latest fires at ${DateTime.now()}');
+        }
       },
     );
   }
@@ -104,6 +108,8 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       ),
       body:
           BlocBuilder<MapLatestWarningMarkerCubit, MapLatestWarningMarkerState>(
+            buildWhen: (previous, current) =>
+                previous.activeWarnings != current.activeWarnings,
         builder: (context, state) {
           return switch (state.status) {
             StateStatus.failure => MapPageErrorView(),

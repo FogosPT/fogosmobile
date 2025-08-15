@@ -12,17 +12,13 @@ import 'package:warnings/warnings.dart';
 import 'package:wolt_modal_sheet/wolt_modal_sheet.dart';
 
 class MapPageView extends StatelessWidget {
-  const MapPageView({
-    super.key,
-  });
+  const MapPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final state = context.read<MapLatestWarningMarkerCubit>().state;
-
+    final state = context.watch<MapLatestWarningMarkerCubit>().state; 
     return Stack(
       children: [
-        if (state.isLoading) const Center(child: CircularProgressIndicator()),
         FlutterMap(
           options: FiresMapConfiguration.getMapOptions(),
           children: [
@@ -46,7 +42,7 @@ class MapPageView extends StatelessWidget {
                   onTap: () => _showBottomModal(context, fire),
                 );
               }).toList(),
-            )
+            ),
           ],
         ),
       ],
@@ -62,14 +58,10 @@ class FireMarker extends Marker {
     required Color color,
     required void Function() onTap,
   }) : super(
-          child: _FireMarkerWidget(
-            type: type,
-            color: color,
-            onTap: onTap,
-          ),
-          width: importance.size,
-          height: importance.size,
-        );
+         child: _FireMarkerWidget(type: type, color: color, onTap: onTap),
+         width: importance.size,
+         height: importance.size,
+       );
 }
 
 class _FireMarkerWidget extends StatelessWidget {
@@ -95,17 +87,11 @@ class _FireMarkerWidget extends StatelessWidget {
             Container(
               width: 50,
               height: 50,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
             Padding(
               padding: const EdgeInsets.all(4.0),
-              child: SvgPicture.asset(
-                height: 30,
-                type.icon,
-              ),
+              child: SvgPicture.asset(height: 30, type.icon),
             ),
           ],
         ),
@@ -118,24 +104,17 @@ Future<dynamic> _showBottomModal(BuildContext context, Fire fire) {
   return WoltModalSheet.show(
     context: context,
     pageListBuilder: (modalSheetcontext) {
-      return [
-        _buildModalSheetPage(modalSheetcontext, fire),
-      ];
+      return [_buildModalSheetPage(modalSheetcontext, fire)];
     },
     modalTypeBuilder: (context) => WoltBottomSheetType(),
   );
 }
 
-WoltModalSheetPage _buildModalSheetPage(
-  BuildContext context,
-  Fire fire,
-) {
+WoltModalSheetPage _buildModalSheetPage(BuildContext context, Fire fire) {
   return WoltModalSheetPage(
     hasSabGradient: false,
     isTopBarLayerAlwaysVisible: false,
     hasTopBarLayer: false,
-    child: MapPageModalContentView(
-      fire: fire,
-    ),
+    child: MapPageModalContentView(fire: fire),
   );
 }

@@ -56,8 +56,10 @@ abstract class Fire with _$Fire {
     FireStatus? fireStatus,
   }) = _Fire;
 
+
   factory Fire.fromJson(Map<String, dynamic> json) => _$FireFromJson(json);
 
+  /// TODO: Passs the internalization object for translations o  f the status
   static FireStatus fromStatusToFireStatus(String status) {
     return switch (status) {
       'Ocorrência Significativa' => FireStatus.significativeOcurrence,

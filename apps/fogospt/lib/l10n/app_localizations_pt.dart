@@ -16,6 +16,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'Autoridade Nacional de Emergência e Proteção Civil';
 
   @override
+  String get source_agency_website => 'https://prociv.gov.pt/pt/home/';
+
+  @override
   String refresh_interval(int minutes) {
     String _temp0 = intl.Intl.pluralLogic(
       minutes,
@@ -100,9 +103,11 @@ class AppLocalizationsPt extends AppLocalizations {
       'Falhou o descarregar da informação do Concelho';
 
   @override
-  String app_information_about_page_data_collected(String agency) {
-    return 'Dados recolhidos do site da $agency';
-  }
+  String get app_information_about_page_title => 'Sobre';
+
+  @override
+  String get app_information_about_page_data_collected =>
+      'Dados recolhidos do site da ';
 
   @override
   String app_information_about_page_data_updated(String interval) {
@@ -114,9 +119,8 @@ class AppLocalizationsPt extends AppLocalizations {
       'A localização pode não ser exata.';
 
   @override
-  String app_information_about_page_suggestions(String email) {
-    return 'Sugestões / Reporte de bugs - $email';
-  }
+  String get app_information_about_page_suggestions =>
+      'Sugestões / Reporte de bugs - ';
 
   @override
   String get app_information_about_made_with_love => 'Feito com ❤️ por:';

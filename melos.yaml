@@ -26,6 +26,8 @@ command:
       mason: ^0.1.0-dev.57
       sentry_flutter: ^8.8.0
       sentry: ^8.8.0
+      url_launcher: ^6.3.2
+
 
     dev_dependencies:
       bloc_test: ^9.1.6

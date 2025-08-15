@@ -110,6 +110,12 @@ abstract class AppLocalizations {
   /// **'Autoridade Nacional de Emergência e Proteção Civil'**
   String get source_agency;
 
+  /// No description provided for @source_agency_website.
+  ///
+  /// In pt, this message translates to:
+  /// **'https://prociv.gov.pt/pt/home/'**
+  String get source_agency_website;
+
   /// Intervalo de atualização em minutos
   ///
   /// In pt, this message translates to:
@@ -254,11 +260,17 @@ abstract class AppLocalizations {
   /// **'Falhou o descarregar da informação do Concelho'**
   String get select_notifications_per_municipality_error;
 
-  /// Mensagem a indicar de onde são recolhidos os dados
+  /// No description provided for @app_information_about_page_title.
   ///
   /// In pt, this message translates to:
-  /// **'Dados recolhidos do site da {agency}'**
-  String app_information_about_page_data_collected(String agency);
+  /// **'Sobre'**
+  String get app_information_about_page_title;
+
+  /// No description provided for @app_information_about_page_data_collected.
+  ///
+  /// In pt, this message translates to:
+  /// **'Dados recolhidos do site da '**
+  String get app_information_about_page_data_collected;
 
   /// Intervalo em que os dados são atualizados
   ///
@@ -272,11 +284,11 @@ abstract class AppLocalizations {
   /// **'A localização pode não ser exata.'**
   String get app_information_about_page_location;
 
-  /// Endereço de email para sugestões e reporte de bugs
+  /// No description provided for @app_information_about_page_suggestions.
   ///
   /// In pt, this message translates to:
-  /// **'Sugestões / Reporte de bugs - {email}'**
-  String app_information_about_page_suggestions(String email);
+  /// **'Sugestões / Reporte de bugs - '**
+  String get app_information_about_page_suggestions;
 
   /// No description provided for @app_information_about_made_with_love.
   ///

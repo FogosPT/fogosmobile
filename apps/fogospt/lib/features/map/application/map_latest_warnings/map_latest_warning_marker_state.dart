@@ -30,7 +30,7 @@ extension MapLatestFiresStateExtension on MapLatestWarningMarkerState {
     return MapLatestWarningMarkerState(
       warnings: warnings,
       activeWarnings:
-          fires?.where((element) => element.active).toSet() ?? <Fire>{},
+          fires?.where((Fire element) => element.active).toSet() ?? <Fire>{},
       status: StateStatus.success,
     );
   }

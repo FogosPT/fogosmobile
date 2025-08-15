@@ -1,6 +1,17 @@
 {
     "@@locale": "pt",
     "fogospt": "Fogos.pt",
+    "source_agency": "Autoridade Nacional de Emergência e Proteção Civil",
+    "refresh_interval": "{minutes, plural, =0 {agora} =1 {1 minuto} other {{minutes} minutos}}",
+    "@refresh_interval": {
+        "description": "Intervalo de atualização em minutos",
+        "placeholders": {
+            "minutes": {
+                "type": "int",
+                "example": "2"
+            }
+        }
+    },
     "fires_map_page_notifications": "Notificações",
     "fires_map_page_notifications_list_municipalities": "Notificações por Concelho",
     "fires_map_page_fire_list": "Lista de Incêndios",
@@ -24,6 +35,38 @@
     "fire_detail_means":"meios",
     "select_notifications_per_municipality": "Notificações por Concelho",
     "select_notifications_per_municipality_error": "Falhou o descarregar da informação do Concelho",
+    "app_information_about_page_data_collected": "Dados recolhidos do site da {agency}",
+    "@app_information_about_page_data_collected": {
+        "description": "Mensagem a indicar de onde são recolhidos os dados",
+        "placeholders": {
+            "agency": {
+                "type": "String",
+                "example": "Autoridade Nacional de Emergência e Proteção Civil"
+            }
+        }
+    },
+    "app_information_about_page_data_updated": "Os dados são atualizados a cada {interval}.",
+    "@app_information_about_page_data_updated": {
+        "description": "Intervalo em que os dados são atualizados",
+        "placeholders": {
+            "interval": {
+                "type": "String",
+                "example": "2 minutos"
+            }
+        }
+    },
+    "app_information_about_page_location": "A localização pode não ser exata.",
+    "app_information_about_page_suggestions": "Sugestões / Reporte de bugs - {email}",
+    "@app_information_about_page_suggestions": {
+        "description": "Endereço de email para sugestões e reporte de bugs",
+        "placeholders": {
+            "email": {
+                "type": "String",
+                "example": "mail@fogos.pt"
+            }
+        }
+    },
+    "app_information_about_made_with_love": "Feito com ❤️ por:",
     "@helloWorld": {
         "description": "The conventional newborn programmer greeting!"
     }

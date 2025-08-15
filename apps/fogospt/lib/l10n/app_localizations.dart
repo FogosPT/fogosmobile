@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'Fogos.pt'**
   String get fogospt;
 
+  /// No description provided for @source_agency.
+  ///
+  /// In pt, this message translates to:
+  /// **'Autoridade Nacional de Emergência e Proteção Civil'**
+  String get source_agency;
+
+  /// Intervalo de atualização em minutos
+  ///
+  /// In pt, this message translates to:
+  /// **'{minutes, plural, =0 {agora} =1 {1 minuto} other {{minutes} minutos}}'**
+  String refresh_interval(int minutes);
+
   /// No description provided for @fires_map_page_notifications.
   ///
   /// In pt, this message translates to:
@@ -241,6 +253,36 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Falhou o descarregar da informação do Concelho'**
   String get select_notifications_per_municipality_error;
+
+  /// Mensagem a indicar de onde são recolhidos os dados
+  ///
+  /// In pt, this message translates to:
+  /// **'Dados recolhidos do site da {agency}'**
+  String app_information_about_page_data_collected(String agency);
+
+  /// Intervalo em que os dados são atualizados
+  ///
+  /// In pt, this message translates to:
+  /// **'Os dados são atualizados a cada {interval}.'**
+  String app_information_about_page_data_updated(String interval);
+
+  /// No description provided for @app_information_about_page_location.
+  ///
+  /// In pt, this message translates to:
+  /// **'A localização pode não ser exata.'**
+  String get app_information_about_page_location;
+
+  /// Endereço de email para sugestões e reporte de bugs
+  ///
+  /// In pt, this message translates to:
+  /// **'Sugestões / Reporte de bugs - {email}'**
+  String app_information_about_page_suggestions(String email);
+
+  /// No description provided for @app_information_about_made_with_love.
+  ///
+  /// In pt, this message translates to:
+  /// **'Feito com ❤️ por:'**
+  String get app_information_about_made_with_love;
 }
 
 class _AppLocalizationsDelegate

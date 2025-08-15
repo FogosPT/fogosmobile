@@ -12,6 +12,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get fogospt => 'Fogos.pt';
 
   @override
+  String get source_agency =>
+      'Autoridade Nacional de Emergência e Proteção Civil';
+
+  @override
+  String refresh_interval(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutos',
+      one: '1 minuto',
+      zero: 'agora',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get fires_map_page_notifications => 'Notificações';
 
   @override
@@ -82,4 +98,26 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get select_notifications_per_municipality_error =>
       'Falhou o descarregar da informação do Concelho';
+
+  @override
+  String app_information_about_page_data_collected(String agency) {
+    return 'Dados recolhidos do site da $agency';
+  }
+
+  @override
+  String app_information_about_page_data_updated(String interval) {
+    return 'Os dados são atualizados a cada $interval.';
+  }
+
+  @override
+  String get app_information_about_page_location =>
+      'A localização pode não ser exata.';
+
+  @override
+  String app_information_about_page_suggestions(String email) {
+    return 'Sugestões / Reporte de bugs - $email';
+  }
+
+  @override
+  String get app_information_about_made_with_love => 'Feito com ❤️ por:';
 }

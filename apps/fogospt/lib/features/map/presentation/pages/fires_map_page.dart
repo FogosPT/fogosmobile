@@ -14,6 +14,8 @@ import 'package:fogospt/routing/message_watcher.dart';
 import 'package:fogospt/utils/extentions/build_context.dart';
 import 'package:fogospt/utils/notifications/notification_helpers.dart';
 import 'package:warnings/warnings.dart';
+import 'package:warnings_core/constants/informational.dart'
+    show kRefreshInterval;
 import 'package:warnings_core/widget/current_version_text.dart';
 
 /// The page that displays the fires on the map
@@ -25,8 +27,6 @@ class FiresMapPage extends StatefulWidget {
 class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
   late final Timer? _timer;
 
-  /// The interval in which the fires are refreshed
-  final Duration refreshInterval = Duration(minutes: 5);
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
   void _startFetchTimer() {
     context.read<MapLatestWarningMarkerCubit>().fetchLatestFires();
     _timer = Timer.periodic(
-      kDebugMode ? Duration(seconds: 10) : refreshInterval,
+    kRefreshInterval,
       (timer) {
         context.read<MapLatestWarningMarkerCubit>().fetchLatestFires();
         if (kDebugMode) {

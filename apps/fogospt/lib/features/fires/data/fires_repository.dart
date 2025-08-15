@@ -1,4 +1,5 @@
-import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
+import 'package:fogos_api/features/latest_warnings/data/fires_service.dart'
+    show FiresService;
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/features/latest_warnings/domain/history_status.dart';
 import 'package:fogos_api/features/latest_warnings/domain/rcm.dart';

@@ -1,6 +1,6 @@
-import 'package:fogospt/features/contributors/data/contributors_service.dart'
+import 'package:fogos_api/features/mobile_contributors/data/contributors_service.dart'
     show ContributorsService;
-import 'package:fogospt/features/contributors/domain/contributor.dart';
+import 'package:fogos_api/features/mobile_contributors/domain/contributor.dart';
 import 'package:get_it/get_it.dart' show GetIt;
 
 class ContributorsRepository {

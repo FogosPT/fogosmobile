@@ -129,9 +129,9 @@
     },
     {
       "name": "sentry",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-9.5.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-8.14.2",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "2.17"
     },
     {
       "name": "sky_engine",

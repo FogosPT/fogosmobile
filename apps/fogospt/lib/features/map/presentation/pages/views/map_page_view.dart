@@ -28,7 +28,7 @@ class MapPageView extends StatelessWidget {
           children: [
             FiresMapConfiguration.getTileLayer(),
             MarkerLayer(
-              markers: state.activeWarnings.map((fire) {
+              markers: state.activeWarnings.map((Fire fire) {
                 return FireMarker(
                   point: LatLng(fire.lat, fire.lng),
                   type: switch (fire.statusCode) {

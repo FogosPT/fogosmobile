@@ -73,7 +73,6 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
               child: Center(child: icoFire),
               decoration: BoxDecoration(color: appFogosOrange),
             ),
-
             ElevatedButton(
               onPressed: () =>
                   NotificationsListMunicipalitiesRoute().go(context),
@@ -83,7 +82,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
                     .fires_map_page_notifications_list_municipalities,
                 style: context.textTheme.bodyLarge,
               ),
-              style: ElevatedButton.styleFrom(backgroundColor: appFogosOrange),
+              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder()),
             ),
             SizedBox(height: 10),
             ElevatedButton(
@@ -92,11 +91,13 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
                 context.l10n_fogos.fires_map_page_notifications,
                 style: context.textTheme.bodyLarge,
               ),
-              style: ElevatedButton.styleFrom(backgroundColor: appFogosOrange),
+              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder()),
             ),
             Spacer(),
-            CurrentVersionText(
-              style: context.textTheme.bodyMedium?.apply(color: Colors.white),
+            Center(
+              child: CurrentVersionText(
+                style: context.textTheme.bodyMedium?.apply(color: Colors.black),
+              ),
             ),
           ],
         ),

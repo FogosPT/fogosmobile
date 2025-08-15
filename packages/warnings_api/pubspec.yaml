@@ -8,7 +8,7 @@ environment:
 
 
 dependencies: 
-  sentry: ^9.5.0
+  sentry: ^8.8.0
 
 dev_dependencies:
   flutter_test:

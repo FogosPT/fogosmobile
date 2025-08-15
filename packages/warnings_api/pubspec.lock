@@ -167,10 +167,10 @@ packages:
     dependency: "direct main"
     description:
       name: sentry
-      sha256: e33638161982fb5deea36751800f7e83d9e4da79e2ff2e822dd92b6b6ddcee8b
+      sha256: "599701ca0693a74da361bc780b0752e1abc98226cf5095f6b069648116c896bb"
       url: "https://pub.dev"
     source: hosted
-    version: "9.5.0"
+    version: "8.14.2"
   sky_engine:
     dependency: transitive
     description: flutter

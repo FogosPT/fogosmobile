@@ -9,6 +9,7 @@
             "request": "launch",
             "type": "dart",
             "program": "apps/fogospt/lib/main.dart",
+            "flutterMode": "debug",
             "args": [
                 "--dart-define-from-file",
                 "keys.json"

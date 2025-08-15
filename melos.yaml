@@ -15,24 +15,24 @@ command:
       sdk: '^3.8.0'
       flutter: '>=2.17.0 <3.0.0'
 
-    # dependencies:
-    #   equatable: ^2.0.2
-    #   flutter_bloc: ^8.1.6
-    #   flutter_map: ^8.2.1
-    #   freezed: ^2.4.7
-    #   get_it: ^7.7.0
-    #   http: ^1.2.1
-    #   latlong2: ^0.9.1
-    #   mason: ^0.1.0-dev.57
-    #   sentry_flutter: ^8.8.0
-    #   sentry: ^8.8.0
+    dependencies:
+      equatable: ^2.0.2
+      flutter_bloc: ^8.1.6
+      flutter_map: ^8.2.1
+      freezed: ^2.4.7
+      get_it: ^7.7.0
+      http: ^1.2.1
+      latlong2: ^0.9.1
+      mason: ^0.1.0-dev.57
+      sentry_flutter: ^8.8.0
+      sentry: ^8.8.0
 
-    # dev_dependencies:
-    #   bloc_test: ^9.1.6
-    #   build_runner: ^2.1.2
-    #   flutter_lints: ^3.0.1
-    #   json_serializable: ^6.7.1
-    #   mockito: ^5.4.4
+    dev_dependencies:
+      bloc_test: ^9.1.6
+      build_runner: ^2.1.2
+      flutter_lints: ^3.0.1
+      json_serializable: ^6.7.1
+      mockito: ^5.4.4
 
     # hooks:
     #   post: dart pub run build_runner build

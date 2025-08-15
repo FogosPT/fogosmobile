@@ -195,7 +195,7 @@
     },
     {
       "name": "get_it",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/get_it-8.1.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/get_it-7.7.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -234,12 +234,6 @@
       "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/io-1.0.4",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "jni",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/jni-0.14.1",
-      "packageUri": "lib/",
-      "languageVersion": "3.3"
     },
     {
       "name": "json_annotation",
@@ -363,15 +357,15 @@
     },
     {
       "name": "sentry",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-9.5.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry-8.14.2",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "2.17"
     },
     {
       "name": "sentry_flutter",
-      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry_flutter-9.5.0",
+      "rootUri": "file:///Users/filipebarroso/.pub-cache/hosted/pub.dev/sentry_flutter-8.14.2",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "2.17"
     },
     {
       "name": "shelf",

@@ -116,10 +116,52 @@ abstract class AppLocalizations {
   /// **'Notificações por Concelho'**
   String get fires_map_page_notifications_list_municipalities;
 
+  /// No description provided for @fires_map_page_fire_list.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lista de Incêndios'**
+  String get fires_map_page_fire_list;
+
+  /// No description provided for @fires_map_page_warnings.
+  ///
+  /// In pt, this message translates to:
+  /// **'Avisos'**
+  String get fires_map_page_warnings;
+
+  /// No description provided for @fires_map_page_warnings_madeira.
+  ///
+  /// In pt, this message translates to:
+  /// **'Avisos Madeira'**
+  String get fires_map_page_warnings_madeira;
+
+  /// No description provided for @fires_map_page_informations.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informações'**
+  String get fires_map_page_informations;
+
+  /// No description provided for @fires_map_page_statistics.
+  ///
+  /// In pt, this message translates to:
+  /// **'Estatísticas'**
+  String get fires_map_page_statistics;
+
+  /// No description provided for @fires_map_page_about.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sobre'**
+  String get fires_map_page_about;
+
+  /// No description provided for @fires_map_page_partners.
+  ///
+  /// In pt, this message translates to:
+  /// **'Parceiros'**
+  String get fires_map_page_partners;
+
   /// No description provided for @fires_map_page_error.
   ///
   /// In pt, this message translates to:
-  /// **'Notifications'**
+  /// **'Erro ao carregar mapa'**
   String get fires_map_page_error;
 
   /// No description provided for @fires_map_page_more_informations.

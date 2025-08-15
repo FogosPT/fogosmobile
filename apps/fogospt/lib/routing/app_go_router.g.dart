@@ -34,6 +34,46 @@ RouteBase get $rootRoute => GoRouteData.$route(
 
       factory: _$NotificationsPerMunicipalityRoute._fromState,
     ),
+    GoRouteData.$route(
+      path: 'fire-list',
+
+      factory: _$FiresMapPageFireListRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'warnings',
+
+      factory: _$FiresMapPageWarningsRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'warnings-madeira',
+
+      factory: _$FiresMapPageWarningsMadeiraRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'informations',
+
+      factory: _$FiresMapPageInformationsRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'statistics',
+
+      factory: _$FiresMapPageStatisticsRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'error',
+
+      factory: _$FiresMapPageErrorRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'about',
+
+      factory: _$FiresMapPageAboutRoute._fromState,
+    ),
+    GoRouteData.$route(
+      path: 'partners-list',
+
+      factory: _$FiresMapPagePartnersRoute._fromState,
+    ),
   ],
 );
 
@@ -151,6 +191,174 @@ mixin _$NotificationsPerMunicipalityRoute on GoRouteData {
   @override
   String get location =>
       GoRouteData.$location('/notifications_per_municipality');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageFireListRoute on GoRouteData {
+  static FiresMapPageFireListRoute _fromState(GoRouterState state) =>
+      const FiresMapPageFireListRoute();
+
+  @override
+  String get location => GoRouteData.$location('/fire-list');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageWarningsRoute on GoRouteData {
+  static FiresMapPageWarningsRoute _fromState(GoRouterState state) =>
+      const FiresMapPageWarningsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/warnings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageWarningsMadeiraRoute on GoRouteData {
+  static FiresMapPageWarningsMadeiraRoute _fromState(GoRouterState state) =>
+      const FiresMapPageWarningsMadeiraRoute();
+
+  @override
+  String get location => GoRouteData.$location('/warnings-madeira');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageInformationsRoute on GoRouteData {
+  static FiresMapPageInformationsRoute _fromState(GoRouterState state) =>
+      const FiresMapPageInformationsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/informations');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageStatisticsRoute on GoRouteData {
+  static FiresMapPageStatisticsRoute _fromState(GoRouterState state) =>
+      const FiresMapPageStatisticsRoute();
+
+  @override
+  String get location => GoRouteData.$location('/statistics');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageErrorRoute on GoRouteData {
+  static FiresMapPageErrorRoute _fromState(GoRouterState state) =>
+      const FiresMapPageErrorRoute();
+
+  @override
+  String get location => GoRouteData.$location('/error');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPageAboutRoute on GoRouteData {
+  static FiresMapPageAboutRoute _fromState(GoRouterState state) =>
+      const FiresMapPageAboutRoute();
+
+  @override
+  String get location => GoRouteData.$location('/about');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin _$FiresMapPagePartnersRoute on GoRouteData {
+  static FiresMapPagePartnersRoute _fromState(GoRouterState state) =>
+      const FiresMapPagePartnersRoute();
+
+  @override
+  String get location => GoRouteData.$location('/partners-list');
 
   @override
   void go(BuildContext context) => context.go(location);

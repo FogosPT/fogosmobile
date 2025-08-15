@@ -70,14 +70,77 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
       ),
       drawer: Drawer(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 10,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             /// Header
             DrawerHeader(
               child: Center(child: icoFire),
               decoration: BoxDecoration(color: appFogosOrange),
             ),
-            ElevatedButton(
+            /// Fire List
+            TextButton(
+              onPressed: () => FiresMapPageFireListRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_fire_list,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Warnings
+            TextButton(
+              onPressed: () => FiresMapPageWarningsRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_warnings,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Warnings Madeira
+            TextButton(
+              onPressed: () => FiresMapPageWarningsMadeiraRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_warnings_madeira,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Informations
+            TextButton(
+              onPressed: () => FiresMapPageInformationsRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_informations,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Statistics
+            TextButton(
+              onPressed: () => FiresMapPageStatisticsRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_statistics,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+            Divider(),
+
+            /// Notifications Generic
+            TextButton(
+              onPressed: () => NotificationsGenericRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_notifications,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Notifications List Municipalities
+            TextButton(
               onPressed: () =>
                   NotificationsListMunicipalitiesRoute().go(context),
               child: Text(
@@ -86,16 +149,28 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
                     .fires_map_page_notifications_list_municipalities,
                 style: context.textTheme.bodyLarge,
               ),
-              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder()),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () => NotificationsGenericRoute().go(context),
+            Divider(),
+
+            /// About
+            TextButton(
+              onPressed: () => FiresMapPageAboutRoute().go(context),
               child: Text(
-                context.l10n_fogos.fires_map_page_notifications,
+                context.l10n_fogos.fires_map_page_about,
                 style: context.textTheme.bodyLarge,
               ),
-              style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder()),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
+            ),
+
+            /// Partners
+            TextButton(
+              onPressed: () => FiresMapPagePartnersRoute().go(context),
+              child: Text(
+                context.l10n_fogos.fires_map_page_partners,
+                style: context.textTheme.bodyLarge,
+              ),
+              style: TextButton.styleFrom(shape: RoundedRectangleBorder()),
             ),
             Spacer(),
             Center(

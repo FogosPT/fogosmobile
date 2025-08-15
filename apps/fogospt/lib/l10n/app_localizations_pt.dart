@@ -19,7 +19,28 @@ class AppLocalizationsPt extends AppLocalizations {
       'Notificações por Concelho';
 
   @override
-  String get fires_map_page_error => 'Notifications';
+  String get fires_map_page_fire_list => 'Lista de Incêndios';
+
+  @override
+  String get fires_map_page_warnings => 'Avisos';
+
+  @override
+  String get fires_map_page_warnings_madeira => 'Avisos Madeira';
+
+  @override
+  String get fires_map_page_informations => 'Informações';
+
+  @override
+  String get fires_map_page_statistics => 'Estatísticas';
+
+  @override
+  String get fires_map_page_about => 'Sobre';
+
+  @override
+  String get fires_map_page_partners => 'Parceiros';
+
+  @override
+  String get fires_map_page_error => 'Erro ao carregar mapa';
 
   @override
   String get fires_map_page_more_informations => 'mais informações';

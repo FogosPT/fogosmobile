@@ -69,11 +69,6 @@ RouteBase get $rootRoute => GoRouteData.$route(
 
       factory: _$FiresMapPageAboutRoute._fromState,
     ),
-    GoRouteData.$route(
-      path: 'partners-list',
-
-      factory: _$FiresMapPagePartnersRoute._fromState,
-    ),
   ],
 );
 
@@ -338,27 +333,6 @@ mixin _$FiresMapPageAboutRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/about');
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-mixin _$FiresMapPagePartnersRoute on GoRouteData {
-  static FiresMapPagePartnersRoute _fromState(GoRouterState state) =>
-      const FiresMapPagePartnersRoute();
-
-  @override
-  String get location => GoRouteData.$location('/partners-list');
 
   @override
   void go(BuildContext context) => context.go(location);

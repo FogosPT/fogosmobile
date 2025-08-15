@@ -165,7 +165,7 @@ class _FiresMapPageState extends State<FiresMapPage> with MessageWatcherBase {
 
             /// Partners
             TextButton(
-              onPressed: () => FiresMapPagePartnersRoute().go(context),
+              onPressed: () => PartnersRoute().go(context),
               child: Text(
                 context.l10n_fogos.fires_map_page_partners,
                 style: context.textTheme.bodyLarge,

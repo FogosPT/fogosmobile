@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fogospt/constants/assets.dart';
+import 'package:fogospt/features/app_information/presentation/pages/app_information_about_page.dart';
+import 'package:fogospt/features/app_information/presentation/pages/app_information_partners_page.dart';
 import 'package:fogospt/features/fires/presentation/pages/fire_detail_page.dart';
 import 'package:fogospt/features/map/presentation/pages/fires_map_page.dart';
-import 'package:fogospt/features/partners/presentation/partners_page.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_generic_page.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_page.dart';
 import 'package:fogospt/features/select_notifications/presentation/select_notifications_municipalities_per_district_page.dart';
@@ -38,7 +39,6 @@ final appRouter = GoRouter(
     TypedGoRoute<FiresMapPageStatisticsRoute>(path: 'statistics'),
     TypedGoRoute<FiresMapPageErrorRoute>(path: 'error'),
     TypedGoRoute<FiresMapPageAboutRoute>(path: 'about'),
-    TypedGoRoute<FiresMapPagePartnersRoute>(path: 'partners-list'),
   ],
 )
 class RootRoute extends GoRouteData with _$RootRoute {
@@ -65,7 +65,8 @@ class PartnersRoute extends GoRouteData with _$PartnersRoute {
   const PartnersRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => PartnersPage(
+  Widget build(BuildContext context, GoRouterState state) =>
+      AppInformationPartnersPage(
         partners: [
           partnerMapbox,
           partnerOfficelan,
@@ -199,26 +200,6 @@ class FiresMapPageAboutRoute extends GoRouteData with _$FiresMapPageAboutRoute {
   const FiresMapPageAboutRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    // TODO: Implement the corresponding page
-    return Scaffold(
-      appBar: AppBar(title: Text("Sobre")),
-      body: Center(child: Text("Sobre a aplicação")),
-    );
-  }
-}
-
-@immutable
-class FiresMapPagePartnersRoute extends GoRouteData
-    with _$FiresMapPagePartnersRoute {
-  const FiresMapPagePartnersRoute();
-
-  @override
-  Widget build(BuildContext context, GoRouterState state) {
-    // TODO: Implement the corresponding page
-    return Scaffold(
-      appBar: AppBar(title: Text("Parceiros")),
-      body: Center(child: Text("Lista de Parceiros")),
-    );
-  }
+  Widget build(BuildContext context, GoRouterState state) =>
+      AppInformationAboutPage();
 }

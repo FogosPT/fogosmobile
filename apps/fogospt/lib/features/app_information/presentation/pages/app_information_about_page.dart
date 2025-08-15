@@ -11,7 +11,9 @@ class AppInformationAboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Sobre")),
+      appBar: AppBar(
+        title: Text(context.l10n_fogos.app_information_about_page_title),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

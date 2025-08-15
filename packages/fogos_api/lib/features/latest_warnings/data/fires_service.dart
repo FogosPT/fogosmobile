@@ -8,10 +8,10 @@ import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
 import 'package:fogos_api/networking/fogos_base_client.dart';
 import 'package:warnings_core/logger.dart';
 
-class FiresRepository {
+class FiresService {
   final FogosBaseClient _fogosApi;
 
-  FiresRepository(this._fogosApi);
+  FiresService(this._fogosApi);
 
   Future<Fires> listActiveFires() async {
     final response = await _fogosApi.listActiveFires();

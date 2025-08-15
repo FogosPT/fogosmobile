@@ -1,9 +1,10 @@
-import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
+import 'package:fogos_api/features/latest_warnings/data/fires_service.dart'
+    show FiresService;
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:warnings_core/logger.dart';
 
 class FiresLatestService {
-  final FiresRepository firesRepository;
+  final FiresService firesRepository;
 
   const FiresLatestService(this.firesRepository);
 

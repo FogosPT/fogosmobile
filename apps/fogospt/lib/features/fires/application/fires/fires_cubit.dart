@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:fogospt/features/fires/application/fires/fires_state.dart';
-import 'package:fogospt/features/fires/data/fire_service.dart';
+import 'package:fogospt/features/fires/data/fires_repository.dart';
 
 class FiresCubit extends Cubit<FiresState> {
-  FireService service;
+  FiresRepository service;
 
   FiresCubit(this.service) : super(FiresState());
 

@@ -1,7 +1,8 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
+import 'package:fogos_api/features/latest_warnings/data/fires_service.dart'
+    show FiresService;
 import 'package:fogos_api/shared/dependency_injection.dart';
 import 'package:fogospt/features/map/application/map_latest_warnings/map_latest_warning_marker_cubit.dart';
 import 'package:fogospt/features/map/data/fires_latest_service.dart';
@@ -29,7 +30,7 @@ class FogosApp extends StatelessWidget {
         BlocProvider(
           create: (context) => MapLatestWarningMarkerCubit(
             FiresLatestService(
-              getIt<FiresRepository>(),
+              getIt<FiresService>(),
             ),
           ),
         ),

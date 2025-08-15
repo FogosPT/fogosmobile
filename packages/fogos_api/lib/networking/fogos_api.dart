@@ -39,4 +39,11 @@ class FogosApi extends FogosBaseClient {
   void dispose() {
     client.close();
   }
+  
+  @override
+  Future<http.Response> getMobileContributors() {
+    return client.get(
+      Uri.parse("${environment.baseUrl}/v1/mobile-contributors"),
+    );
+  }
 }

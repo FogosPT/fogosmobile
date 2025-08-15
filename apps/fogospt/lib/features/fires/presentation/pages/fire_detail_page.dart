@@ -5,8 +5,8 @@ import 'package:fogospt/constants/assets.dart';
 import 'package:fogospt/constants/colors.dart';
 import 'package:fogospt/features/fires/application/fires/fires_cubit.dart';
 import 'package:fogospt/features/fires/application/fires/fires_state.dart';
-import 'package:fogospt/features/fires/data/fire_service.dart';
 import 'package:fogospt/features/fires/data/fires_flchart_data.dart';
+import 'package:fogospt/features/fires/data/fires_repository.dart';
 import 'package:fogospt/features/fires/presentation/fire_app_bar.dart';
 import 'package:fogospt/features/fires/presentation/widgets/fire_risk_state_icon_widget.dart';
 import 'package:fogospt/features/fires/presentation/widgets/fire_risk_widget.dart';
@@ -29,7 +29,7 @@ class FireDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => FiresCubit(
-        FireService.FireService(),
+        FiresRepository.FireService(),
       )..fetchAllFireInformation(fireId),
       child: BlocBuilder<FiresCubit, FiresState>(
         buildWhen: (previous, current) => previous != current,

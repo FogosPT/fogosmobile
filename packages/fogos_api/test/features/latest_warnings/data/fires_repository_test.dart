@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fogos_api/features/latest_warnings/data/fires_repository.dart';
+import 'package:fogos_api/features/latest_warnings/data/fires_service.dart'
+    show FiresService;
 import 'package:fogos_api/features/latest_warnings/domain/fire.dart';
 import 'package:fogos_api/features/latest_warnings/domain/fires.dart';
 import 'package:fogos_api/networking/fogos_base_client.dart';
@@ -18,10 +19,10 @@ import 'fires_repository_test.mocks.dart';
 void main() {
   FogosBaseClient fogosBaseClient = MockFogosBaseClient();
 
-  late FiresRepository firesRepository;
+  late FiresService firesRepository;
 
   setUp(() {
-    firesRepository = FiresRepository(fogosBaseClient);
+    firesRepository = FiresService(fogosBaseClient);
   });
 
   test('Parses correctly a fire', () async {

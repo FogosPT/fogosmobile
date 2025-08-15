@@ -5,15 +5,15 @@ import 'package:fogos_api/features/latest_warnings/domain/rcm.dart';
 import 'package:fogos_api/features/latest_warnings/domain/resources.dart';
 import 'package:get_it/get_it.dart';
 
-class FireService {
-  late final FiresRepository firesRepository;
+class FiresRepository {
+  late final FiresService firesService;
 
-  FireService.FireService()
-      : this.firesRepository = GetIt.I.get<FiresRepository>();
+  FiresRepository.FireService()
+    : this.firesService = GetIt.I.get<FiresService>();
 
   Future<Fire> fetchFire(String id) async {
     try {
-      return await firesRepository.getFireById(id);
+      return await firesService.getFireById(id);
     } catch (e) {
       rethrow;
     }
@@ -21,7 +21,7 @@ class FireService {
 
   Future<List<Resources>> fetchResources(String id) async {
     try {
-      return await firesRepository.getResources(id);
+      return await firesService.getResources(id);
     } catch (e) {
       rethrow;
     }
@@ -29,7 +29,7 @@ class FireService {
 
   Future<List<HistoryStatus>> fetchHistoryStatuses(String id) async {
     try {
-      return await firesRepository.getFireHistoryStatuses(id);
+      return await firesService.getFireHistoryStatuses(id);
     } catch (e) {
       rethrow;
     }
@@ -37,7 +37,7 @@ class FireService {
 
   Future<List<RCM>> fetchRCM(String id) async {
     try {
-      return firesRepository.getRCM(id);
+      return firesService.getRCM(id);
     } catch (e) {
       rethrow;
     }

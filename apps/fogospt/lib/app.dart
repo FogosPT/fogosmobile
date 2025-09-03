@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fogos_api/features/latest_warnings/data/fires_service.dart'
     show FiresService;
 import 'package:fogos_api/shared/dependency_injection.dart';
+import 'package:fogospt/features/contributors/application/cubit/contributors_cubit.dart'
+    show ContributorsCubit;
 import 'package:fogospt/features/map/application/map_latest_warnings/map_latest_warning_marker_cubit.dart';
 import 'package:fogospt/features/map/data/fires_latest_service.dart';
 import 'package:fogospt/features/select_notifications/application/generic_selected_notifications_cubit/generic_selected_notifications_cubit.dart';
@@ -40,6 +42,9 @@ class FogosApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => MunicipalitiesCubit()..loadMunicipalities(),
+        ),
+        BlocProvider(
+          create: (context) => ContributorsCubit()..fetchContributors(),
         ),
       ],
       child: MaterialApp.router(

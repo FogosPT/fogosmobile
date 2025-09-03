@@ -9,7 +9,7 @@ class ContributorsRepository {
   ContributorsRepository.FireService()
     : this.contributorsService = GetIt.I.get<ContributorsService>();
 
-  Future<List<Contributor>> fetchContributors(String id) async {
+  Future<List<Contributor>> fetchContributors() async {
     try {
       return await contributorsService.getContributors();
     } catch (e) {

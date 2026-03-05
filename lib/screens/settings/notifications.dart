@@ -19,7 +19,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   List locations = [];
   TextEditingController controller = new TextEditingController();
-  String filter;
+  String? filter;
 
   @override
   initState() {
@@ -34,7 +34,7 @@ class _NotificationsState extends State<Notifications> {
   getLocations() async {
     String url = Endpoints.getLocations;
     final response = await get(url);
-    return response.data['rows'];
+    return response!.data['rows'];
   }
 
   @override
@@ -97,11 +97,11 @@ class _NotificationsState extends State<Notifications> {
                         final _location = this.locations[index];
                         return filter == null ||
                                 filter == "" ||
-                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter))
+                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter ?? ''))
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
                                 value: state.preferences['pref-${_location['key']}'] == 1,
-                                onChanged: (bool value) {
+                                onChanged: (bool? value) {
                                   setPreferenceAction(_location['key'], value == true ? 1 : 0);
                                 },
                               )

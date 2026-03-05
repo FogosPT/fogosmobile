@@ -7,7 +7,7 @@ import 'package:fogosmobile/screens/utils/date_utils.dart';
 class ModisModal extends StatelessWidget {
   final Modis modis;
 
-  const ModisModal({Key key, this.modis}) : super(key: key);
+  const ModisModal({Key? key, required this.modis}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

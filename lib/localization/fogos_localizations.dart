@@ -44,7 +44,7 @@ class FogosLocalizations {
     // If we're given "en_US", we'll use it as-is. If we're
     // given "en", we extract it and use it.
     final String localeName =
-        locale.countryCode == null || locale.countryCode.isEmpty
+        locale.countryCode == null || locale.countryCode!.isEmpty
             ? locale.languageCode
             : locale.toString();
 
@@ -484,6 +484,18 @@ class FogosLocalizations {
         desc: 'Fires List',
       );
 
+  String get textAllIncidents => Intl.message(
+        "Todas as Ocorrências",
+        name: 'textAllIncidents',
+        desc: 'All Incidents',
+      );
+
+  String get textOtherFires => Intl.message(
+        "Outros Fogos",
+        name: 'textOtherFires',
+        desc: 'Other Fires',
+      );
+
   String get textProblemLoadingData => Intl.message(
         "Houve um problema a carregar a informação.",
         name: 'textProblemLoadingData',
@@ -642,5 +654,5 @@ String get textDataTableStart => Intl.message(
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>
-      Localizations.of<FogosLocalizations>(context, FogosLocalizations);
+      Localizations.of<FogosLocalizations>(context, FogosLocalizations)!;
 }

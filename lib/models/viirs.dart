@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 ViirsResult viirsResultFromJson(String str) =>
     ViirsResult.fromJson(json.decode(str));
@@ -15,7 +15,7 @@ String viirsResultToJson(ViirsResult data) => json.encode(data.toJson());
 
 class ViirsResult {
   ViirsResult({
-    this.viirs,
+    required this.viirs,
   });
 
   Viirs viirs;
@@ -29,36 +29,33 @@ class ViirsResult {
       };
 
   static List<Viirs> fromMap(Map<String, dynamic> obj) {
-    if (obj == null) {
-      return [];
-    }
     return obj.values.map((map) => Viirs.fromJson(map)).toList();
   }
 }
 
 class Viirs extends BaseMapboxModel implements Equatable {
   Viirs({
-    this.latitude,
-    this.longitude,
-    this.brightTi4,
-    this.scan,
-    this.track,
+    required this.latitude,
+    required this.longitude,
+    this.brightTi4 = '',
+    this.scan = '',
+    this.track = '',
     this.acqDate,
-    this.acqTime,
-    this.satellite,
-    this.confidence,
-    this.version,
-    this.brightTi5,
-    this.frp,
-    this.daynight,
-  }) : super(LatLng(latitude ?? 0.0, longitude ?? 0.0), '$latitude');
+    this.acqTime = '',
+    this.satellite = '',
+    this.confidence = '',
+    this.version = '',
+    this.brightTi5 = '',
+    this.frp = '',
+    this.daynight = '',
+  }) : super(Point(coordinates: Position(longitude, latitude)), '$latitude');
 
   double latitude;
   double longitude;
   String brightTi4;
   String scan;
   String track;
-  DateTime acqDate;
+  DateTime? acqDate;
   String acqTime;
   String satellite;
   String confidence;
@@ -69,22 +66,22 @@ class Viirs extends BaseMapboxModel implements Equatable {
 
   factory Viirs.fromJson(Map<String, dynamic> json) => Viirs(
         latitude:
-            json["latitude"] != null ? double.tryParse(json["latitude"]) : null,
-        longitude: json["latitude"] != null
-            ? double.tryParse(json["longitude"])
-            : null,
-        brightTi4: json["bright_ti4"],
-        scan: json["scan"],
-        track: json["track"],
+            json["latitude"] != null ? double.tryParse(json["latitude"]) ?? 0.0 : 0.0,
+        longitude: json["longitude"] != null
+            ? double.tryParse(json["longitude"]) ?? 0.0
+            : 0.0,
+        brightTi4: json["bright_ti4"] ?? '',
+        scan: json["scan"] ?? '',
+        track: json["track"] ?? '',
         acqDate:
-            json["acq_date"] != null ? DateTime.parse(json["acq_date"]) : null,
-        acqTime: json["acq_time"],
-        satellite: json["satellite"],
-        confidence: json["confidence"],
-        version: json["version"],
-        brightTi5: json["bright_ti5"],
-        frp: json["frp"],
-        daynight: json["daynight"],
+            json["acq_date"] != null ? DateTime.tryParse(json["acq_date"]) : null,
+        acqTime: json["acq_time"] ?? '',
+        satellite: json["satellite"] ?? '',
+        confidence: json["confidence"] ?? '',
+        version: json["version"] ?? '',
+        brightTi5: json["bright_ti5"] ?? '',
+        frp: json["frp"] ?? '',
+        daynight: json["daynight"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,8 +90,9 @@ class Viirs extends BaseMapboxModel implements Equatable {
         "bright_ti4": brightTi4,
         "scan": scan,
         "track": track,
-        "acq_date":
-            "${acqDate.year.toString().padLeft(4, '0')}-${acqDate.month.toString().padLeft(2, '0')}-${acqDate.day.toString().padLeft(2, '0')}",
+        "acq_date": acqDate != null
+            ? "${acqDate!.year.toString().padLeft(4, '0')}-${acqDate!.month.toString().padLeft(2, '0')}-${acqDate!.day.toString().padLeft(2, '0')}"
+            : null,
         "acq_time": acqTime,
         "satellite": satellite,
         "confidence": confidence,
@@ -105,7 +103,7 @@ class Viirs extends BaseMapboxModel implements Equatable {
       };
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         latitude,
         longitude,
         brightTi4,
@@ -125,7 +123,7 @@ class Viirs extends BaseMapboxModel implements Equatable {
   bool get stringify => true;
 
   @override
-  bool skip<T>(List<T> filters) {
-    return !(latitude != null && longitude != null) && !(latitude != 0.0 && longitude != 0.0);
+  bool skip<T>(List<T>? filters) {
+    return latitude == 0.0 && longitude == 0.0;
   }
 }

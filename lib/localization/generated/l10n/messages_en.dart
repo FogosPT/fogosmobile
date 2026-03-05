@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "textFirefighters" : MessageLookupByLibrary.simpleMessage("Firefighters"),
     "textFires" : MessageLookupByLibrary.simpleMessage("Fires"),
     "textFiresList" : MessageLookupByLibrary.simpleMessage("Fires List"),
+    "textAllIncidents" : MessageLookupByLibrary.simpleMessage("All Incidents"),
+    "textOtherFires" : MessageLookupByLibrary.simpleMessage("Other Fires"),
     "textFrp" : MessageLookupByLibrary.simpleMessage("Frp"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Firefighters"),
     "textInformationArrival" : MessageLookupByLibrary.simpleMessage("Arrival to Incident Scene - Resources arrived at incidient location."),

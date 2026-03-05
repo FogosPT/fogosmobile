@@ -35,7 +35,7 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                   CheckboxListTile(
                     title: Text(FogosLocalizations.of(context).textSignificatOccurences),
                     value: state.preferences['pref-important'] == 1,
-                    onChanged: (bool value) {
+                    onChanged: (bool? value) {
                       setPreferenceCallBack('important', value == true ? 1 : 0);
                       setState(() {
                         state.preferences['pref-important'] =
@@ -46,7 +46,7 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                   CheckboxListTile(
                     title: Text(FogosLocalizations.of(context).textWarnings),
                     value: state.preferences['pref-warnings'] == 1,
-                    onChanged: (bool value) {
+                    onChanged: (bool? value) {
                       setPreferenceCallBack('warnings', value == true ? 1 : 0);
                       setState(() {
                         state.preferences['pref-warnings'] =
@@ -57,7 +57,7 @@ class _OtherNotificationsState extends State<OtherNotifications> {
                   CheckboxListTile(
                     title: Text(FogosLocalizations.of(context).textPlanes),
                     value: state.preferences['pref-planes'] == 1,
-                    onChanged: (bool value) {
+                    onChanged: (bool? value) {
                       setPreferenceCallBack('planes', value == true ? 1 : 0);
                       setState(() {
                         state.preferences['pref-planes'] =

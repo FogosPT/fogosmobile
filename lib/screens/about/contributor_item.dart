@@ -6,7 +6,7 @@ import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class ContributorItem extends StatelessWidget {
-  ContributorItem({this.contributor});
+  ContributorItem({required this.contributor});
 
   final Contributor contributor;
 

@@ -33,6 +33,7 @@ class About extends StatelessWidget {
                       ),
                     );
                   }
+                  return Center(child: CircularProgressIndicator());
                 });
           } else {
             return Center(

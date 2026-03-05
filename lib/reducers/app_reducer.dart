@@ -16,16 +16,18 @@ import 'package:fogosmobile/reducers/errors_reducer.dart';
 import 'package:fogosmobile/actions/warnings_actions.dart';
 import 'package:fogosmobile/reducers/viirs_reducer.dart';
 import 'package:fogosmobile/reducers/warnings_reducer.dart';
+import 'package:fogosmobile/actions/other_fires_actions.dart';
+import 'package:fogosmobile/reducers/other_fires_reducer.dart';
+import 'package:fogosmobile/actions/all_incidents_actions.dart';
+import 'package:fogosmobile/reducers/all_incidents_reducer.dart';
 
 AppState appReducer(AppState state, action) {
-  bool isLoading;
-  bool hasFirstLoad;
-  bool hasPreferences;
-  bool hasContributors;
-  bool showViirs;
-  bool showModis;
-
-  // print('action is action $action');
+  bool isLoading = state.isLoading;
+  bool hasFirstLoad = state.hasFirstLoad;
+  bool hasPreferences = state.hasPreferences;
+  bool hasContributors = state.hasContributors;
+  bool showViirs = state.showViirs;
+  bool showModis = state.showModis;
 
   if (action is LoadFiresAction) {
     isLoading = true;
@@ -97,11 +99,19 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is ModisLoadedAction) {
     isLoading = false;
+  } else if (action is LoadAllIncidentsAction) {
+    isLoading = true;
+  } else if (action is AllIncidentsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadOtherFiresAction) {
+    isLoading = true;
+  } else if (action is OtherFiresLoadedAction) {
+    isLoading = false;
   } else if (action is ShowViirsAction) {
-    showViirs = !(state.showViirs ?? false);
+    showViirs = !state.showViirs;
     isLoading = state.isLoading;
   } else if (action is ShowModisAction) {
-    showModis = !(state.showModis ?? false);
+    showModis = !state.showModis;
     isLoading = state.isLoading;
   } else {
     isLoading = false;
@@ -120,7 +130,7 @@ AppState appReducer(AppState state, action) {
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
-    hasContributors: hasContributors ?? state.contributors.isNotEmpty,
+    hasContributors: hasContributors,
     preferences: preferencesReducer(state.preferences, action),
     activeFilters: filtersReducer(state.activeFilters, action),
     nowStats: nowStatsReducer(state.nowStats, action),
@@ -136,6 +146,8 @@ AppState appReducer(AppState state, action) {
     viirs: viirsReducer(state.viirs, action),
     showModis: showModis,
     showViirs: showViirs,
+    otherFires: otherFiresReducer(state.otherFires, action),
+    allIncidents: allIncidentsReducer(state.allIncidents, action),
     lightnings: lightningsReducer(state.lightnings, action),
   );
 }

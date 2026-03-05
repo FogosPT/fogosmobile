@@ -25,7 +25,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
   getLocations() async {
     String url = Endpoints.getLocations;
     final response = await get(url);
-    return response.data['rows'];
+    return response!.data['rows'];
   }
 
   void iOSPermission() {
@@ -60,7 +60,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
           bool isLocationTurnedOn = value != 0;
 
           if (isLocationTurnedOn) {
-            store.dispatch(SetPreferenceAction(key, value));
+            store.dispatch(SetPreferenceAction(key, value.toInt()));
           }
         }
       });

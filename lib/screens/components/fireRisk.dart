@@ -21,10 +21,10 @@ class FireRisk extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-          store.dispatch(LoadFireRiskAction(store.state.selectedFire.id));
+          store.dispatch(LoadFireRiskAction(store.state.selectedFire!.id));
       },
       builder: (BuildContext context, AppState state) {
-        String stats = state.fireRisk;
+        String? stats = state.fireRisk;
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireRisk')) {

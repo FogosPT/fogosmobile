@@ -31,7 +31,7 @@ Middleware<AppState> _createLoadPreferences() {
     try {
       String url = Endpoints.getLocations;
       final response = await get(url);
-      final locations = response.data['rows'];
+      final locations = response!.data['rows'];
 
       Map data = {};
       final prefs = SharedPreferencesManager.preferences;

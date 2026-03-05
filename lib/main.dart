@@ -5,7 +5,7 @@ import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
-import 'package:sentry/sentry.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/home_page.dart';
-import 'package:fogosmobile/screens/settings/settings.dart';
+import 'package:fogosmobile/screens/settings/settings.dart' as app_settings;
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
@@ -35,50 +35,19 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
+import 'package:fogosmobile/screens/other_fires_page.dart';
+import 'package:fogosmobile/screens/all_incidents_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
-
-final SentryClient _sentry = SentryClient(SentryOptions(dsn: SENTRY_DSN));
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 bool get isInDebugMode {
-  // Assume you're in production mode
   bool inDebugMode = false;
-
-  // Assert expressions are only evaluated during development. They are ignored
-  // in production. Therefore, this code only sets `inDebugMode` to true
-  // in a development environment.
   assert(inDebugMode = true);
-
   return inDebugMode;
-}
-
-Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-
-  // Errors thrown in development mode are unlikely to be interesting. You can
-  // check if you are running in dev mode using an assertion and omit sending
-  // the report.
-  if (isInDebugMode) {
-    print(stackTrace);
-    print('In dev mode. Not sending report to Sentry.io.');
-    return;
-  }
-
-  print('Reporting to Sentry.io...');
-
-  final SentryId response = await _sentry.captureException(
-    error,
-    stackTrace: stackTrace,
-  );
-
-  if (response != null) {
-    print('Success! Event ID: $response');
-  } else {
-    print('Failed to report to Sentry.io: $error');
-  }
 }
 
 var logger = Logger(
@@ -90,41 +59,32 @@ var loggerNoStack = Logger(
 );
 
 void main() async {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    if (isInDebugMode) {
-      // In development mode, simply print to console.
-      FlutterError.dumpErrorToConsole(details);
-    } else {
-      // In production mode, report to the application zone to report to
-      // Sentry.
-      Zone.current.handleUncaughtError(details.exception, details.stack);
-    }
-  };
+  WidgetsFlutterBinding.ensureInitialized();
+  MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-  runZoned<Future<void>>(() async {
-    try {
-      SharedPreferencesManager.init().then((_) => runApp(MyApp()));
-    } catch (error, stackTrace) {
-      _reportError(error, stackTrace);
-    }
-  }, onError: (error, stackTrace) {
-    // Whenever an error occurs, call the `_reportError` function. This sends
-    // Dart errors to the dev console or Sentry depending on the environment.
-    _reportError(error, stackTrace);
-  });
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = SENTRY_DSN;
+      options.tracesSampleRate = isInDebugMode ? 0.0 : 1.0;
+    },
+    appRunner: () async {
+      await SharedPreferencesManager.init();
+      runApp(MyApp());
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-      store: store, // store comes from the app_store.dart import
+      store: store,
       child: MaterialApp(
         title: 'Fogos.pt',
         theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
-          SETTINGS_ROUTE: (_) => Settings(),
+          SETTINGS_ROUTE: (_) => app_settings.Settings(),
           WARNINGS_ROUTE: (_) => Warnings(),
           WARNINGS_MADEIRA_ROUTE: (_) => WarningsMadeira(),
           PARTNERS_ROUTE: (_) => Partners(),
@@ -134,6 +94,8 @@ class MyApp extends StatelessWidget {
           FIRE_DETAILS_ROUTE: (_) => FireDetailsPage(),
           FIRES_ROUTE: (_) => FireList(),
           FIRES_TABLES_ROUTE: (_) => FiresTablePage(),
+          OTHER_FIRES_ROUTE: (_) => OtherFiresPage(),
+          ALL_INCIDENTS_ROUTE: (_) => AllIncidentsPage(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -144,7 +106,6 @@ class MyApp extends StatelessWidget {
         supportedLocales: [
           const Locale('pt', 'PT'),
           const Locale('en', 'US'),
-          // ... other locales the app supports
         ],
       ),
     );
@@ -172,7 +133,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {
     return state.isLoading
-        ? Container(
+        ? SizedBox(
             width: 48,
             height: 48,
             child: Padding(
@@ -204,7 +165,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 value: status,
                 child: ListTileTheme(
                   style: ListTileStyle.drawer,
-                  selectedColor: Theme.of(context).accentColor,
+                  selectedColor: Theme.of(context).colorScheme.secondary,
                   child: ListTile(
                     dense: true,
                     contentPadding: const EdgeInsets.all(0.0),
@@ -310,7 +271,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 DrawerHeader(
                   child: Center(
                     child:
-                        SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
+                        SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -334,6 +295,22 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.table_chart),
                 ),
                 ListTile(
+                  title: Text(FogosLocalizations.of(context).textAllIncidents),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
+                  },
+                  leading: Icon(Icons.list_alt),
+                ),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textOtherFires),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+                  },
+                  leading: Icon(Icons.local_fire_department),
+                ),
+                ListTile(
                   title: Text(FogosLocalizations.of(context).textWarnings),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -341,16 +318,16 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   },
                   leading: Icon(Icons.warning),
                 ),
-                ListTile(
-                  title:
-                      Text(
-                      FogosLocalizations.of(context).textWarningsMadeira),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
-                  },
-                  leading: Icon(Icons.warning),
-                ),
+                // ListTile(
+                //   title:
+                //       Text(
+                //       FogosLocalizations.of(context).textWarningsMadeira),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
+                //   },
+                //   leading: Icon(Icons.warning),
+                // ),
                 ListTile(
                   title:
                       Text(FogosLocalizations.of(context).textInformations),

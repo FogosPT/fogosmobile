@@ -2,7 +2,7 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 
-firesReducer(List fires, action) {
+List<Fire> firesReducer(List<Fire> fires, action) {
   if (action is LoadFiresAction) {
     return fires;
   } else if (action is FiresLoadedAction) {
@@ -12,7 +12,7 @@ firesReducer(List fires, action) {
   }
 }
 
-fireReducer(Fire fire, action) {
+Fire? fireReducer(Fire? fire, action) {
   if (action is LoadFireAction) {
     return fire;
   } else if (action is FireLoadedAction) {
@@ -24,7 +24,7 @@ fireReducer(Fire fire, action) {
   }
 }
 
-fireMeansHistoryReducer(MeansHistory data, action) {
+MeansHistory? fireMeansHistoryReducer(MeansHistory? data, action) {
   if (action is LoadFireMeansHistoryAction) {
     return data;
   } else if (action is FireMeansHistoryLoadedAction) {
@@ -36,7 +36,7 @@ fireMeansHistoryReducer(MeansHistory data, action) {
   }
 }
 
-fireDetailsHistoryReducer(DetailsHistory data, action) {
+DetailsHistory? fireDetailsHistoryReducer(DetailsHistory? data, action) {
   if (action is LoadFireDetailsHistoryAction) {
     return data;
   } else if (action is FireDetailsHistoryLoadedAction) {
@@ -48,7 +48,7 @@ fireDetailsHistoryReducer(DetailsHistory data, action) {
   }
 }
 
-fireRiskReducer(String data, action) {
+String? fireRiskReducer(String? data, action) {
   if (action is LoadFireRiskAction) {
     return data;
   } else if (action is FireRiskLoadedAction) {
@@ -60,7 +60,7 @@ fireRiskReducer(String data, action) {
   }
 }
 
-filtersReducer(List filters, action) {
+List<FireStatus> filtersReducer(List<FireStatus> filters, action) {
   if (action is SavedFireFiltersAction) {
     return action.filters;
   } else {

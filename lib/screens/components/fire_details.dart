@@ -10,9 +10,9 @@ import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:redux/redux.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 typedef SetPreferenceCallBack = Function(String key, int value);
 
@@ -29,7 +29,7 @@ class FireDetails extends StatelessWidget {
         return StoreConnector<AppState, AppState>(
           converter: (Store<AppState> store) => store.state,
           builder: (BuildContext context, AppState state) {
-            Fire fire = state.selectedFire;
+            Fire? fire = state.selectedFire;
             if (fire == null) {
               if (state.errors != null && state.errors.contains('fire')) {
                 return Center(child: Text(FogosLocalizations.of(context).textProblemLoadingData));
@@ -186,6 +186,39 @@ class FireDetails extends StatelessWidget {
                                         children: <Widget>[
                                           Text(
                                             '${FogosLocalizations.of(context).textStatus}: ${FogosLocalizations.of(context).textFireStatus(fire.status)}',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 20.0),
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 16.0),
+                                      child: Icon(
+                                        Icons.nature,
+                                        color: getFireColor(fire),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          Text(
+                                            fire.nature ?? '',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
                                         ],

@@ -13,7 +13,9 @@ class FogosTheme {
       iconTheme: IconThemeData(color: Colors.black),
       indicatorColor: Colors.white,
       primaryColor: _primaryColor,
-      primaryColorBrightness: Brightness.dark,
-      accentColor: _accentColor,
-      accentColorBrightness: Brightness.dark);
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: _primaryColor,
+        secondary: _accentColor,
+        brightness: Brightness.light,
+      ));
 }

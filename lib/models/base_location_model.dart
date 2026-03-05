@@ -1,13 +1,13 @@
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 abstract class BaseMapboxModel {
   final String id;
 
-  final LatLng latlng;
+  final Point latlng;
 
   BaseMapboxModel(this.latlng, this.id);
 
-  LatLng get location => this.latlng;
+  Point get location => this.latlng;
 
   String get getId => this.id;
 

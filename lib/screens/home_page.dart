@@ -22,8 +22,8 @@ import 'package:fogosmobile/screens/widgets/modis_modal.dart';
 import 'package:fogosmobile/screens/widgets/satellite_button.dart';
 import 'package:fogosmobile/screens/widgets/viirs_button.dart';
 import 'package:fogosmobile/screens/widgets/viirs_modal.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,18 +32,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final LatLng _center = LatLng(39.806251, -8.088591);
+  final Point _center = Point(coordinates: Position(-8.088591, 39.806251));
   final List<String> _stylesStrings = [
     MAPBOX_TEMPLATE_STYLE,
     MAPBOX_URL_SATTELITE_TEMPLATE
   ];
 
   var currentMapboxTemplate = 0;
+  var _lastAppliedTemplate = -1;
 
-  MapboxMapController _mapController;
+  MapboxMap? _mapController;
 
-  void _onMapCreated(MapboxMapController controller) {
-    _mapController = controller;
+  final _fireMarkerKey = GlobalKey<MarkerStackState>();
+  final _modisMarkerKey = GlobalKey<MarkerStackState>();
+  final _viirsMarkerKey = GlobalKey<MarkerStackState>();
+
+  void _onCameraChanged(CameraChangedEventData data) {
+    _fireMarkerKey.currentState?.updatePositions();
+    _modisMarkerKey.currentState?.updatePositions();
+    _viirsMarkerKey.currentState?.updatePositions();
+  }
+
+  void _onMapCreated(MapboxMap mapboxMap) {
+    _mapController = mapboxMap;
+    _mapController?.location.updateSettings(LocationComponentSettings(
+      enabled: true,
+      puckBearingEnabled: true,
+    ));
+  }
+
+  void _updateStyleIfNeeded(int templateIndex) {
+    if (_mapController != null && templateIndex != _lastAppliedTemplate) {
+      _lastAppliedTemplate = templateIndex;
+      _mapController!.style.setStyleURI(_stylesStrings[templateIndex]);
+    }
   }
 
   _openModalSheet(context) async {
@@ -89,12 +111,7 @@ class _HomePageState extends State<HomePage> {
         currentMapboxTemplate =
             state.preferences[preferenceSatellite] == 1 ? 1 : 0;
 
-        //TODO When we need to show Lightning
-        //   MarkerStack<Lightning, LightningMarker,
-        //       LightningMarkerState, void>(
-        //     mapController: _mapController,
-        //     data: state.lightnings,
-        //   );
+        _updateStyleIfNeeded(currentMapboxTemplate);
 
         return ModalProgressHUD(
           opacity: 0.75,
@@ -102,19 +119,17 @@ class _HomePageState extends State<HomePage> {
           inAsyncCall: state.isLoading && state.selectedFire == null,
           child: Stack(
             children: <Widget>[
-              MapboxMap(
-                accessToken: MAPBOX_ACCESS_TOKEN,
-                trackCameraPosition: true,
-                myLocationEnabled: true,
-                myLocationRenderMode: MyLocationRenderMode.GPS,
+              MapWidget(
+                styleUri: _stylesStrings[currentMapboxTemplate],
                 onMapCreated: _onMapCreated,
-                styleString: _stylesStrings[currentMapboxTemplate],
-                initialCameraPosition: CameraPosition(
-                  target: _center,
+                onCameraChangeListener: _onCameraChanged,
+                cameraOptions: CameraOptions(
+                  center: _center,
                   zoom: 7.0,
                 ),
               ),
               MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
+                key: _fireMarkerKey,
                 mapController: _mapController,
                 data: state.fires,
                 filters: state.activeFilters,
@@ -124,6 +139,7 @@ class _HomePageState extends State<HomePage> {
               ),
               if (state.showModis ?? false)
                 MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
+                  key: _modisMarkerKey,
                   mapController: _mapController,
                   data: state.modis,
                   openModal: (item) {
@@ -132,6 +148,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               if (state.showViirs ?? false)
                 MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
+                  key: _viirsMarkerKey,
                   mapController: _mapController,
                   data: state.viirs,
                   openModal: (item) {

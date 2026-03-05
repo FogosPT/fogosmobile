@@ -1,16 +1,15 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class LightningMarker extends StatefulWidget implements BaseMarker {
-  final Point _initialPosition;
-  final LatLng _coordinate;
+  final ScreenCoordinate _initialPosition;
+  final Point _coordinate;
   final void Function(LightningMarkerState) _addMarkerState;
   final void Function() _openModal;
 
@@ -30,28 +29,22 @@ class LightningMarker extends StatefulWidget implements BaseMarker {
   }
 
   @override
-  LatLng get location => _coordinate;
+  Point get location => _coordinate;
 }
 
 class LightningMarkerState extends BaseMarkerState<LightningMarker> {
-  Point _position;
+  late ScreenCoordinate _position;
   void Function() _openModal;
 
   LightningMarkerState(this._position, this._openModal);
 
   @override
   Widget build(BuildContext context) {
-    var ratio = 1.0;
-
-    if (!kIsWeb) {
-      ratio = Platform.isIOS ? 1.0 : MediaQuery.of(context).devicePixelRatio;
-    }
-
     final pinSize = fullPinSize * 0.33;
 
     return Positioned(
-      left: _position.x / ratio - pinSize / 2,
-      top: _position.y / ratio - pinSize / 2,
+      left: _position.x - pinSize / 2,
+      top: _position.y - pinSize / 2,
       child: Container(
         decoration:
             BoxDecoration(color: Colors.purpleAccent, shape: BoxShape.circle),
@@ -72,14 +65,14 @@ class LightningMarkerState extends BaseMarkerState<LightningMarker> {
   }
 
   @override
-  void updatePosition(Point<num> point) {
+  void updatePosition(ScreenCoordinate point) {
     setState(() {
       _position = point;
     });
   }
 
   @override
-  LatLng getCoordinates() {
+  Point getCoordinates() {
     return widget._coordinate;
   }
 }

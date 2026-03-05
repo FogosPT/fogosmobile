@@ -18,6 +18,17 @@ class Partners extends StatelessWidget {
           padding: EdgeInsets.all(15.0),
           children: [
             TextButton(
+              child: Image.asset("assets/partners/portugalchama.png"),
+              onPressed: () {
+                launchURL('https://www.sgifr.gov.pt/');
+              },
+            ),
+             Padding(
+              padding: EdgeInsets.only(
+                bottom: 15.0,
+              ),
+            ),
+            TextButton(
               child: Image.asset("assets/partners/mapbox.png"),
               onPressed: () {
                 launchURL('https://www.mapbox.com/');
@@ -38,13 +49,8 @@ class Partners extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: 15.0,
               ),
-            ),
-            TextButton(
-              child: Image.asset("assets/partners/fll.png"),
-              onPressed: () {
-                launchURL('https://fundacaolapadolobo.pt/');
-              },
             )
+            
           ],
         ),
       ),

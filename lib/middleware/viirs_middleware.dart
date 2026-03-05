@@ -21,11 +21,10 @@ Middleware<AppState> _loadViirs() {
     try {
       String url = Endpoints.getViirs;
       final response = await get(url);
-      List<Viirs> viirs = ViirsResult.fromMap(response.data).toList();
+      List<Viirs> viirs = ViirsResult.fromMap(response!.data).toList();
       store.dispatch(ViirsLoadedAction(viirs));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(ViirsLoadedAction([]));
     }
   };

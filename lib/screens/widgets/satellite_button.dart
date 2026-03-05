@@ -8,7 +8,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class SatelliteButton extends StatefulWidget {
-  const SatelliteButton({Key key}) : super(key: key);
+  const SatelliteButton({Key? key}) : super(key: key);
 
   @override
   _SatelliteButtonState createState() => _SatelliteButtonState();

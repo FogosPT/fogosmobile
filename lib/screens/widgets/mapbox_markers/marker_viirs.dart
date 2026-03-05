@@ -1,16 +1,15 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class ViirsMarker extends StatefulWidget implements BaseMarker{
   final Viirs _viirs;
-  final Point _initialPosition;
-  final LatLng _coordinate;
+  final ScreenCoordinate _initialPosition;
+  final Point _coordinate;
   final void Function(ViirsMarkerState) _addMarkerState;
   final void Function(Viirs) _openModal;
 
@@ -31,13 +30,13 @@ class ViirsMarker extends StatefulWidget implements BaseMarker{
   }
 
   @override
-  LatLng get location => _coordinate;
+  Point get location => _coordinate;
 }
 
 class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
   final _iconSize = 10.0;
 
-  Point _position;
+  late ScreenCoordinate _position;
 
   @override
   void initState() {
@@ -47,15 +46,9 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
 
   @override
   Widget build(BuildContext context) {
-    var ratio = 1.0;
-
-    if (!kIsWeb) {
-      ratio = Platform.isIOS ? 1.0 : MediaQuery.of(context).devicePixelRatio;
-    }
-
     return Positioned(
-      left: _position.x / ratio - _iconSize / 2,
-      top: _position.y / ratio - _iconSize / 2,
+      left: _position.x - _iconSize / 2,
+      top: _position.y - _iconSize / 2,
       child: GestureDetector(
         onTap: () => widget._openModal?.call(widget._viirs),
         child: Container(
@@ -81,14 +74,14 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
   }
 
   @override
-  void updatePosition(Point<num> point) {
+  void updatePosition(ScreenCoordinate point) {
     setState(() {
       _position = point;
     });
   }
 
   @override
-  LatLng getCoordinates() {
+  Point getCoordinates() {
     return widget._coordinate;
   }
 }

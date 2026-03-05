@@ -5,7 +5,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class ModisButton extends StatelessWidget {
-  const ModisButton({Key key}) : super(key: key);
+  const ModisButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -38,9 +38,9 @@ Middleware<AppState> _createLoadFires() {
     try {
       String url = Endpoints.getFires;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       List<Fire> fires =
           responseData.map<Fire>((model) => Fire.fromJson(model)).toList();
       fires = calculateFireImportance(fires);
@@ -52,7 +52,7 @@ Middleware<AppState> _createLoadFires() {
     } catch (e) {
       store.dispatch(FiresLoadedAction([]));
       store.dispatch(AddErrorAction('fires'));
-      if (!(e is DioError)) {
+      if (!(e is DioException)) {
         print('throwing error');
         throw e;
       }
@@ -69,9 +69,9 @@ Middleware<AppState> _createLoadFire() {
 
     try {
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       if (responseData == null) {
         throw StateError('No fire data could be loaded: $url');
       }
@@ -81,10 +81,10 @@ Middleware<AppState> _createLoadFire() {
     } catch (e) {
       store.dispatch(FireLoadedAction(null));
       store.dispatch(AddErrorAction('fire'));
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null) {
-          if (e.response.statusCode >= 400) {
-            throw StateError('Server responded with ${e.response.statusCode}: $url');
+          if (e.response!.statusCode != null && e.response!.statusCode! >= 400) {
+            throw StateError('Server responded with ${e.response!.statusCode}: $url');
           }
         }
       } else {
@@ -102,9 +102,9 @@ Middleware<AppState> _createLoadFireMeansHistory() {
 
     try {
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       if (responseData == null) {
         throw StateError('No getFireMeansHistory could be loaded: $url');
       }
@@ -114,10 +114,10 @@ Middleware<AppState> _createLoadFireMeansHistory() {
     } catch (e) {
       store.dispatch(FireMeansHistoryLoadedAction(null));
       store.dispatch(AddErrorAction('fireMeansHistory'));
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null) {
-          if (e.response.statusCode >= 400) {
-            throw StateError('Server responded with ${e.response.statusCode}: $url');
+          if (e.response!.statusCode! >= 400) {
+            throw StateError('Server responded with ${e.response!.statusCode!}: $url');
           }
         }
       } else {
@@ -135,9 +135,9 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
 
     try {
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       if (responseData == null) {
         throw StateError('No getFireDetailsHistory could be loaded: $url');
       }
@@ -147,10 +147,10 @@ Middleware<AppState> _createLoadFireDetailsHistory() {
     } catch (e) {
       store.dispatch(FireDetailsHistoryLoadedAction(null));
       store.dispatch(AddErrorAction('fireDetailsHistory'));
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null) {
-          if (e.response.statusCode >= 400) {
-            throw StateError('Server responded with ${e.response.statusCode}: $url');
+          if (e.response!.statusCode! >= 400) {
+            throw StateError('Server responded with ${e.response!.statusCode!}: $url');
           }
         }
       } else {
@@ -169,9 +169,9 @@ Middleware<AppState> _createLoadFireRisk() {
 
     try {
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data'][0]['hoje']
-          : response.data['data'][0]['hoje'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data'][0]['hoje']
+          : response!.data['data'][0]['hoje'];
 
       if (responseData == null) {
         throw StateError('No getFireRisk could be loaded: $url');
@@ -182,10 +182,10 @@ Middleware<AppState> _createLoadFireRisk() {
     } catch (e) {
       store.dispatch(FireRiskLoadedAction(null));
       store.dispatch(AddErrorAction('fireRisk'));
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null) {
-          if (e.response.statusCode >= 400) {
-            throw StateError('Server responded with ${e.response.statusCode}: $url');
+          if (e.response!.statusCode! >= 400) {
+            throw StateError('Server responded with ${e.response!.statusCode!}: $url');
           }
         }
       } else {

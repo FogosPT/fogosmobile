@@ -12,9 +12,9 @@ class NowStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, NowStats>(
+    return StoreConnector<AppState, NowStats?>(
       converter: (Store<AppState> store) => store.state.nowStats,
-      builder: (BuildContext context, NowStats stats) {
+      builder: (BuildContext context, NowStats? stats) {
         if (stats == null) {
           return Center(child: CircularProgressIndicator());
         }
@@ -37,7 +37,7 @@ class NowStatistics extends StatelessWidget {
   }
 
   Widget _buildItem(String imgPath, String text,
-      [double height = 50.0, Color color]) {
+      [double height = 50.0, Color? color]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

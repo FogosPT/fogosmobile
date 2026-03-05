@@ -60,6 +60,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "textFirefighters" : MessageLookupByLibrary.simpleMessage("Operacionais"),
     "textFires" : MessageLookupByLibrary.simpleMessage("Incêndios"),
     "textFiresList" : MessageLookupByLibrary.simpleMessage("Lista de Fogos"),
+    "textAllIncidents" : MessageLookupByLibrary.simpleMessage("Todas as Ocorrências"),
+    "textOtherFires" : MessageLookupByLibrary.simpleMessage("Outros Fogos"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Operacionais"),
     "textInformationArrival" : MessageLookupByLibrary.simpleMessage("Chegada ao TO – chegada ao teatro de operações."),
     "textInformationClosed" : MessageLookupByLibrary.simpleMessage("Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos"),

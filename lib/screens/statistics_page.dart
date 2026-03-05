@@ -20,8 +20,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  YesterdayStats yesterdayStats;
-  TodayStats todayStats;
+  YesterdayStats? yesterdayStats;
+  TodayStats? todayStats;
 
   final TextStyle _header = TextStyle(
     color: Color(0xffff512f),

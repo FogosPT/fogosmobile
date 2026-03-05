@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -13,7 +13,7 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 
 class FireList extends StatefulWidget {
@@ -22,9 +22,9 @@ class FireList extends StatefulWidget {
 }
 
 class _FireListState extends State<FireList> {
-  MapboxMapController mapController;
+  MapboxMap? mapController;
 
-  void _onMapCreated(MapboxMapController controller) {
+  void _onMapCreated(MapboxMap controller) {
     mapController = controller;
   }
 
@@ -85,7 +85,7 @@ class _FireListState extends State<FireList> {
               itemBuilder: (BuildContext context, int index) {
                 Fire fire = fires[index];
                 String _title = fire.town;
-                final LatLng _center = LatLng(fire.lat, fire.lng);
+                final Point _center = Point(coordinates: Position(fire.lng, fire.lat));
 
                 if (fire.town != fire.local) {
                   _title = '$_title, ${fire.local}';
@@ -108,15 +108,23 @@ class _FireListState extends State<FireList> {
                     children: <Widget>[
                       Container(
                         height: 200.0,
-                        child: MapboxMap(
-                        initialCameraPosition: CameraPosition(target: _center, zoom: 14.0,),
-                        tiltGesturesEnabled: false,
-                        myLocationEnabled: true,
-                        myLocationRenderMode: MyLocationRenderMode.GPS,
-                        rotateGesturesEnabled: false,
-                        scrollGesturesEnabled: false,
-                        zoomGesturesEnabled: false,
-                        styleString: MAPBOX_URL_SATTELITE_TEMPLATE,
+                        child: MapWidget(
+                        cameraOptions: CameraOptions(center: _center, zoom: 14.0,),
+                        styleUri: MAPBOX_URL_SATTELITE_TEMPLATE,
+                        onMapCreated: (mapboxMap) {
+                          mapboxMap.gestures.updateSettings(GesturesSettings(
+                            pitchEnabled: false,
+                            rotateEnabled: false,
+                            scrollEnabled: false,
+                            pinchToZoomEnabled: false,
+                            doubleTapToZoomInEnabled: false,
+                            doubleTouchToZoomOutEnabled: false,
+                          ));
+                          mapboxMap.location.updateSettings(LocationComponentSettings(
+                            enabled: true,
+                            puckBearingEnabled: true,
+                          ));
+                        },
                         ),
                       ),
                       Container(

@@ -18,7 +18,7 @@ class FiresLoadedAction {
 }
 
 class FireLoadedAction {
-  final Fire fire;
+  final Fire? fire;
 
   FireLoadedAction(this.fire);
 }
@@ -42,7 +42,7 @@ class LoadFireMeansHistoryAction {
 class ClearFireMeansAction {}
 
 class FireMeansHistoryLoadedAction {
-  final MeansHistory data;
+  final MeansHistory? data;
 
   FireMeansHistoryLoadedAction(this.data);
 }
@@ -56,7 +56,7 @@ class LoadFireDetailsHistoryAction {
 class ClearFireDetailsAction {}
 
 class FireDetailsHistoryLoadedAction {
-  final DetailsHistory data;
+  final DetailsHistory? data;
 
   FireDetailsHistoryLoadedAction(this.data);
 }
@@ -70,7 +70,7 @@ class LoadFireRiskAction {
 class ClearFireRiskAction {}
 
 class FireRiskLoadedAction {
-  final String risk;
+  final String? risk;
 
   FireRiskLoadedAction(this.risk);
 }

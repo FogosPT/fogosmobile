@@ -5,7 +5,7 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire_details.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart' as charts;
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:redux/redux.dart';
 
@@ -17,10 +17,10 @@ class MeansStatistics extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-        store.dispatch(LoadFireMeansHistoryAction(store.state.selectedFire.id));
+        store.dispatch(LoadFireMeansHistoryAction(store.state.selectedFire!.id));
       },
       builder: (BuildContext context, AppState state) {
-        MeansHistory stats = state.fireMeansHistory;
+        MeansHistory? stats = state.fireMeansHistory;
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireMeansHistory')) {
@@ -34,21 +34,21 @@ class MeansStatistics extends StatelessWidget {
             charts.Series<Means, DateTime>(
               id: FogosLocalizations.of(context).textFirefighters,
               colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-              domainFn: (Means stats, _) => stats.label,
+              domainFn: (Means stats, _) => stats.label!,
               measureFn: (Means stats, _) => stats.man,
               data: stats.means,
             ),
             charts.Series<Means, DateTime>(
               id: FogosLocalizations.of(context).textVehicles,
               colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-              domainFn: (Means stats, _) => stats.label,
+              domainFn: (Means stats, _) => stats.label!,
               measureFn: (Means stats, _) => stats.terrain,
               data: stats.means,
             ),
             charts.Series<Means, DateTime>(
               id: FogosLocalizations.of(context).textAerial,
               colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-              domainFn: (Means stats, _) => stats.label,
+              domainFn: (Means stats, _) => stats.label!,
               measureFn: (Means stats, _) => stats.aerial,
               data: stats.means,
             ),
@@ -107,7 +107,7 @@ class MeansStatistics extends StatelessWidget {
   }
 
   Widget _buildItem(String imgPath, String text,
-      [double height = 50.0, Color color]) {
+      [double height = 50.0, Color? color]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

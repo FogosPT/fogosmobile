@@ -8,3 +8,5 @@ const ABOUT_ROUTE = '/about';
 const FIRE_DETAILS_ROUTE = '/fire_details';
 const FIRES_ROUTE = '/fires';
 const FIRES_TABLES_ROUTE = '/fires_table';
+const OTHER_FIRES_ROUTE = '/other_fires';
+const ALL_INCIDENTS_ROUTE = '/all_incidents';

@@ -1,7 +1,7 @@
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/models/statistics.dart';
 
-nowStatsReducer(NowStats stats, action) {
+NowStats? nowStatsReducer(NowStats? stats, action) {
   if (action is LoadNowStatsAction) {
     return stats;
   } else if (action is NowStatsLoadedAction) {
@@ -11,7 +11,7 @@ nowStatsReducer(NowStats stats, action) {
   }
 }
 
-todayStatsReducer(TodayStats stats, action) {
+TodayStats? todayStatsReducer(TodayStats? stats, action) {
   if (action is LoadTodayStatsAction) {
     return stats;
   } else if (action is TodayStatsLoadedAction) {
@@ -21,7 +21,7 @@ todayStatsReducer(TodayStats stats, action) {
   }
 }
 
-yesterdayStatsReducer(YesterdayStats stats, action) {
+YesterdayStats? yesterdayStatsReducer(YesterdayStats? stats, action) {
   if (action is LoadYesterdayStatsAction) {
     return stats;
   } else if (action is YesterdayStatsLoadedAction) {
@@ -31,7 +31,7 @@ yesterdayStatsReducer(YesterdayStats stats, action) {
   }
 }
 
-lastNightStatsReducer(LastNightStats stats, action) {
+LastNightStats? lastNightStatsReducer(LastNightStats? stats, action) {
   if (action is LoadLastNightStatsAction) {
     return stats;
   } else if (action is LastNightStatsLoadedAction) {
@@ -41,7 +41,7 @@ lastNightStatsReducer(LastNightStats stats, action) {
   }
 }
 
-weekStatsReducer(WeekStats stats, action) {
+WeekStats? weekStatsReducer(WeekStats? stats, action) {
   if (action is LoadWeekStatsAction) {
     return stats;
   } else if (action is WeekStatsLoadedAction) {
@@ -51,7 +51,7 @@ weekStatsReducer(WeekStats stats, action) {
   }
 }
 
-lastHoursStatsReducer(LastHoursStats stats, action) {
+LastHoursStats? lastHoursStatsReducer(LastHoursStats? stats, action) {
   if (action is LoadLastHoursAction) {
     return stats;
   } else if (action is LastHoursLoadedAction) {

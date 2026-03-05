@@ -1,7 +1,7 @@
 class MeansHistory {
   final List<Means> means;
 
-  MeansHistory({this.means});
+  MeansHistory({this.means = const []});
 
   factory MeansHistory.fromJson(List<dynamic> json) {
     List<Means> means = <Means>[];
@@ -14,9 +14,9 @@ class Means {
   final int aerial;
   final int man;
   final int terrain;
-  final DateTime label;
+  final DateTime? label;
 
-  Means({this.man, this.aerial, this.terrain, this.label});
+  Means({this.man = 0, this.aerial = 0, this.terrain = 0, this.label});
 
   factory Means.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel =
@@ -26,9 +26,9 @@ class Means {
             : parsedJson['created']['sec'] * 1000);
 
     return Means(
-      man: parsedJson['man'],
-      aerial: parsedJson['aerial'],
-      terrain: parsedJson['terrain'],
+      man: parsedJson['man'] ?? 0,
+      aerial: parsedJson['aerial'] ?? 0,
+      terrain: parsedJson['terrain'] ?? 0,
       label: dateLabel,
     );
   }
@@ -37,7 +37,7 @@ class Means {
 class DetailsHistory {
   final List<Details> details;
 
-  DetailsHistory({this.details});
+  DetailsHistory({this.details = const []});
 
   factory DetailsHistory.fromJson(List<dynamic> json) {
     List<Details> details = <Details>[];
@@ -49,9 +49,9 @@ class DetailsHistory {
 class Details {
   final String status;
   final int statusCode;
-  final DateTime label;
+  final DateTime? label;
 
-  Details({this.status, this.statusCode, this.label});
+  Details({this.status = '', this.statusCode = 0, this.label});
 
   factory Details.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel =
@@ -60,8 +60,8 @@ class Details {
             ? parsedJson['created'] * 1000
             : parsedJson['created']['sec'] * 1000);
     return Details(
-      status: parsedJson['status'],
-      statusCode: parsedJson['statusCode'],
+      status: parsedJson['status'] ?? '',
+      statusCode: parsedJson['statusCode'] ?? 0,
       label: dateLabel,
     );
   }

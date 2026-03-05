@@ -5,7 +5,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class MapOverlayErrorInfoWidget extends StatelessWidget {
-  const MapOverlayErrorInfoWidget({Key key}) : super(key: key);
+  const MapOverlayErrorInfoWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MapOverlayErrorInfoWidget extends StatelessWidget {
 
 class _MapOverlayErrorMessage extends StatelessWidget {
   const _MapOverlayErrorMessage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

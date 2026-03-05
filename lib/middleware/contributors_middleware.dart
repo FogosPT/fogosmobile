@@ -22,12 +22,11 @@ Middleware<AppState> _createLoadContributors() {
     try {
       String url = Endpoints.getMobileContributors;
       final response = await get(url);
-      List<Contributor> contributors = Contributor.fromList(response.data);
+      List<Contributor> contributors = Contributor.fromList(response!.data);
       print("load contributors");
       store.dispatch(ContributorsLoadedAction(contributors));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(ContributorsLoadedAction([]));
     }
   };

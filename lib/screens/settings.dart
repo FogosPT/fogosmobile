@@ -19,7 +19,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   List locations = [];
   TextEditingController controller = TextEditingController();
-  String filter;
+  String? filter;
 
   @override
   initState() {
@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
   getLocations() async {
     String url = Endpoints.getLocations;
     final response = await get(url);
-    return response.data['rows'];
+    return response?.data?['rows'] ?? [];
   }
 
   @override
@@ -104,11 +104,11 @@ class _SettingsState extends State<Settings> {
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
-                        return filter == null || filter == "" || _location['value']['name'].toLowerCase().contains(filter.toLowerCase())
+                        return filter == null || filter == "" || _location['value']['name'].toLowerCase().contains(filter!.toLowerCase())
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
                                 value: state.preferences['pref-${_location['key']}'] == 1,
-                                onChanged: (bool value) {
+                                onChanged: (bool? value) {
                                   setPreferenceAction(_location['key'], value == true ? 1 : 0);
                                 },
                               )

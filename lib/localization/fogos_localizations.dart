@@ -484,6 +484,12 @@ class FogosLocalizations {
         desc: 'Fires List',
       );
 
+  String get textSearch => Intl.message(
+        "Pesquisa",
+        name: 'textSearch',
+        desc: 'Search',
+      );
+
   String get textAllIncidents => Intl.message(
         "Todas as Ocorrências",
         name: 'textAllIncidents',

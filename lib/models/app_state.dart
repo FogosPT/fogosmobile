@@ -35,6 +35,7 @@ class AppState {
   bool showViirs;
   List<Fire> otherFires;
   List<Fire> allIncidents;
+  List<Fire> searchResults;
 
   AppState({
     this.fires = const [],
@@ -64,6 +65,7 @@ class AppState {
     this.showViirs = false,
     this.otherFires = const [],
     this.allIncidents = const [],
+    this.searchResults = const [],
     this.lightnings = const [],
   });
 
@@ -94,6 +96,7 @@ class AppState {
     bool? showViirs,
     List<Fire>? otherFires,
     List<Fire>? allIncidents,
+    List<Fire>? searchResults,
     List<Lightning>? lightnings,
   }) {
     return AppState(
@@ -124,6 +127,7 @@ class AppState {
       showViirs: showViirs ?? this.showViirs,
       otherFires: otherFires ?? this.otherFires,
       allIncidents: allIncidents ?? this.allIncidents,
+      searchResults: searchResults ?? this.searchResults,
       lightnings: lightnings ?? this.lightnings,
     );
   }

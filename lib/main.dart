@@ -37,6 +37,7 @@ import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/screens/other_fires_page.dart';
 import 'package:fogosmobile/screens/all_incidents_page.dart';
+import 'package:fogosmobile/screens/search_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
           FIRES_TABLES_ROUTE: (_) => FiresTablePage(),
           OTHER_FIRES_ROUTE: (_) => OtherFiresPage(),
           ALL_INCIDENTS_ROUTE: (_) => AllIncidentsPage(),
+          SEARCH_ROUTE: (_) => SearchPage(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -293,6 +295,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pushNamed(FIRES_TABLES_ROUTE);
                   },
                   leading: Icon(Icons.table_chart),
+                ),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textSearch),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(SEARCH_ROUTE);
+                  },
+                  leading: Icon(Icons.search),
                 ),
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textAllIncidents),

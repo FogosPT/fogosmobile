@@ -20,6 +20,8 @@ import 'package:fogosmobile/actions/other_fires_actions.dart';
 import 'package:fogosmobile/reducers/other_fires_reducer.dart';
 import 'package:fogosmobile/actions/all_incidents_actions.dart';
 import 'package:fogosmobile/reducers/all_incidents_reducer.dart';
+import 'package:fogosmobile/actions/search_actions.dart';
+import 'package:fogosmobile/reducers/search_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   bool isLoading = state.isLoading;
@@ -99,6 +101,10 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is ModisLoadedAction) {
     isLoading = false;
+  } else if (action is SearchIncidentsAction) {
+    isLoading = true;
+  } else if (action is SearchIncidentsLoadedAction) {
+    isLoading = false;
   } else if (action is LoadAllIncidentsAction) {
     isLoading = true;
   } else if (action is AllIncidentsLoadedAction) {
@@ -148,6 +154,7 @@ AppState appReducer(AppState state, action) {
     showViirs: showViirs,
     otherFires: otherFiresReducer(state.otherFires, action),
     allIncidents: allIncidentsReducer(state.allIncidents, action),
+    searchResults: searchResultsReducer(state.searchResults, action),
     lightnings: lightningsReducer(state.lightnings, action),
   );
 }

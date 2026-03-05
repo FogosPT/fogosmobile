@@ -48,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textFirefighters" : MessageLookupByLibrary.simpleMessage("Bombeiros"),
     "textFires" : MessageLookupByLibrary.simpleMessage("Incêndios"),
     "textFiresList" : MessageLookupByLibrary.simpleMessage("Lista de Fogos"),
+    "textSearch" : MessageLookupByLibrary.simpleMessage("Pesquisa"),
     "textAllIncidents" : MessageLookupByLibrary.simpleMessage("Todas as Ocorrências"),
     "textOtherFires" : MessageLookupByLibrary.simpleMessage("Outros Fogos"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Bombeiros"),

@@ -38,86 +38,121 @@ class MarkerStack<T extends BaseMapboxModel, V extends BaseMarker,
 class MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
     B extends BaseMarkerState, F> extends State<MarkerStack> {
   final Map<String, _MarkerData> _markerData = {};
-  bool _isUpdating = false;
+  bool _mapReady = false;
+  int _rebuildGeneration = 0;
+  bool _isRecalculating = false;
 
   @override
   void initState() {
     super.initState();
-    // Initial position calculation after first frame
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _rebuildMarkers();
-    });
   }
 
   @override
   void didUpdateWidget(covariant MarkerStack oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.data != oldWidget.data ||
-        widget.mapController != oldWidget.mapController) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _rebuildMarkers();
+    if (!_mapReady) return;
+    // Rebuild if data changed, or if mapController just became available
+    final controllerChanged = widget.mapController != oldWidget.mapController;
+    final dataChanged = widget.data != oldWidget.data;
+    if (dataChanged || controllerChanged) {
+      _scheduleRebuild();
+    }
+  }
+
+  /// Called externally when camera changes
+  void updatePositions() {
+    if (_mapReady) {
+      _recalcScreenPositions();
+    }
+  }
+
+  /// Called externally when the map style is fully loaded
+  void onMapReady() {
+    _mapReady = true;
+    _scheduleRebuild();
+  }
+
+  void _scheduleRebuild() {
+    _rebuildGeneration++;
+    final gen = _rebuildGeneration;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && gen == _rebuildGeneration) {
+        _rebuildMarkers(gen);
+      }
+    });
+  }
+
+  bool _isOnScreen(ScreenCoordinate coord, double vpWidth, double vpHeight) {
+    // Reject (0,0) — mapbox returns this when projection isn't ready yet
+    if (coord.x == 0 && coord.y == 0) return false;
+    const margin = 50.0;
+    return coord.x > -margin &&
+        coord.y > -margin &&
+        coord.x < vpWidth + margin &&
+        coord.y < vpHeight + margin;
+  }
+
+  void _rebuildMarkers(int gen) async {
+    if (!mounted || widget.mapController == null) return;
+
+    final mq = MediaQuery.of(context).size;
+    final vpWidth = mq.width;
+    final vpHeight = mq.height;
+    final filteredData = widget.data
+        .where((value) => !value.skip(widget.filters ?? []))
+        .toList();
+
+    final newMarkerData = <String, _MarkerData>{};
+
+    for (final item in filteredData) {
+      if (!mounted || gen != _rebuildGeneration) return; // cancelled
+      final id = item.getId;
+      final location = item.location;
+      final screenCoord =
+          await widget.mapController!.pixelForCoordinate(location);
+      final valid = _isOnScreen(screenCoord, vpWidth, vpHeight);
+
+      newMarkerData[id] = _MarkerData(
+        item: item,
+        location: location,
+        screenPosition: valid ? screenCoord : null,
+        visible: valid,
+      );
+    }
+
+    if (mounted && gen == _rebuildGeneration) {
+      setState(() {
+        _markerData.clear();
+        _markerData.addAll(newMarkerData);
       });
     }
   }
 
-  void updatePositions() {
-    _updateAllScreenPositions();
-  }
-
-  void _rebuildMarkers() async {
-    if (!mounted || widget.mapController == null) return;
-    if (_isUpdating) return;
-    _isUpdating = true;
-
-    try {
-      final filteredData = widget.data
-          .where((value) => !value.skip(widget.filters ?? []))
-          .toList();
-
-      final newMarkerData = <String, _MarkerData>{};
-
-      for (final item in filteredData) {
-        final id = item.getId;
-        final location = item.location;
-        final screenCoord =
-            await widget.mapController!.pixelForCoordinate(location);
-
-        newMarkerData[id] = _MarkerData(
-          item: item,
-          location: location,
-          screenPosition: screenCoord,
-        );
-      }
-
-      if (mounted) {
-        setState(() {
-          _markerData.clear();
-          _markerData.addAll(newMarkerData);
-        });
-      }
-    } finally {
-      _isUpdating = false;
-    }
-  }
-
-  void _updateAllScreenPositions() async {
+  void _recalcScreenPositions() async {
     if (!mounted || widget.mapController == null || _markerData.isEmpty) return;
-    if (_isUpdating) return;
-    _isUpdating = true;
+    if (_isRecalculating) return; // prevent concurrent runs
+    _isRecalculating = true;
 
     try {
+      final gen = _rebuildGeneration; // snapshot to detect cancellation
+      final mq = MediaQuery.of(context).size;
+      final vpWidth = mq.width;
+      final vpHeight = mq.height;
+
       for (final entry in _markerData.entries) {
-        if (!mounted) break;
+        if (!mounted || gen != _rebuildGeneration) return;
         final screenCoord =
             await widget.mapController!.pixelForCoordinate(entry.value.location);
-        entry.value.screenPosition = screenCoord;
+        final valid = _isOnScreen(screenCoord, vpWidth, vpHeight);
+        entry.value.screenPosition = valid ? screenCoord : null;
+        entry.value.visible = valid;
       }
 
-      if (mounted) {
+      if (mounted && gen == _rebuildGeneration) {
         setState(() {});
       }
     } finally {
-      _isUpdating = false;
+      _isRecalculating = false;
     }
   }
 
@@ -126,15 +161,16 @@ class MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
     return IgnorePointer(
       ignoring: widget.ignoreTouch,
       child: Stack(
-        children: _markerData.entries.map((entry) {
-          return _buildMarker(entry.value);
-        }).toList(),
+        children: _markerData.entries
+            .where((e) => e.value.visible && e.value.screenPosition != null)
+            .map((entry) => _buildMarker(entry.value))
+            .toList(),
       ),
     );
   }
 
   Widget _buildMarker(_MarkerData data) {
-    final pos = data.screenPosition;
+    final pos = data.screenPosition!;
     final item = data.item;
 
     if (V == FireMarker) {
@@ -189,12 +225,14 @@ class MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
 class _MarkerData {
   final dynamic item;
   final Point location;
-  ScreenCoordinate screenPosition;
+  ScreenCoordinate? screenPosition;
+  bool visible;
 
   _MarkerData({
     required this.item,
     required this.location,
-    required this.screenPosition,
+    this.screenPosition,
+    this.visible = false,
   });
 }
 

@@ -8,6 +8,7 @@ import 'package:fogosmobile/screens/widgets/fire_annotation_manager.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FogosMap extends StatefulWidget {
   final List<Fire> fires;
@@ -60,10 +61,17 @@ class _FogosMapState extends State<FogosMap> {
 
   void _onMapCreated(MapboxMap mapboxMap) {
     _mapController = mapboxMap;
-    _mapController!.location.updateSettings(LocationComponentSettings(
-      enabled: true,
-      puckBearingEnabled: true,
-    ));
+    _enableLocationPuck();
+  }
+
+  Future<void> _enableLocationPuck() async {
+    final status = await Permission.locationWhenInUse.request();
+    if (status.isGranted && _mapController != null) {
+      _mapController!.location.updateSettings(LocationComponentSettings(
+        enabled: true,
+        puckBearingEnabled: true,
+      ));
+    }
   }
 
   void _onStyleLoaded(StyleLoadedEventData data) async {

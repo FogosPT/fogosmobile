@@ -31,6 +31,7 @@ dependencies:
 
   font_awesome_flutter: ^10.8.0
 
+  permission_handler: ^11.3.1
   share_plus: ^10.1.3
   cached_network_image: ^3.4.1
 

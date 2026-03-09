@@ -657,6 +657,84 @@ String get textDataTableStart => Intl.message(
     }
   }
 
+  // Nearby Notifications
+
+  String get textNearbyNotifications => Intl.message(
+    "Notificações por proximidade",
+    name: 'textNearbyNotifications',
+    desc: 'Nearby notifications toggle title',
+  );
+
+  String get textNearbyNotificationsSubtitle => Intl.message(
+    "Receba alertas quando um novo incêndio ocorrer perto de si",
+    name: 'textNearbyNotificationsSubtitle',
+    desc: 'Nearby notifications toggle subtitle',
+  );
+
+  String get textNearbyPrivacyNotice => Intl.message(
+    "A sua localização nunca é enviada para os nossos servidores. O cálculo de proximidade é feito exclusivamente no seu dispositivo.",
+    name: 'textNearbyPrivacyNotice',
+    desc: 'Privacy notice for nearby notifications',
+  );
+
+  String get textNearbyAlertRadius => Intl.message(
+    "Raio de alerta",
+    name: 'textNearbyAlertRadius',
+    desc: 'Alert radius section title',
+  );
+
+  String textNearbyRadiusDescription(int km) => Intl.message(
+    "Será notificado quando um novo incêndio ocorrer dentro de $km km da sua localização.",
+    name: 'textNearbyRadiusDescription',
+    args: [km],
+    desc: 'Description of nearby radius',
+    examples: const {'km': 50},
+  );
+
+  String get textNearbyIncidentType => Intl.message(
+    "Tipo de ocorrências",
+    name: 'textNearbyIncidentType',
+    desc: 'Incident type filter section title',
+  );
+
+  String get textNearbyFiresOnly => Intl.message(
+    "Apenas incêndios",
+    name: 'textNearbyFiresOnly',
+    desc: 'Fires only filter option',
+  );
+
+  String get textNearbyFiresOnlySubtitle => Intl.message(
+    "Incêndios rurais, urbanos e de transporte",
+    name: 'textNearbyFiresOnlySubtitle',
+    desc: 'Fires only filter subtitle',
+  );
+
+  String get textNearbyAllIncidents => Intl.message(
+    "Todos os incidentes",
+    name: 'textNearbyAllIncidents',
+    desc: 'All incidents filter option',
+  );
+
+  String get textNearbyAllIncidentsSubtitle => Intl.message(
+    "Incêndios, acidentes e outras ocorrências",
+    name: 'textNearbyAllIncidentsSubtitle',
+    desc: 'All incidents filter subtitle',
+  );
+
+  String get textNearbyLocationPermissionRequired => Intl.message(
+    "É necessário permitir o acesso à localização para utilizar esta funcionalidade.",
+    name: 'textNearbyLocationPermissionRequired',
+    desc: 'Location permission required message',
+  );
+
+  String textNearbyNotificationTitle(String distance) => Intl.message(
+    "🔥 Incêndio a $distance de si",
+    name: 'textNearbyNotificationTitle',
+    args: [distance],
+    desc: 'Nearby notification title',
+    examples: const {'distance': '5km'},
+  );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

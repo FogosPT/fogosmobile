@@ -547,5 +547,97 @@
     "description": "Notification Text Planes",
     "type": "text",
     "placeholders": {}
+  },
+  "textNearbyNotifications": "Nearby notifications",
+  "@textNearbyNotifications": {
+    "description": "Nearby notifications toggle title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyNotificationsSubtitle": "Receive alerts when a new incident occurs near you",
+  "@textNearbyNotificationsSubtitle": {
+    "description": "Nearby notifications toggle subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyPrivacyNotice": "Your location is never sent to our servers. The proximity calculation is done exclusively on your device.",
+  "@textNearbyPrivacyNotice": {
+    "description": "Privacy notice for nearby notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAlertRadius": "Alert radius",
+  "@textNearbyAlertRadius": {
+    "description": "Alert radius section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyRadiusDescription": "You will be notified when a new incident occurs within {km} km of your location.",
+  "@textNearbyRadiusDescription": {
+    "description": "Description of nearby radius",
+    "type": "text",
+    "placeholders": {
+      "km": {
+        "example": "50"
+      }
+    }
+  },
+  "textNearbyIncidentType": "Incident type",
+  "@textNearbyIncidentType": {
+    "description": "Incident type filter section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyFiresOnly": "Fires only",
+  "@textNearbyFiresOnly": {
+    "description": "Fires only filter option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyFiresOnlySubtitle": "Rural, urban and transport fires",
+  "@textNearbyFiresOnlySubtitle": {
+    "description": "Fires only filter subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAllIncidents": "All incidents",
+  "@textNearbyAllIncidents": {
+    "description": "All incidents filter option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAllIncidentsSubtitle": "Fires, accidents and other incidents",
+  "@textNearbyAllIncidentsSubtitle": {
+    "description": "All incidents filter subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyLocationPermissionRequired": "Location access is required to use this feature.",
+  "@textNearbyLocationPermissionRequired": {
+    "description": "Location permission required message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyNotificationTitle": "🔥 Fire {distance} from you",
+  "@textNearbyNotificationTitle": {
+    "description": "Nearby notification title",
+    "type": "text",
+    "placeholders": {
+      "distance": {
+        "example": "5km"
+      }
+    }
+  },
+  "nearbyChannelName": "Nearby Fires",
+  "@nearbyChannelName": {
+    "description": "Notification channel name for nearby fires",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nearbyChannelDescription": "Notifications for fires near your location",
+  "@nearbyChannelDescription": {
+    "description": "Notification channel description for nearby fires",
+    "type": "text",
+    "placeholders": {}
   }
 }

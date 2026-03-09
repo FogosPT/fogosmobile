@@ -20,6 +20,8 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'messages_pt';
 
   static m0(city, id) => "Incêndio em ${city} https://fogos.pt/fogo/${id}";
+  static m1(km) => "Será notificado quando um novo incêndio ocorrer dentro de ${km} km da sua localização.";
+  static m2(distance) => "🔥 Incêndio a ${distance} de si";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -111,6 +113,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "textWarningsMadeira" : MessageLookupByLibrary.simpleMessage("Avisos Madeira"),
     "textYesterday" : MessageLookupByLibrary.simpleMessage("Ontem"),
     "textYesterdayDistricts" : MessageLookupByLibrary.simpleMessage("Distritos de ontem"),
-    "textYesterdayInterval" : MessageLookupByLibrary.simpleMessage("Intervalo de ontem")
+    "textYesterdayInterval" : MessageLookupByLibrary.simpleMessage("Intervalo de ontem"),
+    "nearbyChannelName" : MessageLookupByLibrary.simpleMessage("Incêndios Próximos"),
+    "nearbyChannelDescription" : MessageLookupByLibrary.simpleMessage("Notificações de incêndios próximos da sua localização"),
+    "textNearbyNotifications" : MessageLookupByLibrary.simpleMessage("Notificações por proximidade"),
+    "textNearbyNotificationsSubtitle" : MessageLookupByLibrary.simpleMessage("Receba alertas quando um novo incêndio ocorrer perto de si"),
+    "textNearbyPrivacyNotice" : MessageLookupByLibrary.simpleMessage("A sua localização nunca é enviada para os nossos servidores. O cálculo de proximidade é feito exclusivamente no seu dispositivo."),
+    "textNearbyAlertRadius" : MessageLookupByLibrary.simpleMessage("Raio de alerta"),
+    "textNearbyRadiusDescription" : m1,
+    "textNearbyIncidentType" : MessageLookupByLibrary.simpleMessage("Tipo de ocorrências"),
+    "textNearbyFiresOnly" : MessageLookupByLibrary.simpleMessage("Apenas incêndios"),
+    "textNearbyFiresOnlySubtitle" : MessageLookupByLibrary.simpleMessage("Incêndios rurais, urbanos e de transporte"),
+    "textNearbyAllIncidents" : MessageLookupByLibrary.simpleMessage("Todos os incidentes"),
+    "textNearbyAllIncidentsSubtitle" : MessageLookupByLibrary.simpleMessage("Incêndios, acidentes e outras ocorrências"),
+    "textNearbyLocationPermissionRequired" : MessageLookupByLibrary.simpleMessage("É necessário permitir o acesso à localização para utilizar esta funcionalidade."),
+    "textNearbyNotificationTitle" : m2
   };
 }

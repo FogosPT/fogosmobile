@@ -546,5 +546,97 @@
     "description": "High",
     "type": "text",
     "placeholders": {}
+  },
+  "textNearbyNotifications": "Notificações por proximidade",
+  "@textNearbyNotifications": {
+    "description": "Nearby notifications toggle title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyNotificationsSubtitle": "Receba alertas quando um novo incêndio ocorrer perto de si",
+  "@textNearbyNotificationsSubtitle": {
+    "description": "Nearby notifications toggle subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyPrivacyNotice": "A sua localização nunca é enviada para os nossos servidores. O cálculo de proximidade é feito exclusivamente no seu dispositivo.",
+  "@textNearbyPrivacyNotice": {
+    "description": "Privacy notice for nearby notifications",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAlertRadius": "Raio de alerta",
+  "@textNearbyAlertRadius": {
+    "description": "Alert radius section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyRadiusDescription": "Será notificado quando um novo incêndio ocorrer dentro de {km} km da sua localização.",
+  "@textNearbyRadiusDescription": {
+    "description": "Description of nearby radius",
+    "type": "text",
+    "placeholders": {
+      "km": {
+        "example": "50"
+      }
+    }
+  },
+  "textNearbyIncidentType": "Tipo de ocorrências",
+  "@textNearbyIncidentType": {
+    "description": "Incident type filter section title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyFiresOnly": "Apenas incêndios",
+  "@textNearbyFiresOnly": {
+    "description": "Fires only filter option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyFiresOnlySubtitle": "Incêndios rurais, urbanos e de transporte",
+  "@textNearbyFiresOnlySubtitle": {
+    "description": "Fires only filter subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAllIncidents": "Todos os incidentes",
+  "@textNearbyAllIncidents": {
+    "description": "All incidents filter option",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyAllIncidentsSubtitle": "Incêndios, acidentes e outras ocorrências",
+  "@textNearbyAllIncidentsSubtitle": {
+    "description": "All incidents filter subtitle",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyLocationPermissionRequired": "É necessário permitir o acesso à localização para utilizar esta funcionalidade.",
+  "@textNearbyLocationPermissionRequired": {
+    "description": "Location permission required message",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textNearbyNotificationTitle": "🔥 Incêndio a {distance} de si",
+  "@textNearbyNotificationTitle": {
+    "description": "Nearby notification title",
+    "type": "text",
+    "placeholders": {
+      "distance": {
+        "example": "5km"
+      }
+    }
+  },
+  "nearbyChannelName": "Incêndios Próximos",
+  "@nearbyChannelName": {
+    "description": "Notification channel name for nearby fires",
+    "type": "text",
+    "placeholders": {}
+  },
+  "nearbyChannelDescription": "Notificações de incêndios próximos da sua localização",
+  "@nearbyChannelDescription": {
+    "description": "Notification channel description for nearby fires",
+    "type": "text",
+    "placeholders": {}
   }
 }

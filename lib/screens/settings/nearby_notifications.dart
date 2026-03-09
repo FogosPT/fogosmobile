@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,7 +12,7 @@ class NearbyNotifications extends StatefulWidget {
 class _NearbyNotificationsState extends State<NearbyNotifications> {
   bool _enabled = false;
   int _radiusKm = NearbyPrefs.defaultRadiusKm;
-  String _filter = 'fires'; // 'fires' or 'all'
+  String _filter = 'fires';
   bool _loading = true;
   bool _locationDenied = false;
 
@@ -34,7 +35,6 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
 
   Future<void> _toggleEnabled(bool value) async {
     if (value) {
-      // Ask for location permission first
       var status = await Permission.locationWhenInUse.request();
       if (!status.isGranted) {
         setState(() => _locationDenied = true);
@@ -61,6 +61,8 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = FogosLocalizations.of(context);
+
     if (_loading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -80,8 +82,7 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'A sua localização nunca é enviada para os nossos servidores. '
-                    'O cálculo de proximidade é feito exclusivamente no seu dispositivo.',
+                    l10n.textNearbyPrivacyNotice,
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.green.shade900,
@@ -96,9 +97,8 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
 
         // Enable toggle
         SwitchListTile(
-          title: const Text('Notificações por proximidade'),
-          subtitle: const Text(
-              'Receba alertas quando um novo incêndio ocorrer perto de si'),
+          title: Text(l10n.textNearbyNotifications),
+          subtitle: Text(l10n.textNearbyNotificationsSubtitle),
           value: _enabled,
           onChanged: _toggleEnabled,
         ),
@@ -107,7 +107,7 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
-              'É necessário permitir o acesso à localização para utilizar esta funcionalidade.',
+              l10n.textNearbyLocationPermissionRequired,
               style: TextStyle(color: Colors.red.shade700, fontSize: 13),
             ),
           ),
@@ -118,14 +118,14 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
-              'Raio de alerta',
+              l10n.textNearbyAlertRadius,
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
-              'Será notificado quando um novo incêndio ocorrer dentro de $_radiusKm km da sua localização.',
+              l10n.textNearbyRadiusDescription(_radiusKm),
               style: const TextStyle(fontSize: 13, color: Colors.grey),
             ),
           ),
@@ -152,20 +152,20 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
-              'Tipo de ocorrências',
+              l10n.textNearbyIncidentType,
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
           RadioListTile<String>(
-            title: const Text('Apenas incêndios'),
-            subtitle: const Text('Incêndios rurais, urbanos e de transporte'),
+            title: Text(l10n.textNearbyFiresOnly),
+            subtitle: Text(l10n.textNearbyFiresOnlySubtitle),
             value: 'fires',
             groupValue: _filter,
             onChanged: (value) => _setFilter(value!),
           ),
           RadioListTile<String>(
-            title: const Text('Todos os incidentes'),
-            subtitle: const Text('Incêndios, acidentes e outras ocorrências'),
+            title: Text(l10n.textNearbyAllIncidents),
+            subtitle: Text(l10n.textNearbyAllIncidentsSubtitle),
             value: 'all',
             groupValue: _filter,
             onChanged: (value) => _setFilter(value!),

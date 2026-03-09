@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fogosmobile/utils/haversine.dart';
 
@@ -126,10 +127,21 @@ class NearbyNotificationService {
     // Use hashCode of fireId for notification ID to allow updates
     final notificationId = fireId.hashCode;
 
-    const androidDetails = AndroidNotificationDetails(
-      'nearby_fires',
+    final channelName = Intl.message(
       'Incêndios Próximos',
-      channelDescription: 'Notificações de incêndios próximos da sua localização',
+      name: 'nearbyChannelName',
+      desc: 'Notification channel name for nearby fires',
+    );
+    final channelDesc = Intl.message(
+      'Notificações de incêndios próximos da sua localização',
+      name: 'nearbyChannelDescription',
+      desc: 'Notification channel description for nearby fires',
+    );
+
+    final androidDetails = AndroidNotificationDetails(
+      'nearby_fires',
+      channelName,
+      channelDescription: channelDesc,
       importance: Importance.high,
       priority: Priority.high,
       icon: '@mipmap/ic_launcher',
@@ -141,7 +153,7 @@ class NearbyNotificationService {
       presentSound: true,
     );
 
-    const details = NotificationDetails(
+    final details = NotificationDetails(
       android: androidDetails,
       iOS: iosDetails,
     );

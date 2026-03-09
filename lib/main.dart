@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
+import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -60,9 +59,21 @@ var loggerNoStack = Logger(
   printer: PrettyPrinter(methodCount: 0),
 );
 
+/// Top-level background message handler.
+/// Must be a top-level function (not a class method).
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await NearbyNotificationService.init();
+  await NearbyNotificationService.handleMessage(message);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+  // Register background handler before runApp
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
 
   await SentryFlutter.init(
     (options) {
@@ -71,6 +82,7 @@ void main() async {
     },
     appRunner: () async {
       await SharedPreferencesManager.init();
+      await NearbyNotificationService.init();
       runApp(MyApp());
     },
   );
@@ -143,10 +155,25 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     // Handle notification tap when app is in background
     FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
 
-    // Handle foreground messages
+    // Handle foreground messages (including nearby data messages)
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Firebase onMessage ${message.data}');
+      // Process nearby proximity check in foreground too
+      NearbyNotificationService.handleMessage(message);
     });
+
+    // Update stored location for nearby feature
+    NearbyNotificationService.updateStoredLocation();
+
+    // Handle taps on nearby local notifications
+    NearbyNotificationService.onNotificationTap = (fireId) {
+      if (fireId.isNotEmpty && mounted) {
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(ClearFireAction());
+        store.dispatch(LoadFireAction(fireId));
+        _openFireModal(context);
+      }
+    };
   }
 
   void _handleNotificationTap(RemoteMessage message) {
@@ -240,6 +267,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       store.dispatch(LoadModisAction());
       store.dispatch(LoadViirsAction());
       store.dispatch(LoadLightningsAction());
+      // Refresh stored location for nearby notifications
+      NearbyNotificationService.updateStoredLocation();
     }
   }
 

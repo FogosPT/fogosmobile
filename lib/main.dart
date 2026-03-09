@@ -33,6 +33,7 @@ import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
+import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
 import 'package:fogosmobile/screens/other_fires_page.dart';
@@ -121,7 +122,8 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  void firebaseCloudMessagingListeners() async {
+
+  void _setupFirebaseMessaging() async {
     final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
 
     if (result.authorizationStatus != AuthorizationStatus.authorized) {
@@ -131,6 +133,37 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     _firebaseMessaging.getToken().then((token) {
       print('token: $token');
     });
+
+    // Handle notification that launched the app (cold start)
+    final initialMessage = await _firebaseMessaging.getInitialMessage();
+    if (initialMessage != null) {
+      _handleNotificationTap(initialMessage);
+    }
+
+    // Handle notification tap when app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+
+    // Handle foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Firebase onMessage ${message.data}');
+    });
+  }
+
+  void _handleNotificationTap(RemoteMessage message) {
+    final fireId = message.data['fireId'];
+    if (fireId != null && fireId is String && fireId.isNotEmpty) {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(ClearFireAction());
+      store.dispatch(LoadFireAction(fireId));
+      _openFireModal(context);
+    }
+  }
+
+  void _openFireModal(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => FireDetails(),
+    );
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {
@@ -190,6 +223,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _setupFirebaseMessaging();
   }
 
   @override
@@ -211,8 +245,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    firebaseCloudMessagingListeners();
-
     SystemChrome.setApplicationSwitcherDescription(
       ApplicationSwitcherDescription(
         label: "Fogos.pt",

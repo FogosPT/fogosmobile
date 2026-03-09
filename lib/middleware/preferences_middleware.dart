@@ -62,19 +62,39 @@ Middleware<AppState> _createLoadPreferences() {
   };
 }
 
+/// Map a preference key to its unified FCM topic name.
+/// Must match the topics used by fogosapi NotificationTool.
+String _unifiedTopic(String key) {
+  // Numeric DICO codes (e.g. "010100") → "district-010100"
+  if (RegExp(r'^\d{6}$').hasMatch(key)) {
+    return 'district-$key';
+  }
+  // "important" → "incident-important" (matches buildImportantTopic)
+  if (key == 'important') {
+    return 'incident-important';
+  }
+  // "warnings", "planes", etc. → same name (matches buildWarningsTopic / buildPlanesTopic)
+  return key;
+}
+
 Middleware<AppState> _createSetPreference() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-    String topic = Platform.isIOS
+    // Unified topic (new) — matches fogosapi NotificationTool
+    String unifiedTopic = _unifiedTopic(action.key);
+    // Legacy topic (platform-specific)
+    String legacyTopic = Platform.isIOS
         ? 'mobile-ios-${action.key}'
         : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
-      _firebaseMessaging.subscribeToTopic(topic);
+      _firebaseMessaging.subscribeToTopic(unifiedTopic);
+      _firebaseMessaging.subscribeToTopic(legacyTopic);
     } else {
-      _firebaseMessaging.unsubscribeFromTopic(topic);
+      _firebaseMessaging.unsubscribeFromTopic(unifiedTopic);
+      _firebaseMessaging.unsubscribeFromTopic(legacyTopic);
     }
 
     try {
@@ -89,7 +109,10 @@ Middleware<AppState> _createSetNotification() {
     next(action);
     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-    String topic = Platform.isIOS
+    // Unified topic (new) — "incident-<id>"
+    String unifiedTopic = 'incident-${action.key}';
+    // Legacy topic (platform-specific)
+    String legacyTopic = Platform.isIOS
         ? 'mobile-ios-${action.key}'
         : 'mobile-android-${action.key}';
 
@@ -99,10 +122,12 @@ Middleware<AppState> _createSetNotification() {
           prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
-        _firebaseMessaging.subscribeToTopic(topic);
+        _firebaseMessaging.subscribeToTopic(unifiedTopic);
+        _firebaseMessaging.subscribeToTopic(legacyTopic);
       } else {
         subscribedFires.remove(action.key);
-        _firebaseMessaging.unsubscribeFromTopic(topic);
+        _firebaseMessaging.unsubscribeFromTopic(unifiedTopic);
+        _firebaseMessaging.unsubscribeFromTopic(legacyTopic);
       }
       prefs.save('subscribedFires', subscribedFires);
       store.dispatch(LoadAllPreferencesAction());

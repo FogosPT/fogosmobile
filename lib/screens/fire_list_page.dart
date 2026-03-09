@@ -92,11 +92,9 @@ class _FireListState extends State<FireList> {
                 }
 
                 bool isFireSubscribed = false;
-                if ((state.preferences['subscribedFires'] ?? []).length > 0) {
-                  var subbedFire = state.preferences['subscribedFires'].firstWhere((fs) => fs.id == fire.id, orElse: () {});
-                  if (subbedFire != null) {
-                    isFireSubscribed = true;
-                  }
+                final subscribedFires = state.preferences['subscribedFires'] ?? [];
+                if (subscribedFires.length > 0) {
+                  isFireSubscribed = subscribedFires.any((fs) => fs.id == fire.id);
                 }
 
                 final store = StoreProvider.of<AppState>(context);

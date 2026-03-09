@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -47,20 +46,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Firebase onMessage ${message.data}');
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Firebase onMessageOpenedApp ${message.toString()}');
-      String fireId = message.data["fireId"];
-      if (fireId != null) {
-        final store = StoreProvider.of<AppState>(context);
-        store.dispatch(ClearFireAction());
-        store.dispatch(LoadFireAction(fireId));
-        _openModalSheet(context);
-      }
-    });
-
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {

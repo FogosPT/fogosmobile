@@ -26,6 +26,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Precisamos de acesso à tua localização para colocarmos o teu posicionamento no mapa e para te alertar de incidentes próximos. A tua localização nunca sai do dispositivo.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

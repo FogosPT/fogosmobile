@@ -60,7 +60,7 @@ class FireDetails extends StatelessWidget {
                   child: Container(
                     child: Padding(
                       padding:
-                          const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
+                          EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0 + MediaQuery.of(context).viewPadding.bottom),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

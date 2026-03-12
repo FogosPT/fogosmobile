@@ -38,6 +38,8 @@ Middleware<AppState> _createLoadPreferences() {
 
       for (Map location in locations) {
         data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
+        // Also load "all incidents" preference for each concelho
+        data['pref-all-${location['key']}'] = prefs.getInt('all-${location['key']}') ?? 0;
       }
 
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
@@ -65,6 +67,10 @@ Middleware<AppState> _createLoadPreferences() {
 /// Map a preference key to its unified FCM topic name.
 /// Must match the topics used by fogosapi NotificationTool.
 String _unifiedTopic(String key) {
+  // "all incidents" subscriptions: "all-010100" → "district-all-010100"
+  if (key.startsWith('all-') && RegExp(r'^\d{6}$').hasMatch(key.substring(4))) {
+    return 'district-$key';
+  }
   // Numeric DICO codes (e.g. "010100") → "district-010100"
   if (RegExp(r'^\d{6}$').hasMatch(key)) {
     return 'district-$key';

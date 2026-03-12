@@ -20,6 +20,8 @@ class _NotificationsState extends State<Notifications> {
   List locations = [];
   TextEditingController controller = new TextEditingController();
   String? filter;
+  /// When true, subscribes to all incident types (not just fires) per concelho.
+  bool _allIncidents = false;
 
   @override
   initState() {
@@ -83,6 +85,28 @@ class _NotificationsState extends State<Notifications> {
                 new Padding(
                   padding: new EdgeInsets.only(top: 20.0),
                 ),
+                // Toggle between fires only and all incidents
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: SegmentedButton<bool>(
+                    segments: [
+                      ButtonSegment<bool>(
+                        value: false,
+                        label: Text('🔥 ${FogosLocalizations.of(context).textFires}'),
+                      ),
+                      ButtonSegment<bool>(
+                        value: true,
+                        label: Text('📋 ${FogosLocalizations.of(context).textAllIncidents}'),
+                      ),
+                    ],
+                    selected: {_allIncidents},
+                    onSelectionChanged: (Set<bool> selection) {
+                      setState(() {
+                        _allIncidents = selection.first;
+                      });
+                    },
+                  ),
+                ),
                 new ListTile(
                   title: new TextField(
                     decoration: new InputDecoration(labelText: FogosLocalizations.of(context).textCounty),
@@ -95,14 +119,20 @@ class _NotificationsState extends State<Notifications> {
                       itemCount: this.locations.length,
                       itemBuilder: (BuildContext context, int index) {
                         final _location = this.locations[index];
+                        final prefKey = _allIncidents
+                            ? 'all-${_location['key']}'
+                            : _location['key'];
                         return filter == null ||
                                 filter == "" ||
                                 transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter ?? ''))
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
-                                value: state.preferences['pref-${_location['key']}'] == 1,
+                                subtitle: _allIncidents
+                                    ? Text('Todos os incidentes', style: TextStyle(fontSize: 12, color: Colors.grey))
+                                    : null,
+                                value: state.preferences['pref-$prefKey'] == 1,
                                 onChanged: (bool? value) {
-                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
+                                  setPreferenceAction(prefKey, value == true ? 1 : 0);
                                 },
                               )
                             : new Container();

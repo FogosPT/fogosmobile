@@ -108,11 +108,13 @@ class NearbyNotificationService {
     await prefs.setStringList(NearbyPrefs.nearbyNotifiedIds, notifiedIds);
 
     // Show local notification
+    final isFire = (message.data['isFire'] ?? '0') == '1';
     await _showNotification(
       fireId: fireId,
       distance: distance,
       location: message.data['location'] ?? '',
       nature: message.data['nature'] ?? '',
+      isFire: isFire,
     );
 
     return true;
@@ -123,6 +125,7 @@ class NearbyNotificationService {
     required double distance,
     required String location,
     required String nature,
+    required bool isFire,
   }) async {
     // Use hashCode of fireId for notification ID to allow updates
     final notificationId = fireId.hashCode;
@@ -162,11 +165,15 @@ class NearbyNotificationService {
         ? '${(distance * 1000).round()}m'
         : '${distance.round()}km';
 
-    final title = '🔥 Incêndio a $distText de si';
+    final title = isFire
+        ? '🔥 Incêndio a $distText de ti'
+        : '⚠️ Incidente a $distText de ti';
     final body = nature.isNotEmpty ? '$location — $nature' : location;
 
+    // Encode fireId and isFire flag so tap handler can route correctly
+    final payload = isFire ? 'fire:$fireId' : 'other:$fireId';
     await _localNotifications.show(notificationId, title, body, details,
-        payload: fireId);
+        payload: payload);
   }
 
   /// Update the stored user location. Call periodically.

@@ -166,12 +166,22 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     NearbyNotificationService.updateStoredLocation();
 
     // Handle taps on nearby local notifications
-    NearbyNotificationService.onNotificationTap = (fireId) {
-      if (fireId.isNotEmpty && mounted) {
+    // Payload format: "fire:<id>" or "other:<id>"
+    NearbyNotificationService.onNotificationTap = (payload) {
+      if (payload.isNotEmpty && mounted) {
+        final isOther = payload.startsWith('other:');
+        final fireId = payload.contains(':') ? payload.split(':').last : payload;
+        if (fireId.isEmpty) return;
+
         final store = StoreProvider.of<AppState>(context);
         store.dispatch(ClearFireAction());
         store.dispatch(LoadFireAction(fireId));
-        _openFireModal(context);
+
+        if (isOther) {
+          Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+        } else {
+          _openFireModal(context);
+        }
       }
     };
   }

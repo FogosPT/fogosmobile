@@ -61,8 +61,8 @@ android {
     signingConfigs {
         debug {
         }
-        release {
-            if (keystorePropertiesFile != null && keystorePropertiesFile.exists()) {
+        if (keystorePropertiesFile.exists()) {
+            release {
                 keyAlias keystoreProperties['keyAlias']
                 keyPassword keystoreProperties['keyPassword']
                 storeFile file(keystoreProperties['storeFile'])
@@ -72,7 +72,9 @@ android {
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig keystorePropertiesFile.exists()
+                ? signingConfigs.release
+                : signingConfigs.debug
         }
     }
 }

@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// and re-subscribes only the topics the user actually has enabled.
 class FcmMigrationService {
   // Bump this when you need to force a new migration
-  static const int _currentMigrationVersion = 1;
+  static const int _currentMigrationVersion = 2;
   static const String _migrationKey = 'fcm_migration_version';
 
   /// Run migration if needed. Should be called early in app startup,
@@ -32,18 +32,18 @@ class FcmMigrationService {
     print('FcmMigration: Running migration v$_currentMigrationVersion (last: v$lastMigration)');
 
     try {
-      // Delete token → clears all FCM topic subscriptions server-side
+      // Explicitly unsubscribe from all known legacy topics first.
+      // deleteToken() does NOT clear topic subscriptions on FCM servers.
+      await _unsubscribeAllLegacy(messaging, prefs);
+
+      // Delete and re-create token for a clean slate
       await messaging.deleteToken();
       final newToken = await messaging.getToken();
       print('FcmMigration: New token: $newToken');
 
-      // Re-subscribe district topics (fires only)
+      // Re-subscribe only active topics
       await _resubscribeDistricts(messaging, prefs);
-
-      // Re-subscribe other notification types
       await _resubscribeOther(messaging, prefs);
-
-      // Re-subscribe nearby topic
       await _resubscribeNearby(messaging, prefs);
 
       // Mark migration as complete
@@ -73,6 +73,43 @@ class FcmMigrationService {
 
   static String _legacyTopic(String key) {
     return Platform.isIOS ? 'mobile-ios-$key' : 'mobile-android-$key';
+  }
+
+  /// Explicitly unsubscribe from all known legacy topics.
+  /// This is necessary because deleteToken() does NOT clear topic subscriptions.
+  static Future<void> _unsubscribeAllLegacy(
+      FirebaseMessaging messaging, SharedPreferences prefs) async {
+    try {
+      final response = await get(Endpoints.getLocations);
+      if (response == null) return;
+      final locations = response.data['rows'] as List;
+
+      for (var location in locations) {
+        final key = location['key'] as String;
+        // Legacy per-platform topics
+        for (var prefix in ['mobile-ios-', 'mobile-android-', 'web-']) {
+          await messaging.unsubscribeFromTopic('$prefix$key');
+        }
+        // Unified district topic (in case user unsubscribed locally but FCM kept it)
+        await messaging.unsubscribeFromTopic('district-$key');
+        await messaging.unsubscribeFromTopic('district-all-$key');
+      }
+
+      // Legacy global topics
+      for (var key in ['important', 'warnings', 'planes']) {
+        for (var prefix in ['mobile-ios-', 'mobile-android-', 'web-', 'incident-']) {
+          await messaging.unsubscribeFromTopic('$prefix$key');
+        }
+        await messaging.unsubscribeFromTopic(key);
+      }
+
+      // Nearby
+      await messaging.unsubscribeFromTopic('incident-nearby');
+
+      print('FcmMigration: Unsubscribed from all legacy topics');
+    } catch (e) {
+      print('FcmMigration: Failed to unsubscribe legacy topics: $e');
+    }
   }
 
   static Future<void> _resubscribeDistricts(

@@ -5,6 +5,7 @@ import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
+import 'package:fogosmobile/services/fcm_migration_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -141,6 +142,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     if (result.authorizationStatus != AuthorizationStatus.authorized) {
       return;
     }
+
+    // Migrate FCM subscriptions on upgrade (clears stale legacy topics)
+    await FcmMigrationService.migrateIfNeeded(_firebaseMessaging);
 
     _firebaseMessaging.getToken().then((token) {
       print('token: $token');

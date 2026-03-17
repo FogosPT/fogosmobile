@@ -282,13 +282,20 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      final store = StoreProvider.of<AppState>(context);
-      store.dispatch(LoadFiresAction());
-      store.dispatch(LoadModisAction());
-      store.dispatch(LoadViirsAction());
-      store.dispatch(LoadLightningsAction());
-      // Refresh stored location for nearby notifications
+      // Refresh stored location first — independent of store
       NearbyNotificationService.updateStoredLocation();
+
+      if (!mounted) return;
+
+      try {
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(LoadFiresAction());
+        store.dispatch(LoadModisAction());
+        store.dispatch(LoadViirsAction());
+        store.dispatch(LoadLightningsAction());
+      } catch (e) {
+        print('didChangeAppLifecycleState: failed to dispatch actions: $e');
+      }
     }
   }
 

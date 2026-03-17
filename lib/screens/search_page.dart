@@ -106,6 +106,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Future<void> _pickDate(BuildContext context, bool isAfter) async {
+    FocusScope.of(context).unfocus();
     final initial = isAfter ? (_afterDate ?? DateTime.now()) : (_beforeDate ?? DateTime.now());
     final picked = await showDatePicker(
       context: context,

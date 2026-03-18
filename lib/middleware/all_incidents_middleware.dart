@@ -20,7 +20,7 @@ Middleware<AppState> _createLoadAllIncidents() {
     next(action);
 
     try {
-      String url = 'https://api.fogos.pt/v2/incidents/active?all=1';
+      String url = 'https://source.fogos.pt/v2/incidents/active?all=1';
       final response = await get(url);
       final responseData = response!.data.runtimeType == String
           ? json.decode(response!.data)['data']

@@ -143,6 +143,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       return;
     }
 
+    // Subscribe all users to the agif topic
+    await _firebaseMessaging.subscribeToTopic('agif');
+
     // Migrate FCM subscriptions on upgrade (clears stale legacy topics)
     await FcmMigrationService.migrateIfNeeded(_firebaseMessaging);
 

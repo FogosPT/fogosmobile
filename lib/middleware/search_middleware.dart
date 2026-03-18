@@ -28,7 +28,7 @@ Middleware<AppState> _createSearchIncidents() {
       if (searchAction.before != null) params['before'] = searchAction.before!;
 
       final queryString = params.entries.map((e) => '${e.key}=${Uri.encodeComponent(e.value)}').join('&');
-      final url = 'https://api.fogos.pt/v2/incidents/search?$queryString';
+      final url = 'https://source.fogos.pt/v2/incidents/search?$queryString';
 
       final response = await get(url);
       final responseData = response!.data.runtimeType == String

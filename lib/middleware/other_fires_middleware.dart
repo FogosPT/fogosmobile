@@ -22,7 +22,7 @@ Middleware<AppState> _createLoadOtherFires() {
     next(action);
 
     try {
-      String url = 'https://api.fogos.pt/v2/incidents/active?otherfire=1&all=1';
+      String url = 'https://source.fogos.pt/v2/incidents/active?otherfire=1&all=1';
       final response = await get(url);
       final responseData = response!.data.runtimeType == String
           ? json.decode(response!.data)['data']

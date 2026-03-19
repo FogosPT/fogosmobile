@@ -61,7 +61,17 @@ class _FogosMapState extends State<FogosMap> {
 
   void _onMapCreated(MapboxMap mapboxMap) {
     _mapController = mapboxMap;
+    _configureOrnaments();
     _enableLocationPuck();
+  }
+
+  void _configureOrnaments() {
+    // Move compass to top-left so it doesn't overlap the overlay buttons (top-right)
+    _mapController!.compass.updateSettings(CompassSettings(
+      position: OrnamentPosition.TOP_LEFT,
+      marginTop: 16,
+      marginLeft: 16,
+    ));
   }
 
   Future<void> _enableLocationPuck() async {

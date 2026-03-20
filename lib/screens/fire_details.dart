@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
+import 'package:fogosmobile/screens/components/fire_details/weather_card.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
@@ -110,7 +111,7 @@ class FireDetailsPage extends StatelessWidget {
                         ],
                       ),
                       // Nature
-                      if (fire.nature != null && fire.nature!.isNotEmpty) ...[
+                      if (fire.nature.isNotEmpty) ...[
                         SizedBox(height: 12),
                         Row(
                           children: [
@@ -119,7 +120,7 @@ class FireDetailsPage extends StatelessWidget {
                               child: Icon(Icons.nature, color: getFireColor(fire)),
                             ),
                             Expanded(
-                              child: Text(fire.nature!, style: TextStyle(fontSize: 15.0)),
+                              child: Text(fire.nature, style: TextStyle(fontSize: 15.0)),
                             ),
                           ],
                         ),
@@ -151,6 +152,12 @@ class FireDetailsPage extends StatelessWidget {
                 SizedBox(height: 15),
                 FireRisk(),
                 SizedBox(height: 25),
+                if (fire.weather != null) ...[
+                  ListTile(title: Text('TEMPO', style: _header)),
+                  SizedBox(height: 15),
+                  WeatherCard(weather: fire.weather!),
+                  SizedBox(height: 25),
+                ],
               ],
             ),
           ),

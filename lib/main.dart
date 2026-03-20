@@ -202,7 +202,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
       final isFire = message.data['isFire'];
       if (isFire == '0') {
-        Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE, arguments: {'openDetail': true});
+        Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
       } else {
         _openFireModal(context);
       }

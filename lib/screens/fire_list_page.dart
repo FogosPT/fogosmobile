@@ -274,6 +274,67 @@ class _FireListState extends State<FireList> {
                                     padding: EdgeInsets.only(top: 20.0),
                                   ),
                                   ImportantFireExtra(fire),
+                                  if (fire.weather != null) ...[
+                                    Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffff512f).withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.location_on, color: Color(0xffff512f), size: 16),
+                                              SizedBox(width: 4),
+                                              Expanded(
+                                                child: Text(
+                                                  fire.weather!.stationLocation,
+                                                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xffff512f)),
+                                                ),
+                                              ),
+                                              Text(
+                                                (() {
+                                                  try {
+                                                    final dt = DateTime.parse(fire.weather!.date);
+                                                    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+                                                  } catch (_) {
+                                                    return fire.weather!.date;
+                                                  }
+                                                })(),
+                                                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(children: [
+                                                Icon(Icons.thermostat, size: 16, color: Color(0xffff512f)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.temperatura.toStringAsFixed(1)}°C', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                              Row(children: [
+                                                Icon(Icons.water_drop, size: 16, color: Color(0xffff512f)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.humidade.toStringAsFixed(0)}%', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                              Row(children: [
+                                                Icon(Icons.air, size: 16, color: Color(0xffff512f)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.intensidadeVentoKM.toStringAsFixed(0)} km/h ${fire.weather!.direccVento}', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20.0),
+                                    ),
+                                  ],
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.end,

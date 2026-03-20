@@ -20,8 +20,6 @@ class OtherFiresPage extends StatefulWidget {
 }
 
 class _OtherFiresPageState extends State<OtherFiresPage> {
-  bool _detailOpened = false;
-
   _openModalSheet(context) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -29,20 +27,8 @@ class _OtherFiresPageState extends State<OtherFiresPage> {
     );
   }
 
-  void _maybeOpenDetail(BuildContext context) {
-    if (_detailOpened) return;
-    final args = ModalRoute.of(context)?.settings.arguments;
-    if (args is Map && args['openDetail'] == true) {
-      _detailOpened = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _openModalSheet(context);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    _maybeOpenDetail(context);
     return Scaffold(
       appBar: FireGradientAppBar(
         title: Text(

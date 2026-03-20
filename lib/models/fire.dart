@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:fogosmobile/models/weather.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 enum FireStatus {
@@ -55,6 +56,9 @@ class Fire extends BaseMapboxModel implements Equatable {
   double importance = 0.0;
   double scale = 0.0;
 
+  // Weather
+  final Weather? weather;
+
   // extra
   String extra;
   String cos;
@@ -83,6 +87,7 @@ class Fire extends BaseMapboxModel implements Equatable {
     required this.date,
     required this.dateTime,
     required this.time,
+    this.weather,
     this.extra = '',
     this.cos = '',
     this.pco = '',
@@ -135,6 +140,7 @@ class Fire extends BaseMapboxModel implements Equatable {
       date: map['date'] ?? '',
       dateTime: map['dateTime']?['sec'] ?? 0,
       time: map['hour'] ?? '',
+      weather: map['weather'] != null ? Weather.tryFromJson(map['weather']) : null,
       extra: map['extra'] ?? '',
       cos: map['cos'] ?? '',
       pco: map['pco'] ?? '',

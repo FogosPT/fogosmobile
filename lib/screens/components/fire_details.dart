@@ -386,7 +386,6 @@ class FireDetails extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
                 );
               },
             );

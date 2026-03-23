@@ -43,11 +43,14 @@ Middleware<AppState> _createLoadPreferences() {
       }
 
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
-      List<Fire> fires = store.state.fires;
+      List<Fire> allKnownIncidents = [
+        ...store.state.fires,
+        ...store.state.otherFires,
+      ];
 
-      if (fires.length > 0) {
+      if (allKnownIncidents.length > 0) {
         data['subscribedFires'] =
-            fires.where((f) => subbedFires.contains(f.id)).toList();
+            allKnownIncidents.where((f) => subbedFires.contains(f.id)).toList();
       } else {
         data['subscribedFires'] = [];
       }

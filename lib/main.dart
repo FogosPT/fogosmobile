@@ -186,6 +186,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
         if (isOther) {
           Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _openFireModal(context);
+          });
         } else {
           _openFireModal(context);
         }
@@ -203,6 +206,9 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       final isFire = message.data['isFire'];
       if (isFire == '0') {
         Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _openFireModal(context);
+        });
       } else {
         _openFireModal(context);
       }

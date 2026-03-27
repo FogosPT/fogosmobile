@@ -25,6 +25,7 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart' as app_settings;
 import 'package:fogosmobile/store/app_store.dart';
@@ -370,7 +371,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 DrawerHeader(
                   child: Center(
                     child:
-                        SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                        Image.asset(imgLogoFlame),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

@@ -16,7 +16,7 @@ import 'package:fogosmobile/actions/fires_actions.dart';
 
 class FireDetailsPage extends StatelessWidget {
   final TextStyle _header = TextStyle(
-    color: Color(0xffff512f),
+    color: Color(0xffF25C54),
     fontSize: 20,
   );
 

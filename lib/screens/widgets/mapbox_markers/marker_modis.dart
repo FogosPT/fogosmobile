@@ -34,7 +34,7 @@ class ModisMarker extends StatefulWidget implements BaseMarker{
 }
 
 class ModisMarkerState extends BaseMarkerState<ModisMarker>{
-  final _iconSize = 10.0;
+  final _iconSize = 14.0;
 
   late ScreenCoordinate _position;
 
@@ -52,7 +52,7 @@ class ModisMarkerState extends BaseMarkerState<ModisMarker>{
         onTap: () => widget._openModal?.call(widget._modis),
         child: Container(
           decoration:
-              BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
+              BoxDecoration(color: Color(0xffF7B267), shape: BoxShape.circle),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(4.0),

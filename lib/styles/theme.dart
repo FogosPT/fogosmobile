@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FogosTheme {
-  static Color _primaryColor = Color(0xffff512f);
-  static Color _accentColor = Color(0xfff09819);
+  static Color _primaryColor = Color(0xffF25C54);
+  static Color _accentColor = Color(0xffF7B267);
 
   Color get primaryColor => _primaryColor;
   Color get accentColor => _accentColor;

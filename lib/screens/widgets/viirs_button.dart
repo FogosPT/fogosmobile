@@ -31,7 +31,7 @@ class ViirsButton extends StatelessWidget {
                   child: Icon(
                     Icons.check_circle,
                     size: 18,
-                    color: Colors.green,
+                    color: Color(0xff3BB273),
                   ),
                 )
             ],

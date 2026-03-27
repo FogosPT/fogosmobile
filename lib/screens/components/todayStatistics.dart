@@ -19,7 +19,7 @@ class TodayStatistics extends StatelessWidget {
           var intervalSeries = [
             charts.Series<IntervalStats, String>(
               id: FogosLocalizations.of(context).textTodayInterval,
-              colorFn: (_, __) => c.Color.fromHex(code: "#ff512f"),
+              colorFn: (_, __) => c.Color.fromHex(code: "#F25C54"),
               domainFn: (IntervalStats stats, _) => stats.label,
               measureFn: (IntervalStats stats, _) => stats.total,
               labelAccessorFn: (IntervalStats stats, _) =>

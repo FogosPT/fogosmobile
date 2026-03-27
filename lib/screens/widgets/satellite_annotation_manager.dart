@@ -44,7 +44,7 @@ class SatelliteAnnotationManager {
         .map((m) => CircleAnnotationOptions(
               geometry: m.location,
               circleRadius: 8.0,
-              circleColor: Colors.amber.value,
+              circleColor: Color(0xffE1BC29).value,
               circleStrokeColor: Colors.white.value,
               circleStrokeWidth: 1.5,
             ))
@@ -72,7 +72,7 @@ class SatelliteAnnotationManager {
         .map((v) => CircleAnnotationOptions(
               geometry: v.location,
               circleRadius: 8.0,
-              circleColor: Colors.orangeAccent.value,
+              circleColor: Color(0xffE76700).value,
               circleStrokeColor: Colors.white.value,
               circleStrokeWidth: 1.5,
             ))

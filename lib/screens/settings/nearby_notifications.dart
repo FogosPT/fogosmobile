@@ -72,7 +72,7 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
       children: [
         // Privacy notice
         Card(
-          color: Colors.green.shade50,
+          color: Color(0xffDEFFFC),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
@@ -108,7 +108,7 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Text(
               l10n.textNearbyLocationPermissionRequired,
-              style: TextStyle(color: Colors.red.shade700, fontSize: 13),
+              style: TextStyle(color: Color(0xffAD1F1F), fontSize: 13),
             ),
           ),
 
@@ -180,9 +180,9 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.orange.withValues(alpha: 0.1),
+                color: Color(0xffE76700).withValues(alpha: 0.1),
                 border: Border.all(
-                  color: Colors.orange.withValues(alpha: 0.4),
+                  color: Color(0xffE76700).withValues(alpha: 0.4),
                   width: 2,
                 ),
               ),
@@ -191,14 +191,14 @@ class _NearbyNotificationsState extends State<NearbyNotifications> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Icon(Icons.person_pin_circle,
-                        size: 32, color: Colors.orange),
+                        size: 32, color: Color(0xffE76700)),
                     const SizedBox(height: 4),
                     Text(
                       '$_radiusKm km',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.orange,
+                        color: Color(0xffE76700),
                       ),
                     ),
                   ],

@@ -30,7 +30,7 @@ class WeatherCard extends StatelessWidget {
               // Station header
               Row(
                 children: [
-                  Icon(Icons.location_on, color: Color(0xffff512f), size: 20),
+                  Icon(Icons.location_on, color: Color(0xffF25C54), size: 20),
                   SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -38,7 +38,7 @@ class WeatherCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xffff512f),
+                        color: Color(0xffF25C54),
                       ),
                     ),
                   ),
@@ -77,7 +77,7 @@ class WeatherCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: Color(0xffff512f), size: 20),
+          Icon(icon, color: Color(0xffF25C54), size: 20),
           SizedBox(width: 8),
           Flexible(
             child: Column(

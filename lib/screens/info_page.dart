@@ -36,7 +36,7 @@ _Informação retirada do IPMA_.
 
 class InfoPage extends StatelessWidget {
   final TextStyle _header = TextStyle(
-    color: Color(0xffff512f),
+    color: Color(0xffF25C54),
     fontSize: 20,
     fontWeight: FontWeight.w700,
   );
@@ -60,46 +60,46 @@ class InfoPage extends StatelessWidget {
               title: Text(FogosLocalizations.of(context).textInformationIncidentStatus.toUpperCase(), style: _header),
               contentPadding: EdgeInsets.symmetric(horizontal: 0),
             ),
-            _occurencyBulletPoint(FogosLocalizations.of(context).textInformationFirstOrderDispatch, imgSvgIconAlarm, Color(0xffff6e02)),
+            _occurencyBulletPoint(FogosLocalizations.of(context).textInformationFirstOrderDispatch, imgSvgIconAlarm, Color(0xffE76700)),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationArrival,
               imgSvgIconPointer,
-              Color(0xffb81e1f),
+              Color(0xffAD1F1F),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationOngoing,
               imgSvgIconFire,
-              Color(0xffb81e1f),
+              Color(0xffAD1F1F),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationSettling,
               imgSvgIconFire,
-              Color(0xff65c4ed),
+              Color(0xff4D9DE0),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationClosing,
               imgSvgIconFire,
-              Color(0xff8e7e7d),
+              Color(0xffC6C8D2),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationSupervision,
               imgSvgIconWatch,
-              Color(0xff65c4ed),
+              Color(0xff4D9DE0),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textInformationClosed,
               imgSvgIconPointer,
-              Color(0xff6abf59),
+              Color(0xff3BB273),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textFalseAlarm,
               imgSvgIconFake,
-              Color(0xffbdbdbd),
+              Color(0xffAFB2C0),
             ),
             _occurencyBulletPoint(
               FogosLocalizations.of(context).textFalseAlert,
               imgSvgIconFake,
-              Color(0xffbdbdbd),
+              Color(0xffAFB2C0),
             ),
             SizedBox(height: 20),
             MarkdownBody(

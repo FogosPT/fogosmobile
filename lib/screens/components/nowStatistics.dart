@@ -25,7 +25,7 @@ class NowStatistics extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _buildItem(imgSvgIconFire, stats.total, 35, Colors.red),
+              _buildItem(imgSvgIconFire, stats.total, 35, Color(0xffE15554)),
               _buildItem(imgSvgFireman, stats.man),
               _buildItem(imgSvgFireTruck, stats.cars),
               _buildItem(imgSvgPlane, stats.aerial),

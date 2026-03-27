@@ -34,7 +34,7 @@ class ViirsMarker extends StatefulWidget implements BaseMarker{
 }
 
 class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
-  final _iconSize = 10.0;
+  final _iconSize = 14.0;
 
   late ScreenCoordinate _position;
 
@@ -53,7 +53,7 @@ class ViirsMarkerState extends BaseMarkerState<ViirsMarker> {
         onTap: () => widget._openModal?.call(widget._viirs),
         child: Container(
           decoration:
-              BoxDecoration(color: Colors.amberAccent, shape: BoxShape.circle),
+              BoxDecoration(color: Color(0xffF7B267), shape: BoxShape.circle),
           child: Center(
             child: Padding(
               padding: const EdgeInsets.all(4.0),

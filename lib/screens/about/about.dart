@@ -73,7 +73,7 @@ class About extends StatelessWidget {
                         TextSpan(
                           text: FogosLocalizations.of(context)
                               .textCivilProtection,
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: Color(0xff4D9DE0)),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => launchURL('http://www.prociv.pt/'),
                         ),
@@ -101,7 +101,7 @@ class About extends StatelessWidget {
                         ),
                         TextSpan(
                           text: ' mail@fogos.pt.',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: Color(0xff4D9DE0)),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () => launchURL('mailto:mail@fogos.pt'),
                         ),

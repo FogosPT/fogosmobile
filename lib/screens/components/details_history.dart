@@ -50,7 +50,7 @@ class DetailsHistoryStats extends StatelessWidget {
             contentPadding: EdgeInsets.all(0),
             dense: true,
             leading: CircleAvatar(
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xffE15554),
               child: Container(
                 width: 20,
                 child: SvgPicture.asset(

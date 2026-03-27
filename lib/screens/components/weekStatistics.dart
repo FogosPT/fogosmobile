@@ -21,7 +21,7 @@ class WeekStatistics extends StatelessWidget {
             return [
               charts.Series<Day, String>(
                 id: FogosLocalizations.of(context).textTotal,
-                colorFn: (_, __) => c.Color.fromHex(code: "#ff512f"),
+                colorFn: (_, __) => c.Color.fromHex(code: "#F25C54"),
                 domainFn: (Day stats, _) => stats.label,
                 measureFn: (Day stats, _) => stats.total,
                 labelAccessorFn: (Day stats, _) => ' ${stats.total.toString()}',

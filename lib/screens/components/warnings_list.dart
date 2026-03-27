@@ -27,7 +27,7 @@ class WarningsList extends StatelessWidget {
                       Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.5), color: Color(0xfff45e29)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.5), color: Color(0xffE76700)),
                           child: Text(warning.timestamp ?? '', style: TextStyle(color: Colors.white), textAlign: TextAlign.left)),
                       _buildWarningBody(warning),
                     ],

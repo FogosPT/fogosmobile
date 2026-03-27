@@ -66,6 +66,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
             getCorrectStatusImage(
                 widget._fire.statusCode, widget._fire.important),
             semanticsLabel: 'Fire Marker',
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           onPressed: () {
             store.dispatch(ClearFireAction());

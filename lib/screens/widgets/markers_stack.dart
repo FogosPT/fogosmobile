@@ -211,12 +211,12 @@ class MarkerStackState<T extends BaseMapboxModel, V extends BaseMarker,
   }
 
   double _getFireIconSize(double scale) {
-    double pinSize = 30.0 * scale;
-    if (pinSize == 0 || pinSize < 20) {
-      pinSize = 20.0;
+    double pinSize = 38.0 * scale;
+    if (pinSize == 0 || pinSize < 26) {
+      pinSize = 26.0;
     }
-    if (pinSize > 40) {
-      pinSize = 40.0;
+    if (pinSize > 52) {
+      pinSize = 52.0;
     }
     return pinSize;
   }
@@ -269,6 +269,7 @@ class _FireMarkerWidget extends StatelessWidget {
             width: size * 0.6,
             height: size * 0.6,
             semanticsLabel: 'Fire Marker',
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
         ),
       ),
@@ -290,10 +291,10 @@ class _SimpleMarkerWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 30,
-        height: 30,
+        width: 38,
+        height: 38,
         decoration: BoxDecoration(
-          color: Colors.amberAccent,
+          color: Color(0xffF7B267),
           shape: BoxShape.circle,
         ),
         child: Center(

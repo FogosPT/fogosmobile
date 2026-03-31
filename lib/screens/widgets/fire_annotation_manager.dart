@@ -86,9 +86,9 @@ class FireAnnotationManager {
   }
 
   int _getIconSize(double scale) {
-    double pinSize = 72.0 * scale;
-    if (pinSize == 0 || pinSize < 54) pinSize = 54.0;
-    if (pinSize > 108) pinSize = 108.0;
+    double pinSize = 108.0 * scale;
+    if (pinSize == 0 || pinSize < 81) pinSize = 81.0;
+    if (pinSize > 162) pinSize = 162.0;
     return pinSize.toInt();
   }
 

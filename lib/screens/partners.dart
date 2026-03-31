@@ -49,8 +49,18 @@ class Partners extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: 15.0,
               ),
-            )
-            
+            ),
+            TextButton(
+              child: Image.asset("assets/partners/ptservidor.png"),
+              onPressed: () {
+                launchURL('https://www.ptservidor.pt/');
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 15.0,
+              ),
+            ),
           ],
         ),
       ),

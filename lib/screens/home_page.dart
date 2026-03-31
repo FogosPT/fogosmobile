@@ -62,6 +62,8 @@ class _HomePageState extends State<HomePage> {
             showViirs: state.showViirs ?? false,
             useSatelliteStyle:
                 state.preferences[preferenceSatellite] == 1,
+            kmlUrl: state.selectedFire?.kmlVost,
+            kmlAreaUrl: state.selectedFire?.kml,
             onFireTap: (Fire fire) {
               final store = StoreProvider.of<AppState>(context);
               store.dispatch(ClearFireAction());

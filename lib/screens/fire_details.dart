@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
+import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
 import 'package:fogosmobile/screens/components/fire_details/weather_card.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
+import 'package:fogosmobile/screens/widgets/kml_map_widget.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/models/app_state.dart';
@@ -158,11 +160,145 @@ class FireDetailsPage extends StatelessWidget {
                   WeatherCard(weather: fire.weather!),
                   SizedBox(height: 25),
                 ],
+                if (fire.kml != null) ...[
+                  ListTile(title: Text('ÁREA ARDIDA', style: _header)),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: KmlMapWidget(kmlContent: fire.kml!),
+                  ),
+                  SizedBox(height: 25),
+                ],
+                if (fire.kmlVost != null) ...[
+                  ListTile(title: Text('ÁREA DE INTERESSE', style: _header)),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: KmlMapWidget(kmlContent: fire.kmlVost!),
+                  ),
+                  SizedBox(height: 25),
+                ],
+                if (fire.icnf != null) ...[
+                  ListTile(title: Text('ICNF', style: _header)),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: _IcnfDetailCard(icnf: fire.icnf!),
+                  ),
+                  SizedBox(height: 25),
+                ],
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _IcnfDetailCard extends StatelessWidget {
+  final Icnf icnf;
+
+  const _IcnfDetailCard({required this.icnf});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xffF25C54).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (icnf.incendio == true)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: const Color(0xffF25C54),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                'Incêndio confirmado',
+                style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ),
+          if (icnf.burnArea != null) ...[
+            const Text('Área Ardida', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.grey)),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                _AreaItem(label: 'Povoamento', value: icnf.burnArea!.povoamento),
+                _AreaItem(label: 'Mato', value: icnf.burnArea!.mato),
+                _AreaItem(label: 'Agrícola', value: icnf.burnArea!.agricola),
+                _AreaItem(label: 'Total', value: icnf.burnArea!.total, highlight: true),
+              ],
+            ),
+          ],
+          if (icnf.altitude != null || icnf.fonteAlerta != null) ...[
+            const SizedBox(height: 16),
+            const Divider(height: 1),
+            const SizedBox(height: 16),
+            if (icnf.altitude != null)
+              _InfoRow(icon: Icons.terrain, label: 'Altitude', value: '${icnf.altitude!.toStringAsFixed(0)} m'),
+            if (icnf.fonteAlerta != null)
+              _InfoRow(icon: Icons.notifications_outlined, label: 'Fonte de alerta', value: icnf.fonteAlerta!),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _AreaItem extends StatelessWidget {
+  final String label;
+  final double value;
+  final bool highlight;
+
+  const _AreaItem({required this.label, required this.value, this.highlight = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            '${value.toStringAsFixed(0)} ha',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: highlight ? const Color(0xffF25C54) : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey), textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _InfoRow({required this.icon, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: Colors.grey),
+          const SizedBox(width: 8),
+          Text('$label: ', style: const TextStyle(color: Colors.grey, fontSize: 14)),
+          Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        ],
+      ),
     );
   }
 }

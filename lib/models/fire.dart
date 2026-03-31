@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
+import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/models/weather.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -63,6 +64,9 @@ class Fire extends BaseMapboxModel implements Equatable {
   String extra;
   String cos;
   String pco;
+  final String? kml;
+  final String? kmlVost;
+  final Icnf? icnf;
 
   Fire({
     required this.id,
@@ -91,6 +95,9 @@ class Fire extends BaseMapboxModel implements Equatable {
     this.extra = '',
     this.cos = '',
     this.pco = '',
+    this.kml,
+    this.kmlVost,
+    this.icnf,
   }) : super(Point(coordinates: Position(lng, lat)), id);
 
   Map<String, dynamic> _toMap() {
@@ -144,6 +151,9 @@ class Fire extends BaseMapboxModel implements Equatable {
       extra: map['extra'] ?? '',
       cos: map['cos'] ?? '',
       pco: map['pco'] ?? '',
+      kml: map['kml'],
+      kmlVost: map['kmlVost'],
+      icnf: map['icnf'] != null ? Icnf.fromJson(map['icnf']) : null,
     );
   }
 

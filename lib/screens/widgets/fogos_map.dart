@@ -5,6 +5,7 @@ import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/widgets/fire_annotation_manager.dart';
+import 'package:fogosmobile/screens/widgets/kml_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -18,6 +19,8 @@ class FogosMap extends StatefulWidget {
   final bool showModis;
   final bool showViirs;
   final bool useSatelliteStyle;
+  final String? kmlUrl;
+  final String? kmlAreaUrl;
   final void Function(Fire)? onFireTap;
   final void Function(Modis)? onModisTap;
   final void Function(Viirs)? onViirsTap;
@@ -32,6 +35,8 @@ class FogosMap extends StatefulWidget {
     this.showModis = false,
     this.showViirs = false,
     this.useSatelliteStyle = false,
+    this.kmlUrl,
+    this.kmlAreaUrl,
     this.onFireTap,
     this.onModisTap,
     this.onViirsTap,
@@ -53,9 +58,10 @@ class _FogosMapState extends State<FogosMap> {
   MapboxMap? _mapController;
   FireAnnotationManager? _fireManager;
   SatelliteAnnotationManager? _satelliteManager;
+  KmlLayerManager? _kmlManager;
+  KmlLayerManager? _kmlAreaManager;
   int _lastAppliedTemplate = -1;
   bool _managersReady = false;
-  bool _pendingSync = false;
 
   int get _templateIndex => widget.useSatelliteStyle ? 1 : 0;
 
@@ -66,7 +72,6 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   void _configureOrnaments() {
-    // Move compass to top-left so it doesn't overlap the overlay buttons (top-right)
     _mapController!.compass.updateSettings(CompassSettings(
       position: OrnamentPosition.TOP_LEFT,
       marginTop: 16,
@@ -87,13 +92,11 @@ class _FogosMapState extends State<FogosMap> {
   void _onStyleLoaded(StyleLoadedEventData data) async {
     _managersReady = false;
 
-    // Dispose old managers
     await _fireManager?.dispose();
     await _satelliteManager?.dispose();
 
     if (_mapController == null || !mounted) return;
 
-    // Create new managers
     _fireManager = FireAnnotationManager(
       mapboxMap: _mapController!,
       onFireTap: widget.onFireTap,
@@ -107,9 +110,11 @@ class _FogosMapState extends State<FogosMap> {
     );
     await _satelliteManager!.init();
 
+    _kmlManager = KmlLayerManager(mapboxMap: _mapController!, id: 'vost');
+    _kmlAreaManager = KmlLayerManager(mapboxMap: _mapController!, id: 'area');
+
     _managersReady = true;
 
-    // Sync all data now
     _syncAll();
   }
 
@@ -126,10 +131,7 @@ class _FogosMapState extends State<FogosMap> {
     super.didUpdateWidget(oldWidget);
     _updateStyleIfNeeded();
 
-    if (!_managersReady) {
-      // Managers not ready yet — data will be synced when they are
-      return;
-    }
+    if (!_managersReady) return;
 
     if (widget.fires != oldWidget.fires ||
         widget.fireFilters != oldWidget.fireFilters) {
@@ -145,12 +147,22 @@ class _FogosMapState extends State<FogosMap> {
         widget.showViirs != oldWidget.showViirs) {
       _syncViirs();
     }
+
+    if (widget.kmlUrl != oldWidget.kmlUrl) {
+      _syncKml();
+    }
+
+    if (widget.kmlAreaUrl != oldWidget.kmlAreaUrl) {
+      _syncKmlArea();
+    }
   }
 
   void _syncAll() {
     _syncFires();
     _syncModis();
     _syncViirs();
+    _syncKml();
+    _syncKmlArea();
   }
 
   void _syncFires() {
@@ -173,10 +185,30 @@ class _FogosMapState extends State<FogosMap> {
     }
   }
 
+  void _syncKml() {
+    final url = widget.kmlUrl;
+    if (url != null && url.isNotEmpty) {
+      _kmlManager?.show(url);
+    } else {
+      _kmlManager?.clear();
+    }
+  }
+
+  void _syncKmlArea() {
+    final url = widget.kmlAreaUrl;
+    if (url != null && url.isNotEmpty) {
+      _kmlAreaManager?.show(url);
+    } else {
+      _kmlAreaManager?.clear();
+    }
+  }
+
   @override
   void dispose() {
     _fireManager?.dispose();
     _satelliteManager?.dispose();
+    _kmlManager?.clear();
+    _kmlAreaManager?.clear();
     super.dispose();
   }
 

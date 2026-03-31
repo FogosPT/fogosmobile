@@ -6,6 +6,7 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
@@ -365,6 +366,14 @@ class FireDetails extends StatelessWidget {
                                     ),
                                   ),
                                 ],
+                                if (fire.kml != null) ...[
+                                  Padding(padding: EdgeInsets.only(top: 20.0)),
+                                  _KmlBadge(label: 'Área Ardida (ICNF)'),
+                                ],
+                                if (fire.icnf != null) ...[
+                                  Padding(padding: EdgeInsets.only(top: 20.0)),
+                                  _IcnfCard(icnf: fire.icnf!),
+                                ],
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -392,6 +401,158 @@ class FireDetails extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _IcnfCard extends StatelessWidget {
+  final Icnf icnf;
+
+  const _IcnfCard({required this.icnf});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xffF25C54).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.local_fire_department, color: Color(0xffF25C54), size: 16),
+              const SizedBox(width: 6),
+              Text(
+                'Área ardida via ICNF',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xffF25C54),
+                ),
+              ),
+              const Spacer(),
+              if (icnf.incendio == true)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF25C54),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Text(
+                    'Incêndio',
+                    style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                  ),
+                ),
+            ],
+          ),
+          if (icnf.burnArea != null) ...[
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                _BurnAreaItem(label: 'Povoamento', value: icnf.burnArea!.povoamento),
+                _BurnAreaItem(label: 'Mato', value: icnf.burnArea!.mato),
+                _BurnAreaItem(label: 'Agrícola', value: icnf.burnArea!.agricola),
+                _BurnAreaItem(label: 'Total', value: icnf.burnArea!.total, highlight: true),
+              ],
+            ),
+          ],
+          if (icnf.altitude != null || icnf.fonteAlerta != null) ...[
+            const SizedBox(height: 8),
+            const Divider(height: 1),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                if (icnf.altitude != null) ...[
+                  const Icon(Icons.terrain, size: 14, color: Colors.grey),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${icnf.altitude!.toStringAsFixed(0)} m',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+                if (icnf.altitude != null && icnf.fonteAlerta != null)
+                  const SizedBox(width: 16),
+                if (icnf.fonteAlerta != null) ...[
+                  const Icon(Icons.notifications_outlined, size: 14, color: Colors.grey),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Alerta: ${icnf.fonteAlerta}',
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _KmlBadge extends StatelessWidget {
+  final String label;
+
+  const _KmlBadge({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0xffF25C54).withOpacity(0.08),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: const Color(0xffF25C54).withOpacity(0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.map_outlined, size: 14, color: Color(0xffF25C54)),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 13, color: Color(0xffF25C54), fontWeight: FontWeight.w500),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BurnAreaItem extends StatelessWidget {
+  final String label;
+  final double value;
+  final bool highlight;
+
+  const _BurnAreaItem({
+    required this.label,
+    required this.value,
+    this.highlight = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            '${value.toStringAsFixed(0)} ha',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: highlight ? FontWeight.bold : FontWeight.normal,
+              color: highlight ? const Color(0xffF25C54) : Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

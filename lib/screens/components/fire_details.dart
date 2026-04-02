@@ -149,6 +149,11 @@ class FireDetails extends StatelessWidget {
                                             fire.local,
                                             style: TextStyle(fontSize: 16.0),
                                           ),
+                                          if (fire.detailLocation != null)
+                                            Text(
+                                              fire.detailLocation!,
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
                                         ],
                                       ),
                                     )

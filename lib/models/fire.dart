@@ -42,7 +42,8 @@ class Fire extends BaseMapboxModel implements Equatable {
   final String district; // distrito
   final String city; // concelho
   final String town; // freguesia
-  final String local; // localidade
+  final String local;
+  final String? detailLocation; // localidade
 
   final double lat;
   final double lng;
@@ -85,6 +86,7 @@ class Fire extends BaseMapboxModel implements Equatable {
     required this.city,
     required this.town,
     required this.local,
+    this.detailLocation,
     required this.lat,
     required this.lng,
     required this.created,
@@ -141,6 +143,7 @@ class Fire extends BaseMapboxModel implements Equatable {
       city: map['concelho'] ?? '',
       town: map['freguesia'] ?? '',
       local: map['localidade'] ?? '',
+      detailLocation: map['detailLocation'],
       lat: (map['lat'] ?? 0.0).toDouble(),
       lng: (map['lng'] ?? 0.0).toDouble(),
       created: map['created']?['sec'] ?? 0,

@@ -172,7 +172,7 @@ class FogosLocalizations {
       );
 
   String get textFireStatusDone => Intl.message(
-        'Chegada ao TO',
+        'Encerrada',
         name: 'textFireStatusDone',
         desc: 'Fire status: done',
       );
@@ -268,13 +268,13 @@ class FogosLocalizations {
       );
 
   String get textInformationSupervision => Intl.message(
-        "Vigilância – Meios no local para actuar em caso de necessidade",
+        "Vigilância – meios no local para atuar em caso de necessidade",
         name: 'textInformationSupervision',
         desc: 'InformationScreen - Supervision',
       );
 
   String get textInformationClosed => Intl.message(
-        "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos",
+        "Encerrada – entrada, nas respetivas entidades, de todos os meios envolvidos",
         name: 'textInformationClosed',
         desc: 'Information Screen - Closed',
       );
@@ -455,7 +455,7 @@ class FogosLocalizations {
       );
 
   String get textDataUpdate => Intl.message(
-        "Actualizações de 2 em 2 minutos.",
+        "Atualizações de 2 em 2 minutos.",
         name: 'textDataUpdate',
         desc: 'Data is updated in 2 minute intervals.',
       );

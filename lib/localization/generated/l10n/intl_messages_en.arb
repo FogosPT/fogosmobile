@@ -7,7 +7,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textInformations": "Informations",
+  "textInformations": "Information",
   "@textInformations": {
     "description": "Texto de informações - App Drawer",
     "type": "text",
@@ -85,7 +85,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textNoConnection": "We were unnable to connect to the server",
+  "textNoConnection": "We were unable to connect to the server",
   "@textNoConnection": {
     "description": "Warning text for when working offline",
     "type": "text",
@@ -181,7 +181,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textInformationArrival": "Arrival to Incident Scene - Resources arrived at incidient location.",
+  "textInformationArrival": "Arrival at incident scene - Resources arrived at the incident location.",
   "@textInformationArrival": {
     "description": "Information Screen - Arrival",
     "type": "text",
@@ -308,7 +308,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textTodayDistricts": "Today's District",
+  "textTodayDistricts": "Today's Districts",
   "@textTodayDistricts": {
     "description": "Text today Districts",
     "type": "text",

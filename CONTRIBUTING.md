@@ -2,23 +2,23 @@
 
 First of all, thank you for thinking about contributing. 🔥
 
-You're more than welcome to contribute to the project. When contributing, please keep in mind that the project is open source, therefore is maintained by several people - your code should be simple and readable. If there's a specific question you need to discuss with someone, please join [our Slack](https://communityinviter.com/apps/fogospt/fogos-pt).
+You're more than welcome to contribute to the project. When contributing, please keep in mind that the project is open source and is maintained by several people - your code should be simple and readable. If there's a specific question you need to discuss with someone, please join [our Slack](https://communityinviter.com/apps/fogospt/fogos-pt).
 
 ## How to Contribute
 
 First of all, you should join [our Slack](https://communityinviter.com/apps/fogospt/fogos-pt), if you haven't already. Joining Slack is a great opportunity to meet the contributors of [FogosPT](https://github.com/FogosPT) projects and to discuss how you can help.
 
-When you decide to contribute, gives us a shout at Slack so we can add you to the contributors (it's easy for us to test and validate your contributions if you branch of our repo than forking to your own repo).
+When you decide to contribute, give us a shout on Slack so we can add you as a contributor (it's easier for us to test and validate your contributions if you branch from our repo instead of forking to your own repo).
 
 If you already know us, take a look at the issues and take a stab at them. We'll try to make the issue as verbose as possible, so it is easy for you to help. When you're done, create a Pull Request (on the PR's description, you should include `closes #<issue-number>` so you know what issue you're fixing and to make sure the issue is closed when we merge your PR).
 
 If you have a suggestion of a feature or a thing that should be improved, speak with us on Slack. We'll be more than happy to listen to your thoughts.
 
-You don't need to code to help us. If you see some bugs or other things that could be better, open an issue on Github.
+You don't need to code to help us. If you see some bugs or other things that could be better, open an issue on GitHub.
 
 ## Setup and run project
 
-This app is built with Flutter and Dart 2, follwing Redux's design Pattern.
+This app is built with Flutter and Dart 2, following Redux's design pattern.
 
 Make sure you have installed Flutter following [these instructions](https://flutter.io/get-started/install/).
 
@@ -38,11 +38,11 @@ flutter doctor
 
 Fix anything `flutter doctor` asks.
 
-Now, you need configure some files and tokens to run app
+Now, you need to configure some files and tokens to run the app.
 
 ### Configure key.properties (android/key.properties)
 
-If file key.properties is created, ⚠ only if created, you need add some variables to run app
+If the `key.properties` file is created (⚠️ only if created), add the variables below to run the app.
 
 ```shell
 # Config to firebase notifications
@@ -61,11 +61,11 @@ After that, everything should be working normally.
 
 ### Configure mapbox
 
-Mapbox is a feature to use map into app. To use mapbox, you need config some enviroment variables and token. Follow [this Android page](https://docs.mapbox.com/android/maps/guides/install/) and [this iOS page](https://docs.mapbox.com/ios/maps/guides/) or this steps:
+Mapbox is used to display maps in the app. To use Mapbox, you need to configure some environment variables and a token. Follow [this Android page](https://docs.mapbox.com/android/maps/guides/install/) and [this iOS page](https://docs.mapbox.com/ios/maps/guides/) or these steps:
 
 - Create a mapbox account [here](https://account.mapbox.com/auth/signup/)
-- Create a API Token with all secret scopes selected ([ref](https://user-images.githubusercontent.com/21011641/122591350-240b6b80-d063-11eb-8f9b-a0228b65f321.png))
-- Add two enviroment variables into your OS. A variable with name `SDK_REGISTRY_TOKEN` and other with name `MAPBOX_DOWNLOADS_TOKEN`, both with same value: the api token generate in previous step. This is necessary because [this issue](https://github.com/tobrun/flutter-mapbox-gl/issues/604) with flutter-mapbox package
+- Create an API token with all secret scopes selected ([ref](https://user-images.githubusercontent.com/21011641/122591350-240b6b80-d063-11eb-8f9b-a0228b65f321.png))
+- Add two environment variables to your OS: one named `SDK_REGISTRY_TOKEN` and another named `MAPBOX_DOWNLOADS_TOKEN`, both with the same value: the API token generated in the previous step. This is necessary because of [this issue](https://github.com/tobrun/flutter-mapbox-gl/issues/604) with the flutter-mapbox package
 - Replace `MAPBOX_DOWNLOADS_TOKEN` in `android/main/res/values/strings.xml` with the same api token generated in mapbox page
 
 ### Run project
@@ -77,14 +77,14 @@ flutter pub get
 flutter run
 ```
 
-If when run don't work, please try this steps:
+If it doesn't work when running, please try these steps:
 
 - Run `flutter clean`
 - Reset your code editor (VS Code or Android Studio or whatever)
 
 ## Reading material
 
-If you want to know more about Dart and Flutter, follow this useful links:
+If you want to know more about Dart and Flutter, follow these useful links:
 
 - [Flutter FTW: Top Articles about Flutter](https://blog.goposse.com/flutter-ftw-top-articles-about-flutter-fec6f365ef81)
 - [Flutter — It’s Easy to Get Started](https://medium.com/@westdabestdb/flutter-its-easy-to-get-started-995eb20c54a1)

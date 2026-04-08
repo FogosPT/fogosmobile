@@ -108,7 +108,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textFireStatusDone": "Chegada ao TO",
+  "textFireStatusDone": "Encerrada",
   "@textFireStatusDone": {
     "description": "Fire status: done",
     "type": "text",
@@ -204,13 +204,13 @@
     "type": "text",
     "placeholders": {}
   },
-  "textInformationSupervision": "Vigilância – Meios no local para actuar em caso de necessidade",
+  "textInformationSupervision": "Vigilância – Meios no local para atuar em caso de necessidade",
   "@textInformationSupervision": {
     "description": "InformationScreen - Supervision",
     "type": "text",
     "placeholders": {}
   },
-  "textInformationClosed": "Encerrada – Entrada, nas respectivas entidades, de todos os meios envolvidos",
+  "textInformationClosed": "Encerrada – Entrada, nas respetivas entidades, de todos os meios envolvidos",
   "@textInformationClosed": {
     "description": "Information Screen - Closed",
     "type": "text",
@@ -397,7 +397,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textDataUpdate": "Actualizações de 2 em 2 minutos.",
+  "textDataUpdate": "Atualizações de 2 em 2 minutos.",
   "@textDataUpdate": {
     "description": "Data is updated in 2 minute intervals.",
     "type": "text",

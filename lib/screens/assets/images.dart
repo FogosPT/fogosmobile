@@ -1,4 +1,3 @@
-const imgLogoFlame = "assets/logo_flame.png";
 const imgSvgFireman = "assets/fireman.svg";
 const imgSvgFireTruck = "assets/firetruck.svg";
 const imgSvgPlane = "assets/plane.svg";

@@ -371,7 +371,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 DrawerHeader(
                   child: Center(
                     child:
-                        Image.asset(imgLogoFlame),
+                        SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

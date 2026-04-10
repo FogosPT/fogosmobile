@@ -328,9 +328,19 @@ class FireDetails extends StatelessWidget {
                                             Icon(Icons.location_on, color: Color(0xffF25C54), size: 16),
                                             SizedBox(width: 4),
                                             Expanded(
-                                              child: Text(
-                                                fire.weather!.stationLocation,
-                                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xffF25C54)),
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    fire.weather!.stationLocation,
+                                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xffF25C54)),
+                                                  ),
+                                                  if (fire.weather!.stationDistance != null)
+                                                    Text(
+                                                      '${fire.weather!.stationDistance!.toStringAsFixed(1)} km do incidente',
+                                                      style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                                                    ),
+                                                ],
                                               ),
                                             ),
                                             Text(

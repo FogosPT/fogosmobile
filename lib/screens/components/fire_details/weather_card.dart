@@ -33,13 +33,23 @@ class WeatherCard extends StatelessWidget {
                   Icon(Icons.location_on, color: Color(0xffF25C54), size: 20),
                   SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      weather.stationLocation,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xffF25C54),
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          weather.stationLocation,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xffF25C54),
+                          ),
+                        ),
+                        if (weather.stationDistance != null)
+                          Text(
+                            '${weather.stationDistance!.toStringAsFixed(1)} km do incidente',
+                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          ),
+                      ],
                     ),
                   ),
                   Icon(Icons.schedule, color: Colors.grey, size: 16),

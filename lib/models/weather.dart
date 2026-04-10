@@ -11,6 +11,7 @@ class Weather {
   final double radiacao;
   final double pressao;
   final String date;
+  final double? stationDistance;
 
   Weather({
     required this.stationId,
@@ -25,6 +26,7 @@ class Weather {
     required this.radiacao,
     required this.pressao,
     required this.date,
+    this.stationDistance,
   });
 
   static Weather? tryFromJson(Map<String, dynamic>? map) {
@@ -50,6 +52,7 @@ class Weather {
       radiacao: (map['radiacao'] ?? 0.0).toDouble(),
       pressao: (map['pressao'] ?? 0.0).toDouble(),
       date: map['date'] ?? '',
+      stationDistance: map['stationDistance'] != null ? (map['stationDistance']).toDouble() : null,
     );
   }
 }

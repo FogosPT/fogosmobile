@@ -79,13 +79,17 @@ class FireDetails extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.share),
-                                      onPressed: () {
-                                        Share.share(
-                                            FogosLocalizations.of(context)
-                                                .textShare(fire.city, fire.id));
-                                      },
+                                    Builder(
+                                      builder: (ctx) => IconButton(
+                                        icon: Icon(Icons.share),
+                                        onPressed: () {
+                                          final box = ctx.findRenderObject() as RenderBox?;
+                                          Share.share(
+                                            FogosLocalizations.of(context).textShare(fire.city, fire.id),
+                                            sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
+                                          );
+                                        },
+                                      ),
                                     ),
                                     SizedBox(width: 8),
                                     state.isLoading

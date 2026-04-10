@@ -378,9 +378,24 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
-                  child: Center(
-                    child:
-                        SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      _aboutTapTimer?.cancel();
+                      _aboutTapCount++;
+                      if (_aboutTapCount >= 5) {
+                        _aboutTapCount = 0;
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
+                      } else {
+                        _aboutTapTimer = Timer(const Duration(seconds: 15), () {
+                          _aboutTapCount = 0;
+                        });
+                      }
+                    },
+                    child: Center(
+                      child: SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+                    ),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -477,19 +492,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textAbout),
                   onTap: () {
-                    _aboutTapTimer?.cancel();
-                    _aboutTapCount++;
-                    if (_aboutTapCount >= 5) {
-                      _aboutTapCount = 0;
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
-                    } else {
-                      _aboutTapTimer = Timer(const Duration(seconds: 15), () {
-                        _aboutTapCount = 0;
-                      });
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed(ABOUT_ROUTE);
-                    }
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(ABOUT_ROUTE);
                   },
                   leading: Icon(Icons.person),
                 ),

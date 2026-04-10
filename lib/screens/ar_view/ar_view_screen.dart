@@ -4,6 +4,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fogosmobile/actions/fires_actions.dart';
+import 'package:fogosmobile/constants/routes.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/utils/haversine.dart';
@@ -129,6 +131,13 @@ class _ArViewScreenState extends State<ArViewScreen> {
     });
   }
 
+  void _openFireDetail(BuildContext context, Fire fire) {
+    final store = StoreProvider.of<AppState>(context);
+    store.dispatch(ClearFireAction());
+    store.dispatch(LoadFireAction(fire.id));
+    Navigator.of(context).pushNamed(FIRE_DETAILS_ROUTE);
+  }
+
   void _recomputeHeading() {
     final (az, pitch) = computeHeadingAndPitch(_accel, _mag);
     if ((az - _deviceHeading).abs() > 0.5 || (pitch - _devicePitch).abs() > 0.5) {
@@ -216,7 +225,11 @@ class _ArViewScreenState extends State<ArViewScreen> {
               .map((v) => Positioned(
                     left: v.x,
                     top: v.y,
-                    child: ArFireOverlay(fire: v.fire, distanceKm: v.dist),
+                    child: ArFireOverlay(
+                      fire: v.fire,
+                      distanceKm: v.dist,
+                      onTap: () => _openFireDetail(context, v.fire),
+                    ),
                   ))
               .toList(),
         );

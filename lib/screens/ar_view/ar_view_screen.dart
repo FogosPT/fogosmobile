@@ -184,7 +184,10 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
           final bearing = bearingTo(_userLat!, _userLng!, fire.lat, fire.lng);
           final relBearing = ((bearing - _deviceHeading) + 360) % 360;
-          final x = projectToScreenX(relBearing, size.width);
+          // Detection FOV is wider than the camera FOV to account for fire
+          // spread — the registered coordinate is the ignition point, but the
+          // actual smoke column may be several km away from it.
+          final x = projectToScreenX(relBearing, size.width, fovDeg: 100.0);
           if (x == null) continue;
 
           final y = projectToScreenY(_devicePitch, size.height);

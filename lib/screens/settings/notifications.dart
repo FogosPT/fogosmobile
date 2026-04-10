@@ -80,6 +80,16 @@ class _NotificationsState extends State<Notifications> {
             };
           },
           builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+            // Sort: selected locations first, then alphabetical within each group
+            final sortedLocations = [...this.locations]..sort((a, b) {
+                final aKey = _allIncidents ? 'all-${a['key']}' : a['key'];
+                final bKey = _allIncidents ? 'all-${b['key']}' : b['key'];
+                final aSelected = state.preferences['pref-$aKey'] == 1;
+                final bSelected = state.preferences['pref-$bKey'] == 1;
+                if (aSelected == bSelected) return 0;
+                return aSelected ? -1 : 1;
+              });
+
             return new Column(
               children: <Widget>[
                 new Padding(
@@ -116,9 +126,9 @@ class _NotificationsState extends State<Notifications> {
                 new Expanded(
                   child: Scrollbar(
                     child: new ListView.builder(
-                      itemCount: this.locations.length,
+                      itemCount: sortedLocations.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final _location = this.locations[index];
+                        final _location = sortedLocations[index];
                         final prefKey = _allIncidents
                             ? 'all-${_location['key']}'
                             : _location['key'];

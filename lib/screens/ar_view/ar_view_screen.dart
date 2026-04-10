@@ -110,7 +110,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
   void _initSensors() {
     _accelSub =
-        accelerometerEventStream(samplingPeriod: SensorInterval.uiSamplingPeriod).listen((e) {
+        accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _accel = [
         _alpha * e.x + (1 - _alpha) * _accel[0],
         _alpha * e.y + (1 - _alpha) * _accel[1],
@@ -119,7 +119,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
       _recomputeHeading();
     });
     _magSub =
-        magnetometerEventStream(samplingPeriod: SensorInterval.uiSamplingPeriod).listen((e) {
+        magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _mag = [
         _alpha * e.x + (1 - _alpha) * _mag[0],
         _alpha * e.y + (1 - _alpha) * _mag[1],

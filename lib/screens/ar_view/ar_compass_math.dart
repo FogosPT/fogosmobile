@@ -45,10 +45,12 @@ double? projectToScreenX(double relBearing, double screenWidth,
 }
 
 /// Returns pixel Y position based on device pitch.
-/// Positive pitch = device tilted up → fires shift down on screen.
+/// Reference: pitch = 90° (device upright, pointing at horizon) → center of screen.
+/// Tilting back (looking up, pitch < 90°) → fires shift down.
+/// Tilting forward (looking down, pitch > 90°) → fires shift up.
 double projectToScreenY(double devicePitch, double screenHeight,
-    {double fovVertDeg = 45.0}) {
-  final relative = -devicePitch;
+    {double fovVertDeg = 60.0}) {
+  final relative = 90.0 - devicePitch;
   final clamped = relative.clamp(-fovVertDeg / 2, fovVertDeg / 2);
   return (clamped / fovVertDeg + 0.5) * screenHeight;
 }

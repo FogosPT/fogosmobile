@@ -47,6 +47,7 @@ post_install do |installer|
         '$(inherited)',
         'PERMISSION_LOCATION=1',
         'PERMISSION_NOTIFICATIONS=1',
+        'PERMISSION_CAMERA=1',
       ]
     end    
   end

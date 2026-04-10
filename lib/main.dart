@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
@@ -41,6 +43,7 @@ import 'package:fogosmobile/screens/other_fires_page.dart';
 import 'package:fogosmobile/screens/all_incidents_page.dart';
 import 'package:fogosmobile/screens/search_page.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/ar_view/ar_view_screen.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -113,6 +116,7 @@ class MyApp extends StatelessWidget {
           OTHER_FIRES_ROUTE: (_) => OtherFiresPage(),
           ALL_INCIDENTS_ROUTE: (_) => AllIncidentsPage(),
           SEARCH_ROUTE: (_) => SearchPage(),
+          AR_VIEW_ROUTE: (_) => const ArViewScreen(),
         },
         home: FirstPage(),
         localizationsDelegates: [
@@ -136,6 +140,10 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  // Easter egg: 5 taps on About → AR mode
+  int _aboutTapCount = 0;
+  Timer? _aboutTapTimer;
 
   void _setupFirebaseMessaging() async {
     final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
@@ -285,6 +293,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _aboutTapTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -468,8 +477,19 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textAbout),
                   onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(ABOUT_ROUTE);
+                    _aboutTapTimer?.cancel();
+                    _aboutTapCount++;
+                    if (_aboutTapCount >= 5) {
+                      _aboutTapCount = 0;
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
+                    } else {
+                      _aboutTapTimer = Timer(const Duration(seconds: 15), () {
+                        _aboutTapCount = 0;
+                      });
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed(ABOUT_ROUTE);
+                    }
                   },
                   leading: Icon(Icons.person),
                 ),

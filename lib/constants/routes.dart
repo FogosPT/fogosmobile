@@ -11,3 +11,4 @@ const FIRES_TABLES_ROUTE = '/fires_table';
 const OTHER_FIRES_ROUTE = '/other_fires';
 const ALL_INCIDENTS_ROUTE = '/all_incidents';
 const SEARCH_ROUTE = '/search';
+const AR_VIEW_ROUTE = '/ar_view';

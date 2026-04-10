@@ -1,0 +1,54 @@
+import 'dart:math';
+
+/// Returns bearing in degrees [0, 360) from (lat1,lng1) to (lat2,lng2).
+double bearingTo(double lat1, double lng1, double lat2, double lng2) {
+  final lat1R = lat1 * pi / 180;
+  final lat2R = lat2 * pi / 180;
+  final dLngR = (lng2 - lng1) * pi / 180;
+  final y = sin(dLngR) * cos(lat2R);
+  final x = cos(lat1R) * sin(lat2R) - sin(lat1R) * cos(lat2R) * cos(dLngR);
+  return (atan2(y, x) * 180 / pi + 360) % 360;
+}
+
+/// Computes azimuth (compass heading) and pitch from raw sensor vectors.
+/// [accel] = [ax, ay, az], [mag] = [mx, my, mz]
+/// Returns (azimuthDeg, pitchDeg).
+(double azimuth, double pitch) computeHeadingAndPitch(
+    List<double> accel, List<double> mag) {
+  final norm =
+      sqrt(accel[0] * accel[0] + accel[1] * accel[1] + accel[2] * accel[2]);
+  if (norm == 0) return (0, 0);
+  final ax = accel[0] / norm, ay = accel[1] / norm, az = accel[2] / norm;
+
+  final ex = mag[1] * az - mag[2] * ay;
+  final ey = mag[2] * ax - mag[0] * az;
+  final ez = mag[0] * ay - mag[1] * ax;
+  final enorm = sqrt(ex * ex + ey * ey + ez * ez);
+  if (enorm == 0) return (0, 0);
+
+  final nx = ay * ez / enorm - az * ey / enorm;
+  final ny = az * ex / enorm - ax * ez / enorm;
+
+  final azimuthRad = atan2(ex / enorm, nx);
+  final azimuthDeg = (azimuthRad * 180 / pi + 360) % 360;
+  final pitchDeg = asin(-ay) * 180 / pi;
+  return (azimuthDeg, pitchDeg);
+}
+
+/// Returns pixel X for a fire given its relative bearing to device heading.
+/// Returns null when outside the ±fovDeg/2 cone.
+double? projectToScreenX(double relBearing, double screenWidth,
+    {double fovDeg = 60.0}) {
+  double r = ((relBearing + 180) % 360) - 180;
+  if (r.abs() > fovDeg / 2) return null;
+  return (r / fovDeg + 0.5) * screenWidth;
+}
+
+/// Returns pixel Y position based on device pitch.
+/// Positive pitch = device tilted up → fires shift down on screen.
+double projectToScreenY(double devicePitch, double screenHeight,
+    {double fovVertDeg = 45.0}) {
+  final relative = -devicePitch;
+  final clamped = relative.clamp(-fovVertDeg / 2, fovVertDeg / 2);
+  return (clamped / fovVertDeg + 0.5) * screenHeight;
+}

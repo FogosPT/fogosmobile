@@ -32,6 +32,8 @@
 		<string>Precisamos de acesso à tua localização para colocarmos o teu posicionamento no mapa e para te alertar de incidentes próximos. A tua localização nunca sai do dispositivo.</string>
 		<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 		<string>Precisamos de acesso à tua localização para te alertar de incidentes próximos, mesmo quando a app está em segundo plano. A tua localização nunca sai do dispositivo.</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Precisamos de acesso à câmara para mostrar os incêndios em realidade aumentada.</string>
 		<key>UIApplicationSceneManifest</key>
 		<dict>
 			<key>UIApplicationSupportsMultipleScenes</key>

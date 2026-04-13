@@ -11,6 +11,7 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import '../ar_view/ar_compass_math.dart';
 import '../../models/fire.dart';
+import '../../utils/haversine.dart';
 
 class IncidentCameraScreen extends StatefulWidget {
   final Fire fire;
@@ -231,6 +232,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     lines.add('ID: ${fire.id}');
     if (lat != null && lng != null) {
       lines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
+      final dist = haversineKm(lat, lng, fire.lat, fire.lng);
+      lines.add('Dist. ao incêndio: ${dist.toStringAsFixed(1)} km');
     }
     final altStr = alt != null ? 'Alt: ${alt.toStringAsFixed(1)} m' : '';
     final dirStr = 'Dir: ${_headingToCardinal(heading)} (${heading.toStringAsFixed(0)}°)';
@@ -406,6 +409,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final lngStr = _userLng != null ? _formatCoord(_userLng!, false) : '—';
     final altStr = _userAlt != null ? '${_userAlt!.toStringAsFixed(1)} m' : '—';
     final dirStr = '${_headingToCardinal(_deviceHeading)} (${_deviceHeading.toStringAsFixed(0)}°)';
+    final distStr = (_userLat != null && _userLng != null)
+        ? '${haversineKm(_userLat!, _userLng!, widget.fire.lat, widget.fire.lng).toStringAsFixed(1)} km'
+        : '—';
 
     return DefaultTextStyle(
       style: const TextStyle(color: Colors.white, fontSize: 12),
@@ -424,6 +430,13 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
             children: [
               Text('Alt: $altStr'),
               Text('Dir: $dirStr'),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('Dist. ao incêndio: $distStr'),
             ],
           ),
         ],

@@ -624,7 +624,7 @@
     "type": "text",
     "placeholders": {
       "distance": {
-        "example": "5km"
+        "example": "5 km"
       }
     }
   },

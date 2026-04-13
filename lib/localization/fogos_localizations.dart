@@ -732,7 +732,7 @@ String get textDataTableStart => Intl.message(
     name: 'textNearbyNotificationTitle',
     args: [distance],
     desc: 'Nearby notification title',
-    examples: const {'distance': '5km'},
+    examples: const {'distance': '5 km'},
   );
 
   /// Retrieve localization resources for the widget tree

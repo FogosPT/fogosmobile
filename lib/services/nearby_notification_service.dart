@@ -162,8 +162,8 @@ class NearbyNotificationService {
     );
 
     final distText = distance < 1
-        ? '${(distance * 1000).round()}m'
-        : '${distance.round()}km';
+        ? '${(distance * 1000).round()} m'
+        : '${distance.round()} km';
 
     final title = isFire
         ? '🔥 Incêndio a $distText de ti'

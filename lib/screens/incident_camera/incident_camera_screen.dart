@@ -248,24 +248,28 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
         .toSet()
         .toList();
 
-    final lines = <String>[];
-    lines.add(locationParts.join(', '));
-    lines.add('ID: ${fire.id}');
-    if (_placeName != null) {
-      lines.add('Local: $_placeName');
-    }
+    // Top block — fire info (shown alongside the logo)
+    final fireLines = <String>[
+      locationParts.join(', '),
+      'ID: ${fire.id}',
+    ];
+
+    // Bottom block — photo context
+    final photoLines = <String>[];
+    if (_placeName != null) photoLines.add('Local: $_placeName');
     if (lat != null && lng != null) {
-      lines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
+      photoLines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
       final dist = haversineKm(lat, lng, fire.lat, fire.lng);
-      lines.add('Dist. ao incêndio: ${dist.toStringAsFixed(1)} km');
+      photoLines.add('Dist. ao incêndio: ${dist.toStringAsFixed(1)} km');
     }
     final altStr = alt != null ? 'Alt: ${alt.toStringAsFixed(1)} m' : '';
     final dirStr = 'Dir: ${_headingToCardinal(heading)} (${heading.toStringAsFixed(0)}°)';
-    lines.add(altStr.isNotEmpty ? '$altStr   $dirStr' : dirStr);
-    lines.add('${_formatDate(captureTime)}  ${_formatTime(captureTime)}');
+    photoLines.add(altStr.isNotEmpty ? '$altStr   $dirStr' : dirStr);
+    photoLines.add('${_formatDate(captureTime)}  ${_formatTime(captureTime)}');
 
-    _drawOverlay(canvas, w, h, lines);
     _drawWatermark(canvas, w, h, logoImage);
+    _drawBlock(canvas, w, h, fireLines, top: true);
+    _drawBlock(canvas, w, h, photoLines, top: false);
 
     final picture = recorder.endRecording();
     final composed = await picture.toImage(srcImage.width, srcImage.height);
@@ -286,7 +290,11 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     );
   }
 
-  void _drawOverlay(Canvas canvas, double imgW, double imgH, List<String> lines) {
+  /// Draws a semi-transparent text block anchored to the top-left or
+  /// bottom-left corner of the image.
+  void _drawBlock(Canvas canvas, double imgW, double imgH, List<String> lines,
+      {required bool top}) {
+    if (lines.isEmpty) return;
     final fontSize = imgH * 0.022;
     final padding = imgW * 0.02;
     final lineSpacing = fontSize * 1.5;
@@ -311,11 +319,11 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final blockH = lines.length * lineSpacing + padding;
     final blockW = maxLineW + padding * 2;
     final left = padding;
-    final top = imgH - blockH - padding;
+    final blockTop = top ? padding : imgH - blockH - padding;
 
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(left, top, blockW, blockH),
+        Rect.fromLTWH(left, blockTop, blockW, blockH),
         const Radius.circular(8),
       ),
       Paint()..color = const Color(0x99000000),
@@ -324,7 +332,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     for (var i = 0; i < textPainters.length; i++) {
       textPainters[i].paint(
         canvas,
-        Offset(left + padding, top + padding / 2 + i * lineSpacing),
+        Offset(left + padding, blockTop + padding / 2 + i * lineSpacing),
       );
     }
   }

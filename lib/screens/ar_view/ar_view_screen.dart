@@ -158,7 +158,17 @@ class _ArViewScreenState extends State<ArViewScreen> {
         fit: StackFit.expand,
         children: [
           if (_cameraReady && _cameraController != null)
-            CameraPreview(_cameraController!)
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  // previewSize is in landscape (width > height), swap for portrait
+                  width: _cameraController!.value.previewSize?.height ?? 1,
+                  height: _cameraController!.value.previewSize?.width ?? 1,
+                  child: CameraPreview(_cameraController!),
+                ),
+              ),
+            )
           else
             const Center(
                 child: CircularProgressIndicator(color: Colors.white)),

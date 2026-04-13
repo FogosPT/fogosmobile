@@ -49,7 +49,11 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     _initCamera();
     _initLocation();
     _initSensors();
@@ -354,8 +358,14 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
               child: FittedBox(
                 fit: BoxFit.cover,
                 child: SizedBox(
-                  width: _cameraController!.value.previewSize?.height ?? 1,
-                  height: _cameraController!.value.previewSize?.width ?? 1,
+                  // previewSize is always landscape (width > height).
+                  // Swap for portrait; use as-is for landscape.
+                  width: MediaQuery.of(context).orientation == Orientation.portrait
+                      ? (_cameraController!.value.previewSize?.height ?? 1)
+                      : (_cameraController!.value.previewSize?.width ?? 1),
+                  height: MediaQuery.of(context).orientation == Orientation.portrait
+                      ? (_cameraController!.value.previewSize?.width ?? 1)
+                      : (_cameraController!.value.previewSize?.height ?? 1),
                   child: CameraPreview(_cameraController!),
                 ),
               ),

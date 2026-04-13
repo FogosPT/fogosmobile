@@ -9,6 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
+import 'package:geocoding/geocoding.dart';
+
 import '../ar_view/ar_compass_math.dart';
 import '../../models/fire.dart';
 import '../../utils/haversine.dart';
@@ -41,6 +43,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   double? _userLat;
   double? _userLng;
   double? _userAlt;
+  String? _placeName;
 
   // Live clock
   late Timer _clockTimer;
@@ -111,6 +114,20 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           _userAlt = pos.altitude;
         });
       }
+      // Reverse geocode in parallel — failure is non-fatal
+      try {
+        final placemarks = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+        if (placemarks.isNotEmpty && mounted) {
+          final p = placemarks.first;
+          final parts = [p.subLocality, p.locality, p.administrativeArea]
+              .where((s) => s != null && s.isNotEmpty)
+              .toSet()
+              .toList();
+          if (parts.isNotEmpty) {
+            setState(() => _placeName = parts.join(', '));
+          }
+        }
+      } catch (_) {}
     } catch (_) {}
   }
 
@@ -234,6 +251,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final lines = <String>[];
     lines.add(locationParts.join(', '));
     lines.add('ID: ${fire.id}');
+    if (_placeName != null) {
+      lines.add('Local: $_placeName');
+    }
     if (lat != null && lng != null) {
       lines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
       final dist = haversineKm(lat, lng, fire.lat, fire.lng);
@@ -444,9 +464,10 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           ),
           const SizedBox(height: 4),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Dist. ao incêndio: $distStr'),
+              if (_placeName != null) Text(_placeName!),
             ],
           ),
         ],

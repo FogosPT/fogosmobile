@@ -19,6 +19,6 @@ class FogosTheme {
         secondary: _accentColor,
         brightness: Brightness.light,
       ),
-      textTheme: GoogleFonts.unboundedTextTheme(),
-      primaryTextTheme: GoogleFonts.unboundedTextTheme());
+      textTheme: GoogleFonts.urbanistTextTheme(),
+      primaryTextTheme: GoogleFonts.urbanistTextTheme());
 }

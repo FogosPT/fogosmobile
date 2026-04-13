@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class FogosTheme {
   static Color _primaryColor = Color(0xffF25C54);
@@ -17,5 +18,7 @@ class FogosTheme {
         seedColor: _primaryColor,
         secondary: _accentColor,
         brightness: Brightness.light,
-      ));
+      ),
+      textTheme: GoogleFonts.unboundedTextTheme(),
+      primaryTextTheme: GoogleFonts.unboundedTextTheme());
 }

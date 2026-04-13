@@ -34,6 +34,8 @@
 		<string>Precisamos de acesso à tua localização para te alertar de incidentes próximos, mesmo quando a app está em segundo plano. A tua localização nunca sai do dispositivo.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Precisamos de acesso à câmara para mostrar os incêndios em realidade aumentada.</string>
+		<key>NSPhotoLibraryAddUsageDescription</key>
+		<string>Precisamos de acesso à galeria para guardar as fotos dos incidentes.</string>
 		<key>UIApplicationSceneManifest</key>
 		<dict>
 			<key>UIApplicationSupportsMultipleScenes</key>

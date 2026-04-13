@@ -7,6 +7,7 @@ import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
 import 'package:fogosmobile/screens/components/fire_details/weather_card.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
+import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/widgets/kml_map_widget.dart';
@@ -60,6 +61,19 @@ class FireDetailsPage extends StatelessWidget {
               _title,
               style: TextStyle(color: Colors.white),
             ),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.camera_alt_outlined, color: Colors.white),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => IncidentCameraScreen(fire: fire),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           body: Container(
             child: ListView(

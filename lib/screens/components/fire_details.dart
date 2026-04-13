@@ -8,6 +8,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/constants/routes.dart';
+import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
@@ -106,6 +107,18 @@ class FireDetails extends StatelessWidget {
                                                   isFireSubscribed ? 0 : 1);
                                             },
                                           ),
+                                    SizedBox(width: 8),
+                                    IconButton(
+                                      icon: Icon(Icons.camera_alt_outlined),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => IncidentCameraScreen(fire: fire),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     SizedBox(width: 8),
                                     IconButton(
                                       icon: Icon(Icons.close),

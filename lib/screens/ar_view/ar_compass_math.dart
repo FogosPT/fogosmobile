@@ -31,7 +31,10 @@ double bearingTo(double lat1, double lng1, double lat2, double lng2) {
 
   final azimuthRad = atan2(ex / enorm, nx);
   final azimuthDeg = (azimuthRad * 180 / pi + 360) % 360;
-  final pitchDeg = asin(-ay) * 180 / pi;
+  // Camera elevation from horizontal: Z axis is perpendicular to screen (toward
+  // the user). When the phone is upright, az=0 (camera at horizon). Tilting
+  // back so the camera looks up makes az negative → elevation positive.
+  final pitchDeg = asin(-az) * 180 / pi;
   return (azimuthDeg, pitchDeg);
 }
 
@@ -44,13 +47,12 @@ double? projectToScreenX(double relBearing, double screenWidth,
   return (r / fovDeg + 0.5) * screenWidth;
 }
 
-/// Returns pixel Y position based on device pitch.
-/// Reference: pitch = 90° (device upright, pointing at horizon) → center of screen.
-/// Tilting back (looking up, pitch < 90°) → fires shift down.
-/// Tilting forward (looking down, pitch > 90°) → fires shift up.
+/// Returns pixel Y position based on camera elevation angle (degrees).
+/// pitch = 0°  → camera at horizon → center of screen.
+/// pitch > 0°  → camera looking up  → fires at horizon shift down.
+/// pitch < 0°  → camera looking down → fires at horizon shift up.
 double projectToScreenY(double devicePitch, double screenHeight,
     {double fovVertDeg = 60.0}) {
-  final relative = 90.0 - devicePitch;
-  final clamped = relative.clamp(-fovVertDeg / 2, fovVertDeg / 2);
+  final clamped = devicePitch.clamp(-fovVertDeg / 2, fovVertDeg / 2);
   return (clamped / fovVertDeg + 0.5) * screenHeight;
 }

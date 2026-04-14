@@ -214,7 +214,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
             fire: fire,
             dist: dist,
             x: x.clamp(0.0, size.width - cardWidth),
-            y: y.clamp(60.0, size.height - cardHeight - 40),
+            y: (y - cardHeight / 2).clamp(60.0, size.height - cardHeight - 40),
           ));
         }
 

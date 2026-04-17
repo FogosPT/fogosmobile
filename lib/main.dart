@@ -421,14 +421,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.list_alt),
                 ),
                 ListTile(
-                  title: Text(FogosLocalizations.of(context).textOtherFires),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
-                  },
-                  leading: Icon(Icons.local_fire_department),
-                ),
-                ListTile(
                   title: Text(FogosLocalizations.of(context).textWarnings),
                   onTap: () {
                     Navigator.of(context).pop();

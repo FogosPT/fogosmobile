@@ -7,6 +7,8 @@ import 'package:fogosmobile/screens/about/contributor_item.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:redux/redux.dart';
 
 class About extends StatelessWidget {
@@ -61,6 +63,12 @@ class About extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(bottom: 24.0),
+                  child: Center(
+                    child: SvgPicture.asset(imgSvgLogoPretoCor, height: 48),
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: RichText(

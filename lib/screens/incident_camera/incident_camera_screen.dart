@@ -11,7 +11,10 @@ import 'package:sensors_plus/sensors_plus.dart';
 
 import 'package:geocoding/geocoding.dart';
 
+import 'package:flutter_svg/flutter_svg.dart';
+
 import '../ar_view/ar_compass_math.dart';
+import '../assets/images.dart';
 import '../../models/fire.dart';
 import '../../utils/haversine.dart';
 
@@ -230,13 +233,20 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final w = srcImage.width.toDouble();
     final h = srcImage.height.toDouble();
 
-    // Load logo asset
-    final logoData = await rootBundle.load('assets/logo.png');
-    final logoCodec = await ui.instantiateImageCodec(
-      logoData.buffer.asUint8List(),
-      targetWidth: (w * 0.15).round(),
+    // Rasterize SVG logo to ui.Image for compositing
+    final pictureInfo = await vg.loadPicture(
+      SvgAssetLoader(imgSvgLogoBrancoHorizontal),
+      null,
     );
-    final logoImage = (await logoCodec.getNextFrame()).image;
+    final logoTargetW = (w * 0.25).round();
+    final logoScale = logoTargetW / pictureInfo.size.width;
+    final logoTargetH = (pictureInfo.size.height * logoScale).round();
+    final logoRecorder = ui.PictureRecorder();
+    final logoCanvas = Canvas(logoRecorder, Rect.fromLTWH(0, 0, logoTargetW.toDouble(), logoTargetH.toDouble()));
+    logoCanvas.scale(logoScale);
+    logoCanvas.drawPicture(pictureInfo.picture);
+    pictureInfo.picture.dispose();
+    final logoImage = await logoRecorder.endRecording().toImage(logoTargetW, logoTargetH);
 
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder, Rect.fromLTWH(0, 0, w, h));

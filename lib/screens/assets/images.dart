@@ -4,3 +4,6 @@ const imgSvgPlane = "assets/plane.svg";
 const imgSvgLogo = "assets/logo.svg";
 const imgLightning = "assets/lightning.png";
 const imgLogo = "assets/logo.png";
+const imgSvgLogoBrancoHorizontal = "assets/SVG/fogos.pt branco horizontal.svg";
+const imgSvgLogoPretoCor = "assets/SVG/fogos.pt preto cor horizontal.svg";
+const imgSvgLogoIconCor = "assets/SVG/fogos.pt icon cor.svg";

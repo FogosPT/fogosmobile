@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
@@ -26,7 +24,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/home_page.dart';
 import 'package:fogosmobile/screens/settings/settings.dart' as app_settings;
@@ -142,8 +139,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   // Easter egg: 5 taps on About → AR mode
-  int _aboutTapCount = 0;
-  Timer? _aboutTapTimer;
 
   void _setupFirebaseMessaging() async {
     final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
@@ -293,7 +288,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    _aboutTapTimer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -378,24 +372,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () {
-                      _aboutTapTimer?.cancel();
-                      _aboutTapCount++;
-                      if (_aboutTapCount >= 5) {
-                        _aboutTapCount = 0;
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
-                      } else {
-                        _aboutTapTimer = Timer(const Duration(seconds: 15), () {
-                          _aboutTapCount = 0;
-                        });
-                      }
-                    },
-                    child: Center(
-                      child: SvgPicture.asset(imgSvgLogoFlame, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
-                    ),
+                  child: Center(
+                    child: SvgPicture.asset(imgSvgLogoBrancoHorizontal),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -477,6 +455,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
                   },
                   leading: Icon(Icons.insert_chart),
+                ),
+                ListTile(
+                  title: Text('Radar'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
+                  },
+                  leading: Icon(Icons.radar),
                 ),
                 Divider(),
                 ListTile(

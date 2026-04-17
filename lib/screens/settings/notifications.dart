@@ -2,6 +2,8 @@ import 'package:diacritic/diacritic.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
@@ -102,7 +104,8 @@ class _NotificationsState extends State<Notifications> {
                     segments: [
                       ButtonSegment<bool>(
                         value: false,
-                        label: Text('🔥 ${FogosLocalizations.of(context).textFires}'),
+                        icon: SvgPicture.asset(imgSvgLogoIconCor, height: 18),
+                        label: Text(FogosLocalizations.of(context).textFires),
                       ),
                       ButtonSegment<bool>(
                         value: true,

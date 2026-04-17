@@ -388,6 +388,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   ),
                 ),
                 ListTile(
+                  title: Text('Radar'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
+                  },
+                  leading: Icon(Icons.radar),
+                ),
+                ListTile(
                   title:
                       Text(FogosLocalizations.of(context).textFiresTable),
                   onTap: () {
@@ -455,14 +463,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pushNamed(STATISTICS_ROUTE);
                   },
                   leading: Icon(Icons.insert_chart),
-                ),
-                ListTile(
-                  title: Text('Radar'),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
-                  },
-                  leading: Icon(Icons.radar),
                 ),
                 Divider(),
                 ListTile(

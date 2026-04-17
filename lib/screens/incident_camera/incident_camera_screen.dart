@@ -10,6 +10,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 import 'package:geocoding/geocoding.dart';
+import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -48,13 +50,21 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   double? _userAlt;
   String? _placeName;
 
+  // GPS time reference for accurate Lisbon time
+  DateTime? _gpsTimestamp;
+  DateTime? _gpsSystemTimestamp;
+  late tz.Location _lisbon;
+
   // Live clock
   late Timer _clockTimer;
-  DateTime _now = DateTime.now();
+  late DateTime _now;
 
   @override
   void initState() {
     super.initState();
+    tz_data.initializeTimeZones();
+    _lisbon = tz.getLocation('Europe/Lisbon');
+    _now = tz.TZDateTime.now(_lisbon);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.landscapeLeft,
@@ -64,8 +74,17 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     _initLocation();
     _initSensors();
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() => _now = DateTime.now());
+      if (mounted) setState(() => _now = _currentLisbonTime());
     });
+  }
+
+  DateTime _currentLisbonTime() {
+    if (_gpsTimestamp != null && _gpsSystemTimestamp != null) {
+      final elapsed = DateTime.now().difference(_gpsSystemTimestamp!);
+      final gpsNow = _gpsTimestamp!.add(elapsed);
+      return tz.TZDateTime.from(gpsNow, _lisbon);
+    }
+    return tz.TZDateTime.now(_lisbon);
   }
 
   @override
@@ -115,6 +134,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           _userLat = pos.latitude;
           _userLng = pos.longitude;
           _userAlt = pos.altitude;
+          _gpsTimestamp = pos.timestamp.toUtc();
+          _gpsSystemTimestamp = DateTime.now();
         });
       }
       // Reverse geocode in parallel — failure is non-fatal
@@ -194,7 +215,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       final lng = _userLng;
       final alt = _userAlt;
       final heading = _deviceHeading;
-      final captureTime = DateTime.now();
+      final captureTime = _currentLisbonTime();
 
       final xFile = await _cameraController!.takePicture();
       final bytes = await xFile.readAsBytes();
@@ -386,6 +407,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       );
     }
 
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    final safePadding = MediaQuery.of(context).padding;
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -398,22 +422,23 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
                 child: SizedBox(
                   // previewSize is always landscape (width > height).
                   // Swap for portrait; use as-is for landscape.
-                  width: MediaQuery.of(context).orientation == Orientation.portrait
-                      ? (_cameraController!.value.previewSize?.height ?? 1)
-                      : (_cameraController!.value.previewSize?.width ?? 1),
-                  height: MediaQuery.of(context).orientation == Orientation.portrait
+                  width: isLandscape
                       ? (_cameraController!.value.previewSize?.width ?? 1)
                       : (_cameraController!.value.previewSize?.height ?? 1),
+                  height: isLandscape
+                      ? (_cameraController!.value.previewSize?.height ?? 1)
+                      : (_cameraController!.value.previewSize?.width ?? 1),
                   child: CameraPreview(_cameraController!),
                 ),
               ),
             )
           else
             const Center(child: CircularProgressIndicator(color: Colors.white)),
-          // Close button
+
+          // Close button — respects safe area on both axes
           Positioned(
-            top: MediaQuery.of(context).padding.top + 8,
-            left: 12,
+            top: safePadding.top + 8,
+            left: safePadding.left + 12,
             child: Material(
               color: Colors.black54,
               shape: const CircleBorder(),
@@ -427,26 +452,46 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
               ),
             ),
           ),
-          // Info bar + shutter
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              color: Colors.black.withOpacity(0.65),
-              padding: EdgeInsets.fromLTRB(
-                16, 12, 16, MediaQuery.of(context).padding.bottom + 24,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildInfoRow(),
-                  const SizedBox(height: 20),
-                  _buildShutterButton(),
-                ],
+
+          if (isLandscape) ...[
+            // Shutter button — vertically centred on the right
+            Positioned(
+              right: safePadding.right + 16,
+              top: 0,
+              bottom: 0,
+              child: Center(child: _buildShutterButton()),
+            ),
+            // Info panel — bottom strip, leaving room for the shutter
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: safePadding.right + 100,
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.65),
+                padding: EdgeInsets.fromLTRB(16, 8, 16, safePadding.bottom + 10),
+                child: _buildInfoRow(),
               ),
             ),
-          ),
+          ] else ...[
+            // Portrait — info + shutter stacked at the bottom
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black.withValues(alpha: 0.65),
+                padding: EdgeInsets.fromLTRB(16, 12, 16, safePadding.bottom + 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildInfoRow(),
+                    const SizedBox(height: 20),
+                    Center(child: _buildShutterButton()),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -502,7 +547,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 4),
-          color: _isSaving ? Colors.grey.withOpacity(0.5) : Colors.white.withOpacity(0.9),
+          color: _isSaving ? Colors.grey.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.9),
         ),
         child: _isSaving
             ? const Padding(

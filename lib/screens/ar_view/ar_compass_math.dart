@@ -26,14 +26,17 @@ double bearingTo(double lat1, double lng1, double lat2, double lng2) {
   final enorm = sqrt(ex * ex + ey * ey + ez * ez);
   if (enorm == 0) return (0, 0);
 
-  final nx = ay * ez / enorm - az * ey / enorm;
-  final ny = az * ex / enorm - ax * ez / enorm;
+  // nz = third component of (g × E) — needed for the camera-direction azimuth.
+  final nz = ax * ez / enorm - az * ex / enorm;
 
-  final azimuthRad = atan2(ex / enorm, nx);
+  // Camera (back lens) points along -Z in device frame. The correct azimuth for
+  // the camera direction is atan2(E·(-Z), N·(-Z)) = atan2(-Ez, -Nz).
+  // Using the X-component atan2(ex, nx) was correct only for a flat phone where
+  // the camera faces down; for portrait/upright AR it was systematically off.
+  final azimuthRad = atan2(-ez / enorm, -nz);
   final azimuthDeg = (azimuthRad * 180 / pi + 360) % 360;
-  // Camera elevation from horizontal: Z axis is perpendicular to screen (toward
-  // the user). When the phone is upright, az=0 (camera at horizon). Tilting
-  // back so the camera looks up makes az negative → elevation positive.
+  // Pitch: az≈0 when upright (camera at horizon). Tilting back (camera up)
+  // makes az positive → pitch negative → fires shift toward top of screen.
   final pitchDeg = asin(-az) * 180 / pi;
   return (azimuthDeg, pitchDeg);
 }

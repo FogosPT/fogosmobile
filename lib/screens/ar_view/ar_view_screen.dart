@@ -138,9 +138,15 @@ class _ArViewScreenState extends State<ArViewScreen> {
     Navigator.of(context).pushNamed(FIRE_DETAILS_ROUTE);
   }
 
+  static double _angleDiff(double a, double b) {
+    double d = (a - b + 360) % 360;
+    if (d > 180) d = 360 - d;
+    return d;
+  }
+
   void _recomputeHeading() {
     final (az, pitch) = computeHeadingAndPitch(_accel, _mag);
-    if ((az - _deviceHeading).abs() > 0.5 || (pitch - _devicePitch).abs() > 0.5) {
+    if (_angleDiff(az, _deviceHeading) > 1.5 || (pitch - _devicePitch).abs() > 1.5) {
       setState(() {
         _deviceHeading = az;
         _devicePitch = pitch;
@@ -188,6 +194,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
     final size = MediaQuery.of(context).size;
 
     return StoreConnector<AppState, List<Fire>>(
+      onInit: (store) => store.dispatch(LoadFiresAction()),
       converter: (store) => store.state.fires,
       builder: (context, fires) {
         const maxRadius = 50.0;
@@ -203,17 +210,17 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
           final bearing = bearingTo(_userLat!, _userLng!, fire.lat, fire.lng);
           final relBearing = ((bearing - _deviceHeading) + 360) % 360;
-          // Detection FOV is wider than the camera FOV to account for fire
-          // spread — the registered coordinate is the ignition point, but the
-          // actual smoke column may be several km away from it.
-          final x = projectToScreenX(relBearing, size.width, fovDeg: 100.0);
+          final x = projectToScreenX(relBearing, size.width, fovDeg: 70.0);
           if (x == null) continue;
+          // Discard if the card would go off-screen — avoids cards "sticking"
+          // to screen edges when the fire is at the edge of the FOV.
+          if (x < 0 || x > size.width - cardWidth) continue;
 
           final y = projectToScreenY(_devicePitch, size.height);
           visible.add((
             fire: fire,
             dist: dist,
-            x: x.clamp(0.0, size.width - cardWidth),
+            x: x,
             y: (y - cardHeight / 2).clamp(60.0, size.height - cardHeight - 40),
           ));
         }
@@ -232,7 +239,10 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
         return Stack(
           children: visible
-              .map((v) => Positioned(
+              .map((v) => AnimatedPositioned(
+                    key: ValueKey(v.fire.id),
+                    duration: const Duration(milliseconds: 120),
+                    curve: Curves.easeOut,
                     left: v.x,
                     top: v.y,
                     child: ArFireOverlay(

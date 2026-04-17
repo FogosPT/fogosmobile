@@ -373,7 +373,14 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 DrawerHeader(
                   child: Center(
-                    child: SvgPicture.asset(imgSvgLogoBrancoHorizontal),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[700],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: SvgPicture.asset(imgSvgLogoBrancoHorizontal, height: 36),
+                    ),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

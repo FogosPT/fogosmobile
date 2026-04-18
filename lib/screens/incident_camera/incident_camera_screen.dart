@@ -310,14 +310,25 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
   void _drawWatermark(Canvas canvas, double imgW, double imgH, ui.Image logo) {
     final padding = imgW * 0.02;
+    final innerPadH = imgW * 0.012;
+    final innerPadV = imgW * 0.008;
     final logoW = logo.width.toDouble();
-    final left = imgW - logoW - padding;
+    final logoH = logo.height.toDouble();
+    final left = imgW - logoW - padding - innerPadH * 2;
     final top = padding;
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(left, top, logoW + innerPadH * 2, logoH + innerPadV * 2),
+        const Radius.circular(8),
+      ),
+      Paint()..color = const Color(0x99000000),
+    );
 
     canvas.drawImage(
       logo,
-      Offset(left, top),
-      Paint()..color = const Color(0xAAFFFFFF),
+      Offset(left + innerPadH, top + innerPadV),
+      Paint(),
     );
   }
 

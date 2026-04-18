@@ -234,6 +234,28 @@ class _ArViewScreenState extends State<ArViewScreen> {
           );
         }
 
+        // Resolve vertical overlaps: sort by X, then push overlapping cards up/down
+        final byX = [...visible]..sort((a, b) => a.x.compareTo(b.x));
+        final resolved = <({Fire fire, double dist, double x, double y})>[];
+        for (final v in byX) {
+          var y = v.y;
+          bool hasOverlap(double testY) => resolved.any(
+                (r) => (r.x - v.x).abs() < cardWidth && (r.y - testY).abs() < cardHeight + 4,
+              );
+          if (hasOverlap(y)) {
+            final above = (y - cardHeight - 8).clamp(60.0, size.height - cardHeight - 40);
+            if (!hasOverlap(above)) {
+              y = above;
+            } else {
+              y = (y + cardHeight + 8).clamp(60.0, size.height - cardHeight - 40);
+            }
+          }
+          resolved.add((fire: v.fire, dist: v.dist, x: v.x, y: y));
+        }
+        visible
+          ..clear()
+          ..addAll(resolved);
+
         // Sort descending by distance so the closest renders last (on top)
         visible.sort((a, b) => b.dist.compareTo(a.dist));
 

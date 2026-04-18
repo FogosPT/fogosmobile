@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
@@ -41,6 +43,7 @@ import 'package:fogosmobile/screens/all_incidents_page.dart';
 import 'package:fogosmobile/screens/search_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/ar_view/ar_view_screen.dart';
+import 'package:fogosmobile/screens/splash_screen.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -115,7 +118,7 @@ class MyApp extends StatelessWidget {
           SEARCH_ROUTE: (_) => SearchPage(),
           AR_VIEW_ROUTE: (_) => const ArViewScreen(),
         },
-        home: FirstPage(),
+        home: Platform.isAndroid ? SplashScreen(child: FirstPage()) : FirstPage(),
         localizationsDelegates: [
           const FogosLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
@@ -373,14 +376,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 DrawerHeader(
                   child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[700],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: SvgPicture.asset(imgSvgLogoBrancoHorizontal, height: 36),
-                    ),
+                    child: SvgPicture.asset(imgSvgLogoBrancoHorizontal, height: 36),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

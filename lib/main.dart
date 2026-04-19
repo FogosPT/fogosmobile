@@ -336,10 +336,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: FireGradientAppBar(
-            title: Text(
-              'Fogos.pt',
-              style: TextStyle(color: Colors.white),
-            ),
+            title: SvgPicture.asset(imgSvgLogoPretoCor, height: 28),
             actions: [
               StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {

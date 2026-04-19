@@ -66,12 +66,12 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Image.asset(
                   'assets/logo-vost.png',
-                  height: 48,
+                  height: 28,
                 ),
-                const SizedBox(width: 32),
+                const SizedBox(width: 24),
                 Image.asset(
                   'assets/logo-agif.png',
-                  height: 48,
+                  height: 28,
                 ),
               ],
             ),

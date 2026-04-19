@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fogosmobile/styles/theme.dart';
 
 class FireGradientAppBar extends AppBar {
-  FireGradientAppBar({Text? title, List<Widget>? actions, TabBar? bottom})
+  FireGradientAppBar({Widget? title, List<Widget>? actions, TabBar? bottom})
       : super(
           title: title,
           backgroundColor: Colors.white,

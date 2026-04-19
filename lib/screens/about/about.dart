@@ -64,7 +64,7 @@ class About extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(bottom: 24.0),
+                  padding: EdgeInsets.only(top: 8.0, bottom: 24.0),
                   child: Center(
                     child: SvgPicture.asset(imgSvgLogoPretoCor, height: 48),
                   ),

@@ -30,7 +30,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
   bool _cameraDenied = false;
 
   // Sensors (low-pass filtered)
-  static const _alpha = 0.15;
+  static const _alpha = 0.06;
   List<double> _accel = [0, 0, 9.8];
   List<double> _mag = [0, 1, 0];
   double _deviceHeading = 0;
@@ -146,7 +146,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
   void _recomputeHeading() {
     final (az, pitch) = computeHeadingAndPitch(_accel, _mag);
-    if (_angleDiff(az, _deviceHeading) > 1.5 || (pitch - _devicePitch).abs() > 1.5) {
+    if (_angleDiff(az, _deviceHeading) > 2.5 || (pitch - _devicePitch).abs() > 2.5) {
       setState(() {
         _deviceHeading = az;
         _devicePitch = pitch;
@@ -210,7 +210,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
 
           final bearing = bearingTo(_userLat!, _userLng!, fire.lat, fire.lng);
           final relBearing = ((bearing - _deviceHeading) + 360) % 360;
-          final x = projectToScreenX(relBearing, size.width, fovDeg: 70.0);
+          final x = projectToScreenX(relBearing, size.width, fovDeg: 120.0);
           if (x == null) continue;
           // Discard if the card would go off-screen — avoids cards "sticking"
           // to screen edges when the fire is at the edge of the FOV.
@@ -263,8 +263,8 @@ class _ArViewScreenState extends State<ArViewScreen> {
           children: visible
               .map((v) => AnimatedPositioned(
                     key: ValueKey(v.fire.id),
-                    duration: const Duration(milliseconds: 120),
-                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeInOutCubic,
                     left: v.x,
                     top: v.y,
                     child: ArFireOverlay(

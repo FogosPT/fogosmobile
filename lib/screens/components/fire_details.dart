@@ -139,7 +139,7 @@ class FireDetails extends StatelessWidget {
                                           const EdgeInsets.only(right: 16.0),
                                       child: Icon(
                                         Icons.map,
-                                        color: getFireColor(fire),
+                                        color: const Color(0xffF25C54),
                                       ),
                                     ),
                                     Expanded(
@@ -194,7 +194,7 @@ class FireDetails extends StatelessWidget {
                                         ),
                                         width: 25.0,
                                         height: 25.0,
-                                        color: getFireColor(fire),
+                                        color: const Color(0xffF25C54),
                                       ),
                                     ),
                                     Expanded(
@@ -227,7 +227,7 @@ class FireDetails extends StatelessWidget {
                                           const EdgeInsets.only(right: 16.0),
                                       child: Icon(
                                         Icons.nature,
-                                        color: getFireColor(fire),
+                                        color: const Color(0xffF25C54),
                                       ),
                                     ),
                                     Expanded(
@@ -262,7 +262,7 @@ class FireDetails extends StatelessWidget {
                                         imgSvgFireman,
                                         width: 35.0,
                                         height: 35.0,
-                                        color: getFireColor(fire),
+                                        color: const Color(0xffF25C54),
                                       ),
                                     ),
                                     Expanded(
@@ -303,7 +303,7 @@ class FireDetails extends StatelessWidget {
                                           const EdgeInsets.only(right: 16.0),
                                       child: Icon(
                                         Icons.access_time,
-                                        color: getFireColor(fire),
+                                        color: const Color(0xffF25C54),
                                       ),
                                     ),
                                     Expanded(

@@ -7,4 +7,5 @@ const imgLogo = "assets/logo.png";
 const imgSvgLogoBrancoHorizontal = "assets/SVG/fogos.pt branco horizontal.svg";
 const imgSvgLogoBrancoCorHorizontal = "assets/SVG/fogos.pt branco cor horizontal.svg";
 const imgSvgLogoPretoCor = "assets/SVG/fogos.pt preto cor horizontal.svg";
+const imgSvgLogoPretoHorizontal = "assets/SVG/fogos.pt preto horizontal.svg";
 const imgSvgLogoIconCor = "assets/SVG/fogos.pt icon cor.svg";

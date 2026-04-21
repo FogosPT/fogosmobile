@@ -43,6 +43,7 @@ import 'package:fogosmobile/screens/all_incidents_page.dart';
 import 'package:fogosmobile/screens/search_page.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/ar_view/ar_view_screen.dart';
+import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
 import 'package:fogosmobile/screens/splash_screen.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
 import 'package:logger/logger.dart';
@@ -336,7 +337,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: FireGradientAppBar(
-            title: SvgPicture.asset(imgSvgLogoPretoCor, height: 28),
+            title: SvgPicture.asset(imgSvgLogoPretoHorizontal, height: 28),
             actions: [
               StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {
@@ -394,6 +395,19 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
                   },
                   leading: Icon(Icons.radar),
+                ),
+                ListTile(
+                  title: Text('Câmara'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const IncidentCameraScreen(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.camera_alt_outlined),
                 ),
                 ListTile(
                   title:

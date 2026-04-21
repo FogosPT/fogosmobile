@@ -24,9 +24,9 @@ import '../../models/fire.dart';
 import '../../utils/haversine.dart';
 
 class IncidentCameraScreen extends StatefulWidget {
-  final Fire fire;
+  final Fire? fire;
 
-  const IncidentCameraScreen({Key? key, required this.fire}) : super(key: key);
+  const IncidentCameraScreen({Key? key, this.fire}) : super(key: key);
 
   @override
   State<IncidentCameraScreen> createState() => _IncidentCameraScreenState();
@@ -267,7 +267,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
     // Rasterize SVG logo to ui.Image for compositing
     final pictureInfo = await vg.loadPicture(
-      SvgAssetLoader(imgSvgLogoBrancoCorHorizontal),
+      SvgAssetLoader(imgSvgLogoBrancoHorizontal),
       null,
     );
     final logoTargetW = (w * 0.25).round();
@@ -285,24 +285,27 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     canvas.drawImage(srcImage, Offset.zero, Paint());
 
     final fire = widget.fire;
-    final locationParts = [fire.local, fire.city, fire.district]
-        .where((s) => s.isNotEmpty)
-        .toSet()
-        .toList();
 
-    // Top block — fire info (shown alongside the logo)
-    final fireLines = <String>[
-      locationParts.join(', '),
-      'ID: ${fire.id}',
-    ];
+    // Top block — fire info (only when associated with a fire)
+    final fireLines = <String>[];
+    if (fire != null) {
+      final locationParts = [fire.local, fire.city, fire.district]
+          .where((s) => s.isNotEmpty)
+          .toSet()
+          .toList();
+      if (locationParts.isNotEmpty) fireLines.add(locationParts.join(', '));
+      fireLines.add('ID: ${fire.id}');
+    }
 
     // Bottom block — photo context
     final photoLines = <String>[];
     if (_placeName != null) photoLines.add('Local: $_placeName');
     if (lat != null && lng != null) {
       photoLines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
-      final dist = haversineKm(lat, lng, fire.lat, fire.lng);
-      photoLines.add('Dist. ao incêndio: ${dist.toStringAsFixed(1)} km');
+      if (fire != null) {
+        final dist = haversineKm(lat, lng, fire.lat, fire.lng);
+        photoLines.add('Dist. ao incêndio: ${dist.toStringAsFixed(1)} km');
+      }
     }
     final altStr = alt != null ? 'Alt: ${alt.toStringAsFixed(1)} m' : '';
     final dirStr = 'Dir: ${_headingToCardinal(heading)} (${heading.toStringAsFixed(0)}°)';
@@ -310,7 +313,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     photoLines.add('${_formatDate(captureTime)}  ${_formatTime(captureTime)}');
 
     _drawWatermark(canvas, w, h, logoImage);
-    _drawBlock(canvas, w, h, fireLines, top: true);
+    if (fireLines.isNotEmpty) _drawBlock(canvas, w, h, fireLines, top: true);
     _drawBlock(canvas, w, h, photoLines, top: false);
 
     final picture = recorder.endRecording();
@@ -567,9 +570,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final lngStr = _userLng != null ? _formatCoord(_userLng!, false) : '—';
     final altStr = _userAlt != null ? '${_userAlt!.toStringAsFixed(1)} m' : '—';
     final dirStr = '${_headingToCardinal(_deviceHeading)} (${_deviceHeading.toStringAsFixed(0)}°)';
-    final distStr = (_userLat != null && _userLng != null)
-        ? '${haversineKm(_userLat!, _userLng!, widget.fire.lat, widget.fire.lng).toStringAsFixed(1)} km'
-        : '—';
+    final distStr = (widget.fire != null && _userLat != null && _userLng != null)
+        ? '${haversineKm(_userLat!, _userLng!, widget.fire!.lat, widget.fire!.lng).toStringAsFixed(1)} km'
+        : null;
 
     return DefaultTextStyle(
       style: const TextStyle(color: Colors.white, fontSize: 12),
@@ -594,7 +597,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Dist. ao incêndio: $distStr'),
+              if (distStr != null) Text('Dist. ao incêndio: $distStr'),
               if (_placeName != null) Text(_placeName!),
             ],
           ),

@@ -90,7 +90,7 @@ class FireDetailsPage extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0, top: 2.0),
-                            child: Icon(Icons.map, color: getFireColor(fire)),
+                            child: Icon(Icons.map, color: const Color(0xffF25C54)),
                           ),
                           Expanded(
                             child: Column(
@@ -115,7 +115,7 @@ class FireDetailsPage extends StatelessWidget {
                             child: SvgPicture.asset(
                               getCorrectStatusImage(fire.statusCode, fire.important),
                               width: 24.0, height: 24.0,
-                              color: getFireColor(fire),
+                              color: const Color(0xffF25C54),
                             ),
                           ),
                           Expanded(
@@ -133,7 +133,7 @@ class FireDetailsPage extends StatelessWidget {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 12.0),
-                              child: Icon(Icons.nature, color: getFireColor(fire)),
+                              child: Icon(Icons.nature, color: const Color(0xffF25C54)),
                             ),
                             Expanded(
                               child: Text(fire.nature, style: TextStyle(fontSize: 15.0)),
@@ -147,7 +147,7 @@ class FireDetailsPage extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
-                            child: Icon(Icons.access_time, color: getFireColor(fire)),
+                            child: Icon(Icons.access_time, color: const Color(0xffF25C54)),
                           ),
                           Text('${fire.date} ${fire.time}', style: TextStyle(fontSize: 15.0)),
                         ],

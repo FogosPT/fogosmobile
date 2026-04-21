@@ -19,7 +19,7 @@ class FogosMap extends StatefulWidget {
   final bool showModis;
   final bool showViirs;
   final bool useSatelliteStyle;
-  final String? kmlUrl;
+  final List<String> kmlVostUrls;
   final String? kmlAreaUrl;
   final void Function(Fire)? onFireTap;
   final void Function(Modis)? onModisTap;
@@ -35,7 +35,7 @@ class FogosMap extends StatefulWidget {
     this.showModis = false,
     this.showViirs = false,
     this.useSatelliteStyle = false,
-    this.kmlUrl,
+    this.kmlVostUrls = const [],
     this.kmlAreaUrl,
     this.onFireTap,
     this.onModisTap,
@@ -58,7 +58,7 @@ class _FogosMapState extends State<FogosMap> {
   MapboxMap? _mapController;
   FireAnnotationManager? _fireManager;
   SatelliteAnnotationManager? _satelliteManager;
-  KmlLayerManager? _kmlManager;
+  final Map<String, KmlLayerManager> _kmlVostManagers = {};
   KmlLayerManager? _kmlAreaManager;
   int _lastAppliedTemplate = -1;
   bool _managersReady = false;
@@ -110,7 +110,7 @@ class _FogosMapState extends State<FogosMap> {
     );
     await _satelliteManager!.init();
 
-    _kmlManager = KmlLayerManager(mapboxMap: _mapController!, id: 'vost');
+    _kmlVostManagers.clear();
     _kmlAreaManager = KmlLayerManager(mapboxMap: _mapController!, id: 'area');
 
     _managersReady = true;
@@ -148,7 +148,7 @@ class _FogosMapState extends State<FogosMap> {
       _syncViirs();
     }
 
-    if (widget.kmlUrl != oldWidget.kmlUrl) {
+    if (widget.kmlVostUrls != oldWidget.kmlVostUrls) {
       _syncKml();
     }
 
@@ -186,11 +186,21 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   void _syncKml() {
-    final url = widget.kmlUrl;
-    if (url != null && url.isNotEmpty) {
-      _kmlManager?.show(url);
-    } else {
-      _kmlManager?.clear();
+    if (_mapController == null) return;
+    final newUrls = widget.kmlVostUrls.toSet();
+    final oldUrls = _kmlVostManagers.keys.toSet();
+
+    // Remove managers for URLs no longer present
+    for (final url in oldUrls.difference(newUrls)) {
+      _kmlVostManagers.remove(url)?.clear();
+    }
+
+    // Add managers for new URLs
+    for (final url in newUrls.difference(oldUrls)) {
+      final idx = _kmlVostManagers.length;
+      final manager = KmlLayerManager(mapboxMap: _mapController!, id: 'vost-$idx');
+      _kmlVostManagers[url] = manager;
+      manager.show(url);
     }
   }
 
@@ -207,7 +217,9 @@ class _FogosMapState extends State<FogosMap> {
   void dispose() {
     _fireManager?.dispose();
     _satelliteManager?.dispose();
-    _kmlManager?.clear();
+    for (final m in _kmlVostManagers.values) {
+      m.clear();
+    }
     _kmlAreaManager?.clear();
     super.dispose();
   }

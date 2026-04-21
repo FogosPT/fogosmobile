@@ -26,9 +26,9 @@ class NowStatistics extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               _buildItem(imgSvgIconFire, stats.total, 35, Color(0xffE15554)),
-              _buildItem(imgSvgFireman, stats.man),
-              _buildItem(imgSvgFireTruck, stats.cars),
-              _buildItem(imgSvgPlane, stats.aerial),
+              _buildItem(imgSvgFireman, stats.man, 50.0, const Color(0xffF25C54)),
+              _buildItem(imgSvgFireTruck, stats.cars, 50.0, const Color(0xffF25C54)),
+              _buildItem(imgSvgPlane, stats.aerial, 50.0, const Color(0xffF25C54)),
             ],
           ),
         );

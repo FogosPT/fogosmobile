@@ -205,20 +205,30 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   }
 
   void _handleNotificationTap(RemoteMessage message) {
+    final isFire = message.data['isFire'];
+    final isFireBool = isFire == 'true' || isFire == '1';
     final fireId = message.data['fireId'];
-    if (fireId != null && fireId is String && fireId.isNotEmpty) {
+    final hasFireId = fireId is String && fireId.isNotEmpty;
+
+    if (hasFireId) {
       final store = StoreProvider.of<AppState>(context);
       store.dispatch(ClearFireAction());
       store.dispatch(LoadFireAction(fireId));
+    }
 
-      final isFire = message.data['isFire'];
-      if (isFire == '0') {
-        Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+    if (isFireBool) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      if (hasFireId) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) _openFireModal(context);
         });
-      } else {
-        _openFireModal(context);
+      }
+    } else {
+      Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
+      if (hasFireId) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _openFireModal(context);
+        });
       }
     }
   }

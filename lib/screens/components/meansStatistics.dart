@@ -66,11 +66,11 @@ class MeansStatistics extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   _buildItem(imgSvgFireman,
-                      stats.means[stats.means.length - 1].man.toString()),
+                      stats.means[stats.means.length - 1].man.toString(), 50.0, const Color(0xffF25C54)),
                   _buildItem(imgSvgFireTruck,
-                      stats.means[stats.means.length - 1].terrain.toString()),
+                      stats.means[stats.means.length - 1].terrain.toString(), 50.0, const Color(0xffF25C54)),
                   _buildItem(imgSvgPlane,
-                      stats.means[stats.means.length - 1].aerial.toString()),
+                      stats.means[stats.means.length - 1].aerial.toString(), 50.0, const Color(0xffF25C54)),
                 ],
               ),
               Container(

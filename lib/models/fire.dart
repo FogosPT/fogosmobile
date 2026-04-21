@@ -26,6 +26,7 @@ class Fire extends BaseMapboxModel implements Equatable {
   // Status
   final bool active;
   final bool important;
+  final bool isFire;
   final int statusCode;
   final String statusColor;
   final FireStatus status;
@@ -74,6 +75,7 @@ class Fire extends BaseMapboxModel implements Equatable {
     required this.sharepointId,
     required this.active,
     required this.important,
+    this.isFire = true,
     required this.status,
     required this.statusCode,
     required this.statusColor,
@@ -131,6 +133,7 @@ class Fire extends BaseMapboxModel implements Equatable {
       sharepointId: map['sharepointId'] ?? 0,
       active: map['active'] ?? false,
       important: map['important'] ?? false,
+      isFire: map['isFire'] == true || map['isFire'] == 1 || map['isFire'] == null,
       status: _statusFromJson(map['status'] ?? ''),
       statusCode: map['statusCode'] ?? 0,
       statusColor: map['statusColor'] ?? '',

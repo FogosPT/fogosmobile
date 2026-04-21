@@ -111,15 +111,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
   }
 
   void _initSensors() {
-    _accelSub =
-        accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
-      _accel = [
-        _alpha * e.x + (1 - _alpha) * _accel[0],
-        _alpha * e.y + (1 - _alpha) * _accel[1],
-        _alpha * e.z + (1 - _alpha) * _accel[2],
-      ];
-      _recomputeHeading();
-    });
+    // Acelerómetro não é necessário — fórmula assume telefone vertical
     _magSub =
         magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _mag = [
@@ -145,12 +137,9 @@ class _ArViewScreenState extends State<ArViewScreen> {
   }
 
   void _recomputeHeading() {
-    final (az, pitch) = computeHeadingAndPitch(_accel, _mag);
-    if (_angleDiff(az, _deviceHeading) > 2.5 || (pitch - _devicePitch).abs() > 2.5) {
-      setState(() {
-        _deviceHeading = az;
-        _devicePitch = pitch;
-      });
+    final az = computeHeadingVertical(_mag);
+    if (_angleDiff(az, _deviceHeading) > 2.5) {
+      setState(() => _deviceHeading = az);
     }
   }
 

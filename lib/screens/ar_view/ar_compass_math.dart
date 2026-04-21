@@ -41,6 +41,14 @@ double bearingTo(double lat1, double lng1, double lat2, double lng2) {
   return (azimuthDeg, pitchDeg);
 }
 
+/// Simplified azimuth for a phone held perfectly upright (portrait).
+/// Camera points along -Z device axis → azimuth = atan2(-mx, -mz).
+/// Avoids tilt-compensation errors when pitch is assumed to be ~0.
+double computeHeadingVertical(List<double> mag) {
+  final azimuthRad = atan2(-mag[0], -mag[2]);
+  return (azimuthRad * 180 / pi + 360) % 360;
+}
+
 /// Returns pixel X for a fire given its relative bearing to device heading.
 /// Returns null when outside the ±fovDeg/2 cone.
 double? projectToScreenX(double relBearing, double screenWidth,

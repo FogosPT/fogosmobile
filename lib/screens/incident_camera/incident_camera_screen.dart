@@ -159,14 +159,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _initSensors() {
-    _accelSub = accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
-      _accel = [
-        _alpha * e.x + (1 - _alpha) * _accel[0],
-        _alpha * e.y + (1 - _alpha) * _accel[1],
-        _alpha * e.z + (1 - _alpha) * _accel[2],
-      ];
-      _updateHeading();
-    });
+    // Acelerómetro não é necessário — fórmula assume telefone vertical
     _magSub = magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _mag = [
         _alpha * e.x + (1 - _alpha) * _mag[0],
@@ -178,7 +171,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _updateHeading() {
-    final (az, _) = computeHeadingAndPitch(_accel, _mag);
+    final az = computeHeadingVertical(_mag);
     if ((az - _deviceHeading).abs() > 0.5) {
       if (mounted) setState(() => _deviceHeading = az);
     }
@@ -396,7 +389,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     if (lines.isEmpty) return;
     final fontSize = imgH * 0.022;
     final padding = imgW * 0.02;
-    final lineSpacing = fontSize * 1.5;
+    final lineGap = fontSize * 0.5;
+    final maxTextW = imgW * 0.55; // cap block width at 55% of image
 
     final textPainters = lines.map((line) {
       final tp = TextPainter(
@@ -410,13 +404,16 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
         ),
         textDirection: TextDirection.ltr,
       );
-      tp.layout(maxWidth: imgW - padding * 4);
+      tp.layout(maxWidth: maxTextW);
       return tp;
     }).toList();
 
+    // Use actual rendered heights so wrapped lines don't overflow the box
     final maxLineW = textPainters.fold(0.0, (m, tp) => tp.width > m ? tp.width : m);
-    final blockH = lines.length * lineSpacing + padding;
+    final totalTextH = textPainters.fold(0.0, (s, tp) => s + tp.height) +
+        lineGap * (textPainters.length - 1);
     final blockW = maxLineW + padding * 2;
+    final blockH = totalTextH + padding * 1.5;
     final left = padding;
     final blockTop = top ? padding : imgH - blockH - padding;
 
@@ -428,11 +425,10 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       Paint()..color = const Color(0x99000000),
     );
 
-    for (var i = 0; i < textPainters.length; i++) {
-      textPainters[i].paint(
-        canvas,
-        Offset(left + padding, blockTop + padding / 2 + i * lineSpacing),
-      );
+    var textY = blockTop + padding * 0.75;
+    for (final tp in textPainters) {
+      tp.paint(canvas, Offset(left + padding, textY));
+      textY += tp.height + lineGap;
     }
   }
 

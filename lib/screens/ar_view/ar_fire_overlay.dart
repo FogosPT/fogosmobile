@@ -42,7 +42,7 @@ class ArFireOverlay extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SvgPicture.asset(
-                  getCorrectStatusImage(fire.statusCode, fire.important),
+                  getCorrectStatusImage(fire.statusCode, fire.important, fire.isFire),
                   width: 18,
                   height: 18,
                   colorFilter: ColorFilter.mode(fireColor, BlendMode.srcIn),

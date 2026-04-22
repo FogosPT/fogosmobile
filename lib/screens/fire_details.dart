@@ -113,7 +113,7 @@ class FireDetailsPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 12.0),
                             child: SvgPicture.asset(
-                              getCorrectStatusImage(fire.statusCode, fire.important),
+                              getCorrectStatusImage(fire.statusCode, fire.important, fire.isFire),
                               width: 24.0, height: 24.0,
                               color: const Color(0xffF25C54),
                             ),

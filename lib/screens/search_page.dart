@@ -403,7 +403,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           child: Center(
             child: SvgPicture.asset(
-              getCorrectStatusImage(fire.statusCode, fire.important),
+              getCorrectStatusImage(fire.statusCode, fire.important, fire.isFire),
               width: 24,
               height: 24,
             ),

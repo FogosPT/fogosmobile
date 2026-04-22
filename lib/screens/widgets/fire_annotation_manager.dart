@@ -40,8 +40,9 @@ class FireAnnotationManager {
   }
 
   Future<Uint8List> _renderFireIcon(
-      Color color, int size, String svgAsset) async {
-    final cacheKey = '${color.value}_${size}_$svgAsset';
+      Color color, int size, String svgAsset,
+      {Color? borderColor, double opacity = 1.0}) async {
+    final cacheKey = '${color.toARGB32()}_${size}_${svgAsset}_${(borderColor ?? Colors.white).toARGB32()}_$opacity';
     if (_iconCache.containsKey(cacheKey)) return _iconCache[cacheKey]!;
 
     final s = size.toDouble();
@@ -49,12 +50,12 @@ class FireAnnotationManager {
     final canvas = Canvas(recorder);
 
     // Draw colored circle background
-    final paint = Paint()..color = color;
+    final paint = Paint()..color = color.withValues(alpha: opacity);
     canvas.drawCircle(Offset(s / 2, s / 2), s / 2, paint);
 
-    // Draw white border
+    // Draw border
     final borderPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.8)
+      ..color = (borderColor ?? Colors.white).withValues(alpha: 0.8)
       ..style = PaintingStyle.stroke
       ..strokeWidth = s * 0.06;
     canvas.drawCircle(Offset(s / 2, s / 2), s / 2 - 1, borderPaint);
@@ -92,22 +93,33 @@ class FireAnnotationManager {
     return pinSize.toInt();
   }
 
-  Future<void> syncFires(List<Fire> fires, List<FireStatus>? filters) async {
+  Future<void> syncFires(List<Fire> fires, List<FireStatus>? filters,
+      {bool showNatureCodes = true}) async {
     if (_manager == null) return;
 
     await _manager!.deleteAll();
     _annotationToFire.clear();
 
-    final filtered = fires.where((f) => !f.skip(filters ?? [])).toList();
+    const greenNatureCodes = {'3111', '3109', '4335'};
+    final filtered = fires.where((f) {
+      if (!showNatureCodes && greenNatureCodes.contains(f.natureCode)) {
+        return false;
+      }
+      return !f.skip(filters ?? []);
+    }).toList();
     if (filtered.isEmpty) return;
 
     final options = <PointAnnotationOptions>[];
     for (final fire in filtered) {
       final color = getFireColor(fire);
       final size = _getIconSize(fire.scale);
-      final svgAsset =
-          getCorrectStatusImage(fire.statusCode, fire.important);
-      final imageBytes = await _renderFireIcon(color, size, svgAsset);
+      final isSpecialNature = greenNatureCodes.contains(fire.natureCode);
+      final svgAsset = getCorrectStatusImage(
+          fire.statusCode, fire.important, fire.isFire && !isSpecialNature);
+      final borderColor = isSpecialNature ? Colors.green : null;
+      final opacity = isSpecialNature ? 0.4 : 1.0;
+      final imageBytes = await _renderFireIcon(color, size, svgAsset,
+          borderColor: borderColor, opacity: opacity);
 
       options.add(PointAnnotationOptions(
         geometry: fire.location,

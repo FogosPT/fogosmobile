@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/fire.dart';
@@ -18,6 +20,7 @@ class FogosMap extends StatefulWidget {
   final List<Viirs>? viirs;
   final bool showModis;
   final bool showViirs;
+  final bool showNatureCodes;
   final bool useSatelliteStyle;
   final List<String> kmlVostUrls;
   final String? kmlAreaUrl;
@@ -34,6 +37,7 @@ class FogosMap extends StatefulWidget {
     this.viirs,
     this.showModis = false,
     this.showViirs = false,
+    this.showNatureCodes = true,
     this.useSatelliteStyle = false,
     this.kmlVostUrls = const [],
     this.kmlAreaUrl,
@@ -62,6 +66,7 @@ class _FogosMapState extends State<FogosMap> {
   KmlLayerManager? _kmlAreaManager;
   int _lastAppliedTemplate = -1;
   bool _managersReady = false;
+  double _zoom = 7.0;
 
   int get _templateIndex => widget.useSatelliteStyle ? 1 : 0;
 
@@ -74,8 +79,12 @@ class _FogosMapState extends State<FogosMap> {
   void _configureOrnaments() {
     _mapController!.compass.updateSettings(CompassSettings(
       position: OrnamentPosition.TOP_LEFT,
-      marginTop: 16,
-      marginLeft: 16,
+      marginTop: 0,
+      marginLeft: 5,
+    ));
+    // Native scale bar disabled — replaced by Flutter overlay widget.
+    _mapController!.scaleBar.updateSettings(ScaleBarSettings(
+      enabled: false,
     ));
   }
 
@@ -115,6 +124,7 @@ class _FogosMapState extends State<FogosMap> {
 
     _managersReady = true;
 
+    _configureOrnaments();
     _syncAll();
   }
 
@@ -134,7 +144,8 @@ class _FogosMapState extends State<FogosMap> {
     if (!_managersReady) return;
 
     if (widget.fires != oldWidget.fires ||
-        widget.fireFilters != oldWidget.fireFilters) {
+        widget.fireFilters != oldWidget.fireFilters ||
+        widget.showNatureCodes != oldWidget.showNatureCodes) {
       _syncFires();
     }
 
@@ -166,7 +177,8 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   void _syncFires() {
-    _fireManager?.syncFires(widget.fires, widget.fireFilters);
+    _fireManager?.syncFires(widget.fires, widget.fireFilters,
+        showNatureCodes: widget.showNatureCodes);
   }
 
   void _syncModis() {
@@ -232,15 +244,76 @@ class _FogosMapState extends State<FogosMap> {
           styleUri: _styles[_templateIndex],
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoaded,
+          onCameraChangeListener: (_) {
+            _mapController?.getCameraState().then((state) {
+              if (mounted) setState(() => _zoom = state.zoom);
+            });
+          },
           cameraOptions: CameraOptions(
             center: _center,
             zoom: 7.0,
           ),
         ),
         const MapboxCopyright(),
+        Positioned(
+          top: 8,
+          left: 8,
+          child: _MapScaleBar(zoom: _zoom),
+        ),
         if (widget.overlayButtons != null) widget.overlayButtons!,
         const MapOverlayErrorInfoWidget(),
       ],
+    );
+  }
+}
+
+class _MapScaleBar extends StatelessWidget {
+  final double zoom;
+  static const _lat = 39.8; // Portugal centre latitude
+
+  const _MapScaleBar({required this.zoom});
+
+  @override
+  Widget build(BuildContext context) {
+    const targetWidth = 80.0;
+    final metersPerPx =
+        156543.03392 * cos(_lat * pi / 180) / pow(2, zoom);
+    final targetMeters = targetWidth * metersPerPx;
+
+    const steps = [
+      10, 20, 50, 100, 200, 500, 1000, 2000, 5000,
+      10000, 20000, 50000, 100000, 200000,
+    ];
+    final dist = steps.lastWhere((s) => s <= targetMeters,
+        orElse: () => steps.first);
+    final barWidth = dist / metersPerPx;
+    final label = dist >= 1000 ? '${dist ~/ 1000} km' : '$dist m';
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.75),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: barWidth,
+            child: Row(children: [
+              Container(width: 1, height: 6, color: Colors.black87),
+              Expanded(child: Container(height: 2, color: Colors.black87)),
+              Container(width: 1, height: 6, color: Colors.black87),
+            ]),
+          ),
+          Text(label,
+              style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w500)),
+        ],
+      ),
     );
   }
 }

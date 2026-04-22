@@ -33,6 +33,7 @@ class AppState {
   List<Modis> modis;
   bool showModis;
   bool showViirs;
+  bool showNatureCodes;
   List<Fire> otherFires;
   List<Fire> allIncidents;
   List<Fire> searchResults;
@@ -63,6 +64,7 @@ class AppState {
     this.modis = const [],
     this.showModis = false,
     this.showViirs = false,
+    this.showNatureCodes = true,
     this.otherFires = const [],
     this.allIncidents = const [],
     this.searchResults = const [],
@@ -94,6 +96,7 @@ class AppState {
     List<Modis>? modis,
     bool? showModis,
     bool? showViirs,
+    bool? showNatureCodes,
     List<Fire>? otherFires,
     List<Fire>? allIncidents,
     List<Fire>? searchResults,
@@ -125,6 +128,7 @@ class AppState {
       modis: modis ?? this.modis,
       showModis: showModis ?? this.showModis,
       showViirs: showViirs ?? this.showViirs,
+      showNatureCodes: showNatureCodes ?? this.showNatureCodes,
       otherFires: otherFires ?? this.otherFires,
       allIncidents: allIncidents ?? this.allIncidents,
       searchResults: searchResults ?? this.searchResults,

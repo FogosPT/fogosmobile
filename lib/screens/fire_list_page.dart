@@ -179,6 +179,7 @@ class _FireListState extends State<FireList> {
                                           getCorrectStatusImage(
                                             fire.statusCode,
                                             fire.important,
+                                            fire.isFire,
                                           ),
                                           width: 25.0,
                                           height: 25.0,

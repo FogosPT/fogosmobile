@@ -192,7 +192,7 @@ class _FiresTablePageState extends State<FiresTablePage> {
                                     child: IconButton(
                                       icon: SvgPicture.asset(
                                           getCorrectStatusImage(
-                                              fire.statusCode, fire.important),
+                                              fire.statusCode, fire.important, fire.isFire),
                                           semanticsLabel: 'Acme Logo'),
                                       onPressed: null,
                                     ),

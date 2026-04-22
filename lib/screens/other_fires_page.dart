@@ -8,7 +8,7 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/widgets/fogos_map.dart';
 import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
-import 'package:fogosmobile/screens/widgets/satellite_button.dart';
+import 'package:fogosmobile/screens/widgets/map_layers_button.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -92,8 +92,9 @@ class _OtherFiresPageState extends State<OtherFiresPage> {
                 child: SafeArea(
                   child: Column(
                     children: [
+                      const SizedBox(height: 40),
                       const MapButtonOverlayBackground(
-                        child: const SatelliteButton(),
+                        child: const MapLayersButton(),
                       ),
                     ],
                   ),

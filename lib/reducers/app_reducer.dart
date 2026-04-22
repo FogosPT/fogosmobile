@@ -30,6 +30,7 @@ AppState appReducer(AppState state, action) {
   bool hasContributors = state.hasContributors;
   bool showViirs = state.showViirs;
   bool showModis = state.showModis;
+  bool showNatureCodes = state.showNatureCodes;
 
   if (action is LoadFiresAction) {
     isLoading = true;
@@ -119,6 +120,9 @@ AppState appReducer(AppState state, action) {
   } else if (action is ShowModisAction) {
     showModis = !state.showModis;
     isLoading = state.isLoading;
+  } else if (action is ToggleNatureCodesAction) {
+    showNatureCodes = !state.showNatureCodes;
+    isLoading = state.isLoading;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -152,6 +156,7 @@ AppState appReducer(AppState state, action) {
     viirs: viirsReducer(state.viirs, action),
     showModis: showModis,
     showViirs: showViirs,
+    showNatureCodes: showNatureCodes,
     otherFires: otherFiresReducer(state.otherFires, action),
     allIncidents: allIncidentsReducer(state.allIncidents, action),
     searchResults: searchResultsReducer(state.searchResults, action),

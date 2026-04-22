@@ -267,6 +267,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
       return PopupMenuButton<FireStatus>(
         icon: Icon(Icons.filter_list),
+        color: Colors.white,
         onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
         itemBuilder: (BuildContext context) => FireStatus.values
             .map(

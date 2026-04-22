@@ -15,7 +15,7 @@ Color getFireColor(Fire fire) {
   );
 }
 
-String getCorrectStatusImage(int statusId, bool important) {
+String getCorrectStatusImage(int statusId, bool important, bool isFire) {
   var status = "status-";
   if (important) {
     status = status + "important";
@@ -28,7 +28,7 @@ String getCorrectStatusImage(int statusId, bool important) {
     case "status-7":
     case "status-99":
     case "status-8":
-      return imgSvgIconFire;
+      return isFire ? imgSvgIconFire : imgSvgIconNonFire;
     case "status-3":
     case "status-4":
       return imgSvgIconAlarm;
@@ -41,6 +41,6 @@ String getCorrectStatusImage(int statusId, bool important) {
     case "status-12":
       return imgSvgIconFake;
     default:
-      return imgSvgIconFire;
+      return isFire ? imgSvgIconFire : imgSvgIconNonFire;
   }
 }

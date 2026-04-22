@@ -9,10 +9,8 @@ import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/widgets/fogos_map.dart';
 import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
-import 'package:fogosmobile/screens/widgets/modis_button.dart';
+import 'package:fogosmobile/screens/widgets/map_layers_button.dart';
 import 'package:fogosmobile/screens/widgets/modis_modal.dart';
-import 'package:fogosmobile/screens/widgets/satellite_button.dart';
-import 'package:fogosmobile/screens/widgets/viirs_button.dart';
 import 'package:fogosmobile/screens/widgets/viirs_modal.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:redux/redux.dart';
@@ -60,6 +58,7 @@ class _HomePageState extends State<HomePage> {
             viirs: state.viirs,
             showModis: state.showModis ?? false,
             showViirs: state.showViirs ?? false,
+            showNatureCodes: state.showNatureCodes,
             useSatelliteStyle:
                 state.preferences[preferenceSatellite] == 1,
             kmlVostUrls: state.fires
@@ -85,16 +84,9 @@ class _HomePageState extends State<HomePage> {
               child: SafeArea(
                 child: Column(
                   children: [
+                    const SizedBox(height: 40),
                     const MapButtonOverlayBackground(
-                      child: const SatelliteButton(),
-                    ),
-                    const SizedBox(height: 24),
-                    const MapButtonOverlayBackground(
-                      child: const ViirsButton(),
-                    ),
-                    const SizedBox(height: 24),
-                    const MapButtonOverlayBackground(
-                      child: const ModisButton(),
+                      child: const MapLayersButton(),
                     ),
                   ],
                 ),

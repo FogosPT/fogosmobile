@@ -74,3 +74,5 @@ class FireRiskLoadedAction {
 
   FireRiskLoadedAction(this.risk);
 }
+
+class ToggleNatureCodesAction {}

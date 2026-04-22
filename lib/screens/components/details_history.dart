@@ -54,7 +54,7 @@ class DetailsHistoryStats extends StatelessWidget {
               child: Container(
                 width: 20,
                 child: SvgPicture.asset(
-                    getCorrectStatusImage(details.statusCode, false),
+                    getCorrectStatusImage(details.statusCode, false, false),
                     semanticsLabel: 'Acme Logo'),
               ),
             ),

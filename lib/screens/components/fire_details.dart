@@ -194,6 +194,7 @@ class FireDetails extends StatelessWidget {
                                         getCorrectStatusImage(
                                           fire.statusCode,
                                           fire.important,
+                                          fire.isFire,
                                         ),
                                         width: 25.0,
                                         height: 25.0,

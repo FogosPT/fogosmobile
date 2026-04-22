@@ -134,8 +134,9 @@ class About extends StatelessWidget {
               _section(
                 'Sobre o Fogos.pt',
                 const Text(
-                  'O Fogos.pt é uma das principais fontes de informação sobre incêndios rurais em Portugal, com dados em tempo quase real.\n\n'
-                  'Mais do que um agregador, funciona como uma camada de integração que transforma dados complexos em informação clara, útil e acessível.',
+                  'O Fogos.pt é uma das principais fontes de informação sobre incêndios rurais em Portugal, disponibilizando dados em tempo quase real.\n\n'
+                  'A plataforma foi desenvolvida originalmente por João Pina, e hoje é operada pela VOST Portugal, que assegura a integração, tratamento e disponibilização da informação ao público e a entidades operacionais, com a liderança técnica de João Pina, também ele um fundador da VOST Portugal.\n\n'
+                  'Mais do que um agregador, o Fogos.pt funciona como uma camada de integração que transforma dados complexos em informação clara, útil e acionável.',
                   style: _bodyStyle,
                 ),
               ),
@@ -150,7 +151,7 @@ class About extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'A informação resulta da articulação de múltiplas fontes oficiais e tecnológicas:',
+                      'A informação resulta da articulação de múltiplas fontes oficiais e tecnológicas, incluindo:',
                       style: _bodyStyle,
                     ),
                     const SizedBox(height: 10),
@@ -160,16 +161,14 @@ class About extends StatelessWidget {
                       'AGIF – Agência para a Gestão Integrada de Fogos Rurais',
                     ]),
                     _labeledBullets('Satélites e tecnologia', [
-                      'Copernicus, NASA, Meteosat',
-                      'Mapbox',
+                      'Copernicus, NASA, Meteosat e Mapbox',
                     ]),
-                    _labeledBullets('Colaboração', [
-                      'Waze',
-                      'Contributos OSINT validados pela VOST Portugal',
+                    _labeledBullets('Outras fontes complementares', [
+                      'Waze e contributos OSINT por voluntários da VOST Portugal',
                     ]),
                     const SizedBox(height: 4),
                     const Text(
-                      'Antes de serem apresentados, os dados passam por processos de validação, normalização e agregação, garantindo informação consistente e fiável.',
+                      'Todos os dados são integrados, processados e validados pela VOST Portugal, incluindo processos de verificação, normalização e contextualização operacional.',
                       style: _bodyStyle,
                     ),
                   ],
@@ -185,11 +184,13 @@ class About extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Text('A continuidade do serviço é suportada por:', style: _bodyStyle),
+                    const SizedBox(height: 8),
+                    _bullet('ANEPC — através do protocolo de cooperação com a VOST Portugal'),
                     _bullet('PTServidor — infraestrutura técnica (pro bono)'),
                     _bullet('Cloudflare — segurança e resiliência (Project Galileo)'),
                     _bullet('Mapbox — visualização cartográfica'),
-                    _bullet('Agência para a Gestão Integrada de Fogos Rurais — enquadramento institucional'),
-                    _bullet('VOST Portugal — validação e contextualização de informação'),
+                    _bullet('AGIF — enquadramento institucional'),
                   ],
                 ),
               ),
@@ -201,7 +202,7 @@ class About extends StatelessWidget {
               _section(
                 'Compromisso',
                 const Text(
-                  'Manter a transparência e a utilidade pública, assegurando o acesso contínuo a informação fiável, especialmente em momentos críticos.',
+                  'O Fogos.pt e a VOST Portugal asseguram a operação contínua do Fogos.pt, mantendo elevados padrões de transparência, fiabilidade e utilidade pública, especialmente em contextos críticos.',
                   style: _bodyStyle,
                 ),
               ),

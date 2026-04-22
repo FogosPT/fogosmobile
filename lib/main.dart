@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +47,7 @@ import 'package:fogosmobile/screens/ar_view/ar_view_screen.dart';
 import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
 import 'package:fogosmobile/screens/splash_screen.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
+import 'package:app_links/app_links.dart';
 import 'package:logger/logger.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
@@ -141,6 +143,7 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  StreamSubscription<Uri>? _linkSubscription;
 
   // Easter egg: 5 taps on About → AR mode
 
@@ -233,6 +236,36 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _initDeepLinks() async {
+    final appLinks = AppLinks();
+
+    final initialLink = await appLinks.getInitialLink();
+    if (initialLink != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _handleDeepLink(initialLink);
+      });
+    }
+
+    _linkSubscription = appLinks.uriLinkStream.listen((uri) {
+      if (mounted) _handleDeepLink(uri);
+    });
+  }
+
+  void _handleDeepLink(Uri uri) {
+    final segments = uri.pathSegments;
+    const supportedLangs = {'pt', 'en', 'es', 'fr'};
+    if (segments.length >= 3 && supportedLangs.contains(segments[0]) && segments[1] == 'fogo') {
+      final fireId = segments[2];
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(ClearFireAction());
+      store.dispatch(LoadFireAction(fireId));
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _openFireModal(context);
+      });
+    }
+  }
+
   void _openFireModal(BuildContext context) async {
     await showModalBottomSheet<void>(
       context: context,
@@ -299,10 +332,12 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _setupFirebaseMessaging();
+    _initDeepLinks();
   }
 
   @override
   void dispose() {
+    _linkSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }

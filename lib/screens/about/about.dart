@@ -61,14 +61,14 @@ class About extends StatelessWidget {
   }
 
   // Ícone numa bolinha colorida, igual ao mapa
-  Widget _mapIcon(Color color, String svgPath, {double opacity = 1.0}) {
+  Widget _mapIcon(Color color, String svgPath, {double opacity = 1.0, Color borderColor = Colors.white}) {
     return Container(
       width: 40,
       height: 40,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color.withValues(alpha: opacity),
-        border: Border.all(color: Colors.white, width: 2),
+        border: Border.all(color: borderColor, width: 2),
         boxShadow: [
           BoxShadow(color: Colors.black26, blurRadius: 3, offset: const Offset(0, 1)),
         ],
@@ -250,6 +250,11 @@ class About extends StatelessWidget {
                       icon: _mapIcon(grey, imgSvgIconFake),
                       label: 'Falso alarme / Falso alerta',
                       description: 'Registo sem confirmação de ocorrência real.',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconFire, opacity: 0.4, borderColor: Colors.green),
+                      label: 'Gestão de Combustível / Queima / Prevenção a Queimadas',
+                      description: 'Ocorrência de natureza preventiva. Marcador com borda verde e transparência reduzida.',
                     ),
 
                     _legendSubtitle('Cor do marcador'),

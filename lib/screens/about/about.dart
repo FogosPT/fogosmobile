@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/screens/about/contributor_item.dart';
+import 'package:fogosmobile/screens/assets/icons.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/utils/uri_utils.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ const _linkColor = Color(0xff4D9DE0);
 const _bodyStyle = TextStyle(fontSize: 14, color: Colors.black87, height: 1.6);
 const _sectionTitleStyle = TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black87);
 const _labelStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black54);
+const _legendLabelStyle = TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87);
+const _legendDescStyle = TextStyle(fontSize: 12, color: Colors.black54, height: 1.4);
 
 class About extends StatelessWidget {
   Widget _section(String title, Widget content) {
@@ -57,6 +60,74 @@ class About extends StatelessWidget {
     );
   }
 
+  // Ícone numa bolinha colorida, igual ao mapa
+  Widget _mapIcon(Color color, String svgPath, {double opacity = 1.0}) {
+    return Container(
+      width: 40,
+      height: 40,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withValues(alpha: opacity),
+        border: Border.all(color: Colors.white, width: 2),
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 3, offset: const Offset(0, 1)),
+        ],
+      ),
+      padding: const EdgeInsets.all(9),
+      child: SvgPicture.asset(svgPath, colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn)),
+    );
+  }
+
+  // Bolinha colorida simples (para pontos de satélite)
+  Widget _dot(Color color) {
+    return Container(
+      width: 24,
+      height: 24,
+      margin: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Colors.white, width: 2),
+        boxShadow: [
+          BoxShadow(color: Colors.black26, blurRadius: 3, offset: const Offset(0, 1)),
+        ],
+      ),
+    );
+  }
+
+  Widget _legendItem({
+    required Widget icon,
+    required String label,
+    required String description,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          icon,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: _legendLabelStyle),
+                Text(description, style: _legendDescStyle),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _legendSubtitle(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 8),
+      child: Text(text, style: _labelStyle),
+    );
+  }
+
   Widget _contributorsWidget(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
@@ -87,6 +158,12 @@ class About extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const orange = Color(0xFFFF512F);
+    const red = Colors.red;
+    const grey = Color(0xFF9E9E9E);
+    const modisYellow = Color(0xFFE1BC29);
+    const viirsOrange = Color(0xFFE76700);
+
     return Scaffold(
       appBar: FireGradientAppBar(
         title: const Text('Sobre', style: TextStyle(color: Colors.white)),
@@ -124,6 +201,76 @@ class About extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+              ),
+
+              const Divider(),
+              const SizedBox(height: 12),
+
+              // Legenda do mapa
+              _section(
+                'Legenda do mapa',
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _legendSubtitle('Tipos de ocorrência'),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconFire),
+                      label: 'Incêndio',
+                      description: 'Incêndio rural ou urbano ativo no terreno.',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconNonFire),
+                      label: 'Outro incidente',
+                      description: 'Acidente ou outra ocorrência não relacionada com incêndio.',
+                    ),
+
+                    _legendSubtitle('Estado da ocorrência'),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconAlarm),
+                      label: 'Despacho / Chegada ao TO',
+                      description: 'Meios em trânsito ou a chegar ao teatro de operações. (Despacho, 1º Alerta, Chegada ao TO)',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconFire),
+                      label: 'Em curso / Em resolução',
+                      description: 'Fogo ativo no terreno, com ou sem perigo de propagação. (Em Curso, Em Resolução, Ocorrência Significativa)',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconWatch),
+                      label: 'Vigilância',
+                      description: 'Meios no local a monitorizar a situação.',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(orange, imgSvgIconPointer),
+                      label: 'Conclusão / Encerrada',
+                      description: 'Ocorrência em fase final ou encerrada. (Conclusão, Encerrada)',
+                    ),
+                    _legendItem(
+                      icon: _mapIcon(grey, imgSvgIconFake),
+                      label: 'Falso alarme / Falso alerta',
+                      description: 'Registo sem confirmação de ocorrência real.',
+                    ),
+
+                    _legendSubtitle('Cor do marcador'),
+                    _legendItem(
+                      icon: _mapIcon(red, imgSvgIconFire),
+                      label: 'Ocorrência importante',
+                      description: 'Marcador a vermelho indica ocorrência prioritária ou de grande dimensão.',
+                    ),
+
+                    _legendSubtitle('Pontos de satélite'),
+                    _legendItem(
+                      icon: _dot(modisYellow),
+                      label: 'MODIS',
+                      description: 'Ponto de calor detetado por satélite NASA (Terra / Aqua).',
+                    ),
+                    _legendItem(
+                      icon: _dot(viirsOrange),
+                      label: 'VIIRS',
+                      description: 'Ponto de calor detetado por satélite NASA/NOAA (Suomi NPP).',
+                    ),
+                  ],
                 ),
               ),
 

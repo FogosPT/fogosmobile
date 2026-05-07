@@ -78,9 +78,7 @@ class _FogosMapState extends State<FogosMap> {
 
   void _configureOrnaments() {
     _mapController!.compass.updateSettings(CompassSettings(
-      position: OrnamentPosition.TOP_LEFT,
-      marginTop: 0,
-      marginLeft: 5,
+      enabled: false,
     ));
     // Native scale bar disabled — replaced by Flutter overlay widget.
     _mapController!.scaleBar.updateSettings(ScaleBarSettings(

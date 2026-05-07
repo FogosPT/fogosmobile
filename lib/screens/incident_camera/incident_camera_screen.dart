@@ -21,6 +21,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../ar_view/ar_compass_math.dart';
 import '../assets/images.dart';
 import '../../models/fire.dart';
+import '../../services/incident_photos_service.dart';
 import '../../utils/haversine.dart';
 
 class IncidentCameraScreen extends StatefulWidget {
@@ -205,6 +206,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     if (_cameraController == null || _isSaving) return;
     setState(() => _isSaving = true);
 
+    File? tmpFile;
     try {
       // Snapshot values at moment of capture
       final lat = _userLat;
@@ -220,27 +222,113 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
       // Write to temp file so we can attach EXIF metadata
       final tmpDir = await getTemporaryDirectory();
-      final tmpFile = File('${tmpDir.path}/fogos_${captureTime.millisecondsSinceEpoch}.png');
+      tmpFile = File('${tmpDir.path}/fogos_${captureTime.millisecondsSinceEpoch}.png');
       await tmpFile.writeAsBytes(composited);
 
       await _writeExif(tmpFile.path, lat, lng, alt, heading, captureTime);
 
-      await Gal.putImage(tmpFile.path, album: 'Fogos.pt');
-      await tmpFile.delete();
+      // Decide whether to also upload. Only offer upload when there is an
+      // associated fire and we actually captured GPS (the API rejects
+      // without GPS, no point trying).
+      final fire = widget.fire;
+      final hasGps = lat != null && lng != null;
+      final canUpload = fire != null && hasGps;
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Foto guardada na galeria')),
-        );
-        Navigator.of(context).pop();
+      bool shouldUpload = false;
+      if (canUpload) {
+        shouldUpload = await _askUploadConfirmation();
       }
+
+      // Save to gallery and (optionally) upload in parallel.
+      final saveFuture = Gal.putImage(tmpFile.path, album: 'Fogos.pt');
+      final uploadFuture = shouldUpload
+          ? IncidentPhotosService().uploadIncidentPhoto(
+              fireId: fire!.id,
+              photoFile: tmpFile,
+            )
+          : null;
+
+      UploadResult? uploadResult;
+      try {
+        if (uploadFuture != null) {
+          final results = await Future.wait([saveFuture, uploadFuture]);
+          uploadResult = results[1] as UploadResult;
+        } else {
+          await saveFuture;
+        }
+      } finally {
+        try {
+          await tmpFile.delete();
+        } catch (_) {}
+      }
+
+      if (!mounted) return;
+
+      final message = uploadResult == null
+          ? 'Foto guardada na galeria.'
+          : _uploadResultMessage(uploadResult);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), duration: const Duration(seconds: 4)),
+      );
+      Navigator.of(context).pop();
     } catch (e) {
+      if (tmpFile != null) {
+        try {
+          await tmpFile.delete();
+        } catch (_) {}
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erro ao guardar foto: $e')),
         );
         setState(() => _isSaving = false);
       }
+    }
+  }
+
+  Future<bool> _askUploadConfirmation() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Enviar foto para o Fogos.pt?'),
+        content: const Text(
+          'A foto será revista pela equipa antes de aparecer publicamente. '
+          'A localização (GPS) é enviada juntamente com a foto.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Só guardar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Enviar'),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
+  String _uploadResultMessage(UploadResult result) {
+    switch (result) {
+      case UploadAccepted():
+        return 'Foto guardada e enviada. Aguarda moderação antes de ser publicada.';
+      case UploadMissingGps():
+        return 'Precisamos da localização para enviar a foto. Verifica as permissões de localização.';
+      case UploadNotFound():
+        return 'Este incidente já não está disponível.';
+      case UploadTooLarge():
+        return 'Foto guardada. Não foi enviada porque é demasiado grande.';
+      case UploadInvalidFormat():
+        return 'Foto guardada. Não conseguimos enviá-la — tenta tirar outra.';
+      case UploadRateLimited(:final retryAfter):
+        final minutes = (retryAfter.inSeconds / 60).ceil();
+        return 'Foto guardada. Estás a enviar demasiado rápido — tenta dentro de $minutes min.';
+      case UploadServerError():
+        return 'Foto guardada. Não foi possível enviá-la agora — tenta mais tarde.';
+      case UploadNetworkError():
+        return 'Foto guardada. Sem ligação para enviar — tenta mais tarde.';
     }
   }
 

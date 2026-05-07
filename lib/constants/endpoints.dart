@@ -20,4 +20,9 @@ abstract class Endpoints {
   static const String getModis = "https://fogos.pt/v1/modis";
   static const String getViirs = "https://fogos.pt/v1/viirs";
   static const String getLightnings = "https://fogos.pt/lightnings";
+
+  static const String fogosApiBase = "https://api.fogos.pt";
+
+  static String incidentPhotoUploadUrl(String fireId) =>
+      "$fogosApiBase/v2/incidents/$fireId/photos";
 }

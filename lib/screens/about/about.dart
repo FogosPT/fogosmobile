@@ -362,6 +362,39 @@ class About extends StatelessWidget {
               const Divider(),
               const SizedBox(height: 12),
 
+              // Envio de fotos de incidentes
+              _section(
+                'Envio de fotos de incidentes',
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF3E0),
+                    border: Border.all(color: const Color(0xFFFFB74D)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Icon(Icons.location_on, color: Color(0xFFE65100), size: 20),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Ao enviar uma foto de um incidente para o Fogos.pt, a localização GPS '
+                          '(coordenadas e altitude) onde a foto foi tirada é enviada juntamente com '
+                          'a imagem. Esta informação é necessária para validar a foto e nunca é '
+                          'tornada pública — só é usada internamente pela equipa de moderação. '
+                          'As fotos publicadas têm os dados de localização removidos.',
+                          style: _bodyStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const Divider(),
+              const SizedBox(height: 12),
+
               // Contribuidores
               const Text('Made with ♥ by:', style: _bodyStyle),
               _contributorsWidget(context),

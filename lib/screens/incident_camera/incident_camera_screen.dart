@@ -160,7 +160,17 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _initSensors() {
-    // Acelerómetro não é necessário — fórmula assume telefone vertical
+    // Tilt-compensated heading needs both accelerometer (gravity vector) and
+    // magnetometer; without gravity the azimuth drifts when the device is
+    // pitched forward/back, even with no rotation around the vertical axis.
+    _accelSub = accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
+      _accel = [
+        _alpha * e.x + (1 - _alpha) * _accel[0],
+        _alpha * e.y + (1 - _alpha) * _accel[1],
+        _alpha * e.z + (1 - _alpha) * _accel[2],
+      ];
+      _updateHeading();
+    });
     _magSub = magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _mag = [
         _alpha * e.x + (1 - _alpha) * _mag[0],
@@ -172,7 +182,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _updateHeading() {
-    final az = computeHeadingVertical(_mag);
+    final (az, _) = computeHeadingAndPitch(_accel, _mag);
     if ((az - _deviceHeading).abs() > 0.5) {
       if (mounted) setState(() => _deviceHeading = az);
     }

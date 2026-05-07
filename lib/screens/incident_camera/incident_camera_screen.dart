@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:native_exif/native_exif.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -23,6 +22,7 @@ import '../assets/images.dart';
 import '../../models/fire.dart';
 import '../../services/incident_photos_service.dart';
 import '../../utils/haversine.dart';
+import '../../utils/png_exif.dart';
 
 class IncidentCameraScreen extends StatefulWidget {
   final Fire? fire;
@@ -230,12 +230,22 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
       final composited = await _composeImage(bytes, lat, lng, alt, heading, captureTime);
 
-      // Write to temp file so we can attach EXIF metadata
+      // Inject the eXIf chunk into the PNG bytes ourselves. native_exif on
+      // Android cannot write EXIF into PNG (ExifInterface only supports
+      // JPEG/WebP/HEIC writes), and the fogos.pt API requires the eXIf chunk
+      // to extract GPS coordinates.
+      final pngWithExif = addPngExif(
+        pngBytes: composited,
+        lat: lat,
+        lng: lng,
+        altitude: alt,
+        imgDirection: heading,
+        dateTimeOriginal: captureTime,
+      );
+
       final tmpDir = await getTemporaryDirectory();
       tmpFile = File('${tmpDir.path}/fogos_${captureTime.millisecondsSinceEpoch}.png');
-      await tmpFile.writeAsBytes(composited);
-
-      await _writeExif(tmpFile.path, lat, lng, alt, heading, captureTime);
+      await tmpFile.writeAsBytes(pngWithExif);
 
       // Decide whether to also upload. Only offer upload when there is an
       // associated fire and we actually captured GPS (the API rejects
@@ -411,49 +421,6 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final composed = await picture.toImage(srcImage.width, srcImage.height);
     final byteData = await composed.toByteData(format: ui.ImageByteFormat.png);
     return byteData!.buffer.asUint8List();
-  }
-
-  String _toExifGps(double value) {
-    final abs = value.abs();
-    final deg = abs.floor();
-    final minFull = (abs - deg) * 60;
-    final min = minFull.floor();
-    final sec = ((minFull - min) * 60 * 1000).round();
-    return '$deg/1,$min/1,$sec/1000';
-  }
-
-  Future<void> _writeExif(
-    String path,
-    double? lat,
-    double? lng,
-    double? alt,
-    double heading,
-    DateTime captureTime,
-  ) async {
-    try {
-      final exif = await Exif.fromPath(path);
-
-      final dateStr =
-          '${captureTime.year}:${captureTime.month.toString().padLeft(2, '0')}:${captureTime.day.toString().padLeft(2, '0')} '
-          '${captureTime.hour.toString().padLeft(2, '0')}:${captureTime.minute.toString().padLeft(2, '0')}:${captureTime.second.toString().padLeft(2, '0')}';
-      await exif.writeAttribute('DateTime', dateStr);
-      await exif.writeAttribute('DateTimeOriginal', dateStr);
-
-      if (lat != null && lng != null) {
-        await exif.writeAttribute('GPSLatitude', _toExifGps(lat));
-        await exif.writeAttribute('GPSLatitudeRef', lat >= 0 ? 'N' : 'S');
-        await exif.writeAttribute('GPSLongitude', _toExifGps(lng));
-        await exif.writeAttribute('GPSLongitudeRef', lng >= 0 ? 'E' : 'W');
-      }
-      if (alt != null) {
-        await exif.writeAttribute('GPSAltitude', '${alt.abs().round()}/1');
-        await exif.writeAttribute('GPSAltitudeRef', alt < 0 ? '1' : '0');
-      }
-      await exif.writeAttribute('GPSImgDirection', '${heading.round()}/1');
-      await exif.writeAttribute('GPSImgDirectionRef', 'M');
-
-      await exif.close();
-    } catch (_) {}
   }
 
   void _drawWatermark(Canvas canvas, double imgW, double imgH, ui.Image logo) {

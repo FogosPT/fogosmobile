@@ -81,8 +81,11 @@ class IncidentPhotosService {
         ),
       });
 
+      final url = Endpoints.incidentPhotoUploadUrl(fireId);
+      print('[incident_photo] POST $url (size=$size, version=$version)');
+
       final response = await _dio.post(
-        Endpoints.incidentPhotoUploadUrl(fireId),
+        url,
         data: form,
         options: Options(
           headers: {
@@ -92,12 +95,17 @@ class IncidentPhotosService {
         ),
       );
 
+      print('[incident_photo] response status=${response.statusCode} '
+          'headers=${response.headers.map} body=${response.data}');
+
       return parseUploadResponse(
         statusCode: response.statusCode ?? 0,
         body: response.data,
         retryAfterHeader: response.headers.value('retry-after'),
       );
     } on DioException catch (e) {
+      print('[incident_photo] DioException type=${e.type} message=${e.message} '
+          'status=${e.response?.statusCode} body=${e.response?.data}');
       if (e.response != null) {
         return parseUploadResponse(
           statusCode: e.response!.statusCode ?? 0,
@@ -106,7 +114,8 @@ class IncidentPhotosService {
         );
       }
       return const UploadNetworkError();
-    } catch (_) {
+    } catch (e, st) {
+      print('[incident_photo] unexpected error: $e\n$st');
       return const UploadNetworkError();
     }
   }

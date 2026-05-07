@@ -346,8 +346,11 @@ class _FireListState extends State<FireList> {
                                           icon: Icon(Icons.share),
                                           onPressed: () {
                                             final box = ctx.findRenderObject() as RenderBox?;
+                                            final shareText = fire.isFire
+                                                ? FogosLocalizations.of(context).textShare(fire.city, fire.id)
+                                                : 'Incidente em ${fire.city} https://fogos.pt/fogo/${fire.id}';
                                             Share.share(
-                                              FogosLocalizations.of(context).textShare(fire.city, fire.id),
+                                              shareText,
                                               sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
                                             );
                                           },

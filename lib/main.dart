@@ -196,7 +196,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         store.dispatch(LoadFireAction(fireId));
 
         if (isOther) {
-          Navigator.of(context).pushNamed(OTHER_FIRES_ROUTE);
+          Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) _openFireModal(context);
           });

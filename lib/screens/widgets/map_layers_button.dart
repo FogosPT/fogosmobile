@@ -46,7 +46,7 @@ class MapLayersButton extends StatelessWidget {
                 ),
                 _LayerTile(
                   icon: Icons.local_fire_department_outlined,
-                  label: 'Outros incêndios rurais',
+                  label: 'Outros fogos',
                   active: state.showNatureCodes,
                   onTap: () => store.dispatch(ToggleNatureCodesAction()),
                 ),

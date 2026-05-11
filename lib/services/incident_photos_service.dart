@@ -61,6 +61,8 @@ class IncidentPhotosService {
   Future<UploadResult> uploadIncidentPhoto({
     required String fireId,
     required File photoFile,
+    bool allowPublic = true,
+    String? signature,
     String? appVersion,
   }) async {
     if (!await photoFile.exists()) {
@@ -74,15 +76,23 @@ class IncidentPhotosService {
     final version = appVersion ?? await _appVersion();
 
     try {
+      final trimmedSignature = signature?.trim();
+      final hasSignature =
+          trimmedSignature != null && trimmedSignature.isNotEmpty;
+
       final form = FormData.fromMap({
         'photo': await MultipartFile.fromFile(
           photoFile.path,
           filename: photoFile.uri.pathSegments.last,
         ),
+        'public': allowPublic ? '1' : '0',
+        if (hasSignature) 'signature': trimmedSignature,
       });
 
       final url = Endpoints.incidentPhotoUploadUrl(fireId);
-      print('[incident_photo] POST $url (size=$size, version=$version)');
+      print('[incident_photo] POST $url (size=$size, version=$version, '
+          'public=${allowPublic ? '1' : '0'}, '
+          'signature=${hasSignature ? '"$trimmedSignature"' : '<none>'})');
 
       final response = await _dio.post(
         url,

@@ -19,10 +19,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../ar_view/ar_compass_math.dart';
 import '../assets/images.dart';
+import '../../middleware/shared_preferences_manager.dart';
 import '../../models/fire.dart';
 import '../../services/incident_photos_service.dart';
 import '../../utils/haversine.dart';
 import '../../utils/png_exif.dart';
+import '../settings/photo_signature_settings.dart';
 
 class IncidentCameraScreen extends StatefulWidget {
   final Fire? fire;
@@ -63,6 +65,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   late Timer _clockTimer;
   late DateTime _now;
 
+  // Optional user-configured signature drawn into the watermark.
+  String? _signature;
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +82,11 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     _initCamera();
     _initLocation();
     _initSensors();
+    final saved = SharedPreferencesManager.preferences
+        .getString(kIncidentPhotoSignatureKey);
+    if (saved != null && saved.trim().isNotEmpty) {
+      _signature = saved.trim();
+    }
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() => _now = _currentLisbonTime());
     });
@@ -255,8 +265,11 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       final canUpload = fire != null && hasGps;
 
       bool shouldUpload = false;
+      bool allowPublic = true;
       if (canUpload) {
-        shouldUpload = await _askUploadConfirmation();
+        final choice = await _askUploadConfirmation();
+        shouldUpload = choice.send;
+        allowPublic = choice.allowPublic;
       }
 
       // Save to gallery and (optionally) upload in parallel.
@@ -265,6 +278,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           ? IncidentPhotosService().uploadIncidentPhoto(
               fireId: fire!.id,
               photoFile: tmpFile,
+              allowPublic: allowPublic,
+              signature: _signature,
             )
           : null;
 
@@ -306,28 +321,223 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     }
   }
 
-  Future<bool> _askUploadConfirmation() async {
+  Future<({bool send, bool allowPublic})> _askUploadConfirmation() async {
+    bool allowPublic = true;
+    const bodyStyle = TextStyle(fontSize: 13, color: Colors.black87, height: 1.5);
+    const boldStyle = TextStyle(
+      fontSize: 13,
+      color: Colors.black87,
+      height: 1.5,
+      fontWeight: FontWeight.bold,
+    );
+
     final result = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Enviar foto para o Fogos.pt?'),
-        content: const Text(
-          'A foto será revista pela equipa antes de aparecer publicamente. '
-          'A localização (GPS) é enviada juntamente com a foto.',
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setStateDialog) => AlertDialog(
+          title: const Text('Enviar foto para o Fogos.pt?'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Antes de enviar, lê com atenção:', style: bodyStyle),
+                  const SizedBox(height: 12),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• '),
+                        TextSpan(
+                          text: 'As coordenadas GPS estão visíveis na própria foto',
+                          style: boldStyle,
+                        ),
+                        TextSpan(
+                            text: ' (no rodapé). Confirma que estás confortável a '
+                                'partilhar a tua localização antes de enviar.'),
+                      ],
+                    ),
+                  ),
+                  if (_signature != null && _signature!.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    RichText(
+                      text: TextSpan(
+                        style: bodyStyle,
+                        children: [
+                          const TextSpan(text: '• '),
+                          TextSpan(
+                            text: 'A foto será assinada com o nome "$_signature"',
+                            style: boldStyle,
+                          ),
+                          const TextSpan(text: ', configurado nas Definições.'),
+                        ],
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(
+                            text: '• Se autorizares a publicação, e depois de aprovada, a foto fica '),
+                        TextSpan(
+                          text: 'publicamente disponível a todos os utilizadores da app Fogos.pt',
+                          style: boldStyle,
+                        ),
+                        TextSpan(text: ' e é '),
+                        TextSpan(
+                          text: 'partilhada com a ANEPC',
+                          style: boldStyle,
+                        ),
+                        TextSpan(text: ' e outras entidades operacionais.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• Se '),
+                        TextSpan(text: 'não', style: boldStyle),
+                        TextSpan(
+                            text: ' autorizares a publicação, a foto é partilhada '),
+                        TextSpan(
+                          text: 'apenas com a ANEPC',
+                          style: boldStyle,
+                        ),
+                        TextSpan(
+                            text: ' para efeitos operacionais e não aparece publicamente na app.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• ', style: bodyStyle),
+                        TextSpan(text: 'Não envies fotos', style: boldStyle),
+                        TextSpan(text: ' que contenham:'),
+                      ],
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12, top: 2),
+                    child: Text(
+                      '— pessoas identificáveis sem o seu consentimento\n'
+                      '— matrículas, documentos ou outros dados pessoais\n'
+                      '— crimes, atos ofensivos ou conteúdo gráfico/violento',
+                      style: bodyStyle,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• És o '),
+                        TextSpan(text: 'único responsável', style: boldStyle),
+                        TextSpan(
+                            text: ' pelo conteúdo que partilhas. O Fogos.pt e a VOST '
+                                'Portugal reservam-se o direito de rejeitar fotos que '
+                                'violem estas regras ou a lei aplicável.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• Fotos '),
+                        TextSpan(text: 'rejeitadas', style: boldStyle),
+                        TextSpan(text: ' na moderação são '),
+                        TextSpan(
+                          text: 'eliminadas definitivamente',
+                          style: boldStyle,
+                        ),
+                        TextSpan(text: ' de todos os sistemas.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  RichText(
+                    text: TextSpan(
+                      style: bodyStyle,
+                      children: const [
+                        TextSpan(text: '• Fotos '),
+                        TextSpan(text: 'aceites', style: boldStyle),
+                        TextSpan(text: ' poderão ser '),
+                        TextSpan(
+                          text: 'conservadas e utilizadas para outros fins',
+                          style: boldStyle,
+                        ),
+                        TextSpan(
+                            text: ', tais como '),
+                        TextSpan(
+                          text: 'treino de modelos de Inteligência Artificial',
+                          style: boldStyle,
+                        ),
+                        TextSpan(
+                            text: ', análise operacional ou investigação, '
+                                'podendo ou não ser eliminadas no futuro.'),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                        value: allowPublic,
+                        onChanged: (v) =>
+                            setStateDialog(() => allowPublic = v ?? true),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () =>
+                              setStateDialog(() => allowPublic = !allowPublic),
+                          child: const Padding(
+                            padding: EdgeInsets.only(top: 12),
+                            child: Text(
+                              'Autorizo a publicação pública desta foto na app '
+                              'Fogos.pt. Se desmarcado, a foto é partilhada apenas '
+                              'com a ANEPC.',
+                              style: bodyStyle,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  const Text(
+                    'Ao tocar em "Enviar", confirmas que leste e aceitas estas condições.',
+                    style: TextStyle(
+                        fontSize: 12, color: Colors.black54, fontStyle: FontStyle.italic),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Só guardar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Enviar'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Só guardar'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Enviar'),
-          ),
-        ],
       ),
     );
-    return result ?? false;
+    return (send: result ?? false, allowPublic: allowPublic);
   }
 
   String _uploadResultMessage(UploadResult result) {
@@ -400,6 +610,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
     // Bottom block — photo context
     final photoLines = <String>[];
+    if (_signature != null && _signature!.isNotEmpty) {
+      photoLines.add('— $_signature');
+    }
     if (_placeName != null) photoLines.add('Local: $_placeName');
     if (lat != null && lng != null) {
       photoLines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
@@ -440,10 +653,14 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       Paint()..color = const Color(0x99000000),
     );
 
+    // Force the logo silhouette to render as solid white regardless of the
+    // SVG's original fill — the rasterizer occasionally misses class-based
+    // styles in the source SVG and falls back to dark fills, which over the
+    // dark overlay made the logo look grey.
     canvas.drawImage(
       logo,
       Offset(left + innerPadH, top + innerPadV),
-      Paint(),
+      Paint()..colorFilter = const ColorFilter.mode(Colors.white, BlendMode.srcIn),
     );
   }
 

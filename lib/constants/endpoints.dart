@@ -25,4 +25,8 @@ abstract class Endpoints {
 
   static String incidentPhotoUploadUrl(String fireId) =>
       "$fogosApiBase/v2/incidents/$fireId/photos";
+
+  static String incidentPhotosListUrl(String fireId,
+          {int page = 1, int perPage = 20}) =>
+      "$fogosApiBase/v2/incidents/$fireId/photos?page=$page&per_page=$perPage";
 }

@@ -5,6 +5,7 @@ import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
+import 'package:fogosmobile/screens/components/fire_details/incident_photos_gallery.dart';
 import 'package:fogosmobile/screens/components/fire_details/weather_card.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
 import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
@@ -167,6 +168,17 @@ class FireDetailsPage extends StatelessWidget {
                 ListTile(title: Text(FogosLocalizations.of(context).textRiskOfFire.toUpperCase(), style: _header)),
                 SizedBox(height: 15),
                 FireRisk(),
+                SizedBox(height: 25),
+                IncidentPhotosGallery(
+                  fireId: fire.id,
+                  header: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ListTile(title: Text('FOTOS', style: _header)),
+                      SizedBox(height: 15),
+                    ],
+                  ),
+                ),
                 SizedBox(height: 25),
                 if (fire.weather != null) ...[
                   ListTile(title: Text('TEMPO', style: _header)),

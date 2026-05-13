@@ -45,10 +45,110 @@ class UploadNetworkError extends UploadResult {
   const UploadNetworkError();
 }
 
+class IncidentPhoto {
+  final String id;
+  final String url;
+  final DateTime? capturedAt;
+  final int? width;
+  final int? height;
+
+  const IncidentPhoto({
+    required this.id,
+    required this.url,
+    this.capturedAt,
+    this.width,
+    this.height,
+  });
+
+  static IncidentPhoto? fromJson(Object? json) {
+    if (json is! Map) return null;
+    final id = json['id'];
+    final url = json['url'];
+    if (id is! String || url is! String || url.isEmpty) return null;
+    DateTime? captured;
+    final rawCaptured = json['captured_at'] ?? json['taken_at'];
+    if (rawCaptured is String) {
+      captured = DateTime.tryParse(rawCaptured);
+    }
+    final width = json['width'];
+    final height = json['height'];
+    return IncidentPhoto(
+      id: id,
+      url: url,
+      capturedAt: captured,
+      width: width is int ? width : (width is num ? width.toInt() : null),
+      height: height is int ? height : (height is num ? height.toInt() : null),
+    );
+  }
+}
+
+class IncidentPhotosPage {
+  final List<IncidentPhoto> photos;
+  final int total;
+  final int page;
+  final int perPage;
+
+  const IncidentPhotosPage({
+    required this.photos,
+    required this.total,
+    required this.page,
+    required this.perPage,
+  });
+
+  bool get hasMore => page * perPage < total;
+}
+
 class IncidentPhotosService {
   IncidentPhotosService({Dio? dio}) : _dio = dio ?? _defaultDio();
 
   final Dio _dio;
+
+  Future<IncidentPhotosPage?> fetchIncidentPhotos({
+    required String fireId,
+    int page = 1,
+    int perPage = 20,
+  }) async {
+    try {
+      final url = Endpoints.incidentPhotosListUrl(
+        fireId,
+        page: page,
+        perPage: perPage,
+      );
+      final response = await _dio.get(url);
+      if (response.statusCode != 200) return null;
+      final body = response.data;
+      if (body is! Map) return null;
+      final data = body['data'];
+      if (data is! List) return null;
+      final photos = <IncidentPhoto>[];
+      for (final item in data) {
+        final photo = IncidentPhoto.fromJson(item);
+        if (photo != null) photos.add(photo);
+      }
+      final meta = body['meta'];
+      int total = photos.length;
+      int respPage = page;
+      int respPerPage = perPage;
+      if (meta is Map) {
+        final t = meta['total'];
+        if (t is int) total = t;
+        else if (t is num) total = t.toInt();
+        final p = meta['page'];
+        if (p is int) respPage = p;
+        final pp = meta['per_page'];
+        if (pp is int) respPerPage = pp;
+      }
+      return IncidentPhotosPage(
+        photos: photos,
+        total: total,
+        page: respPage,
+        perPage: respPerPage,
+      );
+    } catch (e) {
+      print('[incident_photo] fetch error: $e');
+      return null;
+    }
+  }
 
   static Dio _defaultDio() => Dio(BaseOptions(
         connectTimeout: const Duration(seconds: 30),

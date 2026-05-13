@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static m0(city, id) => "Fire in ${city} https://fogos.pt/fogo/${id}";
   static m1(km) => "You will be notified when a new incident occurs within ${km} km of your location.";
   static m2(distance) => "🔥 Fire ${distance} from you";
+  static m3(distance) => "${distance} km from the incident";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -128,6 +129,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "textNearbyAllIncidents" : MessageLookupByLibrary.simpleMessage("All incidents"),
     "textNearbyAllIncidentsSubtitle" : MessageLookupByLibrary.simpleMessage("Fires, accidents and other incidents"),
     "textNearbyLocationPermissionRequired" : MessageLookupByLibrary.simpleMessage("Location access is required to use this feature."),
-    "textNearbyNotificationTitle" : m2
+    "textNearbyNotificationTitle" : m2,
+    "textMoreInformation" : MessageLookupByLibrary.simpleMessage("MORE INFORMATION"),
+    "textKmFromIncident" : m3
   };
 }

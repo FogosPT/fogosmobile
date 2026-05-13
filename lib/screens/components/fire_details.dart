@@ -358,7 +358,7 @@ class FireDetails extends StatelessWidget {
                                                   ),
                                                   if (fire.weather!.stationDistance != null)
                                                     Text(
-                                                      '${fire.weather!.stationDistance!.toStringAsFixed(1)} km do incidente',
+                                                      FogosLocalizations.of(context).textKmFromIncident(fire.weather!.stationDistance!.toStringAsFixed(1)),
                                                       style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                                                     ),
                                                 ],
@@ -416,7 +416,7 @@ class FireDetails extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     TextButton.icon(
-                                        label: Text('MAIS INFORMAÇÕES'),
+                                        label: Text(FogosLocalizations.of(context).textMoreInformation),
                                         icon: Icon(Icons.info),
                                         onPressed: () {
                                           Navigator.of(context)

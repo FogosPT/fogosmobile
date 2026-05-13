@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/weather.dart';
 
 class WeatherCard extends StatelessWidget {
@@ -46,7 +47,7 @@ class WeatherCard extends StatelessWidget {
                         ),
                         if (weather.stationDistance != null)
                           Text(
-                            '${weather.stationDistance!.toStringAsFixed(1)} km do incidente',
+                            FogosLocalizations.of(context).textKmFromIncident(weather.stationDistance!.toStringAsFixed(1)),
                             style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                           ),
                       ],

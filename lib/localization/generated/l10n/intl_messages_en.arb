@@ -639,5 +639,21 @@
     "description": "Notification channel description for nearby fires",
     "type": "text",
     "placeholders": {}
+  },
+  "textMoreInformation": "MORE INFORMATION",
+  "@textMoreInformation": {
+    "description": "More information button label on fire details",
+    "type": "text",
+    "placeholders": {}
+  },
+  "textKmFromIncident": "{distance} km from the incident",
+  "@textKmFromIncident": {
+    "description": "Distance in km from the incident",
+    "type": "text",
+    "placeholders": {
+      "distance": {
+        "example": "5.2"
+      }
+    }
   }
 }

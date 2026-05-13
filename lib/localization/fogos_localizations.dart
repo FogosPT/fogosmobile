@@ -735,6 +735,20 @@ String get textDataTableStart => Intl.message(
     examples: const {'distance': '5 km'},
   );
 
+  String get textMoreInformation => Intl.message(
+    "MAIS INFORMAÇÕES",
+    name: 'textMoreInformation',
+    desc: 'More information button label on fire details',
+  );
+
+  String textKmFromIncident(String distance) => Intl.message(
+    "$distance km do incidente",
+    name: 'textKmFromIncident',
+    args: [distance],
+    desc: 'Distance in km from the incident',
+    examples: const {'distance': '5.2'},
+  );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>

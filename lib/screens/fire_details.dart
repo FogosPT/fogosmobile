@@ -6,6 +6,7 @@ import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/screens/components/details_history.dart';
 import 'package:fogosmobile/screens/components/fireRisk.dart';
 import 'package:fogosmobile/screens/components/fire_details/incident_photos_gallery.dart';
+import 'package:fogosmobile/screens/components/fire_details/ipma_charts_card.dart';
 import 'package:fogosmobile/screens/components/fire_details/weather_card.dart';
 import 'package:fogosmobile/screens/components/meansStatistics.dart';
 import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
@@ -186,6 +187,7 @@ class FireDetailsPage extends StatelessWidget {
                   WeatherCard(weather: fire.weather!),
                   SizedBox(height: 25),
                 ],
+                IpmaChartsCard(lat: fire.lat, lng: fire.lng),
                 if (fire.kml != null) ...[
                   ListTile(title: Text('ÁREA ARDIDA', style: _header)),
                   SizedBox(height: 15),

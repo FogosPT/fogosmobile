@@ -381,9 +381,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         store.dispatch(LoadViirsAction());
         store.dispatch(LoadAllPreferencesAction());
         store.dispatch(LoadIpmaReferenceTimeAction());
-        if (store.state.activeIpmaLayers.contains('ipma-wind-animated')) {
-          store.dispatch(LoadIpmaWindAction());
-        }
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(

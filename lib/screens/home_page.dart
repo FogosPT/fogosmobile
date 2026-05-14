@@ -63,9 +63,6 @@ class _HomePageState extends State<HomePage> {
                 state.preferences[preferenceSatellite] == 1,
             activeIpmaLayers: state.activeIpmaLayers,
             ipmaReferenceTime: state.ipmaReferenceTime,
-            showAnimatedWind:
-                state.activeIpmaLayers.contains('ipma-wind-animated'),
-            ipmaWindGrid: state.ipmaWindGrid,
             kmlVostUrls: state.fires
                 .where((f) => f.kmlVost != null)
                 .map((f) => f.kmlVost!)

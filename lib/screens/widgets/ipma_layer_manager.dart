@@ -31,8 +31,6 @@ class IpmaLayerManager {
     final effective = desired.where((k) {
       final g = ipmaGroupForKey(k);
       if (g == null) return false;
-      // Animated wind is rendered by AnimatedWindOverlay, not as raster tiles.
-      if (g.isAnimatedWind) return false;
       // Skip AROME layers until reference_time is available.
       if (g.requiresReferenceTime &&
           (_referenceTime == null || _referenceTime!.isEmpty)) {

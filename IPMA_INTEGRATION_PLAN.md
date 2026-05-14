@@ -544,3 +544,358 @@ Replace the old §9 with this combined check:
 8. Airplane mode → toggles still respond, the layer fails silently (no crash); FRP and AROME hidden because tiles don't load. Re-enable network → tiles backfill.
 9. Pull the device clock forward by 24 h → on next cold start, `/v1/ipma-reference-time` should return a different `reference_time` (because the backend cache expires); the new value flows into all AROME URLs.
 10. Switch locale → labels (including `Vento animado`) translate.
+
+---
+
+# Addendum (2026-05-14, second wave): per-fire forecast charts
+
+We've also shipped, on the fogos.pt web app, **eight Chart.js panels on every fire detail page** that mirror the click-point sidebar from `mf2.ipma.pt/continent`. They show 48 h hourly AROME forecast and 7-day LSA-SAF/RCM fire-index daily forecast for the exact (lat, lng) of the incident. This addendum is the brief to bring the same feature to the Flutter app on each incident detail screen.
+
+## E. Backend already in place
+
+A new Laravel endpoint does the heavy lifting on our side:
+
+```
+GET https://fogos.pt/v1/ipma-point/{lat}/{lng}
+```
+
+What it does:
+1. Detects the IPMA region (`continent` / `madeira` / `azores`) from the lat/lng.
+2. Resolves the latest available AROME `reference_time` (shared with `/v1/ipma-reference-time`).
+3. Makes two **WMS `GetFeatureInfo`** calls — the trick MF2 uses — passing a comma-separated time list in the `time=` parameter. One call for AROME (hourly, 48 h), one for LSA-SAF + RCM (daily, 7 days).
+4. Normalises the response, **injects `windU`/`windV` for direction arrows** by parsing the `arome.10m.windbarbs.{region}` value (which IPMA returns as a `[u, v]` array in m/s).
+5. Caches in Redis under `ipma:point:{lat:.3f}:{lng:.3f}` for 1 hour and serves with `Cache-Control: public, max-age=1800`.
+
+Error responses you may encounter:
+- `422` → point is outside the IPMA regions (probably not in PT). Hide the section.
+- `503` → IPMA unreachable / no current model run published yet. Show a discreet error message and keep the rest of the screen functional.
+
+### E.1 Response shape
+
+```json
+{
+  "lat": 40.123,
+  "lng": -8.456,
+  "region": "continent",
+  "reference_time": "2026-05-13T12:00",
+  "hourly": [
+    {
+      "datetime": "2026-05-13T19:00",
+      "temperature": 18.7,
+      "humidity": 58.5,
+      "wind": 9.5,           // mean wind speed (km/h)
+      "gust": 24.5,          // gust (km/h)
+      "pressure": 1018.1,
+      "precipitation": 0.0,
+      "windU": 2.09,         // east component, m/s (for direction arrows)
+      "windV": -1.63         // north component, m/s
+    },
+    /* …48 hourly entries, already sorted by datetime ascending… */
+  ],
+  "daily": {
+    "fwi":    [ { "datetime": "2026-05-13T00:00", "value": 5.4 }, … ],
+    "isi":    [ … ],
+    "bui":    [ … ],
+    "dc":     [ … ],
+    "dmc":    [ … ],
+    "ffmc":   [ … ],
+    "p2000":  [ … ],
+    "p2000a": [ … ],
+    "rcm":    [ … ]
+  }
+}
+```
+
+Notes:
+- Arrays may contain `null` values for individual days when IPMA hasn't published that index yet. Skip those points; do not let `null` reach the chart library.
+- All arrays are pre-sorted ascending by datetime by the backend, so you can plot in order without re-sorting.
+- The two arrays are time-disjoint: `hourly` covers `+0…+47 h`, `daily` covers `+0…+6 days` (one value per day, usually at 00:00 UTC). Don't try to merge them onto one axis.
+
+## F. UX target on Flutter
+
+Eight charts, in this order, each captioned with the title shown in §F.2. Mirrors the web app exactly so users get the same experience across platforms:
+
+1. **Temperatura e humidade** — dual-axis line: temperature (left, °C) + humidity (right, %).
+2. **Vento e rajada** — single line for `wind` + `gust`, **with arrows overlaid above the lines pointing where the wind is going** (one arrow every 2-3 hours so 48 timestamps stay readable).
+3. **Pressão atmosférica** — single line, hPa.
+4. **Precipitação acumulada** — bar chart, mm.
+5. **FWI / ISI / BUI** — three daily lines (fire weather + initial spread + buildup indices).
+6. **DC / DMC / FFMC** — three daily lines (drought + duff moisture + fine fuel moisture codes).
+7. **FRM — probabilidade e anomalia** — two daily lines (`p2000` extremes probability + `p2000a` anomaly).
+8. **RCM (estação)** — single daily line (station-based rural fire risk index).
+
+Section title: **"Previsão IPMA neste ponto"** (PT) / **"IPMA forecast at this point"** (EN) / **"Previsión IPMA en este punto"** (ES). Source attribution underneath linking to https://www.ipma.pt.
+
+## G. Flutter implementation
+
+### G.1 Library choice — `fl_chart`
+
+Use **`fl_chart`** (MIT, mature, ~17k stars). It's the de facto Flutter chart package, ships native Flutter widgets (no platform channels), supports `LineChart` and `BarChart`, and exposes raw `CustomPainter`-style hooks via `extraLinesData` and `customRenderers` — exactly what we need for the wind direction arrows overlay.
+
+Avoid `charts_flutter` (Google's package, abandoned). Avoid `syncfusion_flutter_charts` (proprietary, free only under certain conditions).
+
+Add to `pubspec.yaml`:
+
+```yaml
+dependencies:
+  fl_chart: ^0.69.0
+```
+
+### G.2 Skeleton — a single `IpmaChartsCard` widget
+
+Put this on the existing incident detail screen (likely `lib/screens/fire_details_screen.dart` or wherever the existing detail content lives — verify against the actual file). The widget owns its own loading/error state.
+
+```dart
+class IpmaChartsCard extends StatefulWidget {
+  final double lat;
+  final double lng;
+  const IpmaChartsCard({super.key, required this.lat, required this.lng});
+
+  @override
+  State<IpmaChartsCard> createState() => _IpmaChartsCardState();
+}
+
+class _IpmaChartsCardState extends State<IpmaChartsCard> {
+  late Future<IpmaPointData?> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _fetchIpmaPoint(widget.lat, widget.lng);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<IpmaPointData?>(
+      future: _future,
+      builder: (ctx, snap) {
+        if (snap.connectionState != ConnectionState.done) {
+          return const Center(child: Padding(
+            padding: EdgeInsets.all(16),
+            child: CircularProgressIndicator()));
+        }
+        final data = snap.data;
+        if (data == null) {
+          // Either out-of-range or upstream failed — hide silently
+          // unless we want a tiny inline message.
+          return const SizedBox.shrink();
+        }
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Text(L10n.of(context).ipmaChartsTitle, style: theme.titleMedium),
+          _AttributionLine(),
+          const SizedBox(height: 12),
+          TempHumidityChart(hourly: data.hourly),
+          WindChart(hourly: data.hourly),       // includes arrows overlay
+          PressureChart(hourly: data.hourly),
+          PrecipChart(hourly: data.hourly),
+          FwiIsiBuiChart(daily: data.daily),
+          DcDmcFfmcChart(daily: data.daily),
+          FrmChart(daily: data.daily),
+          RcmChart(daily: data.daily),
+        ]);
+      },
+    );
+  }
+}
+```
+
+A simple model and fetcher:
+
+```dart
+class IpmaPointData {
+  final String region;
+  final String referenceTime;
+  final List<IpmaHourly> hourly;
+  final Map<String, List<IpmaDailyValue>> daily;
+  IpmaPointData(this.region, this.referenceTime, this.hourly, this.daily);
+}
+
+class IpmaHourly {
+  final DateTime t;
+  final double? temperature, humidity, wind, gust, pressure, precipitation;
+  final double? windU, windV;
+  IpmaHourly(this.t, this.temperature, this.humidity, this.wind, this.gust,
+             this.pressure, this.precipitation, this.windU, this.windV);
+}
+
+class IpmaDailyValue {
+  final DateTime t;
+  final double? value;
+  IpmaDailyValue(this.t, this.value);
+}
+
+Future<IpmaPointData?> _fetchIpmaPoint(double lat, double lng) async {
+  try {
+    final r = await http.get(Uri.parse(
+        'https://fogos.pt/v1/ipma-point/$lat/$lng'));
+    if (r.statusCode != 200) return null;
+    final j = jsonDecode(r.body) as Map<String, dynamic>;
+    final hourly = (j['hourly'] as List).map((row) {
+      final m = row as Map<String, dynamic>;
+      double? d(String k) => m[k] is num ? (m[k] as num).toDouble() : null;
+      return IpmaHourly(
+        DateTime.parse(m['datetime'] as String),
+        d('temperature'), d('humidity'), d('wind'), d('gust'),
+        d('pressure'), d('precipitation'), d('windU'), d('windV'),
+      );
+    }).toList();
+    final daily = <String, List<IpmaDailyValue>>{};
+    (j['daily'] as Map<String, dynamic>).forEach((k, v) {
+      daily[k] = (v as List).map((row) {
+        final m = row as Map<String, dynamic>;
+        final val = m['value'];
+        return IpmaDailyValue(
+          DateTime.parse(m['datetime'] as String),
+          val is num ? val.toDouble() : null,
+        );
+      }).toList();
+    });
+    return IpmaPointData(
+      j['region'] as String, j['reference_time'] as String, hourly, daily);
+  } catch (_) {
+    return null;
+  }
+}
+```
+
+### G.3 Wind direction arrows overlay
+
+`fl_chart`'s `LineChart` accepts a `painter` style override through `extraLinesData` *and* you can stack a `CustomPaint` widget directly above the chart in a `Stack`. The latter is simpler.
+
+```dart
+class WindChart extends StatelessWidget {
+  final List<IpmaHourly> hourly;
+  const WindChart({super.key, required this.hourly});
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: 1.8,
+      child: Stack(children: [
+        LineChart(/* wind + gust series */),
+        Positioned.fill(child: IgnorePointer(
+          child: CustomPaint(painter: _WindArrowsPainter(hourly)),
+        )),
+      ]),
+    );
+  }
+}
+```
+
+The painter projects each hourly point's index → x using the same horizontal extent as the chart (left padding = chart left axis label width, right padding ≈ 0), then draws a small arrow rotated by `atan2(-v, u)` (negate v because canvas Y is flipped). One arrow every 2 or 3 hours.
+
+```dart
+class _WindArrowsPainter extends CustomPainter {
+  final List<IpmaHourly> hourly;
+  _WindArrowsPainter(this.hourly);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final leftPad = 36.0, rightPad = 8.0, topPad = 18.0;
+    final plotW = size.width - leftPad - rightPad;
+    final step = hourly.length > 24 ? 3 : 2;
+    final stroke = Paint()..color = Colors.black87..strokeWidth = 1.2;
+    final fill = Paint()..color = Colors.black87..style = PaintingStyle.fill;
+    for (var i = 0; i < hourly.length; i++) {
+      if (i % step != 0) continue;
+      final h = hourly[i];
+      if (h.windU == null || h.windV == null) continue;
+      final mag = sqrt(h.windU! * h.windU! + h.windV! * h.windV!);
+      if (mag < 0.1) continue;
+      final x = leftPad + plotW * (i / (hourly.length - 1));
+      final y = topPad;
+      final angle = atan2(-h.windV!, h.windU!);
+      _drawArrow(canvas, Offset(x, y), angle, 11, stroke, fill);
+    }
+  }
+
+  void _drawArrow(Canvas c, Offset center, double angle, double length,
+                  Paint stroke, Paint fill) {
+    final dx = cos(angle) * length / 2;
+    final dy = sin(angle) * length / 2;
+    final tail = center.translate(-dx, -dy);
+    final head = center.translate(dx, dy);
+    c.drawLine(tail, head, stroke);
+    final left  = head.translate(cos(angle + pi - 0.5) * 4, sin(angle + pi - 0.5) * 4);
+    final right = head.translate(cos(angle + pi + 0.5) * 4, sin(angle + pi + 0.5) * 4);
+    final path = Path()..moveTo(head.dx, head.dy)
+                       ..lineTo(left.dx, left.dy)
+                       ..lineTo(right.dx, right.dy)..close();
+    c.drawPath(path, fill);
+  }
+
+  @override
+  bool shouldRepaint(_) => false;
+}
+```
+
+The exact `leftPad` / `rightPad` need to match whatever `fl_chart` uses for its title/axes — measure once with the first run and tweak. Alternatively, listen to `LineChartData.lineTouchData.touchTooltipData` callbacks to extract the exact data-area rect — but the static padding approach is good enough.
+
+### G.4 Charts that take two y-axes
+
+Only the temperature+humidity chart needs dual axis. In `fl_chart`, this is done by giving each `LineChartBarData` its own normalised data and showing two separate `LeftTitles` widgets — or, simpler, scale the humidity values to share the temperature axis range. For parity with the web, use proper dual axis via `LineChartData.lineBarsData[N].belowBarData` ranges: configure `extraLinesData` for the second axis labels manually.
+
+Pragmatic alternative: render two separate stacked charts in one card — "Temperatura (°C)" on top, "Humidade (%)" below, sharing the x axis labels. Less elegant but bullet-proof in `fl_chart`.
+
+## H. i18n strings to add
+
+Mobile app probably uses `intl` / .arb files. Add the same key set we have in PHP:
+
+| Key | PT | EN | ES |
+|---|---|---|---|
+| `ipmaChartsTitle` | Previsão IPMA neste ponto | IPMA forecast at this point | Previsión IPMA en este punto |
+| `ipmaChartsSource` | Dados: | Data: | Datos: |
+| `ipmaChartsError` | Não foi possível obter dados da IPMA para esta localização. | Could not load IPMA data for this location. | No se pudieron obtener datos de IPMA para esta ubicación. |
+| `chartTemperature` | Temperatura (°C) | Temperature (°C) | Temperatura (°C) |
+| `chartHumidity` | Humidade (%) | Humidity (%) | Humedad (%) |
+| `chartWind` | Vento médio (km/h) | Mean wind (km/h) | Viento medio (km/h) |
+| `chartGust` | Rajada (km/h) | Gust (km/h) | Ráfaga (km/h) |
+| `chartPressure` | Pressão (hPa) | Pressure (hPa) | Presión (hPa) |
+| `chartPrecipitation` | Precipitação (mm) | Precipitation (mm) | Precipitación (mm) |
+| `chartFwi/Isi/Bui/Dc/Dmc/Ffmc` | (same in all locales) | | |
+| `chartP2000` | Probabilidade de extremos | Extremes probability | Probabilidad de extremos |
+| `chartP2000a` | Anomalia | Anomaly | Anomalía |
+| `chartRcm` | RCM (estação) | RCM (station) | RCM (estación) |
+| `titleTempHum` | Temperatura e humidade | Temperature and humidity | Temperatura y humedad |
+| `titleWind` | Vento e rajada | Wind and gust | Viento y ráfaga |
+| `titlePressure` | Pressão atmosférica | Atmospheric pressure | Presión atmosférica |
+| `titlePrecip` | Precipitação acumulada | Accumulated precipitation | Precipitación acumulada |
+| `titleFwi` | FWI / ISI / BUI | (same) | (same) |
+| `titleDc` | DC / DMC / FFMC | (same) | (same) |
+| `titleFrm` | FRM — probabilidade e anomalia | FRM — probability and anomaly | FRM — probabilidad y anomalía |
+| `titleRcm` | RCM (estação) | RCM (station) | RCM (estación) |
+
+## I. Performance and offline notes
+
+- The endpoint response is ~20 KB; cheap to fetch over mobile.
+- Our backend already caches 1 hour per (lat, lng) and the response carries `Cache-Control: public, max-age=1800`, so Dio/Flutter `http` will reuse it within that window across re-opens of the same incident. No need for a custom cache layer.
+- When the user opens a detail page offline, the future fails → `data == null` → section is hidden. The rest of the screen renders fine.
+- Don't aggressively re-fetch when the user pulls-to-refresh on the detail screen — once per incident open is plenty (the data updates twice a day at most).
+
+## J. Verification checklist
+
+1. Open the detail screen for an incident in mainland Portugal → after a 1-2 s shimmer, eight charts render. The header reads "Previsão IPMA neste ponto" plus the IPMA link.
+2. Wind chart: arrows visible above the line, pointing in physically plausible directions (verify against MF2 if unsure: open `https://mf2.ipma.pt/continent?query={lat},{lng}` and compare).
+3. Incident in Madeira or Açores → still works, region in response payload is `madeira` / `azores`.
+4. Incident outside PT regions (e.g. test with synthetic lat/lng in Spain) → backend returns 422 → section hidden, no error toast.
+5. Airplane mode → section hidden, no crash.
+6. Switch device locale → all labels and titles translate.
+7. Pull-to-refresh on the detail screen → IPMA section refetches; if backend cache still warm, response is instant (it's coming from our Redis).
+8. Profile mode → no jank when scrolling past the eight charts. If observed, lower `aspectRatio` or render off-screen charts lazily.
+
+## K. Updated quick reference
+
+```dart
+// New endpoint added on the backend:
+//   GET https://fogos.pt/v1/ipma-point/{lat}/{lng}
+//   → 200 { region, reference_time, hourly[], daily{} }
+//   → 422 if point outside the IPMA regions
+//   → 503 if IPMA unreachable
+
+Future<IpmaPointData?> fetchIpmaPoint(double lat, double lng) async {
+  final r = await http.get(Uri.parse('https://fogos.pt/v1/ipma-point/$lat/$lng'));
+  return r.statusCode == 200 ? IpmaPointData.fromJson(jsonDecode(r.body)) : null;
+}
+```
+
+The integration points in the existing Flutter code: wherever the fire detail screen is rendered, add `IpmaChartsCard(lat: fire.lat, lng: fire.lng)` near the bottom of the existing content (after status / meteo, before any "shares" widget). State management — if the project uses Redux/BLoC — should keep the future inside the widget rather than putting it in the store, because the data is single-screen and cached at network layer.

@@ -14,15 +14,3 @@ class IpmaReferenceTimeLoadedAction {
   final String? referenceTime;
   IpmaReferenceTimeLoadedAction(this.referenceTime);
 }
-
-class LoadIpmaWindAction {}
-
-class IpmaWindGridLoadedAction {
-  final dynamic grid; // IpmaWindGrid? — kept dynamic to avoid model coupling
-  IpmaWindGridLoadedAction(this.grid);
-}
-
-class IpmaWindGridLoadingAction {
-  final bool loading;
-  IpmaWindGridLoadingAction(this.loading);
-}

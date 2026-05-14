@@ -129,10 +129,7 @@ AppState appReducer(AppState state, action) {
       action is IpmaLayersLoadedAction) {
     isLoading = state.isLoading;
   } else if (action is LoadIpmaReferenceTimeAction ||
-      action is IpmaReferenceTimeLoadedAction ||
-      action is LoadIpmaWindAction ||
-      action is IpmaWindGridLoadedAction ||
-      action is IpmaWindGridLoadingAction) {
+      action is IpmaReferenceTimeLoadedAction) {
     isLoading = state.isLoading;
   } else {
     isLoading = false;
@@ -179,11 +176,5 @@ AppState appReducer(AppState state, action) {
     ipmaReferenceTimeLoaded: action is IpmaReferenceTimeLoadedAction
         ? true
         : state.ipmaReferenceTimeLoaded,
-    ipmaWindGrid: action is IpmaWindGridLoadedAction
-        ? action.grid
-        : state.ipmaWindGrid,
-    ipmaWindGridLoading: action is IpmaWindGridLoadingAction
-        ? action.loading
-        : (action is IpmaWindGridLoadedAction ? false : state.ipmaWindGridLoading),
   );
 }

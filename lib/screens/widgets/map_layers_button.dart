@@ -100,12 +100,7 @@ class MapLayersButton extends StatelessWidget {
                       icon: _iconForIpma(group.key),
                       label: group.label,
                       active: activeIpma.contains(group.key),
-                      // Animated wind has its own data source — no
-                      // reference_time dependency.
-                      enabled: group.isAnimatedWind ? true : aromeReady,
-                      busy: group.isAnimatedWind &&
-                          activeIpma.contains(group.key) &&
-                          state.ipmaWindGrid == null,
+                      enabled: aromeReady,
                       onTap: () =>
                           store.dispatch(ToggleIpmaLayerAction(group.key)),
                     ),
@@ -128,8 +123,6 @@ class MapLayersButton extends StatelessWidget {
         return Icons.navigation;
       case 'ipma-precipitation':
         return Icons.umbrella;
-      case 'ipma-wind-animated':
-        return Icons.waves;
       case 'ipma-humidity':
         return Icons.water_drop;
       default:
@@ -206,7 +199,6 @@ class _LayerTile extends StatelessWidget {
   final String label;
   final bool active;
   final bool enabled;
-  final bool busy;
   final VoidCallback onTap;
 
   const _LayerTile({
@@ -215,23 +207,16 @@ class _LayerTile extends StatelessWidget {
     required this.active,
     required this.onTap,
     this.enabled = true,
-    this.busy = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Widget trailing = busy
-        ? const SizedBox(
-            width: 18,
-            height: 18,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        : Icon(
-            active ? Icons.check_circle : Icons.radio_button_unchecked,
-            color: !enabled
-                ? Colors.grey.shade300
-                : (active ? const Color(0xff3BB273) : Colors.grey),
-          );
+    final Widget trailing = Icon(
+      active ? Icons.check_circle : Icons.radio_button_unchecked,
+      color: !enabled
+          ? Colors.grey.shade300
+          : (active ? const Color(0xff3BB273) : Colors.grey),
+    );
     return ListTile(
       enabled: enabled,
       leading: Icon(icon, color: enabled ? null : Colors.grey),

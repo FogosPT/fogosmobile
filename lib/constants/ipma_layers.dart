@@ -7,7 +7,6 @@ class IpmaLayerGroup {
   final double opacity;
   final bool isWindBarbs;
   final bool requiresReferenceTime;
-  final bool isAnimatedWind;
 
   const IpmaLayerGroup({
     required this.key,
@@ -16,7 +15,6 @@ class IpmaLayerGroup {
     this.opacity = 0.6,
     this.isWindBarbs = false,
     this.requiresReferenceTime = true,
-    this.isAnimatedWind = false,
   });
 
   String get legendLayerName => wmsLayerNames.first;
@@ -60,13 +58,6 @@ const List<IpmaLayerGroup> ipmaAromeGroups = [
       'arome.0m.precipitation.madeira',
       'arome.0m.precipitation.azores',
     ],
-  ),
-  IpmaLayerGroup(
-    key: 'ipma-wind-animated',
-    label: 'Vento animado',
-    wmsLayerNames: [],
-    isAnimatedWind: true,
-    requiresReferenceTime: false,
   ),
   IpmaLayerGroup(
     key: 'ipma-humidity',

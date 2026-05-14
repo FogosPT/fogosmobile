@@ -268,6 +268,13 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       bool allowPublic = true;
       if (canUpload) {
         final choice = await _askUploadConfirmation();
+        if (choice.cancelled) {
+          try {
+            await tmpFile.delete();
+          } catch (_) {}
+          if (mounted) setState(() => _isSaving = false);
+          return;
+        }
         shouldUpload = choice.send;
         allowPublic = choice.allowPublic;
       }
@@ -321,7 +328,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     }
   }
 
-  Future<({bool send, bool allowPublic})> _askUploadConfirmation() async {
+  Future<({bool cancelled, bool send, bool allowPublic})>
+      _askUploadConfirmation() async {
     bool allowPublic = true;
     const bodyStyle = TextStyle(fontSize: 13, color: Colors.black87, height: 1.5);
     const boldStyle = TextStyle(
@@ -331,8 +339,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       fontWeight: FontWeight.bold,
     );
 
-    final result = await showDialog<bool>(
+    final result = await showDialog<String>(
       context: context,
+      barrierDismissible: false,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setStateDialog) => AlertDialog(
           title: const Text('Enviar foto para o Fogos.pt?'),
@@ -526,18 +535,35 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('Só guardar'),
+              onPressed: () => Navigator.of(ctx).pop('cancel'),
+              child: const Text(
+                'Cancelar',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text('Enviar'),
+              onPressed: () => Navigator.of(ctx).pop('save'),
+              child: const Text(
+                'Só guardar na tua galeria',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop('send'),
+              child: const Text(
+                'Enviar',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
       ),
     );
-    return (send: result ?? false, allowPublic: allowPublic);
+    return (
+      cancelled: result == 'cancel' || result == null,
+      send: result == 'send',
+      allowPublic: allowPublic,
+    );
   }
 
   String _uploadResultMessage(UploadResult result) {

@@ -22,6 +22,8 @@ import 'package:fogosmobile/actions/all_incidents_actions.dart';
 import 'package:fogosmobile/reducers/all_incidents_reducer.dart';
 import 'package:fogosmobile/actions/search_actions.dart';
 import 'package:fogosmobile/reducers/search_reducer.dart';
+import 'package:fogosmobile/reducers/ipma_reducer.dart';
+import 'package:fogosmobile/actions/ipma_actions.dart';
 
 AppState appReducer(AppState state, action) {
   bool isLoading = state.isLoading;
@@ -123,6 +125,15 @@ AppState appReducer(AppState state, action) {
   } else if (action is ToggleNatureCodesAction) {
     showNatureCodes = !state.showNatureCodes;
     isLoading = state.isLoading;
+  } else if (action is ToggleIpmaLayerAction ||
+      action is IpmaLayersLoadedAction) {
+    isLoading = state.isLoading;
+  } else if (action is LoadIpmaReferenceTimeAction ||
+      action is IpmaReferenceTimeLoadedAction ||
+      action is LoadIpmaWindAction ||
+      action is IpmaWindGridLoadedAction ||
+      action is IpmaWindGridLoadingAction) {
+    isLoading = state.isLoading;
   } else {
     isLoading = false;
     hasFirstLoad = true;
@@ -161,5 +172,18 @@ AppState appReducer(AppState state, action) {
     allIncidents: allIncidentsReducer(state.allIncidents, action),
     searchResults: searchResultsReducer(state.searchResults, action),
     lightnings: lightningsReducer(state.lightnings, action),
+    activeIpmaLayers: ipmaLayersReducer(state.activeIpmaLayers, action),
+    ipmaReferenceTime: action is IpmaReferenceTimeLoadedAction
+        ? action.referenceTime
+        : state.ipmaReferenceTime,
+    ipmaReferenceTimeLoaded: action is IpmaReferenceTimeLoadedAction
+        ? true
+        : state.ipmaReferenceTimeLoaded,
+    ipmaWindGrid: action is IpmaWindGridLoadedAction
+        ? action.grid
+        : state.ipmaWindGrid,
+    ipmaWindGridLoading: action is IpmaWindGridLoadingAction
+        ? action.loading
+        : (action is IpmaWindGridLoadedAction ? false : state.ipmaWindGridLoading),
   );
 }

@@ -7,6 +7,7 @@ import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
+import 'package:fogosmobile/actions/ipma_actions.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:fogosmobile/services/fcm_migration_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -379,6 +380,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         store.dispatch(LoadModisAction());
         store.dispatch(LoadViirsAction());
         store.dispatch(LoadAllPreferencesAction());
+        store.dispatch(LoadIpmaReferenceTimeAction());
+        if (store.state.activeIpmaLayers.contains('ipma-wind-animated')) {
+          store.dispatch(LoadIpmaWindAction());
+        }
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(

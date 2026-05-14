@@ -3,10 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/models/ipma_wind_grid.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
+import 'package:fogosmobile/screens/widgets/animated_wind_overlay.dart';
 import 'package:fogosmobile/screens/widgets/fire_annotation_manager.dart';
+import 'package:fogosmobile/screens/widgets/ipma_layer_manager.dart';
+import 'package:fogosmobile/screens/widgets/ipma_legend_overlay.dart';
 import 'package:fogosmobile/screens/widgets/kml_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
@@ -22,6 +26,10 @@ class FogosMap extends StatefulWidget {
   final bool showViirs;
   final bool showNatureCodes;
   final bool useSatelliteStyle;
+  final Set<String> activeIpmaLayers;
+  final String? ipmaReferenceTime;
+  final bool showAnimatedWind;
+  final IpmaWindGrid? ipmaWindGrid;
   final List<String> kmlVostUrls;
   final String? kmlAreaUrl;
   final void Function(Fire)? onFireTap;
@@ -39,6 +47,10 @@ class FogosMap extends StatefulWidget {
     this.showViirs = false,
     this.showNatureCodes = true,
     this.useSatelliteStyle = false,
+    this.activeIpmaLayers = const {},
+    this.ipmaReferenceTime,
+    this.showAnimatedWind = false,
+    this.ipmaWindGrid,
     this.kmlVostUrls = const [],
     this.kmlAreaUrl,
     this.onFireTap,
@@ -62,11 +74,14 @@ class _FogosMapState extends State<FogosMap> {
   MapboxMap? _mapController;
   FireAnnotationManager? _fireManager;
   SatelliteAnnotationManager? _satelliteManager;
+  IpmaLayerManager? _ipmaManager;
   final Map<String, KmlLayerManager> _kmlVostManagers = {};
   KmlLayerManager? _kmlAreaManager;
   int _lastAppliedTemplate = -1;
   bool _managersReady = false;
   double _zoom = 7.0;
+  final ValueNotifier<WindCameraSnapshot?> _cameraNotifier =
+      ValueNotifier<WindCameraSnapshot?>(null);
 
   int get _templateIndex => widget.useSatelliteStyle ? 1 : 0;
 
@@ -101,6 +116,7 @@ class _FogosMapState extends State<FogosMap> {
 
     await _fireManager?.dispose();
     await _satelliteManager?.dispose();
+    _ipmaManager = null;
 
     if (_mapController == null || !mounted) return;
 
@@ -119,6 +135,7 @@ class _FogosMapState extends State<FogosMap> {
 
     _kmlVostManagers.clear();
     _kmlAreaManager = KmlLayerManager(mapboxMap: _mapController!, id: 'area');
+    _ipmaManager = IpmaLayerManager(mapboxMap: _mapController!);
 
     _managersReady = true;
 
@@ -164,14 +181,30 @@ class _FogosMapState extends State<FogosMap> {
     if (widget.kmlAreaUrl != oldWidget.kmlAreaUrl) {
       _syncKmlArea();
     }
+
+    if (widget.activeIpmaLayers != oldWidget.activeIpmaLayers ||
+        widget.ipmaReferenceTime != oldWidget.ipmaReferenceTime) {
+      _syncIpma();
+    }
   }
 
   void _syncAll() {
+    _syncIpma(reapply: true);
     _syncFires();
     _syncModis();
     _syncViirs();
     _syncKml();
     _syncKmlArea();
+  }
+
+  void _syncIpma({bool reapply = false}) {
+    final desired = widget.activeIpmaLayers;
+    final refTime = widget.ipmaReferenceTime;
+    if (reapply) {
+      _ipmaManager?.reapply(desired, referenceTime: refTime);
+    } else {
+      _ipmaManager?.sync(desired, referenceTime: refTime);
+    }
   }
 
   void _syncFires() {
@@ -231,6 +264,7 @@ class _FogosMapState extends State<FogosMap> {
       m.clear();
     }
     _kmlAreaManager?.clear();
+    _cameraNotifier.dispose();
     super.dispose();
   }
 
@@ -244,7 +278,15 @@ class _FogosMapState extends State<FogosMap> {
           onStyleLoadedListener: _onStyleLoaded,
           onCameraChangeListener: (_) {
             _mapController?.getCameraState().then((state) {
-              if (mounted) setState(() => _zoom = state.zoom);
+              if (!mounted) return;
+              final coords = state.center.coordinates;
+              _cameraNotifier.value = WindCameraSnapshot(
+                centerLng: coords.lng.toDouble(),
+                centerLat: coords.lat.toDouble(),
+                zoom: state.zoom,
+                updatedAt: DateTime.now(),
+              );
+              if (state.zoom != _zoom) setState(() => _zoom = state.zoom);
             });
           },
           cameraOptions: CameraOptions(
@@ -258,6 +300,14 @@ class _FogosMapState extends State<FogosMap> {
           left: 8,
           child: _MapScaleBar(zoom: _zoom),
         ),
+        if (widget.showAnimatedWind && widget.ipmaWindGrid != null)
+          Positioned.fill(
+            child: AnimatedWindOverlay(
+              grid: widget.ipmaWindGrid!,
+              camera: _cameraNotifier,
+            ),
+          ),
+        const IpmaLegendOverlay(),
         if (widget.overlayButtons != null) widget.overlayButtons!,
         const MapOverlayErrorInfoWidget(),
       ],

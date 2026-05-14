@@ -1,6 +1,7 @@
 import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/lightning.dart';
+import 'package:fogosmobile/models/ipma_wind_grid.dart';
 import 'package:fogosmobile/models/modis.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/models/fire_details.dart';
@@ -37,6 +38,11 @@ class AppState {
   List<Fire> otherFires;
   List<Fire> allIncidents;
   List<Fire> searchResults;
+  Set<String> activeIpmaLayers;
+  String? ipmaReferenceTime;
+  bool ipmaReferenceTimeLoaded;
+  IpmaWindGrid? ipmaWindGrid;
+  bool ipmaWindGridLoading;
 
   AppState({
     this.fires = const [],
@@ -69,6 +75,11 @@ class AppState {
     this.allIncidents = const [],
     this.searchResults = const [],
     this.lightnings = const [],
+    this.activeIpmaLayers = const {},
+    this.ipmaReferenceTime,
+    this.ipmaReferenceTimeLoaded = false,
+    this.ipmaWindGrid,
+    this.ipmaWindGridLoading = false,
   });
 
   AppState copyWith({
@@ -101,6 +112,11 @@ class AppState {
     List<Fire>? allIncidents,
     List<Fire>? searchResults,
     List<Lightning>? lightnings,
+    Set<String>? activeIpmaLayers,
+    String? ipmaReferenceTime,
+    bool? ipmaReferenceTimeLoaded,
+    IpmaWindGrid? ipmaWindGrid,
+    bool? ipmaWindGridLoading,
   }) {
     return AppState(
       fires: fires ?? this.fires,
@@ -133,6 +149,12 @@ class AppState {
       allIncidents: allIncidents ?? this.allIncidents,
       searchResults: searchResults ?? this.searchResults,
       lightnings: lightnings ?? this.lightnings,
+      activeIpmaLayers: activeIpmaLayers ?? this.activeIpmaLayers,
+      ipmaReferenceTime: ipmaReferenceTime ?? this.ipmaReferenceTime,
+      ipmaReferenceTimeLoaded:
+          ipmaReferenceTimeLoaded ?? this.ipmaReferenceTimeLoaded,
+      ipmaWindGrid: ipmaWindGrid ?? this.ipmaWindGrid,
+      ipmaWindGridLoading: ipmaWindGridLoading ?? this.ipmaWindGridLoading,
     );
   }
 

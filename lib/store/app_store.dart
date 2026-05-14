@@ -13,6 +13,7 @@ import 'package:fogosmobile/reducers/app_reducer.dart';
 import 'package:fogosmobile/middleware/fires_middleware.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/middleware/warnings_middleware.dart';
+import 'package:fogosmobile/middleware/ipma_middleware.dart';
 
 final store = Store<AppState>(
   appReducer,
@@ -35,6 +36,7 @@ final store = Store<AppState>(
     allIncidents: [],
     searchResults: [],
     lightnings: [],
+    activeIpmaLayers: loadIpmaLayersFromPrefs(),
   ),
   middleware: firesMiddleware()
     ..addAll(preferencesMiddleware())
@@ -48,4 +50,5 @@ final store = Store<AppState>(
     ..addAll(otherFiresMiddleware())
     ..addAll(allIncidentsMiddleware())
     ..addAll(searchMiddleware())
+    ..addAll(ipmaMiddleware())
 );

@@ -176,16 +176,39 @@ class NearbyNotificationService {
         payload: payload);
   }
 
+  static DateTime? _lastLocationFetch;
+  static const Duration _minFetchInterval = Duration(minutes: 10);
+
   /// Update the stored user location. Call periodically.
+  ///
+  /// Guards against the OS location-services prompt loop:
+  /// - skips when location services are disabled (would trigger the system
+  ///   "enable location" dialog on each call);
+  /// - skips when permission is denied (no prompt here — only the explicit
+  ///   opt-in screen in settings should prompt);
+  /// - throttles so app-resume churn doesn't re-trigger anything.
   static Future<void> updateStoredLocation() async {
     final prefs = await SharedPreferences.getInstance();
     final enabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
     if (!enabled) return;
 
+    final now = DateTime.now();
+    if (_lastLocationFetch != null &&
+        now.difference(_lastLocationFetch!) < _minFetchInterval) {
+      return;
+    }
+
     try {
+      final serviceOn = await Geolocator.isLocationServiceEnabled();
+      if (!serviceOn) {
+        _lastLocationFetch = now;
+        return;
+      }
+
       final permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
+        _lastLocationFetch = now;
         return;
       }
 
@@ -196,10 +219,11 @@ class NearbyNotificationService {
         ),
       );
 
+      _lastLocationFetch = now;
       await prefs.setDouble(NearbyPrefs.nearbyLat, position.latitude);
       await prefs.setDouble(NearbyPrefs.nearbyLng, position.longitude);
     } catch (_) {
-      // Silently fail — we'll use the last known location
+      _lastLocationFetch = now;
     }
   }
 

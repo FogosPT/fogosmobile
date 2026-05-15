@@ -30,8 +30,25 @@ _Risco de incêndio recolhido do IPMA_.
 - (DMC) Índice de Seca - Este índice é um bom indicador dos efeitos da seca sazonal nos combustíveis florestais (húmus e materiais lenhosos de maiores dimensões), que se encontram abaixo da superfície do solo, entre 8 e 20 cm de profundidade. O índice de seca é obtido a partir da precipitação ocorrida em 24 horas, da temperatura às 12 UTC e do índice de seca verificado na véspera.
 # 
 _Informação retirada do IPMA_.
-# 
-# 
+#
+#
+# GRÁFICOS DE PREVISÃO IPMA (DETALHE DO INCIDENTE)
+#
+#
+Na página de detalhe de cada incidente são apresentados oito gráficos com a previsão IPMA para o local exato do fogo. As séries horárias cobrem ~48 h e as diárias até 7 dias. Uma linha vertical vermelha tracejada indica a hora atual; arraste lateralmente para ver mais horas/dias.
+#
+- __Temperatura e humidade__ — Temperatura do ar a 2 m (°C) e humidade relativa (%). Calor + ar seco favorecem o início e a propagação do fogo.
+- __Vento e rajada__ — Velocidade média e rajadas (km/h). As setas no topo indicam a direção (para onde sopra). Vento forte e rajadas aumentam o risco.
+- __Pressão atmosférica__ — Pressão ao nível do mar (hPa). Quedas rápidas podem indicar instabilidade.
+- __Precipitação acumulada__ — Quantidade de chuva por hora (mm). Útil para perceber se há ou não alívio meteorológico.
+- __FWI / ISI / BUI__ — Índices do sistema Canadiano (sem unidade, diários). FWI = perigo global; ISI = facilidade de propagação (vento + combustível fino); BUI = quantidade de combustível disponível.
+- __DC / DMC / FFMC__ — Códigos de humidade dos combustíveis (sem unidade, diários). FFMC = combustíveis finos à superfície; DMC = camada intermédia; DC = profunda/seca de longo prazo. Valores altos = combustível seco.
+- __FRM — probabilidade e anomalia__ — Fire Risk Map (LSA-SAF). Prob. extremos (%): probabilidade de FWI acima do percentil 2000. Anomalia: desvio face ao normal climatológico.
+- __RCM (estação)__ — Risco Conjuntural Meteorológico de incêndio rural (escala 1 a 5): 1 reduzido, 2 moderado, 3 elevado, 4 muito elevado, 5 máximo.
+#
+_Dados: IPMA (modelo AROME + LSA-SAF)_.
+#
+#
 """;
 
 class InfoPage extends StatelessWidget {

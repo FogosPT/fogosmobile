@@ -24,7 +24,7 @@ class IpmaHourly {
   factory IpmaHourly.fromJson(Map<String, dynamic> j) {
     double? d(String k) => j[k] is num ? (j[k] as num).toDouble() : null;
     return IpmaHourly(
-      t: DateTime.parse(j['datetime'] as String),
+      t: _parseIpmaUtc(j['datetime'] as String),
       temperature: d('temperature'),
       humidity: d('humidity'),
       wind: d('wind'),
@@ -46,10 +46,16 @@ class IpmaDailyValue {
   factory IpmaDailyValue.fromJson(Map<String, dynamic> j) {
     final v = j['value'];
     return IpmaDailyValue(
-      t: DateTime.parse(j['datetime'] as String),
+      t: _parseIpmaUtc(j['datetime'] as String),
       value: v is num ? v.toDouble() : null,
     );
   }
+}
+
+DateTime _parseIpmaUtc(String iso) {
+  final hasTz = iso.endsWith('Z') ||
+      RegExp(r'[+-]\d{2}:?\d{2}$').hasMatch(iso);
+  return DateTime.parse(hasTz ? iso : '${iso}Z').toLocal();
 }
 
 class IpmaPointData {

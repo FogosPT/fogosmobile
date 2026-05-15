@@ -12,6 +12,7 @@ import 'package:fogosmobile/screens/widgets/ipma_legend_overlay.dart';
 import 'package:fogosmobile/screens/widgets/kml_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
+import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -94,13 +95,21 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   Future<void> _enableLocationPuck() async {
-    final status = await Permission.locationWhenInUse.request();
-    if (status.isGranted && _mapController != null) {
-      _mapController!.location.updateSettings(LocationComponentSettings(
-        enabled: true,
-        puckBearingEnabled: true,
-      ));
-    }
+    // Don't prompt for permission here — only enable the puck if the user has
+    // *already* granted permission and turned location services on (typically
+    // through the nearby-notifications opt-in). Avoids the system "enable
+    // location" loop when services are off.
+    final status = await Permission.locationWhenInUse.status;
+    if (!status.isGranted) return;
+
+    final serviceOn = await Geolocator.isLocationServiceEnabled();
+    if (!serviceOn) return;
+
+    if (_mapController == null) return;
+    _mapController!.location.updateSettings(LocationComponentSettings(
+      enabled: true,
+      puckBearingEnabled: true,
+    ));
   }
 
   void _onStyleLoaded(StyleLoadedEventData data) async {

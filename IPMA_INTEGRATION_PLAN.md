@@ -570,6 +570,33 @@ Error responses you may encounter:
 - `422` → point is outside the IPMA regions (probably not in PT). Hide the section.
 - `503` → IPMA unreachable / no current model run published yet. Show a discreet error message and keep the rest of the screen functional.
 
+### E.0 Critical: timestamps are UTC, NOT local time
+
+Every `datetime` field in the response (`hourly[].datetime`, `daily[*][].datetime`) is **wall-clock UTC** in the format `YYYY-MM-DDTHH:mm`, with no timezone suffix. **The IPMA backend does not localise.**
+
+If you display these strings as-is, Portugal mainland users (UTC+1 in summer) will see times off by one hour, Açores users by zero to two hours depending on DST, etc. Always parse as UTC and let `DateTime` / `intl` convert to local for display:
+
+```dart
+DateTime parseIpma(String iso) =>
+    DateTime.parse(iso.endsWith('Z') ? iso : '${iso}Z').toLocal();
+
+String shortHour(String iso) {
+  final d = parseIpma(iso);
+  return '${d.day.toString().padLeft(2, '0')}/${d.month.toString().padLeft(2, '0')} '
+         '${d.hour.toString().padLeft(2, '0')}h';
+}
+```
+
+The web app does this in `public/js/ipma-charts.js` via `new Date(iso + 'Z')` followed by `getHours()` / `getDate()` — same idea.
+
+Note: comparison against "now" for the red current-time vertical marker (§F.2 below) **does not need conversion** — both sides are absolute timestamps:
+
+```dart
+final nowUtc = DateTime.now().toUtc();
+final ts = DateTime.parse('${iso}Z'); // already UTC
+final delta = ts.difference(nowUtc).abs();
+```
+
 ### E.1 Response shape
 
 ```json
@@ -625,6 +652,71 @@ Eight charts, in this order, each captioned with the title shown in §F.2. Mirro
 8. **RCM (estação)** — single daily line (station-based rural fire risk index).
 
 Section title: **"Previsão IPMA neste ponto"** (PT) / **"IPMA forecast at this point"** (EN) / **"Previsión IPMA en este punto"** (ES). Source attribution underneath linking to https://www.ipma.pt.
+
+### F.1 Current-time marker on every chart
+
+Every chart must draw a **dashed red vertical line** at the data point closest to `DateTime.now().toUtc()`. Skip the marker if "now" is more than 12 h outside the timestamps range (stale forecast — don't pin the line to the chart border). Colour: `Colors.red.shade600` at 85% opacity, ~1.5 px stroke, dashed pattern roughly `[4, 4]`. This makes it obvious which slice of the forecast is past vs. future without making the user read x-axis labels.
+
+In `fl_chart`, use `ExtraLinesData.verticalLines` with a `dashArray`. In a custom-paint overlay (the same one used for wind direction arrows), draw the line at the computed x position.
+
+The x position is derived the same way you find the closest index for the marker — see §E.0 for the timezone-correct comparison code.
+
+### F.2 Y-axis units
+
+Show the unit on the y-axis label of each chart so users don't have to read the legend to know the scale. Mapping:
+
+| Chart | Y-axis label |
+|---|---|
+| Temperatura e humidade | left `°C`, right `%` |
+| Vento e rajada | `km/h` |
+| Pressão atmosférica | `hPa` |
+| Precipitação acumulada | `mm` |
+| FRM | `%` |
+| FWI/ISI/BUI, DC/DMC/FFMC, RCM | (none — dimensionless) |
+
+In `fl_chart` this maps to `LeftTitles.axisNameWidget` / `RightTitles.axisNameWidget`.
+
+### F.3 Hover / tap tooltips with units and wind direction
+
+On the web every chart now uses `mode: 'index'` + `intersect: false` so the tooltip appears anywhere along the x range and shows all datasets for that hour at once, with the unit pulled out of the legend label. On mobile, do the same with a long-press / tap-hold gesture (fl_chart's `LineTouchData` exposes `getTooltipItems` and `touchTooltipData`).
+
+Output format:
+- `"Temperatura: 18.7 °C"` — name, colon, value to one decimal, unit. Skip the decimal when the magnitude is ≥ 100.
+- On the wind chart, append an extra line `"Direção: NE"` — 16-point cardinal computed from `windU` / `windV`:
+
+```dart
+const _cardinal = [
+  'E','ENE','NE','NNE','N','NNW','NW','WNW',
+  'W','WSW','SW','SSW','S','SSE','SE','ESE',
+];
+String? windCardinal(double? u, double? v) {
+  if (u == null || v == null) return null;
+  var deg = atan2(v, u) * 180 / pi;          // 0=E, 90=N (going-to convention)
+  if (deg < 0) deg += 360;
+  return _cardinal[(deg / 22.5).round() % 16];
+}
+```
+
+### F.4 Clamp the precipitation chart at zero
+
+IPMA's accumulated precipitation grid occasionally returns tiny negative values from numerical rounding (e.g. `-0.001 mm`). On the web we clamp at zero in two places:
+
+1. **Data**: any value below 0 is set to 0 before plotting.
+2. **Y-axis**: pin `minY = 0` on the precipitation `BarChartData` so the floor of the axis is zero regardless.
+
+Both layers are easy in `fl_chart`: clamp in the `BarChartGroupData` mapping and set `minY: 0`. Apply only to the precipitation chart — the other panels have legitimate negative values (e.g. FRM anomaly).
+
+### F.5 "Learn more" deep link
+
+After all eight charts, the web shows a small grey caption with a link `"O que significam estes gráficos?"` that jumps to the matching explainer section on the Informations page (anchor `#ipma-charts`). The Informations page now has a dedicated card listing every chart with its meaning, units, and a one-line interpretation tip.
+
+If the mobile app has an equivalent in-app "About" / "Information" screen, mirror that section there and add a `TextButton`/`InkWell` after the charts that pushes to it. Translations are in `elements.cards.ipmaCharts.learnMore`:
+
+| Key | PT | EN | ES |
+|---|---|---|---|
+| `learnMore` | O que significam estes gráficos? | What do these charts mean? | ¿Qué significan estos gráficos? |
+
+The detailed explainer copy lives under `pages.information.ipmaCharts.*` in `lang/{locale}/pages.php` — copy the same eight bullet items into the mobile app's localisations so the explanations stay in sync.
 
 ## G. Flutter implementation
 

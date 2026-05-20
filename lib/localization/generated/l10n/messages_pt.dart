@@ -84,7 +84,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "textResources" : MessageLookupByLibrary.simpleMessage("Meios"),
     "textRiskHigh" : MessageLookupByLibrary.simpleMessage("Elevado"),
     "textRiskModerate" : MessageLookupByLibrary.simpleMessage("Moderado"),
-    "textRiskOfFire" : MessageLookupByLibrary.simpleMessage("Risco de Incêndio"),
+    "textRiskOfFire" : MessageLookupByLibrary.simpleMessage("Perigo de Incêndio"),
     "textRiskReduced" : MessageLookupByLibrary.simpleMessage("Reduzido"),
     "textRiskVeryHigh" : MessageLookupByLibrary.simpleMessage("Muito Elevado"),
     "textShare" : m0,

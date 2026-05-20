@@ -349,7 +349,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "textRiskOfFire": "Risco de Incêndio",
+  "textRiskOfFire": "Perigo de Incêndio",
   "@textRiskOfFire": {
     "description": "Risk of Fire",
     "type": "text",

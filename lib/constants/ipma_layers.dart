@@ -1,4 +1,4 @@
-const String ipmaWmsBase = 'https://mf2.ipma.pt/services/';
+const String ipmaWmsBase = 'https://fogos.pt/v1/ipma-wms';
 
 class IpmaLayerGroup {
   final String key;

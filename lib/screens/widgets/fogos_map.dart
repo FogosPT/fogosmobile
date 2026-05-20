@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fogosmobile/constants/ipma_layers.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
@@ -61,10 +62,7 @@ class FogosMap extends StatefulWidget {
 class _FogosMapState extends State<FogosMap> {
   static final Point _center =
       Point(coordinates: Position(-8.088591, 39.806251));
-  static final List<String> _styles = [
-    MAPBOX_TEMPLATE_STYLE,
-    MAPBOX_URL_SATTELITE_TEMPLATE,
-  ];
+  static const String _neutralStyle = 'mapbox://styles/mapbox/light-v11';
 
   MapboxMap? _mapController;
   FireAnnotationManager? _fireManager;
@@ -72,14 +70,23 @@ class _FogosMapState extends State<FogosMap> {
   IpmaLayerManager? _ipmaManager;
   final Map<String, KmlLayerManager> _kmlVostManagers = {};
   KmlLayerManager? _kmlAreaManager;
-  int _lastAppliedTemplate = -1;
+  String? _lastAppliedStyle;
   bool _managersReady = false;
   double _zoom = 7.0;
 
-  int get _templateIndex => widget.useSatelliteStyle ? 1 : 0;
+  bool get _hasIpmaWmsActive => widget.activeIpmaLayers
+      .any((k) => ipmaAromeGroups.any((g) => g.key == k));
+
+  String get _currentStyle {
+    if (_hasIpmaWmsActive) return _neutralStyle;
+    return widget.useSatelliteStyle
+        ? MAPBOX_URL_SATTELITE_TEMPLATE
+        : MAPBOX_TEMPLATE_STYLE;
+  }
 
   void _onMapCreated(MapboxMap mapboxMap) {
     _mapController = mapboxMap;
+    _lastAppliedStyle = _currentStyle;
     _configureOrnaments();
     _enableLocationPuck();
   }
@@ -145,10 +152,10 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   void _updateStyleIfNeeded() {
-    final idx = _templateIndex;
-    if (_mapController != null && idx != _lastAppliedTemplate) {
-      _lastAppliedTemplate = idx;
-      _mapController!.style.setStyleURI(_styles[idx]);
+    final next = _currentStyle;
+    if (_mapController != null && next != _lastAppliedStyle) {
+      _lastAppliedStyle = next;
+      _mapController!.style.setStyleURI(next);
     }
   }
 
@@ -273,7 +280,7 @@ class _FogosMapState extends State<FogosMap> {
     return Stack(
       children: [
         MapWidget(
-          styleUri: _styles[_templateIndex],
+          styleUri: _currentStyle,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoaded,
           onCameraChangeListener: (_) {
@@ -294,6 +301,8 @@ class _FogosMapState extends State<FogosMap> {
           child: _MapScaleBar(zoom: _zoom),
         ),
         const IpmaLegendOverlay(),
+        if (_hasIpmaWmsActive && widget.ipmaReferenceTime != null)
+          _IpmaRunBanner(referenceTime: widget.ipmaReferenceTime!),
         if (widget.overlayButtons != null) widget.overlayButtons!,
         const MapOverlayErrorInfoWidget(),
       ],
@@ -347,6 +356,51 @@ class _MapScaleBar extends StatelessWidget {
                   color: Colors.black87,
                   fontWeight: FontWeight.w500)),
         ],
+      ),
+    );
+  }
+}
+
+class _IpmaRunBanner extends StatelessWidget {
+  final String referenceTime;
+  const _IpmaRunBanner({required this.referenceTime});
+
+  static String _two(int n) => n < 10 ? '0$n' : '$n';
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime? local;
+    try {
+      final hasTz = referenceTime.endsWith('Z') ||
+          RegExp(r'[+-]\d{2}:?\d{2}$').hasMatch(referenceTime);
+      local = DateTime.parse(
+              hasTz ? referenceTime : '${referenceTime}Z')
+          .toLocal();
+    } catch (_) {
+      return const SizedBox.shrink();
+    }
+    final formatted = '${_two(local.day)}/${_two(local.month)}/${local.year} '
+        '${_two(local.hour)}:${_two(local.minute)}';
+    return Positioned(
+      top: 8,
+      right: 8,
+      child: SafeArea(
+        child: Container(
+          padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.85),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Text(
+            'Corrida do modelo: $formatted (hora local)',
+            style: const TextStyle(
+              fontSize: 10,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
       ),
     );
   }

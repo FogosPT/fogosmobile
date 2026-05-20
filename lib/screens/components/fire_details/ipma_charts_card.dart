@@ -12,6 +12,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 const Color _kPrimary = Color(0xffF25C54);
 
+String _two(int n) => n < 10 ? '0$n' : '$n';
+
+String _formatRunTime(DateTime local) {
+  return '${_two(local.day)}/${_two(local.month)}/${local.year} '
+      '${_two(local.hour)}:${_two(local.minute)}';
+}
+
 class IpmaChartsCard extends StatefulWidget {
   final double lat;
   final double lng;
@@ -70,9 +77,20 @@ class _IpmaChartsCardState extends State<IpmaChartsCard> {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 4),
               child: _AttributionLine(),
             ),
+            if (data.referenceTimeLocal != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                child: Text(
+                  'Corrida do modelo: ${_formatRunTime(data.referenceTimeLocal!)} (hora local)',
+                  style: const TextStyle(
+                      fontSize: 11, color: Colors.black54),
+                ),
+              )
+            else
+              const SizedBox(height: 8),
             _ChartSection(
               title: 'Temperatura e humidade',
               description:
@@ -82,13 +100,13 @@ class _IpmaChartsCardState extends State<IpmaChartsCard> {
             _ChartSection(
               title: 'Vento e rajada',
               description:
-                  'Velocidade média do vento e rajadas (km/h). As setas no topo indicam a direção (para onde sopra). Vento e rajadas fortes aumentam o risco de propagação.',
+                  'Velocidade média do vento e rajadas (km/h). A ponta da seta indica para onde o vento sopra. Vento e rajadas fortes aumentam o risco de propagação.',
               child: _WindChart(hourly: data.hourly),
             ),
             _ChartSection(
               title: 'Pressão atmosférica',
               description:
-                  'Pressão atmosférica ao nível do mar (hPa). Quedas rápidas indicam aproximação de sistemas instáveis.',
+                  'Pressão atmosférica ao nível do mar (hPa). Variações bruscas podem indicar aproximação e passagem de superfícies frontais.',
               child: _SingleHourlyLine(
                 hourly: data.hourly,
                 valueOf: (h) => h.pressure,
@@ -100,7 +118,7 @@ class _IpmaChartsCardState extends State<IpmaChartsCard> {
             _ChartSection(
               title: 'Precipitação acumulada',
               description:
-                  'Precipitação acumulada por hora (mm). Útil para perceber alívio (ou ausência dele) nas próximas horas.',
+                  'Precipitação prevista acumulada numa hora (mm). Útil para perceber alívio (ou ausência dele) nas próximas horas.',
               child: _PrecipBars(hourly: data.hourly),
             ),
             _ChartSection(
@@ -127,7 +145,7 @@ class _IpmaChartsCardState extends State<IpmaChartsCard> {
             _ChartSection(
               title: 'DC / DMC / FFMC',
               description:
-                  'Códigos de humidade de combustíveis (diários, sem unidade). FFMC: combustíveis finos à superfície (litter). DMC: camada intermédia. DC: profunda/seca de longo prazo. Valores altos = combustível seco.',
+                  'Índices de humidade de combustíveis (diários, sem unidade). FFMC: combustíveis finos à superfície (litter). DMC: camada intermédia. DC: profunda/seca de longo prazo. Valores altos = combustível seco.',
               child: _MultiDailyLine(
                 series: [
                   _DailySeriesSpec(
@@ -163,17 +181,14 @@ class _IpmaChartsCardState extends State<IpmaChartsCard> {
                 ],
               ),
             ),
-            _ChartSection(
-              title: 'RCM (estação)',
-              description:
-                  'Risco Conjuntural Meteorológico de incêndio rural (escala 1 a 5, IPMA): 1 reduzido, 2 moderado, 3 elevado, 4 muito elevado, 5 máximo.',
-              child: _MultiDailyLine(
-                series: [
-                  _DailySeriesSpec(
-                      label: 'RCM (1–5)',
-                      color: _kPrimary,
-                      data: data.daily['rcm']),
-                ],
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+              child: Text(
+                'O Perigo de Incêndio Rural (RCM, escala 1–5) está disponível como camada do mapa principal.',
+                style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.black54,
+                    fontStyle: FontStyle.italic),
               ),
             ),
             Padding(
@@ -216,7 +231,7 @@ class _AttributionLine extends StatelessWidget {
       onTap: () => launchUrl(Uri.parse('https://www.ipma.pt'),
           mode: LaunchMode.externalApplication),
       child: const Text(
-        'Dados: IPMA (modelo AROME + LSA-SAF)',
+        'Dados: IPMA — previsão ECMWF (12 UTC) + LSA-SAF',
         style: TextStyle(
             fontSize: 11, color: Colors.black54, fontStyle: FontStyle.italic),
       ),

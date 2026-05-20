@@ -16,15 +16,15 @@ Os números disponibilizados são os totais de meios accionados. O número pode 
 # 
 As horas indicadas tanto no gráfico de meios como na linha do tempo dos estados do incêndios, são as horas que o nosso sistema detetou uma mudança de dados por parte da ANEPC podendo não corresponder ao momento exato em que essa alteração ocorreu.
 # 
-_Risco de incêndio recolhido do IPMA_.
-# 
-# 
-# ÍNDICES DE RISCO DE INCÊNDIO
-# 
-# 
-- (FWI) Índice Meteorológico de Risco de Incêndio - Este é o índice final do sistema Canadiano, sendo calculado em função dos seus sub-índices ISI e BUI.
+_Perigo de incêndio recolhido do IPMA_.
+#
+#
+# ÍNDICES DE PERIGO DE INCÊNDIO
+#
+#
+- (FWI) Índice Meteorológico de Perigo de Incêndio - Este é o índice final do sistema Canadiano, sendo calculado em função dos seus sub-índices ISI e BUI.
 - (FFMC) Índice de Humidade dos Combustíveis Finos - Este índice, classifica os combustíveis finos mortos, de secagem rápida, quanto ao seu conteúdo em humidade. Corresponde assim ao grau de inflamabilidade destes combustíveis, que se encontram à superfície do solo. O conteúdo de humidade destes combustíveis às 12 UTC de um determinado dia, depende do conteúdo de humidade à mesma hora, do dia anterior, da precipitação (mm) ocorrida em 24 horas (12-12 UTC) e da temperatura (ºC) e da humidade relativa do ar (%) às 12 UTC do próprio dia. A intensidade do vento influência apenas na velocidade de secagem destes materiais.
-- (ISI) Índice de Propagação Inicial - Este índice de propagação inicial do fogo, depende do sub-índice FFMC e da intensidade do vento (Km/h) às 12 UTC.
+- (ISI) Índice de Propagação Inicial - Este índice de propagação inicial do fogo, depende do sub-índice FFMC e da intensidade do vento (km/h) às 12 UTC.
 - (BUI) Índice de Combustível Disponível - O índice de combustível disponível, é um factor de avaliação dos vegetais que podem alimentar um fogo (combustíveis "pesados" que se encontram no solo) e é calculado a partir de dois dos sub-índices: DMC e DC.
 - (DC) Índice de Húmus - Este índice traduz o conteúdo de humidade do húmus e materiais lenhosos de tamanho médio que se encontram abaixo da superfície do solo até cerca de 8 cm. O índice de húmus é calculado a partir da precipitação ocorrida em 24 horas (12-12 UTC), da temperatura e humidade relativa do ar às 12 UTC e do índice de húmus da véspera.
 - (DMC) Índice de Seca - Este índice é um bom indicador dos efeitos da seca sazonal nos combustíveis florestais (húmus e materiais lenhosos de maiores dimensões), que se encontram abaixo da superfície do solo, entre 8 e 20 cm de profundidade. O índice de seca é obtido a partir da precipitação ocorrida em 24 horas, da temperatura às 12 UTC e do índice de seca verificado na véspera.
@@ -35,18 +35,35 @@ _Informação retirada do IPMA_.
 # GRÁFICOS DE PREVISÃO IPMA (DETALHE DO INCIDENTE)
 #
 #
-Na página de detalhe de cada incidente são apresentados oito gráficos com a previsão IPMA para o local exato do fogo. As séries horárias cobrem ~48 h e as diárias até 7 dias. Uma linha vertical vermelha tracejada indica a hora atual; arraste lateralmente para ver mais horas/dias.
+Na página de detalhe de cada incidente são apresentados gráficos com a previsão IPMA para o local exato do fogo. As séries horárias cobrem ~48 h e as diárias até 10 dias. Uma linha vertical vermelha tracejada indica a hora atual; arraste lateralmente para ver mais horas/dias. A "Corrida do modelo" indicada no topo é a hora a que a previsão foi calculada.
 #
 - __Temperatura e humidade__ — Temperatura do ar a 2 m (°C) e humidade relativa (%). Calor + ar seco favorecem o início e a propagação do fogo.
-- __Vento e rajada__ — Velocidade média e rajadas (km/h). As setas no topo indicam a direção (para onde sopra). Vento forte e rajadas aumentam o risco.
-- __Pressão atmosférica__ — Pressão ao nível do mar (hPa). Quedas rápidas podem indicar instabilidade.
-- __Precipitação acumulada__ — Quantidade de chuva por hora (mm). Útil para perceber se há ou não alívio meteorológico.
-- __FWI / ISI / BUI__ — Índices do sistema Canadiano (sem unidade, diários). FWI = perigo global; ISI = facilidade de propagação (vento + combustível fino); BUI = quantidade de combustível disponível.
-- __DC / DMC / FFMC__ — Códigos de humidade dos combustíveis (sem unidade, diários). FFMC = combustíveis finos à superfície; DMC = camada intermédia; DC = profunda/seca de longo prazo. Valores altos = combustível seco.
-- __FRM — probabilidade e anomalia__ — Fire Risk Map (LSA-SAF). Prob. extremos (%): probabilidade de FWI acima do percentil 2000. Anomalia: desvio face ao normal climatológico.
-- __RCM (estação)__ — Risco Conjuntural Meteorológico de incêndio rural (escala 1 a 5): 1 reduzido, 2 moderado, 3 elevado, 4 muito elevado, 5 máximo.
+- __Vento e rajada__ — Velocidade média e rajadas (km/h). A ponta da seta indica para onde o vento sopra. Vento forte e rajadas aumentam o risco.
+- __Pressão atmosférica__ — Pressão ao nível do mar (hPa). Variações bruscas podem indicar aproximação e passagem de superfícies frontais.
+- __Precipitação acumulada__ — Precipitação prevista acumulada numa hora (mm). Útil para perceber se há ou não alívio meteorológico.
+- __FWI / ISI / BUI__ — Índices do sistema Canadiano (sem unidade, diários, ECMWF 12 UTC). FWI = perigo global; ISI = facilidade de propagação (vento + combustível fino); BUI = quantidade de combustível disponível.
+- __DC / DMC / FFMC__ — Índices de humidade dos combustíveis (sem unidade, diários, ECMWF 12 UTC). FFMC = combustíveis finos à superfície; DMC = camada intermédia; DC = profunda/seca de longo prazo. Valores altos = combustível seco.
+- __FRM — probabilidade e anomalia__ — Fire Risk Map (LSA-SAF, satélite + previsão ECMWF). Prob. extremos (%): probabilidade de FWI acima do percentil 2000. Anomalia: desvio face ao normal climatológico.
 #
-_Dados: IPMA (modelo AROME + LSA-SAF)_.
+_O Perigo de Incêndio Rural (RCM, escala 1–5) está disponível como camada do mapa principal._
+#
+_Dados: IPMA — previsão ECMWF (12 UTC) + LSA-SAF._
+#
+#
+# PERIGO DE INCÊNDIO RURAL (RCM)
+#
+#
+O Perigo de Incêndio Rural (RCM) combina o FWI com a carta de perigosidade do território para classificar cada concelho/estação em 5 classes:
+#
+- __1 — Reduzido__
+- __2 — Moderado__
+- __3 — Elevado__
+- __4 — Muito elevado__
+- __5 — Máximo__
+#
+A camada do RCM no mapa pode ser ativada para "hoje", "amanhã" ou "depois de amanhã".
+#
+_Fonte: IPMA — https://www.ipma.pt/pt/riscoincendio/rcm.pt/_.
 #
 #
 """;

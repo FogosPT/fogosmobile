@@ -407,7 +407,7 @@ class FogosLocalizations {
       );
 
   String get textRiskOfFire => Intl.message(
-        "Risco de Incêndio",
+        "Perigo de Incêndio",
         name: 'textRiskOfFire',
         desc: 'Risk of Fire',
       );

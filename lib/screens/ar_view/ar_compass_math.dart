@@ -41,6 +41,23 @@ double bearingTo(double lat1, double lng1, double lat2, double lng2) {
   return (azimuthDeg, pitchDeg);
 }
 
+/// Roll-compensated azimuth: uses the accelerometer only to derive rotation
+/// around the device Z axis (camera axis), so portrait / landscape-left /
+/// landscape-right all yield the camera's true heading. Pitch (Y axis) is
+/// ignored — avoids the noisy g·z component that destabilises the full
+/// tilt-compensated formula in `computeHeadingAndPitch`.
+/// Returns NaN when gravity has no XY component (phone flat / face up).
+double computeHeadingRollCompensated(List<double> accel, List<double> mag) {
+  final ax = accel[0], ay = accel[1];
+  final gxy = sqrt(ax * ax + ay * ay);
+  if (gxy < 1e-3) return double.nan;
+  final cosRoll = ay / gxy;
+  final sinRoll = -ax / gxy;
+  final mxRot = mag[0] * cosRoll - mag[1] * sinRoll;
+  final azimuthRad = atan2(-mxRot, -mag[2]);
+  return (azimuthRad * 180 / pi + 360) % 360;
+}
+
 /// Simplified azimuth for a phone held perfectly upright (portrait).
 /// Camera points along -Z device axis → azimuth = atan2(-mx, -mz).
 /// Avoids tilt-compensation errors when pitch is assumed to be ~0.

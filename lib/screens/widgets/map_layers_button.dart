@@ -14,6 +14,10 @@ class MapLayersButton extends StatelessWidget {
   const MapLayersButton({Key? key}) : super(key: key);
 
   void _openLayersSheet(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
+    if (!store.state.ipmaReferenceTimeLoaded) {
+      store.dispatch(LoadIpmaReferenceTimeAction());
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -52,13 +56,19 @@ class MapLayersButton extends StatelessWidget {
                     icon: Icons.blur_on,
                     label: 'VIIRS',
                     active: state.showViirs,
-                    onTap: () => store.dispatch(ShowViirsAction()),
+                    onTap: () {
+                      if (!state.showViirs) store.dispatch(LoadViirsAction());
+                      store.dispatch(ShowViirsAction());
+                    },
                   ),
                   _LayerTile(
                     icon: Icons.blur_circular,
                     label: 'MODIS',
                     active: state.showModis,
-                    onTap: () => store.dispatch(ShowModisAction()),
+                    onTap: () {
+                      if (!state.showModis) store.dispatch(LoadModisAction());
+                      store.dispatch(ShowModisAction());
+                    },
                   ),
                   _LayerTile(
                     icon: Icons.whatshot,

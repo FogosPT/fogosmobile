@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -17,6 +19,8 @@ class _KmlMapWidgetState extends State<KmlMapWidget> {
   MapboxMap? _map;
   late final Map<String, dynamic>? _geoJson;
   late final CameraOptions _initialCamera;
+  bool _satellite = false;
+  bool _layersAdded = false;
 
   @override
   void initState() {
@@ -55,7 +59,18 @@ class _KmlMapWidgetState extends State<KmlMapWidget> {
       lineWidth: 2.0,
     ));
 
-    await _fitCamera();
+    if (!_layersAdded) {
+      _layersAdded = true;
+      await _fitCamera();
+    }
+  }
+
+  Future<void> _toggleSatellite() async {
+    if (_map == null) return;
+    setState(() => _satellite = !_satellite);
+    await _map!.style.setStyleURI(
+      _satellite ? MAPBOX_URL_SATTELITE_TEMPLATE : MAPBOX_TEMPLATE_STYLE,
+    );
   }
 
   Future<void> _fitCamera() async {
@@ -95,12 +110,43 @@ class _KmlMapWidgetState extends State<KmlMapWidget> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: SizedBox(
-        height: 220,
-        child: MapWidget(
-          styleUri: MAPBOX_TEMPLATE_STYLE,
-          onMapCreated: _onMapCreated,
-          onStyleLoadedListener: _onStyleLoaded,
-          cameraOptions: _initialCamera,
+        height: 260,
+        child: Stack(
+          children: [
+            MapWidget(
+              styleUri: _satellite
+                  ? MAPBOX_URL_SATTELITE_TEMPLATE
+                  : MAPBOX_TEMPLATE_STYLE,
+              onMapCreated: _onMapCreated,
+              onStyleLoadedListener: _onStyleLoaded,
+              cameraOptions: _initialCamera,
+              gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                Factory<OneSequenceGestureRecognizer>(
+                    () => EagerGestureRecognizer()),
+              },
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Material(
+                color: Colors.white.withValues(alpha: 0.9),
+                shape: const CircleBorder(),
+                elevation: 2,
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: _toggleSatellite,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Icon(
+                      _satellite ? Icons.map : Icons.satellite_alt,
+                      size: 20,
+                      color: const Color(0xffF25C54),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

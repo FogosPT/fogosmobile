@@ -219,7 +219,7 @@ class _ArViewScreenState extends State<ArViewScreen> {
             bottom: 40,
             left: 0,
             right: 0,
-            child: Center(child: _buildBanner('Sem incêndios nos 50 km à volta')),
+            child: Center(child: _buildBanner('Sem incêndios nos 50 km desta direcção')),
           );
         }
 

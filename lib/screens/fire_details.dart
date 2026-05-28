@@ -162,6 +162,15 @@ class FireDetailsPage extends StatelessWidget {
                 SizedBox(height: 15),
                 MeansStatistics(),
                 SizedBox(height: 25),
+                if (fire.kmlVost != null) ...[
+                  ListTile(title: Text('ÁREA DE INTERESSE', style: _header)),
+                  SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: KmlMapWidget(kmlContent: fire.kmlVost!),
+                  ),
+                  SizedBox(height: 25),
+                ],
                 ListTile(title: Text(FogosLocalizations.of(context).textStatus.toUpperCase(), style: _header)),
                 SizedBox(height: 15),
                 DetailsHistoryStats(),
@@ -182,7 +191,7 @@ class FireDetailsPage extends StatelessWidget {
                 ),
                 SizedBox(height: 25),
                 if (fire.weather != null) ...[
-                  ListTile(title: Text('TEMPO', style: _header)),
+                  ListTile(title: Text('METEREOLOGIA', style: _header)),
                   SizedBox(height: 15),
                   WeatherCard(weather: fire.weather!),
                   SizedBox(height: 25),
@@ -194,15 +203,6 @@ class FireDetailsPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: KmlMapWidget(kmlContent: fire.kml!),
-                  ),
-                  SizedBox(height: 25),
-                ],
-                if (fire.kmlVost != null) ...[
-                  ListTile(title: Text('ÁREA DE INTERESSE', style: _header)),
-                  SizedBox(height: 15),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: KmlMapWidget(kmlContent: fire.kmlVost!),
                   ),
                   SizedBox(height: 25),
                 ],

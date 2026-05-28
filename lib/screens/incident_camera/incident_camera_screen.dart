@@ -170,9 +170,10 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _initSensors() {
-    // Tilt-compensated heading needs both accelerometer (gravity vector) and
-    // magnetometer; without gravity the azimuth drifts when the device is
-    // pitched forward/back, even with no rotation around the vertical axis.
+    // Roll-compensated heading: accelerometer is used only to detect rotation
+    // around the camera (Z) axis so portrait and landscape both work. The
+    // vertical (pitch) axis is ignored — the full tilt-compensated formula
+    // was numerically unstable and flipped the azimuth ~180°.
     _accelSub = accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _accel = [
         _alpha * e.x + (1 - _alpha) * _accel[0],
@@ -192,7 +193,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _updateHeading() {
-    final (az, _) = computeHeadingAndPitch(_accel, _mag);
+    final az = computeHeadingRollCompensated(_accel, _mag);
+    if (az.isNaN) return;
     if ((az - _deviceHeading).abs() > 0.5) {
       if (mounted) setState(() => _deviceHeading = az);
     }

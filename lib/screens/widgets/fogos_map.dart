@@ -92,8 +92,16 @@ class _FogosMapState extends State<FogosMap> {
   }
 
   void _configureOrnaments() {
+    // Compass top-left, below the scale bar (~24px tall at top:8). Fades to
+    // invisible when facing north so it doesn't clutter the map most of the
+    // time. Top-right is taken by IPMA banner + layers button; bottom corners
+    // are taken by copyright (right) and IPMA legend (left).
     _mapController!.compass.updateSettings(CompassSettings(
-      enabled: false,
+      enabled: true,
+      position: OrnamentPosition.TOP_LEFT,
+      marginLeft: 8,
+      marginTop: 44,
+      fadeWhenFacingNorth: true,
     ));
     // Native scale bar disabled — replaced by Flutter overlay widget.
     _mapController!.scaleBar.updateSettings(ScaleBarSettings(

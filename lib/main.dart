@@ -6,8 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
-import 'package:fogosmobile/actions/lightning_actions.dart';
-import 'package:fogosmobile/actions/ipma_actions.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:fogosmobile/services/fcm_migration_service.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -354,9 +352,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       try {
         final store = StoreProvider.of<AppState>(context);
         store.dispatch(LoadFiresAction());
-        store.dispatch(LoadModisAction());
-        store.dispatch(LoadViirsAction());
-        store.dispatch(LoadLightningsAction());
+        if (store.state.showModis) store.dispatch(LoadModisAction());
+        if (store.state.showViirs) store.dispatch(LoadViirsAction());
       } catch (e) {
         print('didChangeAppLifecycleState: failed to dispatch actions: $e');
       }
@@ -376,11 +373,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
         store.dispatch(LoadFiresAction());
-        store.dispatch(LoadLightningsAction());
-        store.dispatch(LoadModisAction());
-        store.dispatch(LoadViirsAction());
         store.dispatch(LoadAllPreferencesAction());
-        store.dispatch(LoadIpmaReferenceTimeAction());
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
@@ -391,9 +384,8 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 converter: (Store<AppState> store) {
                   return () {
                     store.dispatch(LoadFiresAction());
-                    store.dispatch(LoadLightningsAction());
-                    store.dispatch(LoadModisAction());
-                    store.dispatch(LoadViirsAction());
+                    if (store.state.showModis) store.dispatch(LoadModisAction());
+                    if (store.state.showViirs) store.dispatch(LoadViirsAction());
                     store.dispatch(LoadAllPreferencesAction());
                   };
                 },
@@ -402,8 +394,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     converter: (Store<AppState> store) => store.state,
                     onInit: (Store<AppState> store) {
                       store.dispatch(LoadFiresAction());
-                      store.dispatch(LoadModisAction());
-                      store.dispatch(LoadViirsAction());
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[

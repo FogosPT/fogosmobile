@@ -242,6 +242,14 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
       final composited = await _composeImage(bytes, lat, lng, alt, heading, captureTime);
 
+      // Preview the composed photo so the user can discard and retake before
+      // we touch tmp files, the gallery or the upload flow.
+      final keep = await _showPhotoPreview(composited);
+      if (!keep) {
+        if (mounted) setState(() => _isSaving = false);
+        return;
+      }
+
       // Inject the eXIf chunk into the PNG bytes ourselves. native_exif on
       // Android cannot write EXIF into PNG (ExifInterface only supports
       // JPEG/WebP/HEIC writes), and the fogos.pt API requires the eXIf chunk
@@ -328,6 +336,71 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
         setState(() => _isSaving = false);
       }
     }
+  }
+
+  Future<bool> _showPhotoPreview(Uint8List pngBytes) async {
+    final result = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            child: Column(
+              children: [
+                Expanded(
+                  child: InteractiveViewer(
+                    minScale: 1,
+                    maxScale: 4,
+                    child: Center(
+                      child: Image.memory(pngBytes, fit: BoxFit.contain),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            side: const BorderSide(color: Colors.white54),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          icon: const Icon(Icons.refresh),
+                          label: const Text(
+                            'Repetir',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          icon: const Icon(Icons.check),
+                          label: const Text(
+                            'Usar foto',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    return result == true;
   }
 
   Future<({bool cancelled, bool send, bool allowPublic})>

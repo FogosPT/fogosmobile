@@ -257,21 +257,11 @@ class _ChartSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(title,
-                    style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87)),
-              ),
-              const Icon(Icons.swipe, size: 14, color: Colors.black38),
-              const SizedBox(width: 4),
-              const Text('arraste',
-                  style: TextStyle(fontSize: 10, color: Colors.black38)),
-            ],
-          ),
+          Text(title,
+              style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87)),
           const SizedBox(height: 4),
           Text(
             description,
@@ -352,14 +342,7 @@ charts.SeriesLegend<DateTime> _bottomLegend() {
 }
 
 Widget _hScroll(BuildContext context, int n, double pxPerPoint, Widget chart) {
-  final screenW = MediaQuery.of(context).size.width - 32;
-  final wanted = (n.clamp(2, 1000)) * pxPerPoint;
-  final width = wanted > screenW ? wanted : screenW;
-  return SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    physics: const BouncingScrollPhysics(),
-    child: SizedBox(width: width, child: chart),
-  );
+  return chart;
 }
 
 charts.DateTimeAxisSpec _hourlyDomainAxis() {

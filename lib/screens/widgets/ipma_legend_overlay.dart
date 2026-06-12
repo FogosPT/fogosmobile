@@ -14,7 +14,7 @@ class IpmaLegendOverlay extends StatelessWidget {
       converter: (Store<AppState> store) => store.state.activeIpmaLayers,
       builder: (context, active) {
         final visible = ipmaAllGroups
-            .where((g) => active.contains(g.key))
+            .where((g) => active.contains(g.key) && g.key != ipmaFrpGroup.key)
             .toList();
         if (visible.isEmpty) return const SizedBox.shrink();
 

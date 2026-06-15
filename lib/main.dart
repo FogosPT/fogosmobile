@@ -179,9 +179,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       NearbyNotificationService.handleMessage(message);
     });
 
-    // Update stored location for nearby feature
-    NearbyNotificationService.updateStoredLocation();
-
     // Handle taps on nearby local notifications
     // Payload format: "fire:<id>" or "other:<id>"
     NearbyNotificationService.onNotificationTap = (payload) {
@@ -331,6 +328,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _setupFirebaseMessaging();
+    NearbyNotificationService.updateStoredLocation();
     _initDeepLinks();
   }
 

@@ -176,55 +176,78 @@ class NearbyNotificationService {
         payload: payload);
   }
 
-  static DateTime? _lastLocationFetch;
-  static const Duration _minFetchInterval = Duration(minutes: 10);
+  static const String _nearbyLocationTimestamp = 'nearby_location_ts';
 
-  /// Update the stored user location. Call periodically.
+  /// Max age of the stored location before we ask the OS for a fresh fix.
+  static const Duration _staleAfter = Duration(hours: 6);
+
+  /// Min spacing between active GPS requests within the same process.
+  static const Duration _minActiveFetchInterval = Duration(minutes: 30);
+  static DateTime? _lastActiveFetch;
+
+  /// Refresh the stored user location, preferring cheap sources.
   ///
-  /// Guards against the OS location-services prompt loop:
-  /// - skips when location services are disabled (would trigger the system
-  ///   "enable location" dialog on each call);
-  /// - skips when permission is denied (no prompt here — only the explicit
-  ///   opt-in screen in settings should prompt);
-  /// - throttles so app-resume churn doesn't re-trigger anything.
+  /// Strategy (cheapest → most expensive):
+  /// 1. If the stored location is fresher than [_staleAfter], do nothing.
+  /// 2. Otherwise try `getLastKnownPosition()` — no GPS wake-up, free.
+  /// 3. Only as a last resort, ask for a fresh fix, and at most once every
+  ///    [_minActiveFetchInterval] per process.
+  ///
+  /// Never triggers a system prompt: skips silently when location services
+  /// are off or permission is denied (the settings screen is the only place
+  /// that should prompt).
   static Future<void> updateStoredLocation() async {
     final prefs = await SharedPreferences.getInstance();
     final enabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
     if (!enabled) return;
 
-    final now = DateTime.now();
-    if (_lastLocationFetch != null &&
-        now.difference(_lastLocationFetch!) < _minFetchInterval) {
+    final storedTs = prefs.getInt(_nearbyLocationTimestamp);
+    final hasStored = prefs.getDouble(NearbyPrefs.nearbyLat) != null &&
+        prefs.getDouble(NearbyPrefs.nearbyLng) != null;
+    if (hasStored && storedTs != null) {
+      final age = DateTime.now().millisecondsSinceEpoch - storedTs;
+      if (age < _staleAfter.inMilliseconds) return;
+    }
+
+    if (!await Geolocator.isLocationServiceEnabled()) return;
+    final permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       return;
     }
 
     try {
-      final serviceOn = await Geolocator.isLocationServiceEnabled();
-      if (!serviceOn) {
-        _lastLocationFetch = now;
+      final last = await Geolocator.getLastKnownPosition();
+      if (last != null) {
+        await _persistPosition(prefs, last.latitude, last.longitude);
         return;
       }
+    } catch (_) {}
 
-      final permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        _lastLocationFetch = now;
-        return;
-      }
+    final now = DateTime.now();
+    if (_lastActiveFetch != null &&
+        now.difference(_lastActiveFetch!) < _minActiveFetchInterval) {
+      return;
+    }
+    _lastActiveFetch = now;
 
+    try {
       final position = await Geolocator.getCurrentPosition(
         locationSettings: const LocationSettings(
           accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
+          timeLimit: Duration(seconds: 15),
         ),
       );
+      await _persistPosition(prefs, position.latitude, position.longitude);
+    } catch (_) {}
+  }
 
-      _lastLocationFetch = now;
-      await prefs.setDouble(NearbyPrefs.nearbyLat, position.latitude);
-      await prefs.setDouble(NearbyPrefs.nearbyLng, position.longitude);
-    } catch (_) {
-      _lastLocationFetch = now;
-    }
+  static Future<void> _persistPosition(
+      SharedPreferences prefs, double lat, double lng) async {
+    await prefs.setDouble(NearbyPrefs.nearbyLat, lat);
+    await prefs.setDouble(NearbyPrefs.nearbyLng, lng);
+    await prefs.setInt(
+        _nearbyLocationTimestamp, DateTime.now().millisecondsSinceEpoch);
   }
 
   /// Subscribe/unsubscribe from the nearby FCM topic.

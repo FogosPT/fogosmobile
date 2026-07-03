@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/ipma_actions.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/constants/ipma_layers.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
@@ -50,6 +51,18 @@ class MapLayersButton extends StatelessWidget {
                     label: 'Outros fogos',
                     active: state.showNatureCodes,
                     onTap: () => store.dispatch(ToggleNatureCodesAction()),
+                  ),
+                  const _SectionHeader(label: 'Meios aéreos'),
+                  _LayerTile(
+                    icon: Icons.flight,
+                    label: 'Aviões',
+                    active: state.showPlanes,
+                    onTap: () {
+                      if (!state.showPlanes) {
+                        store.dispatch(LoadPlanesAction());
+                      }
+                      store.dispatch(ShowPlanesAction());
+                    },
                   ),
                   const _SectionHeader(label: 'Hotspots satélite'),
                   _LayerTile(
@@ -148,6 +161,7 @@ class MapLayersButton extends StatelessWidget {
         final anyActive = state.preferences[preferenceSatellite] == 1 ||
             state.showViirs ||
             state.showModis ||
+            state.showPlanes ||
             state.showNatureCodes ||
             state.activeIpmaLayers.isNotEmpty;
 

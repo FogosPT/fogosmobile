@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
@@ -352,6 +353,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
         store.dispatch(LoadFiresAction());
         if (store.state.showModis) store.dispatch(LoadModisAction());
         if (store.state.showViirs) store.dispatch(LoadViirsAction());
+        if (store.state.showPlanes) store.dispatch(LoadPlanesAction());
       } catch (e) {
         print('didChangeAppLifecycleState: failed to dispatch actions: $e');
       }
@@ -384,6 +386,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     store.dispatch(LoadFiresAction());
                     if (store.state.showModis) store.dispatch(LoadModisAction());
                     if (store.state.showViirs) store.dispatch(LoadViirsAction());
+                    if (store.state.showPlanes) store.dispatch(LoadPlanesAction());
                     store.dispatch(LoadAllPreferencesAction());
                   };
                 },

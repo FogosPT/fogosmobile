@@ -1,4 +1,5 @@
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
@@ -7,6 +8,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/contributors_reducer.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
 import 'package:fogosmobile/reducers/modis_reducer.dart';
+import 'package:fogosmobile/reducers/planes_reducer.dart';
 import 'package:fogosmobile/reducers/lightning_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -32,6 +34,7 @@ AppState appReducer(AppState state, action) {
   bool hasContributors = state.hasContributors;
   bool showViirs = state.showViirs;
   bool showModis = state.showModis;
+  bool showPlanes = state.showPlanes;
   bool showNatureCodes = state.showNatureCodes;
 
   if (action is LoadFiresAction) {
@@ -122,6 +125,12 @@ AppState appReducer(AppState state, action) {
   } else if (action is ShowModisAction) {
     showModis = !state.showModis;
     isLoading = state.isLoading;
+  } else if (action is ShowPlanesAction) {
+    showPlanes = !state.showPlanes;
+    isLoading = state.isLoading;
+  } else if (action is LoadPlanesAction ||
+      action is PlanesLoadedAction) {
+    isLoading = state.isLoading;
   } else if (action is ToggleNatureCodesAction) {
     showNatureCodes = !state.showNatureCodes;
     isLoading = state.isLoading;
@@ -162,8 +171,10 @@ AppState appReducer(AppState state, action) {
     warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
     modis: modisReducer(state.modis, action),
     viirs: viirsReducer(state.viirs, action),
+    planes: planesReducer(state.planes, action),
     showModis: showModis,
     showViirs: showViirs,
+    showPlanes: showPlanes,
     showNatureCodes: showNatureCodes,
     otherFires: otherFiresReducer(state.otherFires, action),
     allIncidents: allIncidentsReducer(state.allIncidents, action),

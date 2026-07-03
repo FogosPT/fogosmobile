@@ -5,6 +5,7 @@ import 'package:fogosmobile/constants/ipma_layers.dart';
 import 'package:fogosmobile/constants/variables.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
+import 'package:fogosmobile/models/plane.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
 import 'package:fogosmobile/screens/widgets/fire_annotation_manager.dart';
@@ -12,6 +13,7 @@ import 'package:fogosmobile/screens/widgets/ipma_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/ipma_legend_overlay.dart';
 import 'package:fogosmobile/screens/widgets/kml_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
+import 'package:fogosmobile/screens/widgets/plane_annotation_manager.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
 import 'package:geolocator/geolocator.dart' show Geolocator;
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -22,8 +24,10 @@ class FogosMap extends StatefulWidget {
   final List<FireStatus>? fireFilters;
   final List<Modis>? modis;
   final List<Viirs>? viirs;
+  final List<Plane>? planes;
   final bool showModis;
   final bool showViirs;
+  final bool showPlanes;
   final bool showNatureCodes;
   final bool useSatelliteStyle;
   final Set<String> activeIpmaLayers;
@@ -33,6 +37,7 @@ class FogosMap extends StatefulWidget {
   final void Function(Fire)? onFireTap;
   final void Function(Modis)? onModisTap;
   final void Function(Viirs)? onViirsTap;
+  final void Function(Plane)? onPlaneTap;
   final Widget? overlayButtons;
 
   const FogosMap({
@@ -41,8 +46,10 @@ class FogosMap extends StatefulWidget {
     this.fireFilters,
     this.modis,
     this.viirs,
+    this.planes,
     this.showModis = false,
     this.showViirs = false,
+    this.showPlanes = false,
     this.showNatureCodes = true,
     this.useSatelliteStyle = false,
     this.activeIpmaLayers = const {},
@@ -52,6 +59,7 @@ class FogosMap extends StatefulWidget {
     this.onFireTap,
     this.onModisTap,
     this.onViirsTap,
+    this.onPlaneTap,
     this.overlayButtons,
   });
 
@@ -67,6 +75,7 @@ class _FogosMapState extends State<FogosMap> {
   MapboxMap? _mapController;
   FireAnnotationManager? _fireManager;
   SatelliteAnnotationManager? _satelliteManager;
+  PlaneAnnotationManager? _planeManager;
   IpmaLayerManager? _ipmaManager;
   final Map<String, KmlLayerManager> _kmlVostManagers = {};
   KmlLayerManager? _kmlAreaManager;
@@ -132,6 +141,7 @@ class _FogosMapState extends State<FogosMap> {
 
     await _fireManager?.dispose();
     await _satelliteManager?.dispose();
+    await _planeManager?.dispose();
     _ipmaManager = null;
 
     if (_mapController == null || !mounted) return;
@@ -148,6 +158,12 @@ class _FogosMapState extends State<FogosMap> {
       onViirsTap: widget.onViirsTap,
     );
     await _satelliteManager!.init();
+
+    _planeManager = PlaneAnnotationManager(
+      mapboxMap: _mapController!,
+      onPlaneTap: widget.onPlaneTap,
+    );
+    await _planeManager!.init();
 
     _kmlVostManagers.clear();
     _kmlAreaManager = KmlLayerManager(mapboxMap: _mapController!, id: 'area');
@@ -190,6 +206,11 @@ class _FogosMapState extends State<FogosMap> {
       _syncViirs();
     }
 
+    if (widget.planes != oldWidget.planes ||
+        widget.showPlanes != oldWidget.showPlanes) {
+      _syncPlanes();
+    }
+
     if (widget.kmlVostUrls != oldWidget.kmlVostUrls) {
       _syncKml();
     }
@@ -209,6 +230,7 @@ class _FogosMapState extends State<FogosMap> {
     _syncFires();
     _syncModis();
     _syncViirs();
+    _syncPlanes();
     _syncKml();
     _syncKmlArea();
   }
@@ -244,6 +266,14 @@ class _FogosMapState extends State<FogosMap> {
     }
   }
 
+  void _syncPlanes() {
+    if (widget.showPlanes && widget.planes != null) {
+      _planeManager?.syncPlanes(widget.planes!);
+    } else {
+      _planeManager?.clear();
+    }
+  }
+
   void _syncKml() {
     if (_mapController == null) return;
     final newUrls = widget.kmlVostUrls.toSet();
@@ -276,6 +306,7 @@ class _FogosMapState extends State<FogosMap> {
   void dispose() {
     _fireManager?.dispose();
     _satelliteManager?.dispose();
+    _planeManager?.dispose();
     for (final m in _kmlVostManagers.values) {
       m.clear();
     }

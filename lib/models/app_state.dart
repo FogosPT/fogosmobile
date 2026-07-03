@@ -2,6 +2,7 @@ import 'package:fogosmobile/models/contributor.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/lightning.dart';
 import 'package:fogosmobile/models/modis.dart';
+import 'package:fogosmobile/models/plane.dart';
 import 'package:fogosmobile/models/statistics.dart';
 import 'package:fogosmobile/models/fire_details.dart';
 import 'package:fogosmobile/models/viirs.dart';
@@ -31,8 +32,10 @@ class AppState {
   List warningsMadeira;
   List<Viirs> viirs;
   List<Modis> modis;
+  List<Plane> planes;
   bool showModis;
   bool showViirs;
+  bool showPlanes;
   bool showNatureCodes;
   List<Fire> otherFires;
   List<Fire> allIncidents;
@@ -65,8 +68,10 @@ class AppState {
     this.warningsMadeira = const [],
     this.viirs = const [],
     this.modis = const [],
+    this.planes = const [],
     this.showModis = false,
     this.showViirs = false,
+    this.showPlanes = false,
     this.showNatureCodes = true,
     this.otherFires = const [],
     this.allIncidents = const [],
@@ -100,8 +105,10 @@ class AppState {
     List? warningsMadeira,
     List<Viirs>? viirs,
     List<Modis>? modis,
+    List<Plane>? planes,
     bool? showModis,
     bool? showViirs,
+    bool? showPlanes,
     bool? showNatureCodes,
     List<Fire>? otherFires,
     List<Fire>? allIncidents,
@@ -135,8 +142,10 @@ class AppState {
       warningsMadeira: warningsMadeira ?? this.warningsMadeira,
       viirs: viirs ?? this.viirs,
       modis: modis ?? this.modis,
+      planes: planes ?? this.planes,
       showModis: showModis ?? this.showModis,
       showViirs: showViirs ?? this.showViirs,
+      showPlanes: showPlanes ?? this.showPlanes,
       showNatureCodes: showNatureCodes ?? this.showNatureCodes,
       otherFires: otherFires ?? this.otherFires,
       allIncidents: allIncidents ?? this.allIncidents,

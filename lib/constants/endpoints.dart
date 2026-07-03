@@ -33,4 +33,7 @@ abstract class Endpoints {
   static String incidentPhotosListUrl(String fireId,
           {int page = 1, int perPage = 20}) =>
       "$fogosApiBase/v2/incidents/$fireId/photos?page=$page&per_page=$perPage";
+
+  static String getRecentPlanes({int hours = 6}) =>
+      "$fogosApiBase/v2/planes/recent?hours=$hours";
 }

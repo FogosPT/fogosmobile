@@ -1,4 +1,5 @@
 import 'package:fogosmobile/middleware/modis_middleware.dart';
+import 'package:fogosmobile/middleware/planes_middleware.dart';
 import 'package:fogosmobile/middleware/viirs_middleware.dart';
 import 'package:fogosmobile/middleware/lightnings_middleware.dart';
 import 'package:fogosmobile/middleware/other_fires_middleware.dart';
@@ -30,8 +31,10 @@ final store = Store<AppState>(
     warningsMadeira: [],
     modis: [],
     viirs: [],
+    planes: [],
     showModis: false,
     showViirs: false,
+    showPlanes: false,
     otherFires: [],
     allIncidents: [],
     searchResults: [],
@@ -44,6 +47,7 @@ final store = Store<AppState>(
     ..addAll(contributorsMiddleware())
     ..addAll(viirsMiddleware())
     ..addAll(modisMiddleware())
+    ..addAll(planesMiddleware())
     ..addAll(warningsMiddleware())
     ..addAll(warningsMiddleware())
     ..addAll(lightningMiddleware())

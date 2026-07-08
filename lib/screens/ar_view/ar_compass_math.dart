@@ -20,25 +20,55 @@ double bearingTo(double lat1, double lng1, double lat2, double lng2) {
   if (norm == 0) return (0, 0);
   final ax = accel[0] / norm, ay = accel[1] / norm, az = accel[2] / norm;
 
+  // E = mag × g (device frame): points along world East, perpendicular to both.
   final ex = mag[1] * az - mag[2] * ay;
   final ey = mag[2] * ax - mag[0] * az;
   final ez = mag[0] * ay - mag[1] * ax;
   final enorm = sqrt(ex * ex + ey * ey + ez * ez);
   if (enorm == 0) return (0, 0);
 
-  // nz = third component of (g × E) — needed for the camera-direction azimuth.
-  final nz = ax * ez / enorm - az * ex / enorm;
+  // Nz = z-component of world-North in device frame = (g × E)_z.
+  // Previous formula (ax*ez − az*ex) was actually −(g × E)_y and gave wrong
+  // headings whenever the phone was tilted.
+  final nz = (ax * ey - ay * ex) / enorm;
 
-  // Camera (back lens) points along -Z in device frame. The correct azimuth for
-  // the camera direction is atan2(E·(-Z), N·(-Z)) = atan2(-Ez, -Nz).
-  // Using the X-component atan2(ex, nx) was correct only for a flat phone where
-  // the camera faces down; for portrait/upright AR it was systematically off.
+  // Camera (back lens) points along -Z in device frame. Azimuth of the camera
+  // direction is atan2(E·(-Z), N·(-Z)) = atan2(-Ez, -Nz).
   final azimuthRad = atan2(-ez / enorm, -nz);
   final azimuthDeg = (azimuthRad * 180 / pi + 360) % 360;
   // Pitch: az≈0 when upright (camera at horizon). Tilting back (camera up)
   // makes az positive → pitch negative → fires shift toward top of screen.
   final pitchDeg = asin(-az) * 180 / pi;
   return (azimuthDeg, pitchDeg);
+}
+
+/// Fully tilt-compensated azimuth of the camera direction (`-Z_device`).
+/// Handles pitch AND roll — use this when the photo direction has to be
+/// registered accurately even if the phone is tilted up/down to frame a fire
+/// on a hillside.
+/// Returns NaN when accel or mag magnitudes are zero, or when gravity aligns
+/// with the mag field (undefined East).
+double computeHeadingTiltCompensated(List<double> accel, List<double> mag) {
+  final anorm = sqrt(accel[0] * accel[0] + accel[1] * accel[1] + accel[2] * accel[2]);
+  if (anorm == 0) return double.nan;
+  final ax = accel[0] / anorm, ay = accel[1] / anorm, az = accel[2] / anorm;
+
+  final ex = mag[1] * az - mag[2] * ay;
+  final ey = mag[2] * ax - mag[0] * az;
+  final ez = mag[0] * ay - mag[1] * ax;
+  final enorm = sqrt(ex * ex + ey * ey + ez * ez);
+  if (enorm < 1e-6) return double.nan;
+
+  final nz = (ax * ey - ay * ex) / enorm;
+  final azimuthRad = atan2(-ez / enorm, -nz);
+  return (azimuthRad * 180 / pi + 360) % 360;
+}
+
+/// Magnitude of the magnetic field vector, in μT (or whatever units the
+/// magnetometer reports). Earth's surface field is 25–65 μT; readings well
+/// outside that range usually mean nearby metal / electronics interference.
+double magneticFieldMagnitude(List<double> mag) {
+  return sqrt(mag[0] * mag[0] + mag[1] * mag[1] + mag[2] * mag[2]);
 }
 
 /// Roll-compensated azimuth: uses the accelerometer only to derive rotation

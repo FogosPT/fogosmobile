@@ -12,6 +12,7 @@ import 'package:fogosmobile/screens/widgets/fire_annotation_manager.dart';
 import 'package:fogosmobile/screens/widgets/ipma_layer_manager.dart';
 import 'package:fogosmobile/screens/widgets/ipma_legend_overlay.dart';
 import 'package:fogosmobile/screens/widgets/kml_layer_manager.dart';
+import 'package:fogosmobile/screens/widgets/map_my_location_button.dart';
 import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
 import 'package:fogosmobile/screens/widgets/plane_annotation_manager.dart';
 import 'package:fogosmobile/screens/widgets/satellite_annotation_manager.dart';
@@ -343,6 +344,19 @@ class _FogosMapState extends State<FogosMap> {
         if (_hasIpmaWmsActive && widget.ipmaReferenceTime != null)
           _IpmaRunBanner(referenceTime: widget.ipmaReferenceTime!),
         if (widget.overlayButtons != null) widget.overlayButtons!,
+        // Centre-on-me button — sits above the copyright block.
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8, bottom: 100),
+              child: MapMyLocationButton(
+                mapProvider: () => _mapController,
+              ),
+            ),
+          ),
+        ),
         const MapOverlayErrorInfoWidget(),
       ],
     );

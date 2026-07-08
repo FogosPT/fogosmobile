@@ -42,6 +42,30 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   bool _cameraDenied = false;
   bool _isSaving = false;
 
+  // Zoom
+  double _minZoom = 1.0;
+  double _maxZoom = 1.0;
+  double _currentZoom = 1.0;
+  double _baseZoom = 1.0;
+  List<double> _zoomPresets = <double>[1.0];
+
+  // Exposure compensation
+  double _minExposureOffset = 0.0;
+  double _maxExposureOffset = 0.0;
+  double _exposureOffset = 0.0;
+
+  // Flash + composition
+  FlashMode _flashMode = FlashMode.off;
+  bool _showGrid = false;
+
+  // Tap-to-focus marker
+  Offset? _focusPoint;
+  Timer? _focusHideTimer;
+
+  // Magnetometer sanity — false when |mag| is outside the plausible Earth
+  // range (implies metallic interference and unreliable heading).
+  bool _magneticFieldOk = true;
+
   // Sensors (low-pass filtered)
   static const _alpha = 0.15;
   List<double> _accel = [0, 0, 9.8];
@@ -108,6 +132,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     _magSub?.cancel();
     _cameraController?.dispose();
     _clockTimer.cancel();
+    _focusHideTimer?.cancel();
     super.dispose();
   }
 
@@ -128,10 +153,37 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       enableAudio: false,
     );
     await controller.initialize();
+
+    double minZoom = 1.0, maxZoom = 1.0;
+    double minExp = 0.0, maxExp = 0.0;
+    try {
+      minZoom = await controller.getMinZoomLevel();
+      maxZoom = await controller.getMaxZoomLevel();
+      minExp = await controller.getMinExposureOffset();
+      maxExp = await controller.getMaxExposureOffset();
+    } catch (_) {}
+
+    final presets = <double>[];
+    if (minZoom < 0.95) presets.add(double.parse(minZoom.toStringAsFixed(1)));
+    presets.add(1.0);
+    if (maxZoom >= 2.0) presets.add(2.0);
+    if (maxZoom >= 5.0) presets.add(5.0);
+    if (maxZoom >= 10.0) presets.add(10.0);
+
+    try {
+      await controller.setFlashMode(FlashMode.off);
+    } catch (_) {}
+
     if (!mounted) return;
     setState(() {
       _cameraController = controller;
       _cameraReady = true;
+      _minZoom = minZoom;
+      _maxZoom = maxZoom;
+      _currentZoom = minZoom < 1.0 ? 1.0 : minZoom;
+      _minExposureOffset = minExp;
+      _maxExposureOffset = maxExp;
+      _zoomPresets = presets;
     });
   }
 
@@ -193,11 +245,29 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _updateHeading() {
-    final az = computeHeadingRollCompensated(_accel, _mag);
-    if (az.isNaN) return;
-    if ((az - _deviceHeading).abs() > 0.5) {
-      if (mounted) setState(() => _deviceHeading = az);
+    final az = computeHeadingTiltCompensated(_accel, _mag);
+    final magOk = _magneticFieldPlausible(_mag);
+    if (az.isNaN) {
+      if (magOk != _magneticFieldOk && mounted) {
+        setState(() => _magneticFieldOk = magOk);
+      }
+      return;
     }
+    // Shortest angular distance, so the 359°↔1° step doesn't trigger.
+    final diff = ((az - _deviceHeading + 540) % 360) - 180;
+    final needsUpdate = diff.abs() > 0.5 || magOk != _magneticFieldOk;
+    if (needsUpdate && mounted) {
+      setState(() {
+        _deviceHeading = az;
+        _magneticFieldOk = magOk;
+      });
+    }
+  }
+
+  bool _magneticFieldPlausible(List<double> mag) {
+    final m = magneticFieldMagnitude(mag);
+    // Earth field is 25–65 μT; allow a bit of slack for a warm-up magnetometer.
+    return m >= 20 && m <= 75;
   }
 
   String _headingToCardinal(double deg) {
@@ -222,6 +292,86 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final d = dt.day.toString().padLeft(2, '0');
     final mo = dt.month.toString().padLeft(2, '0');
     return '$d/$mo/${dt.year}';
+  }
+
+  Future<void> _setZoom(double zoom) async {
+    final controller = _cameraController;
+    if (controller == null) return;
+    final clamped = zoom.clamp(_minZoom, _maxZoom);
+    try {
+      await controller.setZoomLevel(clamped);
+    } catch (_) {
+      return;
+    }
+    if (mounted) setState(() => _currentZoom = clamped);
+  }
+
+  void _onScaleStart(ScaleStartDetails _) {
+    _baseZoom = _currentZoom;
+  }
+
+  void _onScaleUpdate(ScaleUpdateDetails details) {
+    if (details.pointerCount < 2) return;
+    _setZoom(_baseZoom * details.scale);
+  }
+
+  Future<void> _setExposureOffset(double offset) async {
+    final controller = _cameraController;
+    if (controller == null) return;
+    final clamped = offset.clamp(_minExposureOffset, _maxExposureOffset);
+    try {
+      await controller.setExposureOffset(clamped);
+    } catch (_) {
+      return;
+    }
+    if (mounted) setState(() => _exposureOffset = clamped);
+  }
+
+  Future<void> _cycleFlashMode() async {
+    final controller = _cameraController;
+    if (controller == null) return;
+    const order = [FlashMode.off, FlashMode.auto, FlashMode.always, FlashMode.torch];
+    final next = order[(order.indexOf(_flashMode) + 1) % order.length];
+    try {
+      await controller.setFlashMode(next);
+    } catch (_) {
+      return;
+    }
+    if (mounted) setState(() => _flashMode = next);
+  }
+
+  Future<void> _handleTapFocus(Offset localPos, Size areaSize) async {
+    final controller = _cameraController;
+    if (controller == null) return;
+    final normalized = Offset(
+      (localPos.dx / areaSize.width).clamp(0.0, 1.0),
+      (localPos.dy / areaSize.height).clamp(0.0, 1.0),
+    );
+    try {
+      await controller.setFocusMode(FocusMode.auto);
+      await controller.setFocusPoint(normalized);
+      await controller.setExposureMode(ExposureMode.auto);
+      await controller.setExposurePoint(normalized);
+    } catch (_) {}
+    if (!mounted) return;
+    setState(() => _focusPoint = localPos);
+    _focusHideTimer?.cancel();
+    _focusHideTimer = Timer(const Duration(milliseconds: 1500), () {
+      if (mounted) setState(() => _focusPoint = null);
+    });
+  }
+
+  IconData _flashIcon(FlashMode mode) {
+    switch (mode) {
+      case FlashMode.off:
+        return Icons.flash_off;
+      case FlashMode.auto:
+        return Icons.flash_auto;
+      case FlashMode.always:
+        return Icons.flash_on;
+      case FlashMode.torch:
+        return Icons.highlight;
+    }
   }
 
   Future<void> _captureAndSave() async {
@@ -856,31 +1006,55 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
 
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     final safePadding = MediaQuery.of(context).padding;
+    final mediaSize = MediaQuery.of(context).size;
+    final hasExposureRange = _maxExposureOffset > _minExposureOffset;
 
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         fit: StackFit.expand,
         children: [
+          // Camera preview + gesture layer (pinch to zoom, tap to focus/expose)
           if (_cameraReady && _cameraController != null)
-            SizedBox.expand(
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  // previewSize is always landscape (width > height).
-                  // Swap for portrait; use as-is for landscape.
-                  width: isLandscape
-                      ? (_cameraController!.value.previewSize?.width ?? 1)
-                      : (_cameraController!.value.previewSize?.height ?? 1),
-                  height: isLandscape
-                      ? (_cameraController!.value.previewSize?.height ?? 1)
-                      : (_cameraController!.value.previewSize?.width ?? 1),
-                  child: CameraPreview(_cameraController!),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onScaleStart: _onScaleStart,
+              onScaleUpdate: _onScaleUpdate,
+              onTapUp: (details) =>
+                  _handleTapFocus(details.localPosition, mediaSize),
+              child: SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    // previewSize is always landscape (width > height).
+                    // Swap for portrait; use as-is for landscape.
+                    width: isLandscape
+                        ? (_cameraController!.value.previewSize?.width ?? 1)
+                        : (_cameraController!.value.previewSize?.height ?? 1),
+                    height: isLandscape
+                        ? (_cameraController!.value.previewSize?.height ?? 1)
+                        : (_cameraController!.value.previewSize?.width ?? 1),
+                    child: CameraPreview(_cameraController!),
+                  ),
                 ),
               ),
             )
           else
             const Center(child: CircularProgressIndicator(color: Colors.white)),
+
+          // Rule-of-thirds grid
+          if (_showGrid)
+            const Positioned.fill(
+              child: IgnorePointer(child: _GridOverlay()),
+            ),
+
+          // Tap-to-focus marker
+          if (_focusPoint != null)
+            Positioned(
+              left: _focusPoint!.dx - 36,
+              top: _focusPoint!.dy - 36,
+              child: const IgnorePointer(child: _FocusMarker()),
+            ),
 
           // Close button — respects safe area on both axes
           Positioned(
@@ -900,6 +1074,37 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
             ),
           ),
 
+          // Flash + grid toggles — top-right
+          Positioned(
+            top: safePadding.top + 8,
+            right: safePadding.right + 12,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildIconButton(
+                  icon: _flashIcon(_flashMode),
+                  active: _flashMode != FlashMode.off,
+                  onTap: _cycleFlashMode,
+                ),
+                const SizedBox(height: 8),
+                _buildIconButton(
+                  icon: _showGrid ? Icons.grid_on : Icons.grid_off,
+                  active: _showGrid,
+                  onTap: () => setState(() => _showGrid = !_showGrid),
+                ),
+              ],
+            ),
+          ),
+
+          // Exposure compensation slider — left side, vertical
+          if (hasExposureRange)
+            Positioned(
+              left: safePadding.left + 6,
+              top: 0,
+              bottom: 0,
+              child: Center(child: _buildExposureSlider()),
+            ),
+
           if (isLandscape) ...[
             // Shutter button — vertically centred on the right
             Positioned(
@@ -913,10 +1118,21 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
               bottom: 0,
               left: 0,
               right: safePadding.right + 100,
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.65),
-                padding: EdgeInsets.fromLTRB(16, 8, 16, safePadding.bottom + 10),
-                child: _buildInfoRow(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {},
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.65),
+                  padding: EdgeInsets.fromLTRB(16, 8, 16, safePadding.bottom + 10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildZoomRow(),
+                      const SizedBox(height: 6),
+                      _buildInfoRow(),
+                    ],
+                  ),
+                ),
               ),
             ),
           ] else ...[
@@ -925,16 +1141,22 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                color: Colors.black.withValues(alpha: 0.65),
-                padding: EdgeInsets.fromLTRB(16, 12, 16, safePadding.bottom + 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildInfoRow(),
-                    const SizedBox(height: 20),
-                    Center(child: _buildShutterButton()),
-                  ],
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {},
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.65),
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, safePadding.bottom + 24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildZoomRow(),
+                      const SizedBox(height: 8),
+                      _buildInfoRow(),
+                      const SizedBox(height: 20),
+                      Center(child: _buildShutterButton()),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -969,9 +1191,26 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Alt: $altStr'),
-              Text('Dir: $dirStr'),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Dir: $dirStr'),
+                  if (!_magneticFieldOk) ...[
+                    const SizedBox(width: 6),
+                    const Icon(Icons.warning_amber_rounded,
+                        color: Color(0xFFFFC107), size: 14),
+                  ],
+                ],
+              ),
             ],
           ),
+          if (!_magneticFieldOk) ...[
+            const SizedBox(height: 4),
+            const Text(
+              'Bússola pouco fiável — afasta-te de metais / carro.',
+              style: TextStyle(color: Color(0xFFFFC107), fontSize: 11),
+            ),
+          ],
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1002,6 +1241,196 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
               )
             : null,
+      ),
+    );
+  }
+
+  Widget _buildIconButton({
+    required IconData icon,
+    required bool active,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: active ? const Color(0xE6F09819) : Colors.black54,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(icon, color: Colors.white, size: 22),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExposureSlider() {
+    return Container(
+      width: 42,
+      height: 220,
+      decoration: BoxDecoration(
+        color: Colors.black45,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        children: [
+          const Icon(Icons.wb_sunny_outlined, color: Colors.white, size: 18),
+          Expanded(
+            child: RotatedBox(
+              quarterTurns: 3,
+              child: SliderTheme(
+                data: SliderTheme.of(context).copyWith(
+                  trackHeight: 2,
+                  thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 8),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
+                  activeTrackColor: const Color(0xFFF09819),
+                  inactiveTrackColor: Colors.white24,
+                  thumbColor: Colors.white,
+                  overlayColor: const Color(0x33F09819),
+                ),
+                child: Slider(
+                  value: _exposureOffset.clamp(_minExposureOffset, _maxExposureOffset),
+                  min: _minExposureOffset,
+                  max: _maxExposureOffset,
+                  onChanged: _setExposureOffset,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+            child: Text(
+              '${_exposureOffset >= 0 ? '+' : ''}${_exposureOffset.toStringAsFixed(1)}',
+              style: const TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildZoomRow() {
+    if (_zoomPresets.length <= 1 && _maxZoom <= 1.001) {
+      return const SizedBox.shrink();
+    }
+    // Highlight the preset closest to the current zoom
+    final closestPreset = _zoomPresets.reduce(
+      (a, b) => (a - _currentZoom).abs() < (b - _currentZoom).abs() ? a : b,
+    );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _zoomPresets.map((preset) {
+        final isActive = preset == closestPreset;
+        final onPreset = (_currentZoom - preset).abs() < 0.05;
+        final label = (isActive && !onPreset)
+            ? '${_currentZoom.toStringAsFixed(1)}x'
+            : (preset < 1
+                ? '${preset.toStringAsFixed(1)}x'
+                : '${preset.toStringAsFixed(0)}x');
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Material(
+            color: isActive ? Colors.white : Colors.black54,
+            shape: const StadiumBorder(),
+            child: InkWell(
+              customBorder: const StadiumBorder(),
+              onTap: () => _setZoom(preset),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    color: isActive ? Colors.black : Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class _GridOverlay extends StatelessWidget {
+  const _GridOverlay();
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(painter: _GridPainter());
+  }
+}
+
+class _GridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.35)
+      ..strokeWidth = 0.5;
+    canvas.drawLine(
+        Offset(size.width / 3, 0), Offset(size.width / 3, size.height), paint);
+    canvas.drawLine(Offset(size.width * 2 / 3, 0),
+        Offset(size.width * 2 / 3, size.height), paint);
+    canvas.drawLine(
+        Offset(0, size.height / 3), Offset(size.width, size.height / 3), paint);
+    canvas.drawLine(Offset(0, size.height * 2 / 3),
+        Offset(size.width, size.height * 2 / 3), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _FocusMarker extends StatefulWidget {
+  const _FocusMarker();
+
+  @override
+  State<_FocusMarker> createState() => _FocusMarkerState();
+}
+
+class _FocusMarkerState extends State<_FocusMarker>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+  late final Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 260),
+    )..forward();
+    _scale = Tween<double>(begin: 1.5, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _opacity = Tween<double>(begin: 0.0, end: 1.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) => Opacity(
+        opacity: _opacity.value,
+        child: Transform.scale(scale: _scale.value, child: child),
+      ),
+      child: Container(
+        width: 72,
+        height: 72,
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFFFFE082), width: 1.5),
+          borderRadius: BorderRadius.circular(4),
+        ),
       ),
     );
   }

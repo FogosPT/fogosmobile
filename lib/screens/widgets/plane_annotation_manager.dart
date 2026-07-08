@@ -36,6 +36,14 @@ class PlaneAnnotationManager {
 
   Future<void> init() async {
     _manager = await mapboxMap.annotations.createPointAnnotationManager();
+    // Planes fly directly over fire markers — without allow-overlap the
+    // symbol placement engine hides every plane that collides with a fire
+    // (or another plane). Ignore-placement keeps fires visible too.
+    await _manager!.setIconAllowOverlap(true);
+    await _manager!.setIconIgnorePlacement(true);
+    // Track headings should stay locked to true north when the user rotates
+    // the map, so a plane pointing "east" always shows east on the map.
+    await _manager!.setIconRotationAlignment(IconRotationAlignment.MAP);
     _tapListener = _manager!.tapEvents(onTap: _onAnnotationClick);
   }
 

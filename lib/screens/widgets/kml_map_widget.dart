@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fogosmobile/constants/variables.dart';
+import 'package:fogosmobile/screens/widgets/map_my_location_button.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class KmlMapWidget extends StatefulWidget {
@@ -144,6 +145,13 @@ class _KmlMapWidgetState extends State<KmlMapWidget> {
                     ),
                   ),
                 ),
+              ),
+            ),
+            Positioned(
+              bottom: 8,
+              right: 8,
+              child: MapMyLocationButton(
+                mapProvider: () => _map,
               ),
             ),
           ],

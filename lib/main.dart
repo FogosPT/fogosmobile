@@ -339,6 +339,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _setupFirebaseMessaging();
     NearbyNotificationService.updateStoredLocation();
+    NearbyNotificationService.syncToWatch();
     _initDeepLinks();
   }
 

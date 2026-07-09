@@ -1,4 +1,6 @@
 PODS:
+  - app_links (6.4.1):
+    - Flutter
   - camera_avfoundation (0.0.1):
     - Flutter
   - Firebase/Analytics (11.15.0):
@@ -176,6 +178,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - app_links (from `.symlinks/plugins/app_links/ios`)
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -219,6 +222,8 @@ SPEC REPOS:
     - Turf
 
 EXTERNAL SOURCES:
+  app_links:
+    :path: ".symlinks/plugins/app_links/ios"
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
   firebase_analytics:
@@ -263,6 +268,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
+  app_links: 3dbc685f76b1693c66a6d9dd1e9ab6f73d97dc0a
   camera_avfoundation: 5675ca25298b6f81fa0a325188e7df62cc217741
   Firebase: d99ac19b909cd2c548339c2241ecd0d1599ab02e
   firebase_analytics: 0e25ca1d4001ccedd40b4e5b74c0ec34e18f6425
@@ -304,4 +310,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7f7110bb791cace1b2a191e68c544fd203b5f4f5
 
-COCOAPODS: 1.16.2
+COCOAPODS: 1.17.0

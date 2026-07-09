@@ -11,6 +11,7 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/errors_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/services/live_activity_service.dart';
 
 List<Middleware<AppState>> firesMiddleware() {
   final loadFires = _createLoadFires();
@@ -78,6 +79,15 @@ Middleware<AppState> _createLoadFire() {
 
       Fire fire = Fire.fromJson(responseData);
       store.dispatch(FireLoadedAction(fire));
+      // If this fire is being "followed" (iOS Live Activity or Android
+      // ongoing notification), push a refresh. Auto-stop once resolved.
+      if (fire.status == FireStatus.done ||
+          fire.status == FireStatus.false_alarm ||
+          fire.status == FireStatus.false_alert) {
+        LiveActivityService.stop(fire.id);
+      } else {
+        LiveActivityService.update(fire);
+      }
     } catch (e) {
       store.dispatch(FireLoadedAction(null));
       store.dispatch(AddErrorAction('fire'));

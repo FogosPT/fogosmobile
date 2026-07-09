@@ -8,6 +8,9 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <uses-feature android:name="android.hardware.camera" android:required="false" />
   <application android:name="${applicationName}"
   android:label="Fogos.pt" android:icon="@mipmap/ic_launcher">
@@ -56,5 +59,10 @@
       <meta-data android:name="flutterEmbedding"
       android:value="2" />
     </activity>
+    <service
+      android:name=".FollowFireService"
+      android:enabled="true"
+      android:exported="false"
+      android:foregroundServiceType="dataSync" />
   </application>
 </manifest>

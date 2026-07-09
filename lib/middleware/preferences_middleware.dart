@@ -9,6 +9,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/services/watch_bridge_service.dart';
 
 const String preferenceSatellite = "pref-satellite";
 
@@ -139,6 +140,7 @@ Middleware<AppState> _createSetNotification() {
         _firebaseMessaging.unsubscribeFromTopic(legacyTopic);
       }
       prefs.save('subscribedFires', subscribedFires);
+      await WatchBridgeService.sendSubscribedFires(subscribedFires);
       store.dispatch(LoadAllPreferencesAction());
     } catch (e) {
       print(e);

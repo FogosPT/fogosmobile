@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fogosmobile/utils/haversine.dart';
+import 'package:fogosmobile/services/watch_bridge_service.dart';
 
 /// Keys for SharedPreferences — all nearby data stays on-device.
 /// Filter mode for nearby notifications.
@@ -248,6 +249,7 @@ class NearbyNotificationService {
     await prefs.setDouble(NearbyPrefs.nearbyLng, lng);
     await prefs.setInt(
         _nearbyLocationTimestamp, DateTime.now().millisecondsSinceEpoch);
+    await WatchBridgeService.sendLocation(lat, lng);
   }
 
   /// Subscribe/unsubscribe from the nearby FCM topic.
@@ -268,14 +270,32 @@ class NearbyNotificationService {
   static Future<void> setRadius(int km) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(NearbyPrefs.nearbyRadiusKm, km);
+    await WatchBridgeService.sendRadius(km);
   }
 
   /// Update the incident filter preference.
   static Future<void> setFilter(NearbyFilter filter) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      NearbyPrefs.nearbyFilter,
-      filter == NearbyFilter.firesOnly ? 'fires' : 'all',
+    final value = filter == NearbyFilter.firesOnly ? 'fires' : 'all';
+    await prefs.setString(NearbyPrefs.nearbyFilter, value);
+    await WatchBridgeService.sendFilter(value);
+  }
+
+  /// Push the currently persisted nearby prefs and location to the watch.
+  /// Safe to call on startup — no-op on non-iOS or when nothing is stored.
+  static Future<void> syncToWatch() async {
+    final prefs = await SharedPreferences.getInstance();
+    final lat = prefs.getDouble(NearbyPrefs.nearbyLat);
+    final lng = prefs.getDouble(NearbyPrefs.nearbyLng);
+    final radius = prefs.getInt(NearbyPrefs.nearbyRadiusKm);
+    final filter = prefs.getString(NearbyPrefs.nearbyFilter);
+    final subscribedFires = prefs.getStringList('subscribedFires') ?? [];
+    await WatchBridgeService.sendAll(
+      lat: lat,
+      lng: lng,
+      radiusKm: radius,
+      filter: filter,
+      subscribedFires: subscribedFires,
     );
   }
 }

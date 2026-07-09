@@ -12,6 +12,7 @@ import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart'
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/components/fire_details/important_fire_extra.dart';
+import 'package:fogosmobile/screens/components/follow_fire_watch_button.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:redux/redux.dart';
 import 'package:share_plus/share_plus.dart';
@@ -110,6 +111,8 @@ class FireDetails extends StatelessWidget {
                                                   isFireSubscribed ? 0 : 1);
                                             },
                                           ),
+                                    SizedBox(width: 8),
+                                    FollowFireWatchButton(fire: fire),
                                     SizedBox(width: 8),
                                     IconButton(
                                       icon: Icon(Icons.camera_alt_outlined),

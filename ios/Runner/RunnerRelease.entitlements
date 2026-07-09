@@ -8,5 +8,9 @@
 	<array>
 		<string>applinks:fogos.pt</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.tomahock.fogos</string>
+	</array>
 </dict>
 </plist>

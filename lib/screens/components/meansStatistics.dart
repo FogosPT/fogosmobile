@@ -74,7 +74,8 @@ class _MeansStatisticsState extends State<MeansStatistics> {
               domainFn: (Means stats, _) => stats.label!,
               measureFn: (Means stats, _) => stats.aerial,
               data: stats.means,
-            ),
+            )..setAttribute(
+                charts.measureAxisIdKey, 'secondaryMeasureAxisId'),
           ];
         }
 
@@ -148,6 +149,11 @@ class _MeansStatisticsState extends State<MeansStatistics> {
                         ],
                         defaultRenderer: charts.LineRendererConfig(
                             includeArea: true, stacked: false),
+                        secondaryMeasureAxis: const charts.NumericAxisSpec(
+                          tickProviderSpec:
+                              charts.BasicNumericTickProviderSpec(
+                                  desiredTickCount: 5),
+                        ),
                         dateTimeFactory: const charts.LocalDateTimeFactory(),
                       ),
                     ),

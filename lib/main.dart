@@ -150,9 +150,18 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   void _setupFirebaseMessaging() async {
     final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
 
-    if (result.authorizationStatus != AuthorizationStatus.authorized) {
+    if (result.authorizationStatus != AuthorizationStatus.authorized &&
+        result.authorizationStatus != AuthorizationStatus.provisional) {
       return;
     }
+
+    // On iOS, without this the OS suppresses banner/sound while the app is in
+    // the foreground and delivers notifications silently to the Notification Center.
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
 
     // Subscribe all users to the agif topic
     await _firebaseMessaging.subscribeToTopic('agif');

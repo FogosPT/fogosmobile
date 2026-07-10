@@ -31,20 +31,20 @@ class MainActivity : FlutterActivity() {
         }
         when (call.method) {
             "start" -> {
-                FollowFireService.sendCommand(applicationContext, FollowFireService.ACTION_START, args!!)
+                FollowFireNotifier.notify(applicationContext, args!!)
                 prefs().edit { putBoolean(fireId!!, true) }
                 result.success(true)
             }
             "update" -> {
-                // Only update if we started for that fire — avoids resurrecting a
-                // dismissed notification.
+                // Only refresh if we started for that fire — avoids resurrecting a
+                // notification the user already dismissed.
                 if (prefs().getBoolean(fireId!!, false)) {
-                    FollowFireService.sendCommand(applicationContext, FollowFireService.ACTION_UPDATE, args!!)
+                    FollowFireNotifier.notify(applicationContext, args!!)
                 }
                 result.success(null)
             }
             "stop" -> {
-                FollowFireService.stop(applicationContext, fireId!!)
+                FollowFireNotifier.cancel(applicationContext, fireId!!)
                 prefs().edit { remove(fireId) }
                 result.success(null)
             }

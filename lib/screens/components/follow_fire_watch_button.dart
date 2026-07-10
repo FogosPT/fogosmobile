@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/services/live_activity_service.dart';
 
-/// Toggle button for the "follow a fire" experience.
-/// - iOS: starts an ActivityKit Live Activity (visible on lock screen,
-///   Dynamic Island, and the paired Apple Watch Smart Stack).
-/// - Android: starts a foreground service with a persistent ongoing
-///   notification that stays in the shade until dismissed.
+/// Toggle button to "follow" a fire — pins it for continuous updates
+/// wherever the OS surfaces persistent activity:
+/// - iOS: Live Activity on lock screen, Dynamic Island, and (bonus) the
+///   paired Apple Watch Smart Stack when available.
+/// - Android: persistent ongoing notification in the shade.
 class FollowFireWatchButton extends StatefulWidget {
   final Fire fire;
 
@@ -43,27 +43,17 @@ class _FollowFireWatchButtonState extends State<FollowFireWatchButton> {
       if (mounted) {
         setState(() { _following = ok; _busy = false; });
         if (!ok) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(Platform.isIOS
-                ? 'Não foi possível seguir — verifica as permissões de Live Activity'
-                : 'Não foi possível seguir — verifica as permissões de notificação'),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Não foi possível seguir — verifica as permissões nas Definições'),
           ));
         }
       }
     }
   }
 
-  IconData get _icon {
-    if (Platform.isIOS) {
-      return _following ? Icons.watch_off : Icons.watch;
-    }
-    return _following ? Icons.push_pin : Icons.push_pin_outlined;
-  }
+  IconData get _icon => _following ? Icons.push_pin : Icons.push_pin_outlined;
 
-  String get _tooltip {
-    if (_following) return 'Deixar de seguir';
-    return Platform.isIOS ? 'Seguir no relógio' : 'Fixar nas notificações';
-  }
+  String get _tooltip => _following ? 'Deixar de seguir' : 'Seguir este incêndio';
 
   @override
   Widget build(BuildContext context) {

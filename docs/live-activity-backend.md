@@ -17,42 +17,49 @@ a topic (Android). Distance calculations, if ever surfaced, happen on-device.
 
 ## iOS — HTTP endpoints (implemented on backend)
 
-Base: `https://api.fogos.pt/v2/live-activity`
+Base: `https://api.fogos.pt/v2/incidents/{id}/live-activity`
 
-### `POST /register`
+Nested under `/v2/incidents/{id}/...` for consistency with the existing
+photos and posit endpoints. `fireId` travels in the URL path, never in the
+body. Public auth + `liveactivity.ratelimit` middleware
+(per-IP-per-minute + per-incident-global-per-hour, same pattern as
+`photo.ratelimit`).
+
+### `POST /v2/incidents/{id}/live-activity/register`
 
 Called when the app captures a fresh push token (initial start, or when
 Apple rotates the token mid-activity).
 
-Request:
+Body:
 ```json
 {
-  "fireId": "abc123",
-  "pushToken": "a1b2c3...",     // hex-encoded, 64+ chars
+  "pushToken": "a1b2c3...",     // hex-encoded, ≥ 64 chars
   "env": "sandbox"              // or "production"
 }
 ```
 
-Behaviour: idempotent upsert on `(fireId, pushToken)`; refresh `updated_at`.
+Backend flow:
+1. `Incident::whereFireId($id)->firstOrFail()`.
+2. Validate `pushToken` (hex, ≥ 64 chars) and `env ∈ {sandbox, production}`.
+3. `LiveActivityToken::updateOrCreate(['fire_id' => $id, 'push_token' => $t], ['env' => $env])->touch()`
+   — idempotent upsert on `(fire_id, push_token)`, refresh `updated_at`.
+4. Response: `200 { "success": true }`.
 
-Response: `200 { "success": true }`
-
-### `POST /unregister`
+### `POST /v2/incidents/{id}/live-activity/unregister`
 
 Called when the user stops following, or when a token becomes invalid.
 
-Request:
+Body:
 ```json
 {
-  "fireId": "abc123",
   "pushToken": "a1b2c3..."
 }
 ```
 
-Response: `200 { "success": true }`
-
-Also fine to unregister automatically when APNs replies 410 Gone for a
-token — the app-side unregister may not always run (e.g. iOS killed the app).
+Deletes the row if it exists. Always returns `200 { "success": true }`,
+even if the row was missing (idempotent). Also fine to prune automatically
+when APNs replies 410 Gone — the app-side unregister may not always run
+(e.g. iOS killed the app).
 
 ---
 

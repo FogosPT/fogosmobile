@@ -7,7 +7,7 @@ import 'package:logger/logger.dart';
 /// and forwards Live Activity updates. Only the fireId + push token + APNs
 /// environment ever leave the device — never the user's location.
 class LiveActivityBackend {
-  static const _base = 'https://api.fogos.pt/v2/live-activity';
+  static const _base = 'https://api.fogos.pt/v2/incidents';
   static final _logger = Logger(printer: PrettyPrinter(methodCount: 0));
 
   static Future<void> register({
@@ -18,10 +18,9 @@ class LiveActivityBackend {
     try {
       final response = await http
           .post(
-            Uri.parse('$_base/register'),
+            Uri.parse('$_base/$fireId/live-activity/register'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
-              'fireId': fireId,
               'pushToken': pushToken,
               'env': env,
             }),
@@ -42,10 +41,9 @@ class LiveActivityBackend {
     try {
       final response = await http
           .post(
-            Uri.parse('$_base/unregister'),
+            Uri.parse('$_base/$fireId/live-activity/unregister'),
             headers: {'Content-Type': 'application/json'},
             body: jsonEncode({
-              'fireId': fireId,
               'pushToken': pushToken,
             }),
           )

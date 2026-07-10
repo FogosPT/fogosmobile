@@ -1,16 +1,21 @@
-# Live Activity backend — spec
+# "Seguir incêndio" backend — spec
 
-The iOS app opens a Live Activity when the user taps "Seguir este incêndio",
-asks Apple for a per-activity push token, and sends it to the backend so
-APNs can deliver real-time updates while the app is closed.
+Real-time updates for the "seguir incêndio" feature on iOS (Live Activity)
+and Android (ongoing notification). Two independent delivery paths so each
+platform uses the mechanism it does best.
+
+- **iOS**: per-activity APNs push tokens, registered via HTTP endpoints, and
+  the backend sends `apns-push-type: liveactivity` payloads directly to APNs.
+- **Android**: FCM topic subscription `follow-fire-<fireId>`, and the
+  backend sends FCM data messages to that topic.
 
 **Privacy:** the app never sends the user's location. Backend only receives
-`fireId + pushToken + env`. Distance calculations, if ever surfaced, happen
-on-device.
+`fireId + pushToken + env` (iOS) or subscribes an anonymous FCM instance to
+a topic (Android). Distance calculations, if ever surfaced, happen on-device.
 
 ---
 
-## Endpoints (implemented on backend)
+## iOS — HTTP endpoints (implemented on backend)
 
 Base: `https://api.fogos.pt/v2/live-activity`
 
@@ -157,6 +162,67 @@ After the end event, the LA is dismissed by iOS after `dismissal-date`
 (recommend `now + 1h` so the user sees the final state on the lock screen
 briefly). The backend should also DELETE the row from
 `live_activity_tokens` since no more pushes are needed.
+
+---
+
+## Android — FCM data messages
+
+The Android app subscribes to FCM topic `follow-fire-<fireId>` when the
+user taps "Seguir este incêndio", and unsubscribes on "Deixar de seguir".
+**No new backend endpoint or database is needed** — the FCM registry
+transparently tracks subscribers.
+
+When a fire changes, send a **data-only** FCM message to that topic:
+
+```json
+{
+  "message": {
+    "topic": "follow-fire-abc123",
+    "data": {
+      "type": "follow-fire-update",
+      "fireId": "abc123",
+      "title": "🔥 Sintra",
+      "location": "Sintra · Colares · Ao Alto",
+      "statusText": "Em Curso",
+      "statusColor": "#FF512F",
+      "human": "42",
+      "terrain": "12",
+      "aerial": "2",
+      "isFire": "true",
+      "event": "update"
+    },
+    "android": {
+      "priority": "high"
+    }
+  }
+}
+```
+
+- All `data` values must be **strings** — that's an FCM constraint. The
+  client parses `human`/`terrain`/`aerial` as ints and `isFire` as bool.
+- Do **not** include a top-level `notification` field. A pure data message
+  lets the Dart background handler process it silently and update the
+  existing ongoing notification, instead of Firebase auto-posting a new
+  system notification alongside.
+- `android.priority: "high"` is required to wake the app in Doze mode.
+- `apns` block can be omitted — this message is Android-only. iOS
+  subscribers of the FCM topic (if any) would receive it too but the client
+  ignores it on iOS (LA updates go via APNs directly).
+
+For **end** events (fire resolved):
+```json
+{
+  "message": {
+    "topic": "follow-fire-abc123",
+    "data": { "type": "follow-fire-update", "fireId": "abc123", "event": "end" },
+    "android": { "priority": "high" }
+  }
+}
+```
+
+The client dismisses the notification when `event=end`. FCM's own topic
+subscribers list can be pruned by simply skipping further sends for that
+`fireId` — no cleanup call is needed.
 
 ---
 

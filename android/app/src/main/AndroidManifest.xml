@@ -57,9 +57,5 @@
       <meta-data android:name="flutterEmbedding"
       android:value="2" />
     </activity>
-    <receiver
-      android:name=".FollowFireStopReceiver"
-      android:enabled="true"
-      android:exported="false" />
   </application>
 </manifest>

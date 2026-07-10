@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/services/follow_fire_notifier.dart';
 import 'package:fogosmobile/services/live_activity_backend.dart';
 
 /// Bridges Flutter → platform "follow fire" UI.
@@ -56,6 +58,7 @@ class LiveActivityService {
 
   static Future<bool> start(Fire fire, {double? distanceKm}) async {
     if (!_supported) return false;
+    if (Platform.isAndroid) return _startAndroid(fire, distanceKm);
     _ensureHandler();
     try {
       final result = await _channel.invokeMethod<bool>('start', _payload(fire, distanceKm));
@@ -69,6 +72,11 @@ class LiveActivityService {
 
   static Future<void> update(Fire fire, {double? distanceKm}) async {
     if (!_supported) return;
+    if (Platform.isAndroid) {
+      if (!await FollowFireNotifier.isFollowing(fire.id)) return;
+      await _notifyAndroid(fire, distanceKm);
+      return;
+    }
     try {
       await _channel.invokeMethod('update', _payload(fire, distanceKm));
     } on PlatformException {} on MissingPluginException {}
@@ -76,10 +84,16 @@ class LiveActivityService {
 
   static Future<void> stop(String fireId) async {
     if (!_supported) return;
-    // Unregister from backend up-front so the server stops sending pushes
-    // even if the native end callback is delayed.
+    if (Platform.isAndroid) {
+      await FollowFireNotifier.cancel(fireId);
+      try {
+        await FirebaseMessaging.instance.unsubscribeFromTopic('follow-fire-$fireId');
+      } catch (_) {}
+      return;
+    }
+    // iOS: unregister the APNs push token so the server stops pushing.
     final token = _tokensByFireId.remove(fireId);
-    if (token != null && Platform.isIOS) {
+    if (token != null) {
       await LiveActivityBackend.unregister(fireId: fireId, pushToken: token);
     }
     try {
@@ -89,6 +103,7 @@ class LiveActivityService {
 
   static Future<bool> isActive(String fireId) async {
     if (!_supported) return false;
+    if (Platform.isAndroid) return FollowFireNotifier.isFollowing(fireId);
     try {
       final result = await _channel.invokeMethod<bool>('isActive', {'fireId': fireId});
       return result ?? false;
@@ -97,6 +112,36 @@ class LiveActivityService {
     } on MissingPluginException {
       return false;
     }
+  }
+
+  static Future<bool> _startAndroid(Fire fire, double? distanceKm) async {
+    try {
+      await _notifyAndroid(fire, distanceKm);
+      await FollowFireNotifier.setFollowFlag(fire.id, true);
+      try {
+        await FirebaseMessaging.instance.subscribeToTopic('follow-fire-${fire.id}');
+      } catch (_) {}
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  static Future<void> _notifyAndroid(Fire fire, double? distanceKm) async {
+    final location = [fire.district, fire.city, fire.town]
+        .where((s) => s.isNotEmpty)
+        .join(' · ');
+    await FollowFireNotifier.notify(
+      fireId: fire.id,
+      title: fire.isFire ? '🔥 ${fire.city.isEmpty ? "Incêndio" : fire.city}' : '⚠️ Incidente',
+      location: location.isEmpty ? 'Incidente' : location,
+      statusText: _statusToString(fire.status),
+      statusColorHex: fire.statusColor.isEmpty ? '#FF512F' : fire.statusColor,
+      human: fire.human,
+      terrain: fire.terrain,
+      aerial: fire.aerial,
+      isFire: fire.isFire,
+    );
   }
 
   static Map<String, dynamic> _payload(Fire fire, double? distanceKm) {

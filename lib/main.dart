@@ -9,6 +9,7 @@ import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:fogosmobile/services/fcm_migration_service.dart';
+import 'package:fogosmobile/services/follow_fire_notifier.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,36 @@ Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   await NearbyNotificationService.init();
   await NearbyNotificationService.handleMessage(message);
+  await _handleFollowFireUpdate(message);
+}
+
+/// Android-only. Refreshes (or dismisses) the ongoing "seguir incêndio"
+/// notification when the backend pushes an update for a followed fire.
+/// iOS uses APNs Live Activity updates directly and skips this path.
+Future<void> _handleFollowFireUpdate(RemoteMessage message) async {
+  if (!Platform.isAndroid) return;
+  final data = message.data;
+  if (data['type'] != 'follow-fire-update') return;
+  final fireId = data['fireId']?.toString() ?? '';
+  if (fireId.isEmpty) return;
+  // Skip if the user already stopped following on this device.
+  if (!await FollowFireNotifier.isFollowing(fireId)) return;
+  final event = data['event']?.toString() ?? 'update';
+  if (event == 'end') {
+    await FollowFireNotifier.cancel(fireId);
+    return;
+  }
+  await FollowFireNotifier.notify(
+    fireId: fireId,
+    title: data['title']?.toString() ?? 'Incêndio',
+    location: data['location']?.toString() ?? '',
+    statusText: data['statusText']?.toString() ?? '',
+    statusColorHex: data['statusColor']?.toString() ?? '#FF512F',
+    human: int.tryParse(data['human']?.toString() ?? '') ?? 0,
+    terrain: int.tryParse(data['terrain']?.toString() ?? '') ?? 0,
+    aerial: int.tryParse(data['aerial']?.toString() ?? '') ?? 0,
+    isFire: (data['isFire']?.toString() ?? 'true') != 'false',
+  );
 }
 
 void main() async {
@@ -187,6 +218,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       print('Firebase onMessage ${message.data}');
       // Process nearby proximity check in foreground too
       NearbyNotificationService.handleMessage(message);
+      _handleFollowFireUpdate(message);
     });
 
     // Handle taps on nearby local notifications

@@ -1430,7 +1430,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 10.6.2;
+				MARKETING_VERSION = 10.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomahock.fogos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1465,7 +1465,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 10.6.2;
+				MARKETING_VERSION = 10.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomahock.fogos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

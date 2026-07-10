@@ -43,7 +43,8 @@ struct FireLiveActivityWidget: Widget {
                 Image(systemName: context.attributes.isFire ? "flame.fill" : "exclamationmark.triangle.fill")
                     .foregroundStyle(color(hex: context.state.statusColorHex))
             } compactTrailing: {
-                Text("\(context.state.human)")
+                Text("\(context.state.human)/\(context.state.terrain)/\(context.state.aerial)")
+                    .font(.caption2)
                     .monospacedDigit()
             } minimal: {
                 Image(systemName: "flame.fill")

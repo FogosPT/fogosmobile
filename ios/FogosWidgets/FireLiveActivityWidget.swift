@@ -91,7 +91,7 @@ private func resourceRow(state: FireActivityAttributes.ContentState) -> some Vie
         Label("\(state.terrain)", systemImage: "car.fill")
         Label("\(state.aerial)", systemImage: "airplane")
         Spacer()
-        Text(state.updatedAt, style: .relative)
+        Text(Date(timeIntervalSince1970: state.updatedAt), style: .relative)
             .foregroundStyle(.tertiary)
     }
 }

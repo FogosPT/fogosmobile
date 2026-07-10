@@ -14,7 +14,9 @@ public struct FireActivityAttributes: ActivityAttributes {
         public var terrain: Int
         public var aerial: Int
         public var distanceKm: Double?
-        public var updatedAt: Date
+        /// Unix timestamp (seconds since 1970). Kept as a Double so the
+        /// backend can encode it plainly in JSON without Date-format quirks.
+        public var updatedAt: Double
 
         public init(statusText: String,
                     statusColorHex: String,
@@ -22,7 +24,7 @@ public struct FireActivityAttributes: ActivityAttributes {
                     terrain: Int,
                     aerial: Int,
                     distanceKm: Double?,
-                    updatedAt: Date) {
+                    updatedAt: Double) {
             self.statusText = statusText
             self.statusColorHex = statusColorHex
             self.human = human

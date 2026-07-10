@@ -7,12 +7,20 @@ import ActivityKit
 
 /// Bridges Flutter → ActivityKit for the "seguir incêndio" feature.
 /// One activity per followed fireId. Started with `start`, refreshed with
-/// `update`, ended with `stop`. Requires iOS 16.1+; silently no-ops otherwise.
+/// `update`, ended with `stop`. Requires iOS 16.2+; silently no-ops otherwise.
+///
+/// When an activity starts we ask Apple for a per-activity push token and
+/// forward it to Flutter via a `pushTokenUpdate` method call, so the Dart
+/// side can register it with the backend that sends APNs updates.
 @objc final class LiveActivityBridge: NSObject {
     @objc static let shared = LiveActivityBridge()
 
     private let channelName = "pt.fogos/live_activity"
     private var channel: FlutterMethodChannel?
+
+    #if canImport(ActivityKit)
+    private var tokenTasks: [String: Task<Void, Never>] = [:]
+    #endif
 
     @objc func register(withMessenger messenger: FlutterBinaryMessenger) {
         let channel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
@@ -57,6 +65,13 @@ import ActivityKit
     private func start(fireId: String, args: [String: Any]) -> Bool {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return false }
 
+        // If we already have an activity for this fire, don't create another.
+        if let existing = Activity<FireActivityAttributes>.activities
+            .first(where: { $0.attributes.fireId == fireId }) {
+            observePushToken(for: existing, fireId: fireId)
+            return true
+        }
+
         let attributes = FireActivityAttributes(
             fireId: fireId,
             location: (args["location"] as? String) ?? "",
@@ -66,11 +81,38 @@ import ActivityKit
         let content = ActivityContent(state: state, staleDate: Date().addingTimeInterval(60 * 60))
 
         do {
-            _ = try Activity.request(attributes: attributes, content: content, pushType: nil)
+            let activity = try Activity.request(
+                attributes: attributes,
+                content: content,
+                pushType: .token
+            )
+            observePushToken(for: activity, fireId: fireId)
             return true
         } catch {
             NSLog("[LiveActivityBridge] start failed: \(error)")
             return false
+        }
+    }
+
+    @available(iOS 16.2, *)
+    private func observePushToken(for activity: Activity<FireActivityAttributes>, fireId: String) {
+        tokenTasks[fireId]?.cancel()
+        tokenTasks[fireId] = Task { [weak self] in
+            for await tokenData in activity.pushTokenUpdates {
+                let hex = tokenData.map { String(format: "%02x", $0) }.joined()
+                await MainActor.run {
+                    self?.channel?.invokeMethod("pushTokenUpdate", arguments: [
+                        "fireId": fireId,
+                        "pushToken": hex,
+                        "env": Self.apnsEnvironment,
+                    ])
+                }
+            }
+            // pushTokenUpdates ends when the activity ends.
+            await MainActor.run {
+                self?.channel?.invokeMethod("activityEnded", arguments: ["fireId": fireId])
+                self?.tokenTasks[fireId] = nil
+            }
         }
     }
 
@@ -89,6 +131,8 @@ import ActivityKit
             where activity.attributes.fireId == fireId {
             await activity.end(nil, dismissalPolicy: .immediate)
         }
+        tokenTasks[fireId]?.cancel()
+        tokenTasks[fireId] = nil
     }
 
     @available(iOS 16.2, *)
@@ -101,13 +145,23 @@ import ActivityKit
     private func contentState(from args: [String: Any]) -> FireActivityAttributes.ContentState {
         FireActivityAttributes.ContentState(
             statusText: (args["statusText"] as? String) ?? "",
-            statusColorHex: (args["statusColorHex"] as? String) ?? "#FF0000",
+            statusColorHex: (args["statusColorHex"] as? String) ?? "#FF512F",
             human: (args["human"] as? Int) ?? 0,
             terrain: (args["terrain"] as? Int) ?? 0,
             aerial: (args["aerial"] as? Int) ?? 0,
             distanceKm: args["distanceKm"] as? Double,
-            updatedAt: Date()
+            updatedAt: Date().timeIntervalSince1970
         )
+    }
+
+    /// Which APNs endpoint the backend must use to reach this build's push
+    /// tokens. Debug builds get sandbox tokens; Release get production ones.
+    private static var apnsEnvironment: String {
+        #if DEBUG
+        return "sandbox"
+        #else
+        return "production"
+        #endif
     }
     #endif
 }

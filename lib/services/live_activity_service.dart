@@ -2,20 +2,61 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/services/live_activity_backend.dart';
 
 /// Bridges Flutter → platform "follow fire" UI.
 /// - iOS 16.2+: ActivityKit Live Activity (lock screen, Dynamic Island,
-///   Apple Watch Smart Stack when paired).
-/// - Android: persistent ongoing notification via a foreground service
-///   (`FollowFireService`), always visible in the notification shade like
-///   a live sports score.
+///   Apple Watch Smart Stack when paired). Push tokens are captured from
+///   the activity and forwarded to the Fogos.pt backend so APNs can
+///   deliver updates while the app is closed.
+/// - Android: persistent ongoing notification via a receiver-backed
+///   NotificationCompat.
 class LiveActivityService {
   static const MethodChannel _channel = MethodChannel('pt.fogos/live_activity');
+  static bool _handlerInstalled = false;
+
+  /// Maps fireId → last known APNs push token, so we can unregister the
+  /// exact token when the user stops following.
+  static final Map<String, String> _tokensByFireId = {};
 
   static bool get _supported => Platform.isIOS || Platform.isAndroid;
 
+  static void _ensureHandler() {
+    if (_handlerInstalled) return;
+    _handlerInstalled = true;
+    _channel.setMethodCallHandler(_onNativeCall);
+  }
+
+  static Future<dynamic> _onNativeCall(MethodCall call) async {
+    switch (call.method) {
+      case 'pushTokenUpdate':
+        final args = Map<String, dynamic>.from(call.arguments as Map);
+        final fireId = args['fireId'] as String? ?? '';
+        final token = args['pushToken'] as String? ?? '';
+        final env = args['env'] as String? ?? 'production';
+        if (fireId.isEmpty || token.isEmpty) return null;
+        _tokensByFireId[fireId] = token;
+        await LiveActivityBackend.register(
+          fireId: fireId,
+          pushToken: token,
+          env: env,
+        );
+        return null;
+      case 'activityEnded':
+        final args = Map<String, dynamic>.from(call.arguments as Map);
+        final fireId = args['fireId'] as String? ?? '';
+        final token = _tokensByFireId.remove(fireId);
+        if (fireId.isNotEmpty && token != null) {
+          await LiveActivityBackend.unregister(fireId: fireId, pushToken: token);
+        }
+        return null;
+    }
+    return null;
+  }
+
   static Future<bool> start(Fire fire, {double? distanceKm}) async {
     if (!_supported) return false;
+    _ensureHandler();
     try {
       final result = await _channel.invokeMethod<bool>('start', _payload(fire, distanceKm));
       return result ?? false;
@@ -35,6 +76,12 @@ class LiveActivityService {
 
   static Future<void> stop(String fireId) async {
     if (!_supported) return;
+    // Unregister from backend up-front so the server stops sending pushes
+    // even if the native end callback is delayed.
+    final token = _tokensByFireId.remove(fireId);
+    if (token != null && Platform.isIOS) {
+      await LiveActivityBackend.unregister(fireId: fireId, pushToken: token);
+    }
     try {
       await _channel.invokeMethod('stop', {'fireId': fireId});
     } on PlatformException {} on MissingPluginException {}

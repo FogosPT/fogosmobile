@@ -7,7 +7,9 @@ import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
+import 'package:fogosmobile/screens/settings/notification_diagnostics.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,7 +85,7 @@ class _ResetNotificationsState extends State<ResetNotifications> {
       // Re-subscribe nearby topic if enabled
       final nearbyEnabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
       if (nearbyEnabled) {
-        await _firebaseMessaging.subscribeToTopic('incident-nearby');
+        await PushRegistry.subscribe('incident-nearby');
       }
 
       setState(() {
@@ -105,7 +107,12 @@ class _ResetNotificationsState extends State<ResetNotifications> {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: <Widget>[
-            Text(FogosLocalizations.of(context).textNotificationProblems),
+            const NotificationDiagnostics(),
+            const Divider(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(FogosLocalizations.of(context).textNotificationProblems),
+            ),
             if (isLoading)
               Center(
                   child: Padding(

@@ -4,6 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fogosmobile/utils/haversine.dart';
+import 'package:fogosmobile/services/push_registry.dart';
+import 'package:fogosmobile/services/significant_location_service.dart';
 import 'package:fogosmobile/services/watch_bridge_service.dart';
 
 /// Keys for SharedPreferences — all nearby data stays on-device.
@@ -63,11 +65,31 @@ class NearbyNotificationService {
       },
     );
     _initialized = true;
+
+    // Resume significant-change monitoring across cold starts. Cheap to
+    // call more than once; the OS deduplicates internally.
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final enabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
+      // Keep the App Group mirror (used by the Notification Service
+      // Extension) in sync with the current Flutter settings on every
+      // launch, so a freshly-terminated app doesn't leave stale values.
+      await SignificantLocationService.mirrorSettings(
+        enabled: enabled,
+        radiusKm: prefs.getInt(NearbyPrefs.nearbyRadiusKm) ??
+            NearbyPrefs.defaultRadiusKm,
+        filter: prefs.getString(NearbyPrefs.nearbyFilter) ?? 'fires',
+      );
+      if (enabled) {
+        await SignificantLocationService.start();
+      }
+    } catch (_) {}
   }
 
   /// Process an incoming FCM data message.
   /// Returns true if a local notification was shown.
   static Future<bool> handleMessage(RemoteMessage message) async {
+    await PushRegistry.recordMessageReceived();
     if (message.data['type'] != 'nearby') return false;
 
     final prefs = await SharedPreferences.getInstance();
@@ -202,6 +224,17 @@ class NearbyNotificationService {
     final enabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
     if (!enabled) return;
 
+    // iOS Significant-Change updates land here first; if the OS delivered a
+    // newer fix than what's in SharedPreferences, adopt it before falling
+    // back to any GPS work.
+    final sig = await SignificantLocationService.getLast();
+    if (sig != null) {
+      final storedTs = prefs.getInt(_nearbyLocationTimestamp) ?? 0;
+      if (sig.ts > storedTs) {
+        await _persistPosition(prefs, sig.lat, sig.lng);
+      }
+    }
+
     final storedTs = prefs.getInt(_nearbyLocationTimestamp);
     final hasStored = prefs.getDouble(NearbyPrefs.nearbyLat) != null &&
         prefs.getDouble(NearbyPrefs.nearbyLng) != null;
@@ -250,19 +283,27 @@ class NearbyNotificationService {
     await prefs.setInt(
         _nearbyLocationTimestamp, DateTime.now().millisecondsSinceEpoch);
     await WatchBridgeService.sendLocation(lat, lng);
+    // Also mirror into the App Group so the Notification Service Extension
+    // has a coordinate to filter against even before Significant-Change
+    // delivers its first callback.
+    await SignificantLocationService.writeLocation(lat, lng);
   }
 
   /// Subscribe/unsubscribe from the nearby FCM topic.
   static Future<void> setEnabled(bool enabled) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(NearbyPrefs.nearbyEnabled, enabled);
+    await SignificantLocationService.mirrorSettings(enabled: enabled);
 
-    final messaging = FirebaseMessaging.instance;
     if (enabled) {
-      await messaging.subscribeToTopic('incident-nearby');
+      await PushRegistry.subscribe('incident-nearby');
       await updateStoredLocation();
+      // iOS-only: the OS wakes the app on ~500m moves so the stored
+      // location stays fresh even for users who rarely open the app.
+      await SignificantLocationService.start();
     } else {
-      await messaging.unsubscribeFromTopic('incident-nearby');
+      await PushRegistry.unsubscribe('incident-nearby');
+      await SignificantLocationService.stop();
     }
   }
 
@@ -270,6 +311,7 @@ class NearbyNotificationService {
   static Future<void> setRadius(int km) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(NearbyPrefs.nearbyRadiusKm, km);
+    await SignificantLocationService.mirrorSettings(radiusKm: km);
     await WatchBridgeService.sendRadius(km);
   }
 
@@ -278,6 +320,7 @@ class NearbyNotificationService {
     final prefs = await SharedPreferences.getInstance();
     final value = filter == NearbyFilter.firesOnly ? 'fires' : 'all';
     await prefs.setString(NearbyPrefs.nearbyFilter, value);
+    await SignificantLocationService.mirrorSettings(filter: value);
     await WatchBridgeService.sendFilter(value);
   }
 

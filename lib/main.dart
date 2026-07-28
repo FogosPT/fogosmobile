@@ -10,6 +10,7 @@ import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:fogosmobile/services/fcm_migration_service.dart';
 import 'package:fogosmobile/services/follow_fire_notifier.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,7 @@ var loggerNoStack = Logger(
 Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   await NearbyNotificationService.init();
+  await PushRegistry.recordMessageReceived();
   await NearbyNotificationService.handleMessage(message);
   await _handleFollowFireUpdate(message);
 }
@@ -180,6 +182,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
 
   void _setupFirebaseMessaging() async {
     final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
+    await PushRegistry.recordAuthStatus(result.authorizationStatus.name);
 
     if (result.authorizationStatus != AuthorizationStatus.authorized &&
         result.authorizationStatus != AuthorizationStatus.provisional) {
@@ -195,14 +198,17 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     );
 
     // Subscribe all users to the agif topic
-    await _firebaseMessaging.subscribeToTopic('agif');
+    await PushRegistry.subscribe('agif');
 
     // Migrate FCM subscriptions on upgrade (clears stale legacy topics)
     await FcmMigrationService.migrateIfNeeded(_firebaseMessaging);
 
-    _firebaseMessaging.getToken().then((token) {
-      print('token: $token');
-    });
+    // Rotate-safe subscription pipeline: when FCM issues a fresh token
+    // (iOS reinstall, restore from backup, occasional server-side rotation),
+    // re-issue every tracked topic against the new token.
+    PushRegistry.installTokenRefreshListener();
+    // Second-line defence in case onTokenRefresh missed a rotation.
+    await PushRegistry.verifyToken();
 
     // Handle notification that launched the app (cold start)
     final initialMessage = await _firebaseMessaging.getInitialMessage();
@@ -216,6 +222,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     // Handle foreground messages (including nearby data messages)
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Firebase onMessage ${message.data}');
+      PushRegistry.recordMessageReceived();
       // Process nearby proximity check in foreground too
       NearbyNotificationService.handleMessage(message);
       _handleFollowFireUpdate(message);
@@ -387,6 +394,10 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       // Refresh stored location first — independent of store
       NearbyNotificationService.updateStoredLocation();
+      // Cheap check: if FCM rotated our token since last foreground and the
+      // onTokenRefresh callback did not fire (rare, but observed), replay
+      // subscriptions against the current token.
+      PushRegistry.verifyToken();
 
       if (!mounted) return;
 

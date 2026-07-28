@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
@@ -90,7 +90,6 @@ String _unifiedTopic(String key) {
 Middleware<AppState> _createSetPreference() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     // Unified topic (new) — matches fogosapi NotificationTool
     String unifiedTopic = _unifiedTopic(action.key);
@@ -100,11 +99,11 @@ Middleware<AppState> _createSetPreference() {
         : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
-      _firebaseMessaging.subscribeToTopic(unifiedTopic);
-      _firebaseMessaging.subscribeToTopic(legacyTopic);
+      await PushRegistry.subscribe(unifiedTopic);
+      await PushRegistry.subscribe(legacyTopic);
     } else {
-      _firebaseMessaging.unsubscribeFromTopic(unifiedTopic);
-      _firebaseMessaging.unsubscribeFromTopic(legacyTopic);
+      await PushRegistry.unsubscribe(unifiedTopic);
+      await PushRegistry.unsubscribe(legacyTopic);
     }
 
     try {
@@ -117,7 +116,6 @@ Middleware<AppState> _createSetPreference() {
 Middleware<AppState> _createSetNotification() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
     // Unified topic (new) — "incident-<id>"
     String unifiedTopic = 'incident-${action.key}';
@@ -132,12 +130,12 @@ Middleware<AppState> _createSetNotification() {
           prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
-        _firebaseMessaging.subscribeToTopic(unifiedTopic);
-        _firebaseMessaging.subscribeToTopic(legacyTopic);
+        await PushRegistry.subscribe(unifiedTopic);
+        await PushRegistry.subscribe(legacyTopic);
       } else {
         subscribedFires.remove(action.key);
-        _firebaseMessaging.unsubscribeFromTopic(unifiedTopic);
-        _firebaseMessaging.unsubscribeFromTopic(legacyTopic);
+        await PushRegistry.unsubscribe(unifiedTopic);
+        await PushRegistry.unsubscribe(legacyTopic);
       }
       prefs.save('subscribedFires', subscribedFires);
       await WatchBridgeService.sendSubscribedFires(subscribedFires);

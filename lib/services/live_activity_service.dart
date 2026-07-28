@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/services/follow_fire_notifier.dart';
 import 'package:fogosmobile/services/live_activity_backend.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 
 /// Bridges Flutter → platform "follow fire" UI.
 /// - iOS 16.2+: ActivityKit Live Activity (lock screen, Dynamic Island,
@@ -86,9 +86,7 @@ class LiveActivityService {
     if (!_supported) return;
     if (Platform.isAndroid) {
       await FollowFireNotifier.cancel(fireId);
-      try {
-        await FirebaseMessaging.instance.unsubscribeFromTopic('follow-fire-$fireId');
-      } catch (_) {}
+      await PushRegistry.unsubscribe('follow-fire-$fireId');
       return;
     }
     // iOS: unregister the APNs push token so the server stops pushing.
@@ -118,9 +116,7 @@ class LiveActivityService {
     try {
       await _notifyAndroid(fire, distanceKm);
       await FollowFireNotifier.setFollowFlag(fire.id, true);
-      try {
-        await FirebaseMessaging.instance.subscribeToTopic('follow-fire-${fire.id}');
-      } catch (_) {}
+      await PushRegistry.subscribe('follow-fire-${fire.id}');
       return true;
     } catch (_) {
       return false;

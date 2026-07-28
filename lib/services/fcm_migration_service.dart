@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/services/nearby_notification_service.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -127,8 +128,8 @@ class FcmMigrationService {
         // Fires-only district subscription
         final value = appPrefs.getInt(key) ?? 0;
         if (value != 0) {
-          await messaging.subscribeToTopic(_unifiedTopic(key));
-          await messaging.subscribeToTopic(_legacyTopic(key));
+          await PushRegistry.subscribe(_unifiedTopic(key));
+          await PushRegistry.subscribe(_legacyTopic(key));
           print('FcmMigration: Re-subscribed district $key');
         }
 
@@ -136,7 +137,7 @@ class FcmMigrationService {
         final allKey = 'all-$key';
         final allValue = prefs.getInt(allKey) ?? 0;
         if (allValue != 0) {
-          await messaging.subscribeToTopic(_unifiedTopic(allKey));
+          await PushRegistry.subscribe(_unifiedTopic(allKey));
           print('FcmMigration: Re-subscribed district-all $key');
         }
       }
@@ -152,8 +153,8 @@ class FcmMigrationService {
     for (var key in ['important', 'warnings', 'planes']) {
       final value = appPrefs.getInt(key) ?? 0;
       if (value != 0) {
-        await messaging.subscribeToTopic(_unifiedTopic(key));
-        await messaging.subscribeToTopic(_legacyTopic(key));
+        await PushRegistry.subscribe(_unifiedTopic(key));
+        await PushRegistry.subscribe(_legacyTopic(key));
         print('FcmMigration: Re-subscribed $key');
       }
     }
@@ -163,7 +164,7 @@ class FcmMigrationService {
       FirebaseMessaging messaging, SharedPreferences prefs) async {
     final enabled = prefs.getBool(NearbyPrefs.nearbyEnabled) ?? false;
     if (enabled) {
-      await messaging.subscribeToTopic('incident-nearby');
+      await PushRegistry.subscribe('incident-nearby');
       print('FcmMigration: Re-subscribed nearby');
     }
   }

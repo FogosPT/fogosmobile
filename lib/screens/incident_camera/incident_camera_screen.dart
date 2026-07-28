@@ -1082,7 +1082,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     if (_signature != null && _signature!.isNotEmpty) {
       photoLines.add('— $_signature');
     }
-    if (_placeName != null) photoLines.add('Local: $_placeName');
+    if (_placeName != null) photoLines.add('Local da foto: $_placeName');
     if (lat != null && lng != null) {
       photoLines.add('GPS: ${_formatCoord(lat, true)}  ${_formatCoord(lng, false)}');
       if (fire != null) {

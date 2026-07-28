@@ -54,7 +54,7 @@ android {
     defaultConfig {
         applicationId "com.tomahock.fogos"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

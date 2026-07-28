@@ -21,6 +21,10 @@
   if (significantLocationRegistrar != nil) {
     [[SignificantLocationBridge shared] registerWithMessenger:significantLocationRegistrar.messenger];
   }
+  NSObject<FlutterPluginRegistrar> *orientationRegistrar = [self registrarForPlugin:@"OrientationBridge"];
+  if (orientationRegistrar != nil) {
+    [[OrientationBridge shared] registerWithMessenger:orientationRegistrar.messenger];
+  }
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

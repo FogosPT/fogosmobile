@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
@@ -22,9 +23,19 @@ import '../assets/images.dart';
 import '../../middleware/shared_preferences_manager.dart';
 import '../../models/fire.dart';
 import '../../services/incident_photos_service.dart';
+import '../../services/orientation_service.dart';
 import '../../utils/haversine.dart';
 import '../../utils/png_exif.dart';
 import '../settings/photo_signature_settings.dart';
+
+enum HeadingQuality { good, medium, bad, unknown }
+
+class _HeadingSample {
+  final double headingDeg;
+  final int atMs;
+  final HeadingQuality quality;
+  const _HeadingSample(this.headingDeg, this.atMs, this.quality);
+}
 
 class IncidentCameraScreen extends StatefulWidget {
   final Fire? fire;
@@ -62,17 +73,41 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   Offset? _focusPoint;
   Timer? _focusHideTimer;
 
-  // Magnetometer sanity — false when |mag| is outside the plausible Earth
-  // range (implies metallic interference and unreliable heading).
-  bool _magneticFieldOk = true;
+  // Three-state indicator of how much we trust the current heading.
+  // Driven by the OS-fused source when available (CMDeviceMotion /
+  // TYPE_ROTATION_VECTOR) or by our own motion / mag / pitch heuristics
+  // in the sensors_plus fallback.
+  HeadingQuality _headingQuality = HeadingQuality.unknown;
+  bool _magneticFieldOk = true; // retained for the fallback path
 
-  // Sensors (low-pass filtered)
-  static const _alpha = 0.15;
+  // Fallback sensor state (only used when the native OrientationService
+  // isn't emitting — e.g. old iOS / Android device with no ROTATION_VECTOR).
+  static const _accelAlpha = 0.08;
+  static const _magAlpha = 0.15;
   List<double> _accel = [0, 0, 9.8];
   List<double> _mag = [0, 1, 0];
+  // Angular rate (rad/s) from the gyroscope, low-pass filtered.
+  double _gyroRate = 0;
+  // Deviation of |accel| from 9.8, low-pass filtered — proxy for linear
+  // motion (walking, hand tremor). Kept in m/s².
+  double _accelDeviation = 0;
   double _deviceHeading = 0;
+  // Elevation of the camera axis above horizontal, in degrees. Populated
+  // by both the native and fallback paths. Near-vertical (>|60°|) means
+  // the horizontal projection is unreliable.
+  double _cameraPitch = 0;
+  bool _trueNorthHeading = false;
+  bool _useNativeOrientation = false;
   StreamSubscription<AccelerometerEvent>? _accelSub;
   StreamSubscription<MagnetometerEvent>? _magSub;
+  StreamSubscription<GyroscopeEvent>? _gyroSub;
+  StreamSubscription<OrientationEvent>? _orientationSub;
+
+  // Rolling window of recent heading readings, used to compute a circular
+  // median at capture time so a single noisy sample doesn't end up in the
+  // EXIF.
+  final List<_HeadingSample> _headingSamples = [];
+  static const int _maxHeadingSamples = 30;
 
   // Location
   double? _userLat;
@@ -130,6 +165,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
     _accelSub?.cancel();
     _magSub?.cancel();
+    _gyroSub?.cancel();
+    _orientationSub?.cancel();
+    OrientationService.stop();
     _cameraController?.dispose();
     _clockTimer.cancel();
     _focusHideTimer?.cancel();
@@ -203,6 +241,12 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
           _gpsTimestamp = pos.timestamp.toUtc();
           _gpsSystemTimestamp = DateTime.now();
         });
+        // Android needs the coordinate to compute magnetic declination
+        // and report a true-north heading. iOS resolves this internally
+        // via `.xTrueNorthZVertical`.
+        OrientationService.setLocation(
+          pos.latitude, pos.longitude, altitude: pos.altitude,
+        );
       }
       // Reverse geocode in parallel — failure is non-fatal
       try {
@@ -222,52 +266,211 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   void _initSensors() {
-    // Roll-compensated heading: accelerometer is used only to detect rotation
-    // around the camera (Z) axis so portrait and landscape both work. The
-    // vertical (pitch) axis is ignored — the full tilt-compensated formula
-    // was numerically unstable and flipped the azimuth ~180°.
+    // Prefer the OS-fused orientation source: CMDeviceMotion on iOS (with
+    // .xTrueNorthZVertical) and TYPE_ROTATION_VECTOR on Android. That
+    // stack fuses accelerometer, gyroscope and magnetometer under a
+    // Kalman-style filter, gives us the camera axis directly, and reports
+    // a real calibration state. The raw sensors_plus pipeline below is
+    // only wired up if the native side reports the sensor is unavailable.
+    _startNativeOrientation();
+    _startFallbackSensors();
+  }
+
+  Future<void> _startNativeOrientation() async {
+    final available = await OrientationService.isAvailable();
+    if (!available) return;
+    final started = await OrientationService.start();
+    if (!started) return;
+    _orientationSub = OrientationService.events.listen(_onNativeOrientation);
+    if (mounted) setState(() => _useNativeOrientation = true);
+    // Feed GPS in so the Android bridge can add local declination for
+    // true-north correction. iOS resolves it internally.
+    if (_userLat != null && _userLng != null) {
+      await OrientationService.setLocation(_userLat!, _userLng!, altitude: _userAlt);
+    }
+  }
+
+  void _onNativeOrientation(OrientationEvent e) {
+    final quality = _classifyNativeQuality(e);
+    _headingSamples.add(_HeadingSample(
+        e.headingDeg, DateTime.now().millisecondsSinceEpoch, quality));
+    if (_headingSamples.length > _maxHeadingSamples) {
+      _headingSamples.removeAt(0);
+    }
+    if (!mounted) return;
+    final diff = ((e.headingDeg - _deviceHeading + 540) % 360) - 180;
+    final pitchDiff = (e.pitchDeg - _cameraPitch).abs();
+    if (diff.abs() > 0.3 ||
+        pitchDiff > 0.5 ||
+        quality != _headingQuality ||
+        e.isTrueNorth != _trueNorthHeading) {
+      setState(() {
+        _deviceHeading = e.headingDeg;
+        _cameraPitch = e.pitchDeg;
+        _headingQuality = quality;
+        _trueNorthHeading = e.isTrueNorth;
+        _magneticFieldOk = quality != HeadingQuality.bad;
+      });
+    }
+  }
+
+  HeadingQuality _classifyNativeQuality(OrientationEvent e) {
+    if (e.accuracy == OrientationAccuracy.uncalibrated) return HeadingQuality.bad;
+    if (e.pitchDeg.abs() > 70) return HeadingQuality.bad;
+    if (e.accuracy == OrientationAccuracy.low) return HeadingQuality.medium;
+    if (e.pitchDeg.abs() > 55) return HeadingQuality.medium;
+    if (e.accuracy == OrientationAccuracy.high) return HeadingQuality.good;
+    if (e.accuracy == OrientationAccuracy.medium) return HeadingQuality.medium;
+    return HeadingQuality.good;
+  }
+
+  void _startFallbackSensors() {
     _accelSub = accelerometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _accel = [
-        _alpha * e.x + (1 - _alpha) * _accel[0],
-        _alpha * e.y + (1 - _alpha) * _accel[1],
-        _alpha * e.z + (1 - _alpha) * _accel[2],
+        _accelAlpha * e.x + (1 - _accelAlpha) * _accel[0],
+        _accelAlpha * e.y + (1 - _accelAlpha) * _accel[1],
+        _accelAlpha * e.z + (1 - _accelAlpha) * _accel[2],
       ];
-      _updateHeading();
+      final mag = math.sqrt(
+          _accel[0] * _accel[0] + _accel[1] * _accel[1] + _accel[2] * _accel[2]);
+      _accelDeviation =
+          _accelAlpha * (mag - 9.81).abs() + (1 - _accelAlpha) * _accelDeviation;
+      _updateFallbackHeading();
     });
     _magSub = magnetometerEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
       _mag = [
-        _alpha * e.x + (1 - _alpha) * _mag[0],
-        _alpha * e.y + (1 - _alpha) * _mag[1],
-        _alpha * e.z + (1 - _alpha) * _mag[2],
+        _magAlpha * e.x + (1 - _magAlpha) * _mag[0],
+        _magAlpha * e.y + (1 - _magAlpha) * _mag[1],
+        _magAlpha * e.z + (1 - _magAlpha) * _mag[2],
       ];
-      _updateHeading();
+      _updateFallbackHeading();
+    });
+    _gyroSub = gyroscopeEventStream(samplingPeriod: SensorInterval.uiInterval).listen((e) {
+      final rate = math.sqrt(e.x * e.x + e.y * e.y + e.z * e.z);
+      _gyroRate = 0.2 * rate + 0.8 * _gyroRate;
     });
   }
 
-  void _updateHeading() {
+  void _updateFallbackHeading() {
+    // Native source takes precedence; ignore fallback calculations when
+    // Core Motion / ROTATION_VECTOR is feeding us fused values.
+    if (_useNativeOrientation) return;
+
     final az = computeHeadingTiltCompensated(_accel, _mag);
     final magOk = _magneticFieldPlausible(_mag);
+    // Pitch of camera axis (-Z_device) above horizontal:
+    // sin(pitch) = -a_z / |a| (accel points opposite to gravity → z<0 when
+    // camera aimed above horizon).
+    final anorm = math.sqrt(
+        _accel[0] * _accel[0] + _accel[1] * _accel[1] + _accel[2] * _accel[2]);
+    final pitch = anorm > 0
+        ? math.asin((-_accel[2] / anorm).clamp(-1.0, 1.0)) * 180 / math.pi
+        : 0.0;
+
     if (az.isNaN) {
       if (magOk != _magneticFieldOk && mounted) {
         setState(() => _magneticFieldOk = magOk);
       }
       return;
     }
+
+    // Motion gating — refuse to accept a new heading while the phone is
+    // moving. Linear accel corrupts gravity estimation, and gyro rate
+    // above ~0.5 rad/s means the user is panning; either way the fused
+    // heading is unreliable. We still keep displaying the last stable
+    // value so the UI doesn't jump.
+    final moving = _accelDeviation > 0.6 || _gyroRate > 0.5;
+
+    final quality = _classifyFallbackQuality(
+      magOk: magOk,
+      moving: moving,
+      pitch: pitch,
+    );
+
+    _headingSamples.add(_HeadingSample(
+        az, DateTime.now().millisecondsSinceEpoch, quality));
+    if (_headingSamples.length > _maxHeadingSamples) {
+      _headingSamples.removeAt(0);
+    }
+
+    if (moving && quality == HeadingQuality.bad) {
+      // Don't update the visible heading during heavy motion; keep the
+      // pitch/quality flags fresh though.
+      if (mounted &&
+          (pitch.round() != _cameraPitch.round() ||
+              quality != _headingQuality ||
+              magOk != _magneticFieldOk)) {
+        setState(() {
+          _cameraPitch = pitch;
+          _headingQuality = quality;
+          _magneticFieldOk = magOk;
+        });
+      }
+      return;
+    }
+
     // Shortest angular distance, so the 359°↔1° step doesn't trigger.
     final diff = ((az - _deviceHeading + 540) % 360) - 180;
-    final needsUpdate = diff.abs() > 0.5 || magOk != _magneticFieldOk;
+    final needsUpdate = diff.abs() > 0.5 ||
+        magOk != _magneticFieldOk ||
+        quality != _headingQuality ||
+        (pitch - _cameraPitch).abs() > 0.5;
     if (needsUpdate && mounted) {
       setState(() {
         _deviceHeading = az;
         _magneticFieldOk = magOk;
+        _cameraPitch = pitch;
+        _headingQuality = quality;
+        _trueNorthHeading = false;
       });
     }
+  }
+
+  HeadingQuality _classifyFallbackQuality({
+    required bool magOk,
+    required bool moving,
+    required double pitch,
+  }) {
+    if (!magOk) return HeadingQuality.bad;
+    if (pitch.abs() > 70) return HeadingQuality.bad;
+    if (moving) return HeadingQuality.medium;
+    if (pitch.abs() > 55) return HeadingQuality.medium;
+    return HeadingQuality.good;
   }
 
   bool _magneticFieldPlausible(List<double> mag) {
     final m = magneticFieldMagnitude(mag);
     // Earth field is 25–65 μT; allow a bit of slack for a warm-up magnetometer.
     return m >= 20 && m <= 75;
+  }
+
+  /// Circular median of the samples collected inside [windowMs] before now.
+  /// Returns null if the window contains no usable (non-bad) samples.
+  ({double heading, HeadingQuality quality})? _captureHeadingMedian({
+    int windowMs = 500,
+  }) {
+    if (_headingSamples.isEmpty) return null;
+    final cutoff = DateTime.now().millisecondsSinceEpoch - windowMs;
+    final recent = _headingSamples
+        .where((s) => s.atMs >= cutoff && s.quality != HeadingQuality.bad)
+        .toList();
+    if (recent.isEmpty) return null;
+    // Circular mean via unit-vector sum — resistant to the 359°↔0° wrap.
+    double sx = 0, sy = 0;
+    for (final s in recent) {
+      final r = s.headingDeg * math.pi / 180.0;
+      sx += math.cos(r);
+      sy += math.sin(r);
+    }
+    final mean = (math.atan2(sy, sx) * 180 / math.pi + 360) % 360;
+    // Worst quality present in the window bubbles up.
+    HeadingQuality worst = HeadingQuality.good;
+    for (final s in recent) {
+      if (s.quality == HeadingQuality.medium && worst == HeadingQuality.good) {
+        worst = HeadingQuality.medium;
+      }
+    }
+    return (heading: mean, quality: worst);
   }
 
   String _headingToCardinal(double deg) {
@@ -384,13 +587,25 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       final lat = _userLat;
       final lng = _userLng;
       final alt = _userAlt;
-      final heading = _deviceHeading;
       final captureTime = _currentLisbonTime();
+
+      // Prefer the circular median over the trailing ~500ms — single
+      // noisy samples don't survive. If every recent sample was flagged
+      // as bad (uncalibrated compass or near-vertical camera) drop the
+      // heading entirely rather than baking a lie into the EXIF.
+      final medianed = _captureHeadingMedian();
+      final headingForEmbed = medianed?.heading;
+      final headingQuality = medianed?.quality ?? HeadingQuality.bad;
+      final headingForWatermark = medianed?.heading ?? _deviceHeading;
+      final isTrueNorth = _trueNorthHeading;
 
       final xFile = await _cameraController!.takePicture();
       final bytes = await xFile.readAsBytes();
 
-      final composited = await _composeImage(bytes, lat, lng, alt, heading, captureTime);
+      final composited = await _composeImage(
+          bytes, lat, lng, alt, headingForWatermark, captureTime,
+          headingIsFinal: headingForEmbed != null,
+          headingQuality: headingQuality);
 
       // Preview the composed photo so the user can discard and retake before
       // we touch tmp files, the gallery or the upload flow.
@@ -409,7 +624,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
         lat: lat,
         lng: lng,
         altitude: alt,
-        imgDirection: heading,
+        imgDirection: headingForEmbed,
+        imgDirectionTrue: isTrueNorth,
         dateTimeOriginal: captureTime,
       );
 
@@ -819,8 +1035,10 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     double? lng,
     double? alt,
     double heading,
-    DateTime captureTime,
-  ) async {
+    DateTime captureTime, {
+    bool headingIsFinal = true,
+    HeadingQuality headingQuality = HeadingQuality.good,
+  }) async {
     final codec = await ui.instantiateImageCodec(jpegBytes);
     final frame = await codec.getNextFrame();
     final srcImage = frame.image;
@@ -873,7 +1091,14 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
       }
     }
     final altStr = alt != null ? 'Alt: ${alt.toStringAsFixed(1)} m' : '';
-    final dirStr = 'Dir: ${_headingToCardinal(heading)} (${heading.toStringAsFixed(0)}°)';
+    final String dirStr;
+    if (!headingIsFinal || headingQuality == HeadingQuality.bad) {
+      dirStr = 'Dir: —';
+    } else {
+      final label = headingQuality == HeadingQuality.medium ? '~' : '';
+      dirStr =
+          'Dir: $label${_headingToCardinal(heading)} (${heading.toStringAsFixed(0)}°)';
+    }
     photoLines.add(altStr.isNotEmpty ? '$altStr   $dirStr' : dirStr);
     photoLines.add('${_formatDate(captureTime)}  ${_formatTime(captureTime)}');
 
@@ -1170,7 +1395,22 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final latStr = _userLat != null ? _formatCoord(_userLat!, true) : '—';
     final lngStr = _userLng != null ? _formatCoord(_userLng!, false) : '—';
     final altStr = _userAlt != null ? '${_userAlt!.toStringAsFixed(1)} m' : '—';
-    final dirStr = '${_headingToCardinal(_deviceHeading)} (${_deviceHeading.toStringAsFixed(0)}°)';
+    final trueSuffix = _trueNorthHeading ? ' T' : '';
+    final dirStr = _headingQuality == HeadingQuality.bad
+        ? '—'
+        : '${_headingToCardinal(_deviceHeading)} (${_deviceHeading.toStringAsFixed(0)}°$trueSuffix)';
+    final qualityColor = switch (_headingQuality) {
+      HeadingQuality.good => const Color(0xFF4CAF50),
+      HeadingQuality.medium => const Color(0xFFFFC107),
+      HeadingQuality.bad => const Color(0xFFF44336),
+      HeadingQuality.unknown => Colors.white54,
+    };
+    final qualityIcon = switch (_headingQuality) {
+      HeadingQuality.good => Icons.check_circle_outline,
+      HeadingQuality.medium => Icons.warning_amber_rounded,
+      HeadingQuality.bad => Icons.error_outline,
+      HeadingQuality.unknown => Icons.help_outline,
+    };
     final distStr = (widget.fire != null && _userLat != null && _userLng != null)
         ? '${haversineKm(_userLat!, _userLng!, widget.fire!.lat, widget.fire!.lng).toStringAsFixed(1)} km'
         : null;
@@ -1195,22 +1435,32 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text('Dir: $dirStr'),
-                  if (!_magneticFieldOk) ...[
-                    const SizedBox(width: 6),
-                    const Icon(Icons.warning_amber_rounded,
-                        color: Color(0xFFFFC107), size: 14),
-                  ],
+                  const SizedBox(width: 6),
+                  Icon(qualityIcon, color: qualityColor, size: 14),
                 ],
               ),
             ],
           ),
-          if (!_magneticFieldOk) ...[
-            const SizedBox(height: 4),
-            const Text(
-              'Bússola pouco fiável — afasta-te de metais / carro.',
-              style: TextStyle(color: Color(0xFFFFC107), fontSize: 11),
+          if (_headingQuality == HeadingQuality.bad)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                _cameraPitch.abs() > 65
+                    ? 'Endireita o telemóvel — direção indefinida'
+                    : 'Bússola pouco fiável — afasta-te de metais / calibra',
+                style: TextStyle(color: qualityColor, fontSize: 11),
+              ),
+            )
+          else if (_headingQuality == HeadingQuality.medium)
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Text(
+                _cameraPitch.abs() > 50
+                    ? 'Ângulo elevado — direção aproximada'
+                    : 'Mantém-te parado para direção precisa',
+                style: TextStyle(color: qualityColor, fontSize: 11),
+              ),
             ),
-          ],
           const SizedBox(height: 4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

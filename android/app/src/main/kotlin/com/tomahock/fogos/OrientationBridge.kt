@@ -114,6 +114,12 @@ class OrientationBridge private constructor(context: Context) : SensorEventListe
         val horiz = sqrt((east * east + north * north).toDouble())
         val pitch = Math.toDegrees(atan2(up.toDouble(), horiz))
 
+        // getRotationMatrixFromVector occasionally yields a degenerate
+        // matrix during sensor warm-up; skip those samples instead of
+        // shipping NaN to Flutter (where .floor() / .round() throw).
+        if (heading.isNaN() || heading.isInfinite() ||
+            pitch.isNaN() || pitch.isInfinite()) return
+
         val accuracyLabel = when (event.accuracy) {
             SensorManager.SENSOR_STATUS_ACCURACY_HIGH -> "high"
             SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM -> "medium"

@@ -474,6 +474,7 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
   }
 
   String _headingToCardinal(double deg) {
+    if (!deg.isFinite) return '—';
     const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
     return dirs[((deg + 22.5) / 45).floor() % 8];
   }
@@ -1092,7 +1093,9 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     }
     final altStr = alt != null ? 'Alt: ${alt.toStringAsFixed(1)} m' : '';
     final String dirStr;
-    if (!headingIsFinal || headingQuality == HeadingQuality.bad) {
+    if (!headingIsFinal ||
+        headingQuality == HeadingQuality.bad ||
+        !heading.isFinite) {
       dirStr = 'Dir: —';
     } else {
       final label = headingQuality == HeadingQuality.medium ? '~' : '';
@@ -1396,7 +1399,8 @@ class _IncidentCameraScreenState extends State<IncidentCameraScreen> {
     final lngStr = _userLng != null ? _formatCoord(_userLng!, false) : '—';
     final altStr = _userAlt != null ? '${_userAlt!.toStringAsFixed(1)} m' : '—';
     final trueSuffix = _trueNorthHeading ? ' T' : '';
-    final dirStr = _headingQuality == HeadingQuality.bad
+    final dirStr = (_headingQuality == HeadingQuality.bad ||
+            !_deviceHeading.isFinite)
         ? '—'
         : '${_headingToCardinal(_deviceHeading)} (${_deviceHeading.toStringAsFixed(0)}°$trueSuffix)';
     final qualityColor = switch (_headingQuality) {

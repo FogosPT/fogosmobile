@@ -112,6 +112,11 @@ import Foundation
         let horiz = sqrt(northComp * northComp + westComp * westComp)
         let pitch = atan2(upComp, horiz) * 180.0 / .pi
 
+        // Guard: attitude can be degenerate at the very first sample.
+        // Flutter uses .floor()/.round() on these values which throws
+        // on NaN, so drop the emission.
+        guard heading.isFinite, pitch.isFinite else { return }
+
         let accuracy: String
         switch m.magneticField.accuracy {
         case .uncalibrated: accuracy = "uncalibrated"

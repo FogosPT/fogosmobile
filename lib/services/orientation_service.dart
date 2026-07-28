@@ -57,6 +57,11 @@ class OrientationService {
       final heading = (args['headingDeg'] as num?)?.toDouble();
       final pitch = (args['pitchDeg'] as num?)?.toDouble();
       if (heading == null || pitch == null) return null;
+      // Sensor fusion (Android's getRotationMatrixFromVector especially)
+      // can briefly emit NaN during warm-up when the rotation vector is
+      // degenerate. Downstream call sites use .floor() / .round() which
+      // throw UnsupportedError on NaN, so drop the sample here.
+      if (!heading.isFinite || !pitch.isFinite) return null;
       final accuracy = _parseAccuracy(args['accuracy'] as String?);
       final isTrueNorth = args['isTrueNorth'] as bool? ?? false;
       _controller.add(OrientationEvent(

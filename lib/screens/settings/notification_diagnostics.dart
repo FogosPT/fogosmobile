@@ -67,6 +67,7 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
       ..writeln('Plataforma: ${Platform.operatingSystem}')
       ..writeln('Autorização: ${_authFromOs ?? d.authStatus ?? "?"}')
       ..writeln('FCM token: ${d.fcmToken ?? "—"}')
+      ..writeln('APNs token: ${d.apnsToken ?? "—"}')
       ..writeln('Último token conhecido: ${d.lastKnownToken ?? "—"}')
       ..writeln('Última rotação de token: ${_fmtTs(d.lastTokenRefreshMs)}')
       ..writeln('Última mensagem recebida: ${_fmtTs(d.lastMessageMs)}')
@@ -122,6 +123,7 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
           _row('Última mensagem recebida', _fmtTs(d.lastMessageMs)),
           _row('Última rotação FCM', _fmtTs(d.lastTokenRefreshMs)),
           _row('FCM token', _shortToken(d.fcmToken)),
+          if (Platform.isIOS) _row('APNs token', _shortToken(d.apnsToken)),
           _row('Tópicos ativos', d.topics.length.toString()),
           const SizedBox(height: 12),
           if (d.topics.isNotEmpty)

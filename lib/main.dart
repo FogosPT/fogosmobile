@@ -113,7 +113,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
 
-  // Register background handler before runApp
+  // Initialize Firebase on the main isolate up front. iOS previously
+  // relied on the FirebaseCore auto-configure that fires when the
+  // framework loads, but that path can race with the first APNs token
+  // callback and leave FirebaseMessaging.getToken() returning null.
+  await Firebase.initializeApp();
+
+  // Register background handler after Firebase.initializeApp — the
+  // Flutter plugin requires the core to be ready.
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
 
   await SentryFlutter.init(

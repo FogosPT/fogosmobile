@@ -125,8 +125,13 @@ class PushRegistry {
     try {
       token = await FirebaseMessaging.instance.getToken();
     } catch (_) {}
+    String? apnsToken;
+    try {
+      apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    } catch (_) {}
     return PushDiagnostics(
       fcmToken: token,
+      apnsToken: apnsToken,
       lastKnownToken: prefs.getString(_kLastToken),
       lastTokenRefreshMs: prefs.getInt(_kLastRefreshMs),
       lastMessageMs: prefs.getInt(_kLastMessageMs),
@@ -144,6 +149,7 @@ class PushRegistry {
 
 class PushDiagnostics {
   final String? fcmToken;
+  final String? apnsToken; // iOS-only; null on Android
   final String? lastKnownToken;
   final int? lastTokenRefreshMs;
   final int? lastMessageMs;
@@ -153,6 +159,7 @@ class PushDiagnostics {
 
   const PushDiagnostics({
     required this.fcmToken,
+    required this.apnsToken,
     required this.lastKnownToken,
     required this.lastTokenRefreshMs,
     required this.lastMessageMs,

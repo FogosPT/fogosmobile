@@ -38,7 +38,7 @@ class PlaneAnnotationManager {
   final Map<String, Uint8List> _iconCache = {};
   final Map<String, PictureInfo> _svgCache = {};
 
-  static const int _iconSize = 64;
+  static const int _iconSize = 112;
 
   PlaneAnnotationManager({
     required this.mapboxMap,
@@ -192,7 +192,13 @@ class PlaneAnnotationManager {
               .map((p) => [p.lon, p.lat])
               .toList(),
         },
-        'properties': {'icao': plane.icao},
+        'properties': {
+          'icao': plane.icao,
+          // Stable per-aircraft hue so each track stands out and looks
+          // the same across refreshes. Read by the LineLayer via
+          // ["get", "color"] below.
+          'color': _colorHexForIcao(plane.icao),
+        },
       });
     }
 
@@ -210,9 +216,9 @@ class PlaneAnnotationManager {
         await mapboxMap.style.addLayer(LineLayer(
           id: _tracksLayerId,
           sourceId: _tracksSourceId,
-          lineColor: 0xFF3B82F6,
-          lineWidth: 2.0,
-          lineOpacity: 0.85,
+          lineColorExpression: <Object>['get', 'color'],
+          lineWidth: 2.5,
+          lineOpacity: 0.9,
         ));
         _tracksSourceAdded = true;
       } else {
@@ -224,6 +230,47 @@ class PlaneAnnotationManager {
       // Style may have been swapped out — reset flag so next sync recreates.
       _tracksSourceAdded = false;
     }
+  }
+
+  /// Deterministic hex colour ("#RRGGBB") from the aircraft's ICAO. Uses
+  /// a stable hash → HSL hue with fixed saturation/lightness so every
+  /// track is well-saturated and visually distinct against the map.
+  String _colorHexForIcao(String icao) {
+    if (icao.isEmpty) return '#3B82F6';
+    var h = 0;
+    for (final c in icao.codeUnits) {
+      h = (h * 31 + c) & 0x7FFFFFFF;
+    }
+    final hue = (h % 360).toDouble();
+    return _hslToHex(hue, 0.72, 0.5);
+  }
+
+  String _hslToHex(double h, double s, double l) {
+    final c = (1 - (2 * l - 1).abs()) * s;
+    final hp = h / 60.0;
+    final x = c * (1 - (hp % 2 - 1).abs());
+    double r1 = 0, g1 = 0, b1 = 0;
+    if (hp < 1) {
+      r1 = c; g1 = x;
+    } else if (hp < 2) {
+      r1 = x; g1 = c;
+    } else if (hp < 3) {
+      g1 = c; b1 = x;
+    } else if (hp < 4) {
+      g1 = x; b1 = c;
+    } else if (hp < 5) {
+      r1 = x; b1 = c;
+    } else {
+      r1 = c; b1 = x;
+    }
+    final m = l - c / 2;
+    final r = ((r1 + m) * 255).round().clamp(0, 255);
+    final g = ((g1 + m) * 255).round().clamp(0, 255);
+    final b = ((b1 + m) * 255).round().clamp(0, 255);
+    return '#'
+        '${r.toRadixString(16).padLeft(2, '0')}'
+        '${g.toRadixString(16).padLeft(2, '0')}'
+        '${b.toRadixString(16).padLeft(2, '0')}';
   }
 
   Future<void> clear() async {

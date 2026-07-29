@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fogosmobile/screens/widgets/plane_annotation_manager.dart';
+import 'package:fogosmobile/services/fcm_debug_bridge.dart';
 import 'package:fogosmobile/services/push_registry.dart';
 import 'package:intl/intl.dart';
 
@@ -58,6 +59,42 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
     if (token == null || token.isEmpty) return '—';
     if (token.length <= 16) return token;
     return '${token.substring(0, 8)}…${token.substring(token.length - 8)}';
+  }
+
+  Future<void> _debugNative() async {
+    final result = await FcmDebugBridge.fetchToken();
+    if (!mounted) return;
+    final buf = StringBuffer('Debug FCM nativo\n');
+    if (result == null || result.isEmpty) {
+      buf.writeln('(sem resposta)');
+    } else {
+      result.forEach((k, v) => buf.writeln('$k: $v'));
+    }
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Debug FCM (nativo)'),
+        content: SingleChildScrollView(
+          child: SelectableText(
+            buf.toString(),
+            style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: buf.toString()));
+              if (ctx.mounted) Navigator.pop(ctx);
+            },
+            child: const Text('Copiar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Fechar'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _forceRefresh() async {
@@ -228,6 +265,14 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
             label: const Text('Forçar novo token FCM'),
             onPressed: _forceRefresh,
           ),
+          if (Platform.isIOS) ...[
+            const SizedBox(height: 4),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.bug_report),
+              label: const Text('Debug FCM (nativo)'),
+              onPressed: _debugNative,
+            ),
+          ],
         ],
       ),
     );

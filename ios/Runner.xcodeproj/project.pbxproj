@@ -23,6 +23,7 @@
 		5EAA000000000000000000D2 /* LiveActivityBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA000000000000000000C2 /* LiveActivityBridge.swift */; };
 		5EAA000000000000000000D3 /* SignificantLocationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA000000000000000000C3 /* SignificantLocationBridge.swift */; };
 		5EAA000000000000000000D4 /* OrientationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA000000000000000000C4 /* OrientationBridge.swift */; };
+		5EAA000000000000000000D5 /* FcmDebugBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EAA000000000000000000C5 /* FcmDebugBridge.swift */; };
 		8549B752793AB8D80FB72013 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4B7C401D59D2A5580F98F2 /* Pods_Runner.framework */; };
 		9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9740EEB21CF90195004384FC /* Debug.xcconfig */; };
 		978B8F6F1D3862AE00F588F7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFFD8EE1D35381100E5BB4D /* AppDelegate.m */; };
@@ -148,6 +149,7 @@
 		5EAA000000000000000000C2 /* LiveActivityBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveActivityBridge.swift; sourceTree = "<group>"; };
 		5EAA000000000000000000C3 /* SignificantLocationBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignificantLocationBridge.swift; sourceTree = "<group>"; };
 		5EAA000000000000000000C4 /* OrientationBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationBridge.swift; sourceTree = "<group>"; };
+		5EAA000000000000000000C5 /* FcmDebugBridge.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FcmDebugBridge.swift; sourceTree = "<group>"; };
 		5EC1A9F92F991CF400B049EA /* RunnerRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunnerRelease.entitlements; sourceTree = "<group>"; };
 		790C99B5224FE87E003DBFE3 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		7AFA3C8E1D35360C0083082E /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				5EAA000000000000000000C2 /* LiveActivityBridge.swift */,
 				5EAA000000000000000000C3 /* SignificantLocationBridge.swift */,
 				5EAA000000000000000000C4 /* OrientationBridge.swift */,
+				5EAA000000000000000000C5 /* FcmDebugBridge.swift */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -790,6 +793,7 @@
 				5EAA000000000000000000D2 /* LiveActivityBridge.swift in Sources */,
 				5EAA000000000000000000D3 /* SignificantLocationBridge.swift in Sources */,
 				5EAA000000000000000000D4 /* OrientationBridge.swift in Sources */,
+				5EAA000000000000000000D5 /* FcmDebugBridge.swift in Sources */,
 				97C146F31CF9000F007C117D /* main.m in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
@@ -1421,7 +1425,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 107020;
+				CURRENT_PROJECT_VERSION = 107050;
 				DEVELOPMENT_TEAM = RNKVG428JH;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1438,7 +1442,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 10.7.2;
+				MARKETING_VERSION = 10.7.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomahock.fogos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1456,7 +1460,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 107020;
+				CURRENT_PROJECT_VERSION = 107050;
 				DEVELOPMENT_TEAM = RNKVG428JH;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1473,7 +1477,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 10.7.2;
+				MARKETING_VERSION = 10.7.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.tomahock.fogos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

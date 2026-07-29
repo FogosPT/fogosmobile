@@ -24,6 +24,10 @@
   if (orientationRegistrar != nil) {
     [[OrientationBridge shared] registerWithMessenger:orientationRegistrar.messenger];
   }
+  NSObject<FlutterPluginRegistrar> *fcmDebugRegistrar = [self registrarForPlugin:@"FcmDebugBridge"];
+  if (fcmDebugRegistrar != nil) {
+    [[FcmDebugBridge shared] registerWithMessenger:fcmDebugRegistrar.messenger];
+  }
   // Override point for customization after application launch.
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

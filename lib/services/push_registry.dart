@@ -41,16 +41,18 @@ class PushRegistry {
   /// second line of defence if `onTokenRefresh` didn't fire.
   ///
   /// On iOS the APNs token binding is asynchronous, so the first getToken()
-  /// call right after cold-start often returns null even though APNs was
-  /// registered. We retry with a small backoff before giving up.
+  /// call right after cold-start can return null even though APNs was
+  /// registered. Retry once after a short wait — do NOT hammer harder,
+  /// Firebase Installations rate-limits and returns "Too many server
+  /// requests" (code 2) which then blocks FCM derivation for 5min–1h.
   static Future<bool> verifyToken() async {
     String? current;
-    for (var attempt = 0; attempt < 4; attempt++) {
+    for (var attempt = 0; attempt < 2; attempt++) {
       try {
         current = await FirebaseMessaging.instance.getToken();
         if (current != null && current.isNotEmpty) break;
       } catch (_) {}
-      await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
+      if (attempt < 1) await Future.delayed(const Duration(seconds: 2));
     }
     if (current == null || current.isEmpty) return false;
     final prefs = await SharedPreferences.getInstance();
@@ -63,21 +65,30 @@ class PushRegistry {
     return true;
   }
 
-  /// Force a fresh FCM registration token by deleting the current one and
-  /// asking Firebase to derive a new one from the APNs token. Exposed for
-  /// the diagnostics UI when APNs is present but FCM is stuck. Returns a
-  /// [ForceRefreshResult] so the UI can show the actual server-side error
-  /// (usually points to a missing APNs Auth Key in the Firebase project).
-  static Future<ForceRefreshResult> forceRefreshToken() async {
+  /// Ask Firebase for the current FCM registration token. If it hasn't
+  /// been derived yet (APNs bound but FCM never resolved), a single
+  /// getToken() call is enough — do NOT call deleteToken() here. Every
+  /// deleteToken() hits Firebase Installations (`com.firebase.installations`)
+  /// which rate-limits aggressively (HTTP 429 "Too many server requests"
+  /// that then blocks token derivation for 5min–1h). We keep [hardReset]
+  /// as an opt-in for the rare case where the token really is corrupted
+  /// server-side.
+  static Future<ForceRefreshResult> forceRefreshToken({
+    bool hardReset = false,
+  }) async {
     String? deleteError;
-    try {
-      await FirebaseMessaging.instance.deleteToken();
-    } catch (e) {
-      deleteError = e.toString();
+    if (hardReset) {
+      try {
+        await FirebaseMessaging.instance.deleteToken();
+      } catch (e) {
+        deleteError = e.toString();
+      }
     }
     String? fresh;
     String? lastError;
-    for (var attempt = 0; attempt < 4; attempt++) {
+    // Two attempts, wide backoff — the goal is to survive a brief APNs
+    // binding lag, not to stress the Installations service.
+    for (var attempt = 0; attempt < 2; attempt++) {
       try {
         fresh = await FirebaseMessaging.instance.getToken();
         if (fresh != null && fresh.isNotEmpty) {
@@ -88,7 +99,7 @@ class PushRegistry {
       } catch (e) {
         lastError = e.toString();
       }
-      await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
+      if (attempt < 1) await Future.delayed(const Duration(seconds: 2));
     }
     final prefs = await SharedPreferences.getInstance();
     if (fresh != null && fresh.isNotEmpty) {

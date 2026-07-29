@@ -183,13 +183,13 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
             iconColor: const Color(0xffAD1F1F),
             title: 'Sem token FCM',
             body:
-                'O iOS deu-nos um token APNs mas o Firebase não conseguiu '
-                'converter para um token FCM — sem isto não recebes '
-                'notificações. Se "Forçar novo token FCM" continua a '
-                'falhar, o problema não é do teu telemóvel: falta '
-                'configurar a APNs Authentication Key no Firebase '
-                'Console (Project Settings → Cloud Messaging → Apple '
-                'app configuration). Copia este ecrã e envia para suporte.',
+                'O iOS entregou o token APNs mas o Firebase ainda não '
+                'devolveu o token FCM — sem isto não recebes '
+                'notificações. Toca em "Debug FCM (nativo)" abaixo e '
+                'copia o resultado para o suporte. Evita carregar em '
+                '"Forçar novo token FCM" várias vezes seguidas — cada '
+                'toque pode ativar o rate-limit do Firebase e bloquear '
+                'a derivação do token durante uma hora.',
           ),
           if (d.lastFcmError != null)
             _banner(

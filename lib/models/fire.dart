@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
 import 'package:fogosmobile/models/icnf.dart';
 import 'package:fogosmobile/models/weather.dart';
+import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 enum FireStatus {
@@ -139,9 +140,9 @@ class Fire extends BaseMapboxModel implements Equatable {
       statusColor: map['statusColor'] ?? '',
       nature: map['natureza'] ?? '',
       natureCode: map['naturezaCode'] ?? '',
-      aerial: map['aerial'] ?? 0,
-      terrain: map['terrain'] ?? 0,
-      human: map['man'] ?? 0,
+      aerial: nonNegativeInt(map['aerial']),
+      terrain: nonNegativeInt(map['terrain']),
+      human: nonNegativeInt(map['man']),
       district: map['district'] ?? '',
       city: map['concelho'] ?? '',
       town: map['freguesia'] ?? '',

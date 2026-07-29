@@ -1,3 +1,5 @@
+import 'package:fogosmobile/utils/model_utils.dart';
+
 class MeansHistory {
   final List<Means> means;
 
@@ -26,9 +28,9 @@ class Means {
             : parsedJson['created']['sec'] * 1000);
 
     return Means(
-      man: parsedJson['man'] ?? 0,
-      aerial: parsedJson['aerial'] ?? 0,
-      terrain: parsedJson['terrain'] ?? 0,
+      man: nonNegativeInt(parsedJson['man']),
+      aerial: nonNegativeInt(parsedJson['aerial']),
+      terrain: nonNegativeInt(parsedJson['terrain']),
       label: dateLabel,
     );
   }

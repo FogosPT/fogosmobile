@@ -11,6 +11,7 @@ import 'package:fogosmobile/services/nearby_notification_service.dart';
 import 'package:fogosmobile/services/fcm_migration_service.dart';
 import 'package:fogosmobile/services/follow_fire_notifier.dart';
 import 'package:fogosmobile/services/push_registry.dart';
+import 'package:fogosmobile/utils/model_utils.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -102,9 +103,9 @@ Future<void> _handleFollowFireUpdate(RemoteMessage message) async {
     location: data['location']?.toString() ?? '',
     statusText: data['statusText']?.toString() ?? '',
     statusColorHex: data['statusColor']?.toString() ?? '#FF512F',
-    human: int.tryParse(data['human']?.toString() ?? '') ?? 0,
-    terrain: int.tryParse(data['terrain']?.toString() ?? '') ?? 0,
-    aerial: int.tryParse(data['aerial']?.toString() ?? '') ?? 0,
+    human: nonNegativeInt(data['human']),
+    terrain: nonNegativeInt(data['terrain']),
+    aerial: nonNegativeInt(data['aerial']),
     isFire: (data['isFire']?.toString() ?? 'true') != 'false',
   );
 }

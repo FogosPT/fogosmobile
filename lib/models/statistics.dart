@@ -1,5 +1,7 @@
 import 'dart:collection';
 
+import 'package:fogosmobile/utils/model_utils.dart';
+
 class NowStats {
   final String man;
   final String aerial;
@@ -10,10 +12,10 @@ class NowStats {
 
   factory NowStats.fromJson(Map<String, dynamic> parsedJson) {
     return NowStats(
-        man: parsedJson['man'].toString(),
-        aerial: parsedJson['aerial'].toString(),
-        cars: parsedJson['cars'].toString(),
-        total: parsedJson['total'].toString());
+        man: nonNegativeIntString(parsedJson['man']),
+        aerial: nonNegativeIntString(parsedJson['aerial']),
+        cars: nonNegativeIntString(parsedJson['cars']),
+        total: nonNegativeIntString(parsedJson['total']));
   }
 }
 
@@ -175,10 +177,10 @@ class LastHour {
             : parsedJson['created']['sec'] * 1000);
 
     return LastHour(
-      man: parsedJson['man'],
-      aerial: parsedJson['aerial'],
-      cars: parsedJson['cars'],
-      total: parsedJson['total'],
+      man: nonNegativeInt(parsedJson['man']),
+      aerial: nonNegativeInt(parsedJson['aerial']),
+      cars: nonNegativeInt(parsedJson['cars']),
+      total: nonNegativeInt(parsedJson['total']),
       label: dateLabel,
     );
   }

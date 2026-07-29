@@ -65,29 +65,57 @@ class PushRegistry {
 
   /// Force a fresh FCM registration token by deleting the current one and
   /// asking Firebase to derive a new one from the APNs token. Exposed for
-  /// the diagnostics UI when APNs is present but FCM is stuck.
-  static Future<String?> forceRefreshToken() async {
+  /// the diagnostics UI when APNs is present but FCM is stuck. Returns a
+  /// [ForceRefreshResult] so the UI can show the actual server-side error
+  /// (usually points to a missing APNs Auth Key in the Firebase project).
+  static Future<ForceRefreshResult> forceRefreshToken() async {
+    String? deleteError;
     try {
       await FirebaseMessaging.instance.deleteToken();
-    } catch (_) {}
+    } catch (e) {
+      deleteError = e.toString();
+    }
     String? fresh;
+    String? lastError;
     for (var attempt = 0; attempt < 4; attempt++) {
       try {
         fresh = await FirebaseMessaging.instance.getToken();
-        if (fresh != null && fresh.isNotEmpty) break;
-      } catch (_) {}
+        if (fresh != null && fresh.isNotEmpty) {
+          lastError = null;
+          break;
+        }
+        lastError = 'getToken returned null (attempt ${attempt + 1})';
+      } catch (e) {
+        lastError = e.toString();
+      }
       await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
     }
+    final prefs = await SharedPreferences.getInstance();
     if (fresh != null && fresh.isNotEmpty) {
-      final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kLastToken, fresh);
       await prefs.setInt(
           _kLastRefreshMs, DateTime.now().millisecondsSinceEpoch);
       await resubscribeAll();
       _onResubscribe?.call();
     }
-    return fresh;
+    if (lastError != null || deleteError != null) {
+      await prefs.setString(
+          _kLastForceError,
+          [
+            if (deleteError != null) 'delete: $deleteError',
+            if (lastError != null) 'get: $lastError',
+          ].join(' | '));
+    } else {
+      await prefs.remove(_kLastForceError);
+    }
+    return ForceRefreshResult(
+      token: fresh,
+      deleteError: deleteError,
+      getError: lastError,
+    );
   }
+
+  static const String _kLastForceError = 'push_last_force_error';
 
   /// Subscribe to a topic and record it locally so we can replay after a
   /// token rotation.
@@ -154,9 +182,12 @@ class PushRegistry {
   static Future<PushDiagnostics> diagnostics() async {
     final prefs = await SharedPreferences.getInstance();
     String? token;
+    String? fcmError;
     try {
       token = await FirebaseMessaging.instance.getToken();
-    } catch (_) {}
+    } catch (e) {
+      fcmError = e.toString();
+    }
     String? apnsToken;
     try {
       apnsToken = await FirebaseMessaging.instance.getAPNSToken();
@@ -170,6 +201,7 @@ class PushRegistry {
       authStatus: prefs.getString(_kAuthStatus),
       backgroundRefresh: prefs.getString(_kBackgroundRefresh),
       topics: prefs.getStringList(_kTopics) ?? const <String>[],
+      lastFcmError: fcmError ?? prefs.getString(_kLastForceError),
     );
   }
 
@@ -188,6 +220,7 @@ class PushDiagnostics {
   final String? authStatus;
   final String? backgroundRefresh;
   final List<String> topics;
+  final String? lastFcmError;
 
   const PushDiagnostics({
     required this.fcmToken,
@@ -198,5 +231,14 @@ class PushDiagnostics {
     required this.authStatus,
     required this.backgroundRefresh,
     required this.topics,
+    this.lastFcmError,
   });
+}
+
+class ForceRefreshResult {
+  final String? token;
+  final String? deleteError;
+  final String? getError;
+  const ForceRefreshResult({this.token, this.deleteError, this.getError});
+  bool get success => token != null && token!.isNotEmpty;
 }

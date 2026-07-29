@@ -62,15 +62,16 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
 
   Future<void> _forceRefresh() async {
     setState(() => _loading = true);
-    final token = await PushRegistry.forceRefreshToken();
+    final result = await PushRegistry.forceRefreshToken();
     if (!mounted) return;
     await _reload();
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(token != null && token.isNotEmpty
+        content: Text(result.success
             ? 'Novo token FCM obtido'
-            : 'Não foi possível obter token FCM — vê a mensagem no ecrã'),
+            : 'Falhou: ${result.getError ?? "sem detalhes"}'),
+        duration: const Duration(seconds: 8),
       ),
     );
   }
@@ -87,6 +88,7 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
       ..writeln('Último token conhecido: ${d.lastKnownToken ?? "—"}')
       ..writeln('Última rotação de token: ${_fmtTs(d.lastTokenRefreshMs)}')
       ..writeln('Última mensagem recebida: ${_fmtTs(d.lastMessageMs)}')
+      ..writeln('Último erro FCM: ${d.lastFcmError ?? "—"}')
       ..writeln('Tópicos ativos (${d.topics.length}):');
     for (final t in d.topics) {
       buf.writeln('  - $t');
@@ -146,10 +148,20 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
             body:
                 'O iOS deu-nos um token APNs mas o Firebase não conseguiu '
                 'converter para um token FCM — sem isto não recebes '
-                'notificações. Toca em "Forçar novo token" abaixo. Se o '
-                'problema persistir depois de reiniciar a app, contacta o '
-                'suporte com este ecrã copiado.',
+                'notificações. Se "Forçar novo token FCM" continua a '
+                'falhar, o problema não é do teu telemóvel: falta '
+                'configurar a APNs Authentication Key no Firebase '
+                'Console (Project Settings → Cloud Messaging → Apple '
+                'app configuration). Copia este ecrã e envia para suporte.',
           ),
+          if (d.lastFcmError != null)
+            _banner(
+              color: const Color(0xffFFF3D6),
+              icon: Icons.error_outline,
+              iconColor: const Color(0xffB4802E),
+              title: 'Último erro FCM',
+              body: d.lastFcmError!,
+            ),
           _row('Estado', auth ?? '—'),
           _row('Última mensagem recebida', _fmtTs(d.lastMessageMs)),
           _row('Última rotação FCM', _fmtTs(d.lastTokenRefreshMs)),

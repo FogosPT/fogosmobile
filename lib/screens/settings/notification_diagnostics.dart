@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fogosmobile/screens/widgets/plane_annotation_manager.dart';
 import 'package:fogosmobile/services/push_registry.dart';
 import 'package:intl/intl.dart';
 
@@ -155,6 +156,12 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
           _row('FCM token', _shortToken(d.fcmToken)),
           if (Platform.isIOS) _row('APNs token', _shortToken(d.apnsToken)),
           _row('Tópicos ativos', d.topics.length.toString()),
+          const SizedBox(height: 8),
+          _row('Última sync aviões', _fmtTs(PlaneSyncReport.lastAttemptMs)),
+          _row('Aviões (recebidos / c/ posição / no mapa)',
+              '${PlaneSyncReport.totalPlanes ?? "—"} / ${PlaneSyncReport.withPositions ?? "—"} / ${PlaneSyncReport.placedAnnotations ?? "—"}'),
+          if (PlaneSyncReport.lastError != null)
+            _row('Erro aviões', PlaneSyncReport.lastError!),
           const SizedBox(height: 12),
           if (d.topics.isNotEmpty)
             Card(

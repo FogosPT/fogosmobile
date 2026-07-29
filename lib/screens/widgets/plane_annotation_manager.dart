@@ -7,6 +7,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/models/plane.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
+/// Latest attempt at syncing planes onto the map. Kept as a top-level
+/// static so the notifications-diagnostics screen can display it — the
+/// map manager is torn down between navigations, but this survives.
+class PlaneSyncReport {
+  static int? lastAttemptMs;
+  static int? totalPlanes;
+  static int? withPositions;
+  static int? placedAnnotations;
+  static String? lastError;
+}
+
 /// Draws firefighting aircraft markers (rotated by heading) + their recent
 /// flight tracks as polylines. Mirrors the setup used by
 /// [FireAnnotationManager] for point annotations and [KmlLayerManager] for
@@ -108,13 +119,23 @@ class PlaneAnnotationManager {
   }
 
   Future<void> syncPlanes(List<Plane> planes) async {
-    if (_manager == null) return;
+    PlaneSyncReport.lastAttemptMs = DateTime.now().millisecondsSinceEpoch;
+    PlaneSyncReport.totalPlanes = planes.length;
+    PlaneSyncReport.withPositions = null;
+    PlaneSyncReport.placedAnnotations = null;
+    PlaneSyncReport.lastError = null;
+
+    if (_manager == null) {
+      PlaneSyncReport.lastError = 'manager_null';
+      return;
+    }
 
     try {
       await _manager!.deleteAll();
       _annotationToPlane.clear();
 
       final visible = planes.where((p) => p.lastPosition != null).toList();
+      PlaneSyncReport.withPositions = visible.length;
       debugPrint('[planes] sync ${planes.length} total, ${visible.length} with positions');
 
       // Markers
@@ -145,14 +166,16 @@ class PlaneAnnotationManager {
             placed++;
           }
         }
+        PlaneSyncReport.placedAnnotations = placed;
         debugPrint('[planes] placed $placed annotations');
+      } else {
+        PlaneSyncReport.placedAnnotations = 0;
       }
 
       // Track polylines
       await _syncTracks(visible);
     } catch (e, st) {
-      // Without this catch, mapbox_maps_flutter throws propagate as
-      // unhandled Future errors and the map silently shows nothing.
+      PlaneSyncReport.lastError = e.toString();
       debugPrint('[planes] sync failed: $e\n$st');
     }
   }

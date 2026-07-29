@@ -16,6 +16,21 @@ class PushRegistry {
   static const String _kAuthStatus = 'push_auth_status';
   static const String _kBackgroundRefresh = 'push_background_refresh_status';
 
+  /// Circuit breaker — flips to true once we observe "Too many server
+  /// requests" from com.firebase.installations. Firebase's exponential
+  /// backoff extends every time a new request comes in, so once we're
+  /// throttled the only sane thing is to stop calling FCM until the
+  /// next cold start (or until the user does something intentional).
+  static bool _throttled = false;
+  static bool get isThrottled => _throttled;
+  static bool _looksThrottled(Object? err) {
+    if (err == null) return false;
+    final s = err.toString().toLowerCase();
+    return s.contains('too many server requests') ||
+        s.contains('too many requests') ||
+        s.contains('rate') && s.contains('limit');
+  }
+
   static bool _tokenListenerInstalled = false;
   static void Function()? _onResubscribe;
 
@@ -46,12 +61,18 @@ class PushRegistry {
   /// Firebase Installations rate-limits and returns "Too many server
   /// requests" (code 2) which then blocks FCM derivation for 5min–1h.
   static Future<bool> verifyToken() async {
+    if (_throttled) return false;
     String? current;
     for (var attempt = 0; attempt < 2; attempt++) {
       try {
         current = await FirebaseMessaging.instance.getToken();
         if (current != null && current.isNotEmpty) break;
-      } catch (_) {}
+      } catch (e) {
+        if (_looksThrottled(e)) {
+          _throttled = true;
+          return false;
+        }
+      }
       if (attempt < 1) await Future.delayed(const Duration(seconds: 2));
     }
     if (current == null || current.isEmpty) return false;
@@ -98,6 +119,10 @@ class PushRegistry {
         lastError = 'getToken returned null (attempt ${attempt + 1})';
       } catch (e) {
         lastError = e.toString();
+        if (_looksThrottled(e)) {
+          _throttled = true;
+          break;
+        }
       }
       if (attempt < 1) await Future.delayed(const Duration(seconds: 2));
     }
@@ -194,10 +219,16 @@ class PushRegistry {
     final prefs = await SharedPreferences.getInstance();
     String? token;
     String? fcmError;
-    try {
-      token = await FirebaseMessaging.instance.getToken();
-    } catch (e) {
-      fcmError = e.toString();
+    // While throttled, don't call getToken() from the diagnostics screen —
+    // each visit was extending the Installations backoff and prolonging
+    // the outage.
+    if (!_throttled) {
+      try {
+        token = await FirebaseMessaging.instance.getToken();
+      } catch (e) {
+        fcmError = e.toString();
+        if (_looksThrottled(e)) _throttled = true;
+      }
     }
     String? apnsToken;
     try {

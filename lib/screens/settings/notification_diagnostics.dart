@@ -191,6 +191,19 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
                 'toque pode ativar o rate-limit do Firebase e bloquear '
                 'a derivação do token durante uma hora.',
           ),
+          if (PushRegistry.isThrottled) _banner(
+            color: const Color(0xffFFE0DE),
+            icon: Icons.pause_circle_outline,
+            iconColor: const Color(0xffAD1F1F),
+            title: 'Firebase em rate-limit',
+            body:
+                'Detetámos que o Firebase Installations recusou pedidos '
+                'com "Too many server requests". Parámos de contactar '
+                'o serviço para não estender o bloqueio. Solução: '
+                'desinstala e reinstala a app (limpa o keychain do '
+                'Firebase), depois abre a app UMA vez e espera 30s '
+                'antes de voltar a este ecrã.',
+          ),
           if (d.lastFcmError != null)
             _banner(
               color: const Color(0xffFFF3D6),

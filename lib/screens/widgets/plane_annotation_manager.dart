@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/models/plane.dart';
@@ -39,11 +39,19 @@ class PlaneAnnotationManager {
     // Planes fly directly over fire markers — without allow-overlap the
     // symbol placement engine hides every plane that collides with a fire
     // (or another plane). Ignore-placement keeps fires visible too.
-    await _manager!.setIconAllowOverlap(true);
-    await _manager!.setIconIgnorePlacement(true);
-    // Track headings should stay locked to true north when the user rotates
-    // the map, so a plane pointing "east" always shows east on the map.
-    await _manager!.setIconRotationAlignment(IconRotationAlignment.MAP);
+    try {
+      await _manager!.setIconAllowOverlap(true);
+      await _manager!.setIconIgnorePlacement(true);
+    } catch (e) {
+      debugPrint('[planes] init overlap settings failed: $e');
+    }
+    // NOTE: intentionally NOT calling setIconRotationAlignment(MAP). It
+    // aligns iconRotate to map-east (an icon with rotation 0 faces east
+    // on the map), which mismatched our SVG that points north — planes
+    // rendered but at wrong headings and, in mapbox_maps_flutter 2.19,
+    // appeared to be dropped by the placement engine entirely. Default
+    // (viewport) alignment keeps the compass-bearing rotation aligned
+    // with a north-up map, which is how the map opens 99% of the time.
     _tapListener = _manager!.tapEvents(onTap: _onAnnotationClick);
   }
 
@@ -102,41 +110,51 @@ class PlaneAnnotationManager {
   Future<void> syncPlanes(List<Plane> planes) async {
     if (_manager == null) return;
 
-    await _manager!.deleteAll();
-    _annotationToPlane.clear();
+    try {
+      await _manager!.deleteAll();
+      _annotationToPlane.clear();
 
-    final visible = planes.where((p) => p.lastPosition != null).toList();
+      final visible = planes.where((p) => p.lastPosition != null).toList();
+      debugPrint('[planes] sync ${planes.length} total, ${visible.length} with positions');
 
-    // Markers
-    if (visible.isNotEmpty) {
-      final options = <PointAnnotationOptions>[];
-      final iconByKind = <String, Uint8List>{};
+      // Markers
+      if (visible.isNotEmpty) {
+        final options = <PointAnnotationOptions>[];
+        final iconByKind = <String, Uint8List>{};
 
-      for (final plane in visible) {
-        final last = plane.lastPosition!;
-        iconByKind[plane.kind] ??= await _renderPlaneIcon(plane.kind);
-        final rotation = (last.track ?? 0).toDouble();
+        for (final plane in visible) {
+          final last = plane.lastPosition!;
+          iconByKind[plane.kind] ??= await _renderPlaneIcon(plane.kind);
+          final rotation = (last.track ?? 0).toDouble();
 
-        options.add(PointAnnotationOptions(
-          geometry: Point(coordinates: Position(last.lon, last.lat)),
-          image: iconByKind[plane.kind],
-          iconSize: 1.0,
-          iconAnchor: IconAnchor.CENTER,
-          iconRotate: rotation,
-        ));
-      }
-
-      final annotations = await _manager!.createMulti(options);
-      for (int i = 0; i < annotations.length; i++) {
-        final annotation = annotations[i];
-        if (annotation != null) {
-          _annotationToPlane[annotation.id] = visible[i];
+          options.add(PointAnnotationOptions(
+            geometry: Point(coordinates: Position(last.lon, last.lat)),
+            image: iconByKind[plane.kind],
+            iconSize: 1.0,
+            iconAnchor: IconAnchor.CENTER,
+            iconRotate: rotation,
+          ));
         }
-      }
-    }
 
-    // Track polylines
-    await _syncTracks(visible);
+        final annotations = await _manager!.createMulti(options);
+        int placed = 0;
+        for (int i = 0; i < annotations.length; i++) {
+          final annotation = annotations[i];
+          if (annotation != null) {
+            _annotationToPlane[annotation.id] = visible[i];
+            placed++;
+          }
+        }
+        debugPrint('[planes] placed $placed annotations');
+      }
+
+      // Track polylines
+      await _syncTracks(visible);
+    } catch (e, st) {
+      // Without this catch, mapbox_maps_flutter throws propagate as
+      // unhandled Future errors and the map silently shows nothing.
+      debugPrint('[planes] sync failed: $e\n$st');
+    }
   }
 
   Future<void> _syncTracks(List<Plane> planes) async {

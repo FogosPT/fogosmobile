@@ -30,8 +30,6 @@ import Foundation
             fetchToken(result: result)
         case "fetchApnsToken":
             fetchApnsToken(result: result)
-        case "senderId":
-            result(FirebaseMessaging.messaging().value(forKey: "GCMSenderID") ?? "unknown")
         default:
             result(FlutterMethodNotImplemented)
         }

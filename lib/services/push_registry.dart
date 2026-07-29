@@ -39,22 +39,54 @@ class PushRegistry {
   /// Compare the current FCM token against what we saw last. Returns true if
   /// it changed (and stores the new one). Call on every app foreground —
   /// second line of defence if `onTokenRefresh` didn't fire.
+  ///
+  /// On iOS the APNs token binding is asynchronous, so the first getToken()
+  /// call right after cold-start often returns null even though APNs was
+  /// registered. We retry with a small backoff before giving up.
   static Future<bool> verifyToken() async {
+    String? current;
+    for (var attempt = 0; attempt < 4; attempt++) {
+      try {
+        current = await FirebaseMessaging.instance.getToken();
+        if (current != null && current.isNotEmpty) break;
+      } catch (_) {}
+      await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
+    }
+    if (current == null || current.isEmpty) return false;
+    final prefs = await SharedPreferences.getInstance();
+    final last = prefs.getString(_kLastToken);
+    if (last == current) return false;
+    await prefs.setString(_kLastToken, current);
+    await prefs.setInt(_kLastRefreshMs, DateTime.now().millisecondsSinceEpoch);
+    await resubscribeAll();
+    _onResubscribe?.call();
+    return true;
+  }
+
+  /// Force a fresh FCM registration token by deleting the current one and
+  /// asking Firebase to derive a new one from the APNs token. Exposed for
+  /// the diagnostics UI when APNs is present but FCM is stuck.
+  static Future<String?> forceRefreshToken() async {
     try {
-      final current = await FirebaseMessaging.instance.getToken();
-      if (current == null || current.isEmpty) return false;
+      await FirebaseMessaging.instance.deleteToken();
+    } catch (_) {}
+    String? fresh;
+    for (var attempt = 0; attempt < 4; attempt++) {
+      try {
+        fresh = await FirebaseMessaging.instance.getToken();
+        if (fresh != null && fresh.isNotEmpty) break;
+      } catch (_) {}
+      await Future.delayed(Duration(milliseconds: 500 * (attempt + 1)));
+    }
+    if (fresh != null && fresh.isNotEmpty) {
       final prefs = await SharedPreferences.getInstance();
-      final last = prefs.getString(_kLastToken);
-      if (last == current) return false;
-      await prefs.setString(_kLastToken, current);
+      await prefs.setString(_kLastToken, fresh);
       await prefs.setInt(
           _kLastRefreshMs, DateTime.now().millisecondsSinceEpoch);
       await resubscribeAll();
       _onResubscribe?.call();
-      return true;
-    } catch (_) {
-      return false;
     }
+    return fresh;
   }
 
   /// Subscribe to a topic and record it locally so we can replay after a

@@ -59,6 +59,21 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
     return '${token.substring(0, 8)}…${token.substring(token.length - 8)}';
   }
 
+  Future<void> _forceRefresh() async {
+    setState(() => _loading = true);
+    final token = await PushRegistry.forceRefreshToken();
+    if (!mounted) return;
+    await _reload();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(token != null && token.isNotEmpty
+            ? 'Novo token FCM obtido'
+            : 'Não foi possível obter token FCM — vê a mensagem no ecrã'),
+      ),
+    );
+  }
+
   Future<void> _copyAll() async {
     final d = _diag;
     if (d == null) return;
@@ -94,6 +109,9 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
     final auth = _authFromOs ?? d.authStatus;
     final isProvisional = auth == 'provisional';
     final isDenied = auth == 'denied' || auth == 'notDetermined';
+    final iosFcmMissing = Platform.isIOS &&
+        (d.apnsToken?.isNotEmpty ?? false) &&
+        (d.fcmToken?.isEmpty ?? true);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -118,6 +136,18 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
             body:
                 'Não deste permissão ao Fogos.pt para enviar notificações. '
                 'Abre Definições → Fogos.pt → Notificações e ativa.',
+          ),
+          if (iosFcmMissing) _banner(
+            color: const Color(0xffFFE0DE),
+            icon: Icons.link_off,
+            iconColor: const Color(0xffAD1F1F),
+            title: 'Sem token FCM',
+            body:
+                'O iOS deu-nos um token APNs mas o Firebase não conseguiu '
+                'converter para um token FCM — sem isto não recebes '
+                'notificações. Toca em "Forçar novo token" abaixo. Se o '
+                'problema persistir depois de reiniciar a app, contacta o '
+                'suporte com este ecrã copiado.',
           ),
           _row('Estado', auth ?? '—'),
           _row('Última mensagem recebida', _fmtTs(d.lastMessageMs)),
@@ -172,6 +202,12 @@ class _NotificationDiagnosticsState extends State<NotificationDiagnostics> {
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            icon: const Icon(Icons.sync_problem),
+            label: const Text('Forçar novo token FCM'),
+            onPressed: _forceRefresh,
           ),
         ],
       ),

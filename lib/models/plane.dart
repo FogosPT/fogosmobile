@@ -82,7 +82,12 @@ class Plane {
   factory Plane.fromJson(Map<String, dynamic> j) {
     final rawPositions = (j['positions'] as List?) ?? const [];
     return Plane(
-      icao: j['icao'] as String,
+      // The upstream feed occasionally returns entries with `icao: null`
+      // for aircraft that haven't been resolved yet. Treat them as
+      // unknown rather than throwing — the middleware's positions filter
+      // drops them anyway, but a single throw here used to poison the
+      // whole map() and left the map empty.
+      icao: (j['icao'] as String?) ?? '',
       registration: j['registration'] as String?,
       name: j['name'] as String?,
       aircraftType: j['aircraft_type'] as String?,

@@ -29,10 +29,18 @@ Middleware<AppState> _loadPlanes() {
           : response.data;
       final list = (body['data'] as List?) ?? const [];
 
-      final planes = list
-          .map((j) => Plane.fromJson(j as Map<String, dynamic>))
-          .where((p) => p.positions.isNotEmpty)
-          .toList();
+      // Parse each entry independently — a single malformed row shouldn't
+      // drop the whole batch (previous behaviour hid all planes when any
+      // entry was missing a required field).
+      final planes = <Plane>[];
+      for (final j in list) {
+        try {
+          final plane = Plane.fromJson(j as Map<String, dynamic>);
+          if (plane.positions.isNotEmpty) planes.add(plane);
+        } catch (e) {
+          print('planes: skipping malformed entry: $e');
+        }
+      }
 
       store.dispatch(PlanesLoadedAction(planes));
     } catch (e) {

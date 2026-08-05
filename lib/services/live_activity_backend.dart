@@ -1,13 +1,13 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+
+import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/utils/network_utils.dart' as net;
 
 /// Talks to the Fogos.pt backend that stores per-activity APNs push tokens
 /// and forwards Live Activity updates. Only the fireId + push token + APNs
 /// environment ever leave the device — never the user's location.
 class LiveActivityBackend {
-  static const _base = 'https://api.fogos.pt/v2/incidents';
   static final _logger = Logger(printer: PrettyPrinter(methodCount: 0));
 
   static Future<void> register({
@@ -15,22 +15,18 @@ class LiveActivityBackend {
     required String pushToken,
     required String env,
   }) async {
+    final url = Endpoints.liveActivityRegisterUrl(fireId);
     try {
-      final response = await http
-          .post(
-            Uri.parse('$_base/$fireId/live-activity/register'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'pushToken': pushToken,
-              'env': env,
-            }),
-          )
-          .timeout(const Duration(seconds: 8));
-      if (response.statusCode >= 400) {
-        _logger.w('LA register ${response.statusCode}: ${response.body}');
+      final response = await net.post(url, data: {
+        'pushToken': pushToken,
+        'env': env,
+      });
+      final status = response?.statusCode ?? 0;
+      if (status < 200 || status >= 300) {
+        _logger.e('LA register $status: ${response?.data}');
       }
-    } catch (e) {
-      _logger.w('LA register error: $e');
+    } on DioException catch (e) {
+      _logger.e('LA register error: $e');
     }
   }
 
@@ -38,21 +34,17 @@ class LiveActivityBackend {
     required String fireId,
     required String pushToken,
   }) async {
+    final url = Endpoints.liveActivityUnregisterUrl(fireId);
     try {
-      final response = await http
-          .post(
-            Uri.parse('$_base/$fireId/live-activity/unregister'),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'pushToken': pushToken,
-            }),
-          )
-          .timeout(const Duration(seconds: 8));
-      if (response.statusCode >= 400) {
-        _logger.w('LA unregister ${response.statusCode}: ${response.body}');
+      final response = await net.post(url, data: {
+        'pushToken': pushToken,
+      });
+      final status = response?.statusCode ?? 0;
+      if (status < 200 || status >= 300) {
+        _logger.e('LA unregister $status: ${response?.data}');
       }
-    } catch (e) {
-      _logger.w('LA unregister error: $e');
+    } on DioException catch (e) {
+      _logger.e('LA unregister error: $e');
     }
   }
 }

@@ -17,13 +17,18 @@ a topic (Android). Distance calculations, if ever surfaced, happen on-device.
 
 ## iOS — HTTP endpoints (implemented on backend)
 
-Base: `https://api.fogos.pt/v2/incidents/{id}/live-activity`
+Base: `https://source.fogos.pt/v2/incidents/{id}/live-activity`
 
 Nested under `/v2/incidents/{id}/...` for consistency with the existing
 photos and posit endpoints. `fireId` travels in the URL path, never in the
 body. Public auth + `liveactivity.ratelimit` middleware
 (per-IP-per-minute + per-incident-global-per-hour, same pattern as
 `photo.ratelimit`).
+
+Every request from the app carries the `FPT` header (shared secret) and
+`User-Agent: FogosPT-App`. Requests without `FPT` are rejected upstream
+of Laravel — the app only routes through `source.fogos.pt`, never
+`api.fogos.pt`.
 
 ### `POST /v2/incidents/{id}/live-activity/register`
 

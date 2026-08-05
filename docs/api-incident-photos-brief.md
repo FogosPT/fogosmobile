@@ -13,7 +13,7 @@ POST {API_BASE}/v2/incidents/{fireId}/photos
 Content-Type: multipart/form-data
 ```
 
-`API_BASE` no cliente está fixado em `https://api.fogos.pt`. Se o vosso domínio
+`API_BASE` no cliente está fixado em `https://source.fogos.pt`. Se o vosso domínio
 real for outro, dêem-nos o valor correto e nós actualizamos a constante em
 `lib/constants/endpoints.dart`.
 
@@ -201,7 +201,7 @@ Tem ajudado-nos a perceber o que se passa quando o cliente reporta um erro.
 
 ```bash
 # happy path com publicação autorizada (foto válida com GPS)
-curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
+curl -i -X POST https://source.fogos.pt/v2/incidents/<FIRE_ID>/photos \
      -F "photo=@foto-com-gps.png" \
      -F "public=1" \
      -F "signature=João P."
@@ -209,7 +209,7 @@ curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
 # documento Mongo deve guardar signature: "João P."
 
 # uso operacional (não público), com assinatura
-curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
+curl -i -X POST https://source.fogos.pt/v2/incidents/<FIRE_ID>/photos \
      -F "photo=@foto-com-gps.png" \
      -F "public=0" \
      -F "signature=João P."
@@ -217,13 +217,13 @@ curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
 # após aprovação, NÃO deve aparecer em GET /v2/incidents/<FIRE_ID>/photos
 
 # sem assinatura (campo ausente)
-curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
+curl -i -X POST https://source.fogos.pt/v2/incidents/<FIRE_ID>/photos \
      -F "photo=@foto-com-gps.png" \
      -F "public=1"
 # esperado: 202; signature guardada como null
 
 # faltar GPS
-curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
+curl -i -X POST https://source.fogos.pt/v2/incidents/<FIRE_ID>/photos \
      -F "photo=@foto-sem-gps.png" \
      -F "public=1"
 # esperado: 422 + { success: false, error: "missing_gps_exif" }
@@ -234,7 +234,7 @@ curl -i -X POST https://api.fogos.pt/v2/incidents/<FIRE_ID>/photos \
 - [ ] Nome dos campos: `public`, `signature` — ok, ou preferem outros nomes?
 - [ ] Default de `public` quando ausente: `true` (compat) ou `400`?
 - [ ] `signature` é apenas metadata interna (cliente não lê de respostas).
-- [ ] Confirmar URL base: `https://api.fogos.pt` ou outro domínio?
+- [ ] Confirmar URL base: `https://source.fogos.pt` ou outro domínio?
 - [ ] Confirmar que `GET /v2/incidents/{id}/photos` filtra por `public=true` e
       não devolve GPS.
 - [ ] Confirmar política de hard-delete em `rejected`.

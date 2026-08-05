@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../constants/endpoints.dart';
+import '../utils/network_utils.dart' show commonHeaders;
 
 const int photoUploadMaxBytes = 20 * 1024 * 1024;
 
@@ -154,7 +155,7 @@ class IncidentPhotosService {
         connectTimeout: const Duration(seconds: 30),
         sendTimeout: const Duration(seconds: 60),
         receiveTimeout: const Duration(seconds: 30),
-        headers: {'User-Agent': 'FogosPT-App'},
+        headers: commonHeaders(),
         validateStatus: (_) => true,
       ));
 

@@ -25,15 +25,19 @@ abstract class Endpoints {
   static String getIpmaPoint(double lat, double lng) =>
       "https://fogos.pt/v1/ipma-point/$lat/$lng";
 
-  static const String fogosApiBase = "https://api.fogos.pt";
-
   static String incidentPhotoUploadUrl(String fireId) =>
-      "$fogosApiBase/v2/incidents/$fireId/photos";
+      "$fogosBaseApi/v2/incidents/$fireId/photos";
 
   static String incidentPhotosListUrl(String fireId,
           {int page = 1, int perPage = 20}) =>
-      "$fogosApiBase/v2/incidents/$fireId/photos?page=$page&per_page=$perPage";
+      "$fogosBaseApi/v2/incidents/$fireId/photos?page=$page&per_page=$perPage";
 
   static String getRecentPlanes({int hours = 6}) =>
-      "$fogosApiBase/v2/planes/recent?hours=$hours";
+      "$fogosBaseApi/v2/planes/recent?hours=$hours";
+
+  static String liveActivityRegisterUrl(String fireId) =>
+      "$fogosBaseApi/v2/incidents/$fireId/live-activity/register";
+
+  static String liveActivityUnregisterUrl(String fireId) =>
+      "$fogosBaseApi/v2/incidents/$fireId/live-activity/unregister";
 }

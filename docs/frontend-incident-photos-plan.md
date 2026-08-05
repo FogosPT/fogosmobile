@@ -6,7 +6,7 @@ Mostrar, na página de cada incidente do site fogos.pt, as fotos submetidas pelo
 
 ## 1. Endpoint a consumir
 
-`GET https://api.fogos.pt/v2/incidents/{id}/photos`
+`GET https://source.fogos.pt/v2/incidents/{id}/photos`
 
 - `{id}` — id do incidente (mesmo id já usado nas páginas de detalhe; aceita tanto o id legado como o `_id`).
 - Sem autenticação. Público.

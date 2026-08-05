@@ -1,29 +1,23 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
-import 'package:fogosmobile/constants/routes.dart';
-import 'package:fogosmobile/constants/variables.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/models/modis.dart';
+import 'package:fogosmobile/models/plane.dart';
 import 'package:fogosmobile/models/viirs.dart';
 import 'package:fogosmobile/screens/components/fire_details.dart';
-import 'package:fogosmobile/screens/components/mapbox_copyright.dart';
+import 'package:fogosmobile/screens/widgets/fogos_map.dart';
 import 'package:fogosmobile/screens/widgets/map_button_overlay_background.dart';
-import 'package:fogosmobile/screens/widgets/map_overlay_error_info.dart';
-import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_fire.dart';
-import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_modis.dart';
-import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_viirs.dart';
-import 'package:fogosmobile/screens/widgets/markers_stack.dart';
-import 'package:fogosmobile/screens/widgets/modis_button.dart';
+import 'package:fogosmobile/screens/widgets/map_layers_button.dart';
 import 'package:fogosmobile/screens/widgets/modis_modal.dart';
-import 'package:fogosmobile/screens/widgets/satellite_button.dart';
-import 'package:fogosmobile/screens/widgets/viirs_button.dart';
+import 'package:fogosmobile/screens/widgets/plane_modal.dart';
 import 'package:fogosmobile/screens/widgets/viirs_modal.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:redux/redux.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,19 +26,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final LatLng _center = LatLng(39.806251, -8.088591);
-  final List<String> _stylesStrings = [
-    MAPBOX_TEMPLATE_STYLE,
-    MAPBOX_URL_SATTELITE_TEMPLATE
-  ];
+  Timer? _planesTimer;
+  bool _planesTimerActive = false;
 
-  var currentMapboxTemplate = 0;
-
-  MapboxMapController _mapController;
-
-  void _onMapCreated(MapboxMapController controller) {
-    _mapController = controller;
-  }
+  static const _planesRefreshInterval = Duration(seconds: 60);
 
   _openModalSheet(context) async {
     await showModalBottomSheet<void>(
@@ -67,101 +52,92 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  _openPlaneModal(BuildContext context, Plane plane) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => PlaneModal(plane: plane),
+    );
+  }
+
+  void _syncPlanesTimer(Store<AppState> store, bool showPlanes) {
+    if (showPlanes && !_planesTimerActive) {
+      _planesTimerActive = true;
+      _planesTimer =
+          Timer.periodic(_planesRefreshInterval, (_) {
+        store.dispatch(LoadPlanesAction());
+      });
+    } else if (!showPlanes && _planesTimerActive) {
+      _planesTimerActive = false;
+      _planesTimer?.cancel();
+      _planesTimer = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _planesTimer?.cancel();
+    _planesTimer = null;
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Firebase onMessage ${message.data}');
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('Firebase onMessageOpenedApp ${message.toString()}');
-      String fireId = message.data["fireId"];
-      if (fireId != null) {
-        final store = StoreProvider.of<AppState>(context);
-        store.dispatch(ClearFireAction());
-        store.dispatch(LoadFireAction(fireId));
-        _openModalSheet(context);
-      }
-    });
-
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       builder: (BuildContext context, AppState state) {
-        currentMapboxTemplate =
-            state.preferences[preferenceSatellite] == 1 ? 1 : 0;
-
-        //TODO When we need to show Lightning
-        //   MarkerStack<Lightning, LightningMarker,
-        //       LightningMarkerState, void>(
-        //     mapController: _mapController,
-        //     data: state.lightnings,
-        //   );
-
+        _syncPlanesTimer(StoreProvider.of<AppState>(context), state.showPlanes);
         return ModalProgressHUD(
           opacity: 0.75,
           color: Colors.black,
           inAsyncCall: state.isLoading && state.selectedFire == null,
-          child: Stack(
-            children: <Widget>[
-              MapboxMap(
-                accessToken: MAPBOX_ACCESS_TOKEN,
-                trackCameraPosition: true,
-                myLocationEnabled: true,
-                myLocationRenderMode: MyLocationRenderMode.GPS,
-                onMapCreated: _onMapCreated,
-                styleString: _stylesStrings[currentMapboxTemplate],
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 7.0,
+          child: FogosMap(
+            fires: state.fires,
+            fireFilters: state.activeFilters,
+            modis: state.modis,
+            viirs: state.viirs,
+            planes: state.planes,
+            showModis: state.showModis ?? false,
+            showViirs: state.showViirs ?? false,
+            showPlanes: state.showPlanes,
+            showNatureCodes: state.showNatureCodes,
+            useSatelliteStyle:
+                state.preferences[preferenceSatellite] == 1,
+            activeIpmaLayers: state.activeIpmaLayers,
+            ipmaReferenceTime: state.ipmaReferenceTime,
+            kmlVostUrls: state.fires
+                .where((f) => f.kmlVost != null)
+                .map((f) => f.kmlVost!)
+                .toList(),
+            kmlAreaUrl: state.selectedFire?.kml,
+            onFireTap: (Fire fire) {
+              final store = StoreProvider.of<AppState>(context);
+              store.dispatch(ClearFireAction());
+              store.dispatch(LoadFireAction(fire.id));
+              _openModalSheet(context);
+            },
+            onModisTap: (Modis modis) {
+              _openModisModal(context, modis);
+            },
+            onViirsTap: (Viirs viirs) {
+              _openViirsModal(context, viirs);
+            },
+            onPlaneTap: (Plane plane) {
+              _openPlaneModal(context, plane);
+            },
+            overlayButtons: Positioned(
+              right: 0.0,
+              top: 0.0,
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    const MapButtonOverlayBackground(
+                      child: const MapLayersButton(),
+                    ),
+                  ],
                 ),
               ),
-              MarkerStack<Fire, FireMarker, FireMarkerState, FireStatus>(
-                mapController: _mapController,
-                data: state.fires,
-                filters: state.activeFilters,
-                openModal: (_) {
-                  _openModalSheet(context);
-                },
-              ),
-              if (state.showModis ?? false)
-                MarkerStack<Modis, ModisMarker, ModisMarkerState, void>(
-                  mapController: _mapController,
-                  data: state.modis,
-                  openModal: (item) {
-                    _openModisModal(context, item);
-                  },
-                ),
-              if (state.showViirs ?? false)
-                MarkerStack<Viirs, ViirsMarker, ViirsMarkerState, void>(
-                  mapController: _mapController,
-                  data: state.viirs,
-                  openModal: (item) {
-                    _openViirsModal(context, item);
-                  },
-                ),
-              const MapboxCopyright(),
-              Positioned(
-                right: 0.0,
-                top: 0.0,
-                child: SafeArea(
-                  child: Column(
-                    children: [
-                      const MapButtonOverlayBackground(
-                        child: const SatelliteButton(),
-                      ),
-                      const SizedBox(height: 24),
-                      const MapButtonOverlayBackground(
-                        child: const ViirsButton(),
-                      ),
-                      const SizedBox(height: 24),
-                      const MapButtonOverlayBackground(
-                        child: const ModisButton(),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const MapOverlayErrorInfoWidget(),
-            ],
+            ),
           ),
         );
       },

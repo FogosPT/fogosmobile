@@ -4,7 +4,7 @@ import 'package:fogosmobile/models/warning.dart';
 class WarningsList extends StatelessWidget {
   final List warnings;
 
-  WarningsList({this.warnings});
+  WarningsList({required this.warnings});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,8 @@ class WarningsList extends StatelessWidget {
                       Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.5), color: Color(0xfff45e29)),
-                          child: Text(warning.timestamp, style: TextStyle(color: Colors.white), textAlign: TextAlign.left)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.5), color: Color(0xffE76700)),
+                          child: Text(warning.timestamp ?? '', style: TextStyle(color: Colors.white), textAlign: TextAlign.left)),
                       _buildWarningBody(warning),
                     ],
                   ),
@@ -50,10 +50,10 @@ class WarningsList extends StatelessWidget {
             padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
             child: Text(warning.title, style: TextStyle(color: Colors.redAccent, fontSize: 16)),
           ),
-          Text(warning.description),
+          Text(warning.description ?? ''),
         ],
       );
     }
-    return Container(padding: EdgeInsets.only(top: 3.0, bottom: 3.0), child: Text(warning.description));
+    return Container(padding: EdgeInsets.only(top: 3.0, bottom: 3.0), child: Text(warning.description ?? ''));
   }
 }

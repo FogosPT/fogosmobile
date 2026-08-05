@@ -2,6 +2,8 @@ import 'package:diacritic/diacritic.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/screens/utils/text_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
@@ -19,7 +21,9 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> {
   List locations = [];
   TextEditingController controller = new TextEditingController();
-  String filter;
+  String? filter;
+  /// When true, subscribes to all incident types (not just fires) per concelho.
+  bool _allIncidents = false;
 
   @override
   initState() {
@@ -34,7 +38,7 @@ class _NotificationsState extends State<Notifications> {
   getLocations() async {
     String url = Endpoints.getLocations;
     final response = await get(url);
-    return response.data['rows'];
+    return response!.data['rows'];
   }
 
   @override
@@ -78,10 +82,43 @@ class _NotificationsState extends State<Notifications> {
             };
           },
           builder: (BuildContext context, SetPreferenceCallBack setPreferenceAction) {
+            // Sort: selected locations first, then alphabetical within each group
+            final sortedLocations = [...this.locations]..sort((a, b) {
+                final aKey = _allIncidents ? 'all-${a['key']}' : a['key'];
+                final bKey = _allIncidents ? 'all-${b['key']}' : b['key'];
+                final aSelected = state.preferences['pref-$aKey'] == 1;
+                final bSelected = state.preferences['pref-$bKey'] == 1;
+                if (aSelected == bSelected) return 0;
+                return aSelected ? -1 : 1;
+              });
+
             return new Column(
               children: <Widget>[
                 new Padding(
                   padding: new EdgeInsets.only(top: 20.0),
+                ),
+                // Toggle between fires only and all incidents
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  child: SegmentedButton<bool>(
+                    segments: [
+                      ButtonSegment<bool>(
+                        value: false,
+                        icon: SvgPicture.asset(imgSvgLogoIconCor, height: 18),
+                        label: Text(FogosLocalizations.of(context).textFires),
+                      ),
+                      ButtonSegment<bool>(
+                        value: true,
+                        label: Text('📋 ${FogosLocalizations.of(context).textAllIncidents}'),
+                      ),
+                    ],
+                    selected: {_allIncidents},
+                    onSelectionChanged: (Set<bool> selection) {
+                      setState(() {
+                        _allIncidents = selection.first;
+                      });
+                    },
+                  ),
                 ),
                 new ListTile(
                   title: new TextField(
@@ -92,17 +129,23 @@ class _NotificationsState extends State<Notifications> {
                 new Expanded(
                   child: Scrollbar(
                     child: new ListView.builder(
-                      itemCount: this.locations.length,
+                      itemCount: sortedLocations.length,
                       itemBuilder: (BuildContext context, int index) {
-                        final _location = this.locations[index];
+                        final _location = sortedLocations[index];
+                        final prefKey = _allIncidents
+                            ? 'all-${_location['key']}'
+                            : _location['key'];
                         return filter == null ||
                                 filter == "" ||
-                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter))
+                                transformStringToSearch(_location['value']['name']).contains(transformStringToSearch(filter ?? ''))
                             ? CheckboxListTile(
                                 title: Text(_location['value']['name']),
-                                value: state.preferences['pref-${_location['key']}'] == 1,
-                                onChanged: (bool value) {
-                                  setPreferenceAction(_location['key'], value == true ? 1 : 0);
+                                subtitle: _allIncidents
+                                    ? Text('Todos os incidentes', style: TextStyle(fontSize: 12, color: Colors.grey))
+                                    : null,
+                                value: state.preferences['pref-$prefKey'] == 1,
+                                onChanged: (bool? value) {
+                                  setPreferenceAction(prefKey, value == true ? 1 : 0);
                                 },
                               )
                             : new Container();

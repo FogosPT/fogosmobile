@@ -1,18 +1,18 @@
-import 'package:charts_common/common.dart' as c;
+import 'package:community_charts_common/community_charts_common.dart' as c;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart' as charts;
 import 'package:redux/redux.dart';
 
 class WeekStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, WeekStats>(
+    return StoreConnector<AppState, WeekStats?>(
         converter: (Store<AppState> store) => store.state.weekStats,
-        builder: (BuildContext context, WeekStats weekStats) {
+        builder: (BuildContext context, WeekStats? weekStats) {
           if (weekStats == null) {
             return Center(child: CircularProgressIndicator());
           }
@@ -21,7 +21,7 @@ class WeekStatistics extends StatelessWidget {
             return [
               charts.Series<Day, String>(
                 id: FogosLocalizations.of(context).textTotal,
-                colorFn: (_, __) => c.Color.fromHex(code: "#ff512f"),
+                colorFn: (_, __) => c.Color.fromHex(code: "#F25C54"),
                 domainFn: (Day stats, _) => stats.label,
                 measureFn: (Day stats, _) => stats.total,
                 labelAccessorFn: (Day stats, _) => ' ${stats.total.toString()}',

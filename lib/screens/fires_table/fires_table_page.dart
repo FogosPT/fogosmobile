@@ -12,7 +12,7 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 
 class FiresTablePage extends StatefulWidget {
@@ -192,7 +192,7 @@ class _FiresTablePageState extends State<FiresTablePage> {
                                     child: IconButton(
                                       icon: SvgPicture.asset(
                                           getCorrectStatusImage(
-                                              fire.statusCode, fire.important),
+                                              fire.statusCode, fire.important, fire.isFire),
                                           semanticsLabel: 'Acme Logo'),
                                       onPressed: null,
                                     ),
@@ -203,13 +203,13 @@ class _FiresTablePageState extends State<FiresTablePage> {
                               ),
                             ),
                             DataCell(
-                              Text(fire.human?.toString() ?? 0),
+                              Text(fire.human.toString()),
                             ),
                             DataCell(
-                              Text(fire.terrain?.toString() ?? 0),
+                              Text(fire.terrain.toString()),
                             ),
                             DataCell(
-                              Text(fire.aerial?.toString() ?? 0),
+                              Text(fire.aerial.toString()),
                             ),
                           ],
                         ),

@@ -20,6 +20,9 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   static m0(city, id) => "Fire in ${city} https://fogos.pt/fogo/${id}";
+  static m1(km) => "You will be notified when a new incident occurs within ${km} km of your location.";
+  static m2(distance) => "🔥 Fire ${distance} from you";
+  static m3(distance) => "${distance} km from the incident";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -60,6 +63,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "textFirefighters" : MessageLookupByLibrary.simpleMessage("Firefighters"),
     "textFires" : MessageLookupByLibrary.simpleMessage("Fires"),
     "textFiresList" : MessageLookupByLibrary.simpleMessage("Fires List"),
+    "textSearch" : MessageLookupByLibrary.simpleMessage("Search"),
+    "textAllIncidents" : MessageLookupByLibrary.simpleMessage("All Incidents"),
+    "textOtherFires" : MessageLookupByLibrary.simpleMessage("Other Fires"),
     "textFrp" : MessageLookupByLibrary.simpleMessage("Frp"),
     "textHumanMeans" : MessageLookupByLibrary.simpleMessage("Firefighters"),
     "textInformationArrival" : MessageLookupByLibrary.simpleMessage("Arrival to Incident Scene - Resources arrived at incidient location."),
@@ -109,6 +115,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "textWarningsMadeira" : MessageLookupByLibrary.simpleMessage("Warnings Madeira"),
     "textYesterday" : MessageLookupByLibrary.simpleMessage("Yesterday"),
     "textYesterdayDistricts" : MessageLookupByLibrary.simpleMessage("Yesterday\'s Districts"),
-    "textYesterdayInterval" : MessageLookupByLibrary.simpleMessage("Yesterday\'s Interval")
+    "textYesterdayInterval" : MessageLookupByLibrary.simpleMessage("Yesterday\'s Interval"),
+    "nearbyChannelName" : MessageLookupByLibrary.simpleMessage("Nearby Fires"),
+    "nearbyChannelDescription" : MessageLookupByLibrary.simpleMessage("Notifications for fires near your location"),
+    "textNearbyNotifications" : MessageLookupByLibrary.simpleMessage("Nearby notifications"),
+    "textNearbyNotificationsSubtitle" : MessageLookupByLibrary.simpleMessage("Receive alerts when a new incident occurs near you"),
+    "textNearbyPrivacyNotice" : MessageLookupByLibrary.simpleMessage("Your location is never sent to our servers. The proximity calculation is done exclusively on your device."),
+    "textNearbyAlertRadius" : MessageLookupByLibrary.simpleMessage("Alert radius"),
+    "textNearbyRadiusDescription" : m1,
+    "textNearbyIncidentType" : MessageLookupByLibrary.simpleMessage("Incident type"),
+    "textNearbyFiresOnly" : MessageLookupByLibrary.simpleMessage("Fires only"),
+    "textNearbyFiresOnlySubtitle" : MessageLookupByLibrary.simpleMessage("Rural, urban and transport fires"),
+    "textNearbyAllIncidents" : MessageLookupByLibrary.simpleMessage("All incidents"),
+    "textNearbyAllIncidentsSubtitle" : MessageLookupByLibrary.simpleMessage("Fires, accidents and other incidents"),
+    "textNearbyLocationPermissionRequired" : MessageLookupByLibrary.simpleMessage("Location access is required to use this feature."),
+    "textNearbyNotificationTitle" : m2,
+    "textMoreInformation" : MessageLookupByLibrary.simpleMessage("MORE INFORMATION"),
+    "textKmFromIncident" : m3
   };
 }

@@ -6,7 +6,7 @@ import 'package:fogosmobile/screens/utils/date_utils.dart';
 class ViirsModal extends StatelessWidget {
   final Viirs viirs;
 
-  const ViirsModal({Key key, this.viirs}) : super(key: key);
+  const ViirsModal({Key? key, required this.viirs}) : super(key: key);
 
   String getConfidence(BuildContext context, String confidence) {
     if (confidence == 'nominal') {

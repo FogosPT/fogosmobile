@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:fogosmobile/models/base_location_model.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 LightningRemote lightningFromJson(String str) => LightningRemote.fromJson(json.decode(str));
 
@@ -9,7 +9,7 @@ String lightningToJson(LightningRemote data) => json.encode(data.toJson());
 
 class LightningRemote {
   LightningRemote({
-    this.data,
+    required this.data,
   });
 
   List<Lightning> data;
@@ -23,9 +23,6 @@ class LightningRemote {
       };
 
   static List<LightningRemote> fromList(List<dynamic> obj) {
-    if (obj == null) {
-      return [];
-    }
     return obj
         .cast<Map<String, dynamic>>()
         .map((data) => LightningRemote.fromJson(data))
@@ -35,15 +32,15 @@ class LightningRemote {
 
 class Lightning extends BaseMapboxModel {
   Lightning({
-    this.timestamp,
-    this.payload,
-  }): super(LatLng(payload?.latitude?? 0.0, payload?.longitude?? 0.0), timestamp);
+    required this.timestamp,
+    required this.payload,
+  }): super(Point(coordinates: Position(payload.longitude, payload.latitude)), timestamp);
 
   String timestamp;
   LightningData payload;
 
   factory Lightning.fromJson(Map<String, dynamic> json) => Lightning(
-        timestamp: json["timestamp"],
+        timestamp: json["timestamp"] ?? '',
         payload: LightningData.fromJson(json["payload"]),
       );
 
@@ -53,16 +50,16 @@ class Lightning extends BaseMapboxModel {
       };
 
   @override
-  bool skip<T>(List<T> filters) {
-    return !(payload.latitude != null && payload?.longitude != null  ?? false);
+  bool skip<T>(List<T>? filters) {
+    return payload.latitude == 0.0 && payload.longitude == 0.0;
   }
 }
 
 class LightningData {
   LightningData({
-    this.latitude,
-    this.amplitude,
-    this.longitude,
+    this.latitude = 0.0,
+    this.amplitude = 0.0,
+    this.longitude = 0.0,
   });
 
   double latitude;
@@ -70,9 +67,9 @@ class LightningData {
   double longitude;
 
   factory LightningData.fromJson(Map<String, dynamic> json) => LightningData(
-        latitude: json["latitude"].toDouble(),
-        amplitude: json["amplitude"].toDouble(),
-        longitude: json["longitude"].toDouble(),
+        latitude: (json["latitude"] ?? 0.0).toDouble(),
+        amplitude: (json["amplitude"] ?? 0.0).toDouble(),
+        longitude: (json["longitude"] ?? 0.0).toDouble(),
       );
 
   Map<String, dynamic> toJson() => {

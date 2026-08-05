@@ -1,5 +1,25 @@
 import 'package:fogosmobile/models/fire.dart';
 
+/// Coerce a dynamic API value to a non-negative int. The fogos.pt feed
+/// sometimes reports -1 as a sentinel for "no data" on resource counts
+/// (human / terrain / aerial); the app should render those as 0 so the
+/// UI never shows a negative number of firefighters or vehicles.
+int nonNegativeInt(dynamic value) {
+  if (value == null) return 0;
+  int? n;
+  if (value is num) {
+    n = value.toInt();
+  } else {
+    n = int.tryParse(value.toString());
+  }
+  if (n == null || n < 0) return 0;
+  return n;
+}
+
+/// String form of [nonNegativeInt] — used by NowStats which keeps
+/// counts as pre-formatted strings.
+String nonNegativeIntString(dynamic value) => nonNegativeInt(value).toString();
+
 //region Fire
 /// Calculates the importance of each fire
 

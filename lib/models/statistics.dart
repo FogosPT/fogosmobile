@@ -1,19 +1,21 @@
 import 'dart:collection';
 
+import 'package:fogosmobile/utils/model_utils.dart';
+
 class NowStats {
   final String man;
   final String aerial;
   final String cars;
   final String total;
 
-  NowStats({this.man, this.aerial, this.cars, this.total});
+  NowStats({this.man = "0", this.aerial = "0", this.cars = "0", this.total = "0"});
 
   factory NowStats.fromJson(Map<String, dynamic> parsedJson) {
     return NowStats(
-        man: parsedJson['man'].toString(),
-        aerial: parsedJson['aerial'].toString(),
-        cars: parsedJson['cars'].toString(),
-        total: parsedJson['total'].toString());
+        man: nonNegativeIntString(parsedJson['man']),
+        aerial: nonNegativeIntString(parsedJson['aerial']),
+        cars: nonNegativeIntString(parsedJson['cars']),
+        total: nonNegativeIntString(parsedJson['total']));
   }
 }
 
@@ -21,7 +23,7 @@ class TodayStats {
   final List<IntervalStats> intervalStatsList;
   final List<District> districtList;
 
-  TodayStats({this.intervalStatsList, this.districtList});
+  TodayStats({this.intervalStatsList = const [], this.districtList = const []});
 
   factory TodayStats.fromJson(Map<String, dynamic> parsedJson) {
     List<IntervalStats> intervalStatsList = <IntervalStats>[];
@@ -44,7 +46,7 @@ class TodayStats {
 
     // Sort by increasing values
     var sortedKeys = districtTempMap.keys.toList(growable: false)
-      ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
+      ..sort((k1, k2) => (districtTempMap[k1] ?? 0).compareTo(districtTempMap[k2] ?? 0));
     LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
         key: (k) => k, value: (k) => districtTempMap[k]);
 
@@ -62,7 +64,7 @@ class YesterdayStats {
   final List<IntervalStats> intervalStatsList;
   final List<District> districtList;
 
-  YesterdayStats({this.intervalStatsList, this.districtList});
+  YesterdayStats({this.intervalStatsList = const [], this.districtList = const []});
 
   factory YesterdayStats.fromJson(Map<String, dynamic> parsedJson) {
     List<IntervalStats> intervalStatsList = <IntervalStats>[];
@@ -85,7 +87,7 @@ class YesterdayStats {
 
     // Sort by increasing values
     var sortedKeys = districtTempMap.keys.toList(growable: false)
-      ..sort((k1, k2) => districtTempMap[k1].compareTo(districtTempMap[k2]));
+      ..sort((k1, k2) => (districtTempMap[k1] ?? 0).compareTo(districtTempMap[k2] ?? 0));
     LinkedHashMap sortedMap = LinkedHashMap.fromIterable(sortedKeys,
         key: (k) => k, value: (k) => districtTempMap[k]);
 
@@ -103,7 +105,7 @@ class LastNightStats {
   final int total;
   final List<District> districtList;
 
-  LastNightStats({this.total, this.districtList});
+  LastNightStats({this.total = 0, this.districtList = const []});
 
   factory LastNightStats.fromJson(Map<String, dynamic> json) {
     List<District> districtList = <District>[];
@@ -123,7 +125,7 @@ class LastNightStats {
 class WeekStats {
   final List<Day> days;
 
-  WeekStats({this.days});
+  WeekStats({this.days = const []});
 
   factory WeekStats.fromJson(List<dynamic> json) {
     List<Day> days = <Day>[];
@@ -139,7 +141,7 @@ class Day {
   final int total;
   final int fake;
 
-  Day({this.label, this.total, this.fake});
+  Day({this.label = "", this.total = 0, this.fake = 0});
 
   factory Day.fromJson(Map<String, dynamic> json) {
     return Day(label: json['label'], total: json['total'], fake: json['false']);
@@ -149,7 +151,7 @@ class Day {
 class LastHoursStats {
   final List<LastHour> lastHours;
 
-  LastHoursStats({this.lastHours});
+  LastHoursStats({this.lastHours = const []});
 
   factory LastHoursStats.fromJson(List<dynamic> json) {
     List<LastHour> lastHours = <LastHour>[];
@@ -163,9 +165,9 @@ class LastHour {
   final int aerial;
   final int cars;
   final int total;
-  final DateTime label;
+  final DateTime? label;
 
-  LastHour({this.man, this.aerial, this.cars, this.total, this.label});
+  LastHour({this.man = 0, this.aerial = 0, this.cars = 0, this.total = 0, this.label});
 
   factory LastHour.fromJson(Map<String, dynamic> parsedJson) {
     DateTime dateLabel =
@@ -175,10 +177,10 @@ class LastHour {
             : parsedJson['created']['sec'] * 1000);
 
     return LastHour(
-      man: parsedJson['man'],
-      aerial: parsedJson['aerial'],
-      cars: parsedJson['cars'],
-      total: parsedJson['total'],
+      man: nonNegativeInt(parsedJson['man']),
+      aerial: nonNegativeInt(parsedJson['aerial']),
+      cars: nonNegativeInt(parsedJson['cars']),
+      total: nonNegativeInt(parsedJson['total']),
       label: dateLabel,
     );
   }
@@ -189,7 +191,7 @@ class IntervalStats {
   final int total;
   final Map<String, int> districtMap;
 
-  IntervalStats({this.total, this.districtMap, this.label});
+  IntervalStats({this.total = 0, this.districtMap = const {}, this.label = ""});
 
   factory IntervalStats.fromJson(Map<String, dynamic> json, String label) {
     int total = json['total'];
@@ -208,7 +210,7 @@ class District {
   final String district;
   final int fires;
 
-  District({this.district, this.fires});
+  District({this.district = "", this.fires = 0});
 
   factory District.fromJson(String district, int fire) {
     return District(district: district, fires: fire);

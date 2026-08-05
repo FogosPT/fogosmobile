@@ -44,7 +44,7 @@ class FogosLocalizations {
     // If we're given "en_US", we'll use it as-is. If we're
     // given "en", we extract it and use it.
     final String localeName =
-        locale.countryCode == null || locale.countryCode.isEmpty
+        locale.countryCode == null || locale.countryCode!.isEmpty
             ? locale.languageCode
             : locale.toString();
 
@@ -407,7 +407,7 @@ class FogosLocalizations {
       );
 
   String get textRiskOfFire => Intl.message(
-        "Risco de Incêndio",
+        "Perigo de Incêndio",
         name: 'textRiskOfFire',
         desc: 'Risk of Fire',
       );
@@ -482,6 +482,24 @@ class FogosLocalizations {
         "Tabela de Fogos",
         name: 'textFiresList',
         desc: 'Fires List',
+      );
+
+  String get textSearch => Intl.message(
+        "Pesquisa",
+        name: 'textSearch',
+        desc: 'Search',
+      );
+
+  String get textAllIncidents => Intl.message(
+        "Todas as Ocorrências",
+        name: 'textAllIncidents',
+        desc: 'All Incidents',
+      );
+
+  String get textOtherFires => Intl.message(
+        "Outros Fogos",
+        name: 'textOtherFires',
+        desc: 'Other Fires',
       );
 
   String get textProblemLoadingData => Intl.message(
@@ -639,8 +657,100 @@ String get textDataTableStart => Intl.message(
     }
   }
 
+  // Nearby Notifications
+
+  String get textNearbyNotifications => Intl.message(
+    "Notificações por proximidade",
+    name: 'textNearbyNotifications',
+    desc: 'Nearby notifications toggle title',
+  );
+
+  String get textNearbyNotificationsSubtitle => Intl.message(
+    "Receba alertas quando um novo incêndio ocorrer perto de si",
+    name: 'textNearbyNotificationsSubtitle',
+    desc: 'Nearby notifications toggle subtitle',
+  );
+
+  String get textNearbyPrivacyNotice => Intl.message(
+    "A sua localização nunca é enviada para os nossos servidores. O cálculo de proximidade é feito exclusivamente no seu dispositivo.",
+    name: 'textNearbyPrivacyNotice',
+    desc: 'Privacy notice for nearby notifications',
+  );
+
+  String get textNearbyAlertRadius => Intl.message(
+    "Raio de alerta",
+    name: 'textNearbyAlertRadius',
+    desc: 'Alert radius section title',
+  );
+
+  String textNearbyRadiusDescription(int km) => Intl.message(
+    "Será notificado quando um novo incêndio ocorrer dentro de $km km da sua localização.",
+    name: 'textNearbyRadiusDescription',
+    args: [km],
+    desc: 'Description of nearby radius',
+    examples: const {'km': 50},
+  );
+
+  String get textNearbyIncidentType => Intl.message(
+    "Tipo de ocorrências",
+    name: 'textNearbyIncidentType',
+    desc: 'Incident type filter section title',
+  );
+
+  String get textNearbyFiresOnly => Intl.message(
+    "Apenas incêndios",
+    name: 'textNearbyFiresOnly',
+    desc: 'Fires only filter option',
+  );
+
+  String get textNearbyFiresOnlySubtitle => Intl.message(
+    "Incêndios rurais, urbanos e de transporte",
+    name: 'textNearbyFiresOnlySubtitle',
+    desc: 'Fires only filter subtitle',
+  );
+
+  String get textNearbyAllIncidents => Intl.message(
+    "Todos os incidentes",
+    name: 'textNearbyAllIncidents',
+    desc: 'All incidents filter option',
+  );
+
+  String get textNearbyAllIncidentsSubtitle => Intl.message(
+    "Incêndios, acidentes e outras ocorrências",
+    name: 'textNearbyAllIncidentsSubtitle',
+    desc: 'All incidents filter subtitle',
+  );
+
+  String get textNearbyLocationPermissionRequired => Intl.message(
+    "É necessário permitir o acesso à localização para utilizar esta funcionalidade.",
+    name: 'textNearbyLocationPermissionRequired',
+    desc: 'Location permission required message',
+  );
+
+  String textNearbyNotificationTitle(String distance) => Intl.message(
+    "🔥 Incêndio a $distance de si",
+    name: 'textNearbyNotificationTitle',
+    args: [distance],
+    desc: 'Nearby notification title',
+    examples: const {'distance': '5 km'},
+  );
+
+  String get textMoreInformation => Intl.message(
+    "MAIS INFORMAÇÕES",
+    name: 'textMoreInformation',
+    desc: 'More information button label on fire details',
+  );
+
+  String textKmFromIncident(String distance) => Intl.message(
+    "$distance km do incidente",
+    name: 'textKmFromIncident',
+    args: [distance],
+    desc: 'Distance in km from the incident',
+    examples: const {'distance': '5.2'},
+  );
+
   /// Retrieve localization resources for the widget tree
   /// corresponding to the given `context`
   static FogosLocalizations of(BuildContext context) =>
-      Localizations.of<FogosLocalizations>(context, FogosLocalizations);
+      Localizations.of<FogosLocalizations>(context, FogosLocalizations)!;
 }

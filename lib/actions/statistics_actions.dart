@@ -3,7 +3,7 @@ import 'package:fogosmobile/models/statistics.dart';
 class LoadNowStatsAction {}
 
 class NowStatsLoadedAction {
-  final NowStats nowStats;
+  final NowStats? nowStats;
 
   NowStatsLoadedAction(this.nowStats);
 }
@@ -11,7 +11,7 @@ class NowStatsLoadedAction {
 class LoadTodayStatsAction {}
 
 class TodayStatsLoadedAction {
-  final TodayStats todayStats;
+  final TodayStats? todayStats;
 
   TodayStatsLoadedAction(this.todayStats);
 }
@@ -19,7 +19,7 @@ class TodayStatsLoadedAction {
 class LoadYesterdayStatsAction {}
 
 class YesterdayStatsLoadedAction {
-  final YesterdayStats yesterdayStats;
+  final YesterdayStats? yesterdayStats;
 
   YesterdayStatsLoadedAction(this.yesterdayStats);
 }
@@ -27,7 +27,7 @@ class YesterdayStatsLoadedAction {
 class LoadLastNightStatsAction {}
 
 class LastNightStatsLoadedAction {
-  final LastNightStats lastNightStats;
+  final LastNightStats? lastNightStats;
 
   LastNightStatsLoadedAction(this.lastNightStats);
 }
@@ -35,7 +35,7 @@ class LastNightStatsLoadedAction {
 class LoadWeekStatsAction {}
 
 class WeekStatsLoadedAction {
-  final WeekStats weekStats;
+  final WeekStats? weekStats;
 
   WeekStatsLoadedAction(this.weekStats);
 }
@@ -43,7 +43,7 @@ class WeekStatsLoadedAction {
 class LoadLastHoursAction {}
 
 class LastHoursLoadedAction {
-  final LastHoursStats lastHoursStats;
+  final LastHoursStats? lastHoursStats;
 
   LastHoursLoadedAction(this.lastHoursStats);
 }

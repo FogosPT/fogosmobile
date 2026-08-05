@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +9,12 @@ import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
 import 'package:fogosmobile/screens/widgets/mapbox_markers/marker_base.dart';
 import 'package:fogosmobile/store/app_store.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class FireMarker extends StatefulWidget implements BaseMarker {
   final Fire _fire;
-  final Point _initialPosition;
-  final LatLng _coordinate;
+  final ScreenCoordinate _initialPosition;
+  final Point _coordinate;
   final void Function(FireMarkerState) _addMarkerState;
   final void Function(Fire) _openModal;
 
@@ -39,13 +38,13 @@ class FireMarker extends StatefulWidget implements BaseMarker {
   }
 
   @override
-  LatLng get location => _coordinate;
+  Point get location => _coordinate;
 }
 
 class FireMarkerState extends BaseMarkerState<FireMarker> {
   final _iconSize = 10.0;
 
-  Point _position;
+  late ScreenCoordinate _position;
 
   @override
   void initState() {
@@ -55,15 +54,9 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
 
   @override
   Widget build(BuildContext context) {
-    var ratio = 1.0;
-
-    if (!kIsWeb) {
-      ratio = Platform.isIOS ? 1.0 : MediaQuery.of(context).devicePixelRatio;
-    }
-
     return Positioned(
-      left: _position.x / ratio - _getIconSize(widget._fire.scale) / 2,
-      top: _position.y / ratio - _getIconSize(widget._fire.scale) / 2,
+      left: _position.x - _getIconSize(widget._fire.scale) / 2,
+      top: _position.y - _getIconSize(widget._fire.scale) / 2,
       child: Container(
         decoration: BoxDecoration(
             color: getFireColor(widget._fire), shape: BoxShape.circle),
@@ -73,6 +66,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
             getCorrectStatusImage(
                 widget._fire.statusCode, widget._fire.important),
             semanticsLabel: 'Fire Marker',
+            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
           ),
           onPressed: () {
             store.dispatch(ClearFireAction());
@@ -85,7 +79,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
   }
 
   @override
-  void updatePosition(Point<num> point) {
+  void updatePosition(ScreenCoordinate point) {
     if(mounted) {
       setState(() {
         _position = point;
@@ -94,7 +88,7 @@ class FireMarkerState extends BaseMarkerState<FireMarker> {
   }
 
   @override
-  LatLng getCoordinates() {
+  Point getCoordinates() {
     return widget._coordinate;
   }
 

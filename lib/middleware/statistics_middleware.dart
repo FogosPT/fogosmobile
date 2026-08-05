@@ -31,14 +31,14 @@ Middleware<AppState> _createLoadNowStats() {
     try {
       String url = Endpoints.getNowStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       NowStats nowStats = NowStats.fromJson(responseData);
       store.dispatch(NowStatsLoadedAction(nowStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(NowStatsLoadedAction(null));
     }
   };
@@ -51,14 +51,14 @@ Middleware<AppState> _createTodayStats() {
     try {
       String url = Endpoints.getTodayStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       TodayStats todayStats = TodayStats.fromJson(responseData);
       store.dispatch(TodayStatsLoadedAction(todayStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(TodayStatsLoadedAction(null));
     }
   };
@@ -71,14 +71,14 @@ Middleware<AppState> _createYesterdayStats() {
     try {
       String url = Endpoints.getYesterdayStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       YesterdayStats yesterdayStats = YesterdayStats.fromJson(responseData);
       store.dispatch(YesterdayStatsLoadedAction(yesterdayStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(YesterdayStatsLoadedAction(null));
     }
   };
@@ -91,14 +91,14 @@ Middleware<AppState> _createLastNightStats() {
     try {
       String url = Endpoints.getLastNightStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       LastNightStats lastNightStats = LastNightStats.fromJson(responseData);
       store.dispatch(LastNightStatsLoadedAction(lastNightStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(LastNightStatsLoadedAction(null));
     }
   };
@@ -111,14 +111,14 @@ Middleware<AppState> _createWeekStats() {
     try {
       String url = Endpoints.getWeekStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       WeekStats weekStats = WeekStats.fromJson(responseData);
       store.dispatch(WeekStatsLoadedAction(weekStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(WeekStatsLoadedAction(null));
     }
   };
@@ -131,14 +131,14 @@ Middleware<AppState> _createLastHoursStats() {
     try {
       String url = Endpoints.getLastHoursStats;
       final response = await get(url);
-      final responseData = response.data.runtimeType == String
-          ? json.decode(response.data)['data']
-          : response.data['data'];
+      final responseData = response!.data.runtimeType == String
+          ? json.decode(response!.data)['data']
+          : response!.data['data'];
       LastHoursStats lastHoursStats = LastHoursStats.fromJson(responseData);
       store.dispatch(LastHoursLoadedAction(lastHoursStats));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
+      
       store.dispatch(LastHoursLoadedAction(null));
     }
   };

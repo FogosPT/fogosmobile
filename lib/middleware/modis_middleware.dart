@@ -21,11 +21,10 @@ Middleware<AppState> _loadModis() {
     try {
       String url = Endpoints.getModis;
       final response = await get(url);
-      List<Modis> modis = ModisResult.fromMap(response.data).toList();
+      List<Modis> modis = ModisResult.fromMap(response!.data).toList();
       store.dispatch(ModisLoadedAction(modis));
     } catch (e) {
       print(e);
-      print(e.stackTrace);
       store.dispatch(ModisLoadedAction([]));
     }
   };

@@ -1,4 +1,5 @@
-const imgSvgIconAlarm = "assets/icons/ico_alarm.svg";
+const imgSvgIconAlarm = "assets/icons/ico_clock-countdown.svg";
+const imgSvgIconNonFire = "assets/icons/ico_alarm.svg";
 const imgSvgIconFire = "assets/icons/ico_fire.svg";
 const imgSvgIconWatch = "assets/icons/ico_watch.svg";
 const imgSvgLogoFlame = "assets/logo_flame.svg";

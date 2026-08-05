@@ -1,7 +1,7 @@
 class Warning {
-  final String timestamp;
-  final String title;
-  final String description;
+  final String? timestamp;
+  final String? title;
+  final String? description;
 
   Warning({
     this.timestamp,
@@ -19,7 +19,7 @@ class Warning {
 }
 
 class WarningMadeira extends Warning {
-  WarningMadeira({timestamp, title, description})
+  WarningMadeira({String? timestamp, String? title, String? description})
       : super(timestamp: timestamp, title: title, description: description);
 
   factory WarningMadeira.fromJson(Map<String, dynamic> parsedJson) {

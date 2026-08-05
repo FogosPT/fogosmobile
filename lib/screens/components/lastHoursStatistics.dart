@@ -3,15 +3,15 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/statistics.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:community_charts_flutter/community_charts_flutter.dart' as charts;
 import 'package:redux/redux.dart';
 
 class LastHoursStatistics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, LastHoursStats>(
+    return StoreConnector<AppState, LastHoursStats?>(
         converter: (Store<AppState> store) => store.state.lastHoursStats,
-        builder: (BuildContext context, LastHoursStats lastHoursStats) {
+        builder: (BuildContext context, LastHoursStats? lastHoursStats) {
           if (lastHoursStats == null) {
             return Center(child: CircularProgressIndicator());
           }
@@ -21,28 +21,28 @@ class LastHoursStatistics extends StatelessWidget {
               charts.Series<LastHour, DateTime>(
                 id: FogosLocalizations.of(context).textFires,
                 colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-                domainFn: (LastHour stats, _) => stats.label,
+                domainFn: (LastHour stats, _) => stats.label!,
                 measureFn: (LastHour stats, _) => stats.total,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
                 id: FogosLocalizations.of(context).textFirefighters,
                 colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-                domainFn: (LastHour stats, _) => stats.label,
+                domainFn: (LastHour stats, _) => stats.label!,
                 measureFn: (LastHour stats, _) => stats.man,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
                 id: FogosLocalizations.of(context).textVehicles,
                 colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-                domainFn: (LastHour stats, _) => stats.label,
+                domainFn: (LastHour stats, _) => stats.label!,
                 measureFn: (LastHour stats, _) => stats.cars,
                 data: lastHoursStats.lastHours,
               ),
               charts.Series<LastHour, DateTime>(
                 id: FogosLocalizations.of(context).textAerial,
                 colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-                domainFn: (LastHour stats, _) => stats.label,
+                domainFn: (LastHour stats, _) => stats.label!,
                 measureFn: (LastHour stats, _) => stats.aerial,
                 data: lastHoursStats.lastHours,
               ),

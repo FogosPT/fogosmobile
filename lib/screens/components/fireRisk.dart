@@ -9,11 +9,11 @@ class FireRisk extends StatelessWidget {
   final TextStyle _body = TextStyle(color: Colors.white, fontSize: 20);
 
   List<FireRiskStruct> _riskList = [
-    FireRiskStruct('Reduzido', Color(0xff6ABF59)),
-    FireRiskStruct('Moderado', Color(0xffFFB202)),
-    FireRiskStruct('Elevado', Color(0xffFF6E02)),
-    FireRiskStruct('Muito Elevado', Color(0xffB81E1F)),
-    FireRiskStruct('Máximo ', Color(0xff711313)),
+    FireRiskStruct('Reduzido', Color(0xff3BB273)),
+    FireRiskStruct('Moderado', Color(0xffE1BC29)),
+    FireRiskStruct('Elevado', Color(0xffE76700)),
+    FireRiskStruct('Muito Elevado', Color(0xffE15554)),
+    FireRiskStruct('Máximo ', Color(0xffAD1F1F)),
   ];
 
   @override
@@ -21,10 +21,10 @@ class FireRisk extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-          store.dispatch(LoadFireRiskAction(store.state.selectedFire.id));
+          store.dispatch(LoadFireRiskAction(store.state.selectedFire!.id));
       },
       builder: (BuildContext context, AppState state) {
-        String stats = state.fireRisk;
+        String? stats = state.fireRisk;
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireRisk')) {

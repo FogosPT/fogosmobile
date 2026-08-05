@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:fogosmobile/models/base_location_model.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:fogosmobile/models/icnf.dart';
+import 'package:fogosmobile/models/weather.dart';
+import 'package:fogosmobile/utils/model_utils.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 enum FireStatus {
   dispatch,
@@ -24,6 +27,7 @@ class Fire extends BaseMapboxModel implements Equatable {
   // Status
   final bool active;
   final bool important;
+  final bool isFire;
   final int statusCode;
   final String statusColor;
   final FireStatus status;
@@ -40,7 +44,8 @@ class Fire extends BaseMapboxModel implements Equatable {
   final String district; // distrito
   final String city; // concelho
   final String town; // freguesia
-  final String local; // localidade
+  final String local;
+  final String? detailLocation; // localidade
 
   final double lat;
   final double lng;
@@ -52,41 +57,53 @@ class Fire extends BaseMapboxModel implements Equatable {
   final String time;
 
   // Importance
-  double importance;
-  double scale;
+  double importance = 0.0;
+  double scale = 0.0;
+
+  // Weather
+  final Weather? weather;
 
   // extra
   String extra;
   String cos;
   String pco;
+  final String? kml;
+  final String? kmlVost;
+  final Icnf? icnf;
 
   Fire({
-    this.id,
-    this.sharepointId,
-    this.active,
-    this.important,
-    this.status,
-    this.statusCode,
-    this.statusColor,
-    this.nature,
-    this.natureCode,
-    this.aerial,
-    this.terrain,
-    this.human,
-    this.district,
-    this.city,
-    this.town,
-    this.local,
-    this.lat,
-    this.lng,
-    this.created,
-    this.date,
-    this.dateTime,
-    this.time,
-    this.extra,
-    this.cos,
-    this.pco,
-  }) : super(LatLng(lat ?? 0.0, lng ?? 0.0), id);
+    required this.id,
+    required this.sharepointId,
+    required this.active,
+    required this.important,
+    this.isFire = true,
+    required this.status,
+    required this.statusCode,
+    required this.statusColor,
+    required this.nature,
+    required this.natureCode,
+    required this.aerial,
+    required this.terrain,
+    required this.human,
+    required this.district,
+    required this.city,
+    required this.town,
+    required this.local,
+    this.detailLocation,
+    required this.lat,
+    required this.lng,
+    required this.created,
+    required this.date,
+    required this.dateTime,
+    required this.time,
+    this.weather,
+    this.extra = '',
+    this.cos = '',
+    this.pco = '',
+    this.kml,
+    this.kmlVost,
+    this.icnf,
+  }) : super(Point(coordinates: Position(lng, lat)), id);
 
   Map<String, dynamic> _toMap() {
     return {
@@ -113,31 +130,37 @@ class Fire extends BaseMapboxModel implements Equatable {
 
   factory Fire.fromJson(Map<String, dynamic> map) {
     return Fire(
-      id: map['id'],
-      sharepointId: map['sharepointId'],
-      active: map['active'],
-      important: map['important'],
-      status: _statusFromJson(map['status']),
-      statusCode: map['statusCode'],
-      statusColor: map['statusColor'],
-      nature: map['natureza'],
-      natureCode: map['naturezaCode'],
-      aerial: map['aerial'],
-      terrain: map['terrain'],
-      human: map['man'],
-      district: map['district'],
-      city: map['concelho'],
-      town: map['freguesia'],
-      local: map['localidade'],
-      lat: map['lat'],
-      lng: map['lng'],
-      created: map['created']['sec'],
-      date: map['date'],
-      dateTime: map['dateTime']['sec'],
-      time: map['hour'],
-      extra: map['extra'],
-      cos: map['cos'],
-      pco: map['pco'],
+      id: map['id'] ?? '',
+      sharepointId: map['sharepointId'] ?? 0,
+      active: map['active'] ?? false,
+      important: map['important'] ?? false,
+      isFire: map['isFire'] == true || map['isFire'] == 1 || map['isFire'] == null,
+      status: _statusFromJson(map['status'] ?? ''),
+      statusCode: map['statusCode'] ?? 0,
+      statusColor: map['statusColor'] ?? '',
+      nature: map['natureza'] ?? '',
+      natureCode: map['naturezaCode'] ?? '',
+      aerial: nonNegativeInt(map['aerial']),
+      terrain: nonNegativeInt(map['terrain']),
+      human: nonNegativeInt(map['man']),
+      district: map['district'] ?? '',
+      city: map['concelho'] ?? '',
+      town: map['freguesia'] ?? '',
+      local: map['localidade'] ?? '',
+      detailLocation: map['detailLocation'],
+      lat: (map['lat'] ?? 0.0).toDouble(),
+      lng: (map['lng'] ?? 0.0).toDouble(),
+      created: map['created']?['sec'] ?? 0,
+      date: map['date'] ?? '',
+      dateTime: map['dateTime']?['sec'] ?? 0,
+      time: map['hour'] ?? '',
+      weather: map['weather'] != null ? Weather.tryFromJson(map['weather']) : null,
+      extra: map['extra'] ?? '',
+      cos: map['cos'] ?? '',
+      pco: map['pco'] ?? '',
+      kml: map['kml'],
+      kmlVost: map['kmlVost'],
+      icnf: map['icnf'] != null ? Icnf.fromJson(map['icnf']) : null,
     );
   }
 
@@ -194,20 +217,17 @@ class Fire extends BaseMapboxModel implements Equatable {
         return 'Falso Alarme';
       case FireStatus.false_alert:
         return 'Falso Alerta';
-      default:
-        throw Exception('Unknown fire state: $status');
     }
   }
 
   static List<String> activeFiltersToList(List<FireStatus> statusList) {
-    return statusList?.map((filter) => Fire._statusToJson(filter))?.toList() ??
-        [];
+    return statusList.map((filter) => Fire._statusToJson(filter)).toList();
   }
 
-  static List<FireStatus> listFromActiveFilters(List<String> statusList) {
+  static List<FireStatus> listFromActiveFilters(List<String>? statusList) {
     return statusList
             ?.map((filter) => Fire._statusFromJson(filter))
-            ?.toList() ??
+            .toList() ??
         List.from(FireStatus.values);
   }
 
@@ -220,7 +240,7 @@ class Fire extends BaseMapboxModel implements Equatable {
   bool get stringify => true;
 
   @override
-  bool skip<T>(List<T> filters) {
+  bool skip<T>(List<T>? filters) {
     if (filters != null) {
       return !filters.contains(status);
     } else

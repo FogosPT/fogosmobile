@@ -1,12 +1,18 @@
+import 'dart:async';
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/actions/viirs_actions.dart';
 import 'package:fogosmobile/screens/fires_table/fires_table_page.dart';
-import 'package:fogosmobile/actions/lightning_actions.dart';
-import 'package:sentry/sentry.dart';
-import 'dart:async';
+import 'package:fogosmobile/services/nearby_notification_service.dart';
+import 'package:fogosmobile/services/fcm_migration_service.dart';
+import 'package:fogosmobile/services/follow_fire_notifier.dart';
+import 'package:fogosmobile/services/push_registry.dart';
+import 'package:fogosmobile/utils/model_utils.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,61 +30,36 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/models/app_state.dart';
-import 'package:fogosmobile/screens/assets/icons.dart';
+import 'package:fogosmobile/screens/assets/images.dart';
 import 'package:fogosmobile/screens/home_page.dart';
-import 'package:fogosmobile/screens/settings/settings.dart';
+import 'package:fogosmobile/screens/settings/settings.dart' as app_settings;
 import 'package:fogosmobile/store/app_store.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:fogosmobile/localization/fogos_localizations_delegate.dart';
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
 import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/screens/fire_details.dart';
+import 'package:fogosmobile/screens/components/fire_details.dart';
 import 'package:fogosmobile/screens/warnings.dart';
 import 'package:fogosmobile/screens/fire_list_page.dart';
+import 'package:fogosmobile/screens/other_fires_page.dart';
+import 'package:fogosmobile/screens/all_incidents_page.dart';
+import 'package:fogosmobile/screens/search_page.dart';
 import 'package:fogosmobile/models/fire.dart';
+import 'package:fogosmobile/screens/ar_view/ar_view_screen.dart';
+import 'package:fogosmobile/screens/incident_camera/incident_camera_screen.dart';
+import 'package:fogosmobile/screens/splash_screen.dart';
 import 'package:fogosmobile/screens/warnings_madeira.dart';
+import 'package:app_links/app_links.dart';
 import 'package:logger/logger.dart';
-
-final SentryClient _sentry = SentryClient(SentryOptions(dsn: SENTRY_DSN));
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 typedef SetFiltersCallback = Function(FireStatus filter);
 
 bool get isInDebugMode {
-  // Assume you're in production mode
   bool inDebugMode = false;
-
-  // Assert expressions are only evaluated during development. They are ignored
-  // in production. Therefore, this code only sets `inDebugMode` to true
-  // in a development environment.
   assert(inDebugMode = true);
-
   return inDebugMode;
-}
-
-Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-
-  // Errors thrown in development mode are unlikely to be interesting. You can
-  // check if you are running in dev mode using an assertion and omit sending
-  // the report.
-  if (isInDebugMode) {
-    print(stackTrace);
-    print('In dev mode. Not sending report to Sentry.io.');
-    return;
-  }
-
-  print('Reporting to Sentry.io...');
-
-  final SentryId response = await _sentry.captureException(
-    error,
-    stackTrace: stackTrace,
-  );
-
-  if (response != null) {
-    print('Success! Event ID: $response');
-  } else {
-    print('Failed to report to Sentry.io: $error');
-  }
 }
 
 var logger = Logger(
@@ -89,42 +70,84 @@ var loggerNoStack = Logger(
   printer: PrettyPrinter(methodCount: 0),
 );
 
-void main() async {
-  FlutterError.onError = (FlutterErrorDetails details) {
-    if (isInDebugMode) {
-      // In development mode, simply print to console.
-      FlutterError.dumpErrorToConsole(details);
-    } else {
-      // In production mode, report to the application zone to report to
-      // Sentry.
-      Zone.current.handleUncaughtError(details.exception, details.stack);
-    }
-  };
+/// Top-level background message handler.
+/// Must be a top-level function (not a class method).
+@pragma('vm:entry-point')
+Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  await NearbyNotificationService.init();
+  await PushRegistry.recordMessageReceived();
+  await NearbyNotificationService.handleMessage(message);
+  await _handleFollowFireUpdate(message);
+}
 
-  runZoned<Future<void>>(() async {
-    try {
-      SharedPreferencesManager.init().then((_) => runApp(MyApp()));
-    } catch (error, stackTrace) {
-      _reportError(error, stackTrace);
-    }
-  }, onError: (error, stackTrace) {
-    // Whenever an error occurs, call the `_reportError` function. This sends
-    // Dart errors to the dev console or Sentry depending on the environment.
-    _reportError(error, stackTrace);
-  });
+/// Android-only. Refreshes (or dismisses) the ongoing "seguir incêndio"
+/// notification when the backend pushes an update for a followed fire.
+/// iOS uses APNs Live Activity updates directly and skips this path.
+Future<void> _handleFollowFireUpdate(RemoteMessage message) async {
+  if (!Platform.isAndroid) return;
+  final data = message.data;
+  if (data['type'] != 'follow-fire-update') return;
+  final fireId = data['fireId']?.toString() ?? '';
+  if (fireId.isEmpty) return;
+  // Skip if the user already stopped following on this device.
+  if (!await FollowFireNotifier.isFollowing(fireId)) return;
+  final event = data['event']?.toString() ?? 'update';
+  if (event == 'end') {
+    await FollowFireNotifier.cancel(fireId);
+    return;
+  }
+  await FollowFireNotifier.notify(
+    fireId: fireId,
+    title: data['title']?.toString() ?? 'Incêndio',
+    location: data['location']?.toString() ?? '',
+    statusText: data['statusText']?.toString() ?? '',
+    statusColorHex: data['statusColor']?.toString() ?? '#FF512F',
+    human: nonNegativeInt(data['human']),
+    terrain: nonNegativeInt(data['terrain']),
+    aerial: nonNegativeInt(data['aerial']),
+    isFire: (data['isFire']?.toString() ?? 'true') != 'false',
+  );
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  MapboxOptions.setAccessToken(MAPBOX_ACCESS_TOKEN);
+
+  // Initialize Firebase on the main isolate up front. iOS previously
+  // relied on the FirebaseCore auto-configure that fires when the
+  // framework loads, but that path can race with the first APNs token
+  // callback and leave FirebaseMessaging.getToken() returning null.
+  await Firebase.initializeApp();
+
+  // Register background handler after Firebase.initializeApp — the
+  // Flutter plugin requires the core to be ready.
+  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = SENTRY_DSN;
+      options.tracesSampleRate = isInDebugMode ? 0.0 : 1.0;
+    },
+    appRunner: () async {
+      await SharedPreferencesManager.init();
+      await NearbyNotificationService.init();
+      runApp(MyApp());
+    },
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreProvider(
-      store: store, // store comes from the app_store.dart import
+      store: store,
       child: MaterialApp(
         title: 'Fogos.pt',
         theme: FogosTheme().themeData,
         debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
-          SETTINGS_ROUTE: (_) => Settings(),
+          SETTINGS_ROUTE: (_) => app_settings.Settings(),
           WARNINGS_ROUTE: (_) => Warnings(),
           WARNINGS_MADEIRA_ROUTE: (_) => WarningsMadeira(),
           PARTNERS_ROUTE: (_) => Partners(),
@@ -134,8 +157,12 @@ class MyApp extends StatelessWidget {
           FIRE_DETAILS_ROUTE: (_) => FireDetailsPage(),
           FIRES_ROUTE: (_) => FireList(),
           FIRES_TABLES_ROUTE: (_) => FiresTablePage(),
+          OTHER_FIRES_ROUTE: (_) => OtherFiresPage(),
+          ALL_INCIDENTS_ROUTE: (_) => AllIncidentsPage(),
+          SEARCH_ROUTE: (_) => SearchPage(),
+          AR_VIEW_ROUTE: (_) => const ArViewScreen(),
         },
-        home: FirstPage(),
+        home: Platform.isAndroid ? SplashScreen(child: FirstPage()) : FirstPage(),
         localizationsDelegates: [
           const FogosLocalizationsDelegate(),
           GlobalMaterialLocalizations.delegate,
@@ -144,7 +171,6 @@ class MyApp extends StatelessWidget {
         supportedLocales: [
           const Locale('pt', 'PT'),
           const Locale('en', 'US'),
-          // ... other locales the app supports
         ],
       ),
     );
@@ -158,21 +184,151 @@ class FirstPage extends StatefulWidget {
 
 class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  void firebaseCloudMessagingListeners() async {
-    final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
+  StreamSubscription<Uri>? _linkSubscription;
 
-    if (result.authorizationStatus != AuthorizationStatus.authorized) {
+  // Easter egg: 5 taps on About → AR mode
+
+  void _setupFirebaseMessaging() async {
+    final result = await _firebaseMessaging.requestPermission(sound: true, badge: true, alert: true);
+    await PushRegistry.recordAuthStatus(result.authorizationStatus.name);
+
+    if (result.authorizationStatus != AuthorizationStatus.authorized &&
+        result.authorizationStatus != AuthorizationStatus.provisional) {
       return;
     }
 
-    _firebaseMessaging.getToken().then((token) {
-      print('token: $token');
+    // On iOS, without this the OS suppresses banner/sound while the app is in
+    // the foreground and delivers notifications silently to the Notification Center.
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    // Subscribe all users to the agif topic
+    await PushRegistry.subscribe('agif');
+
+    // Migrate FCM subscriptions on upgrade (clears stale legacy topics)
+    await FcmMigrationService.migrateIfNeeded(_firebaseMessaging);
+
+    // Rotate-safe subscription pipeline: when FCM issues a fresh token
+    // (iOS reinstall, restore from backup, occasional server-side rotation),
+    // re-issue every tracked topic against the new token.
+    PushRegistry.installTokenRefreshListener();
+    // Second-line defence in case onTokenRefresh missed a rotation.
+    await PushRegistry.verifyToken();
+
+    // Handle notification that launched the app (cold start)
+    final initialMessage = await _firebaseMessaging.getInitialMessage();
+    if (initialMessage != null) {
+      _handleNotificationTap(initialMessage);
+    }
+
+    // Handle notification tap when app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
+
+    // Handle foreground messages (including nearby data messages)
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Firebase onMessage ${message.data}');
+      PushRegistry.recordMessageReceived();
+      // Process nearby proximity check in foreground too
+      NearbyNotificationService.handleMessage(message);
+      _handleFollowFireUpdate(message);
     });
+
+    // Handle taps on nearby local notifications
+    // Payload format: "fire:<id>" or "other:<id>"
+    NearbyNotificationService.onNotificationTap = (payload) {
+      if (payload.isNotEmpty && mounted) {
+        final isOther = payload.startsWith('other:');
+        final fireId = payload.contains(':') ? payload.split(':').last : payload;
+        if (fireId.isEmpty) return;
+
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(ClearFireAction());
+        store.dispatch(LoadFireAction(fireId));
+
+        if (isOther) {
+          Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _openFireModal(context);
+          });
+        } else {
+          _openFireModal(context);
+        }
+      }
+    };
+  }
+
+  void _handleNotificationTap(RemoteMessage message) {
+    final isFire = message.data['isFire'];
+    final isFireBool = isFire == 'true' || isFire == '1';
+    final fireId = message.data['fireId'];
+    final hasFireId = fireId is String && fireId.isNotEmpty;
+
+    if (hasFireId) {
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(ClearFireAction());
+      store.dispatch(LoadFireAction(fireId));
+    }
+
+    if (isFireBool) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      if (hasFireId) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _openFireModal(context);
+        });
+      }
+    } else {
+      Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
+      if (hasFireId) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) _openFireModal(context);
+        });
+      }
+    }
+  }
+
+  Future<void> _initDeepLinks() async {
+    final appLinks = AppLinks();
+
+    final initialLink = await appLinks.getInitialLink();
+    if (initialLink != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _handleDeepLink(initialLink);
+      });
+    }
+
+    _linkSubscription = appLinks.uriLinkStream.listen((uri) {
+      if (mounted) _handleDeepLink(uri);
+    });
+  }
+
+  void _handleDeepLink(Uri uri) {
+    final segments = uri.pathSegments;
+    const supportedLangs = {'pt', 'en', 'es', 'fr'};
+    if (segments.length >= 3 && supportedLangs.contains(segments[0]) && segments[1] == 'fogo') {
+      final fireId = segments[2];
+      final store = StoreProvider.of<AppState>(context);
+      store.dispatch(ClearFireAction());
+      store.dispatch(LoadFireAction(fireId));
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _openFireModal(context);
+      });
+    }
+  }
+
+  void _openFireModal(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) => FireDetails(),
+    );
   }
 
   Widget _buildRefreshButton(AppState state, VoidCallback action) {
     return state.isLoading
-        ? Container(
+        ? SizedBox(
             width: 48,
             height: 48,
             child: Padding(
@@ -197,6 +353,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
     }, builder: (BuildContext context, SetFiltersCallback setFiltersAction) {
       return PopupMenuButton<FireStatus>(
         icon: Icon(Icons.filter_list),
+        color: Colors.white,
         onSelected: (selectedStatus) => setFiltersAction(selectedStatus),
         itemBuilder: (BuildContext context) => FireStatus.values
             .map(
@@ -204,7 +361,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                 value: status,
                 child: ListTileTheme(
                   style: ListTileStyle.drawer,
-                  selectedColor: Theme.of(context).accentColor,
+                  selectedColor: Theme.of(context).colorScheme.secondary,
                   child: ListTile(
                     dense: true,
                     contentPadding: const EdgeInsets.all(0.0),
@@ -227,10 +384,15 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _setupFirebaseMessaging();
+    NearbyNotificationService.updateStoredLocation();
+    NearbyNotificationService.syncToWatch();
+    _initDeepLinks();
   }
 
   @override
   void dispose() {
+    _linkSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -238,18 +400,29 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      final store = StoreProvider.of<AppState>(context);
-      store.dispatch(LoadFiresAction());
-      store.dispatch(LoadModisAction());
-      store.dispatch(LoadViirsAction());
-      store.dispatch(LoadLightningsAction());
+      // Refresh stored location first — independent of store
+      NearbyNotificationService.updateStoredLocation();
+      // Cheap check: if FCM rotated our token since last foreground and the
+      // onTokenRefresh callback did not fire (rare, but observed), replay
+      // subscriptions against the current token.
+      PushRegistry.verifyToken();
+
+      if (!mounted) return;
+
+      try {
+        final store = StoreProvider.of<AppState>(context);
+        store.dispatch(LoadFiresAction());
+        if (store.state.showModis) store.dispatch(LoadModisAction());
+        if (store.state.showViirs) store.dispatch(LoadViirsAction());
+        if (store.state.showPlanes) store.dispatch(LoadPlanesAction());
+      } catch (e) {
+        print('didChangeAppLifecycleState: failed to dispatch actions: $e');
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    firebaseCloudMessagingListeners();
-
     SystemChrome.setApplicationSwitcherDescription(
       ApplicationSwitcherDescription(
         label: "Fogos.pt",
@@ -261,26 +434,20 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
         store.dispatch(LoadFiresAction());
-        store.dispatch(LoadLightningsAction());
-        store.dispatch(LoadModisAction());
-        store.dispatch(LoadViirsAction());
         store.dispatch(LoadAllPreferencesAction());
       },
       builder: (BuildContext context, AppState state) {
         return Scaffold(
           appBar: FireGradientAppBar(
-            title: Text(
-              'Fogos.pt',
-              style: TextStyle(color: Colors.white),
-            ),
+            title: SvgPicture.asset(imgSvgLogoPretoHorizontal, height: 28),
             actions: [
               StoreConnector<AppState, VoidCallback>(
                 converter: (Store<AppState> store) {
                   return () {
                     store.dispatch(LoadFiresAction());
-                    store.dispatch(LoadLightningsAction());
-                    store.dispatch(LoadModisAction());
-                    store.dispatch(LoadViirsAction());
+                    if (store.state.showModis) store.dispatch(LoadModisAction());
+                    if (store.state.showViirs) store.dispatch(LoadViirsAction());
+                    if (store.state.showPlanes) store.dispatch(LoadPlanesAction());
                     store.dispatch(LoadAllPreferencesAction());
                   };
                 },
@@ -289,8 +456,6 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                     converter: (Store<AppState> store) => store.state,
                     onInit: (Store<AppState> store) {
                       store.dispatch(LoadFiresAction());
-                      store.dispatch(LoadModisAction());
-                      store.dispatch(LoadViirsAction());
                     },
                     builder: (BuildContext context, AppState state) {
                       return Row(children: <Widget>[
@@ -309,8 +474,7 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
               children: <Widget>[
                 DrawerHeader(
                   child: Center(
-                    child:
-                        SvgPicture.asset(imgSvgLogoFlame, color: Colors.white),
+                    child: SvgPicture.asset(imgSvgLogoBrancoHorizontal, height: 36),
                   ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -325,6 +489,27 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   ),
                 ),
                 ListTile(
+                  title: Text('Radar'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(AR_VIEW_ROUTE);
+                  },
+                  leading: Icon(Icons.radar),
+                ),
+                ListTile(
+                  title: Text('Câmara'),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const IncidentCameraScreen(),
+                      ),
+                    );
+                  },
+                  leading: Icon(Icons.camera_alt_outlined),
+                ),
+                ListTile(
                   title:
                       Text(FogosLocalizations.of(context).textFiresTable),
                   onTap: () {
@@ -334,6 +519,22 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   leading: Icon(Icons.table_chart),
                 ),
                 ListTile(
+                  title: Text(FogosLocalizations.of(context).textSearch),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(SEARCH_ROUTE);
+                  },
+                  leading: Icon(Icons.search),
+                ),
+                ListTile(
+                  title: Text(FogosLocalizations.of(context).textAllIncidents),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed(ALL_INCIDENTS_ROUTE);
+                  },
+                  leading: Icon(Icons.list_alt),
+                ),
+                ListTile(
                   title: Text(FogosLocalizations.of(context).textWarnings),
                   onTap: () {
                     Navigator.of(context).pop();
@@ -341,16 +542,16 @@ class _FirstPageState extends State<FirstPage> with WidgetsBindingObserver {
                   },
                   leading: Icon(Icons.warning),
                 ),
-                ListTile(
-                  title:
-                      Text(
-                      FogosLocalizations.of(context).textWarningsMadeira),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
-                  },
-                  leading: Icon(Icons.warning),
-                ),
+                // ListTile(
+                //   title:
+                //       Text(
+                //       FogosLocalizations.of(context).textWarningsMadeira),
+                //   onTap: () {
+                //     Navigator.of(context).pop();
+                //     Navigator.of(context).pushNamed(WARNINGS_MADEIRA_ROUTE);
+                //   },
+                //   leading: Icon(Icons.warning),
+                // ),
                 ListTile(
                   title:
                       Text(FogosLocalizations.of(context).textInformations),

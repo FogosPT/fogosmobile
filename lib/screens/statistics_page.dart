@@ -20,11 +20,11 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  YesterdayStats yesterdayStats;
-  TodayStats todayStats;
+  YesterdayStats? yesterdayStats;
+  TodayStats? todayStats;
 
   final TextStyle _header = TextStyle(
-    color: Color(0xffff512f),
+    color: Color(0xffF25C54),
     fontSize: 20,
     fontWeight: FontWeight.w700,
   );
@@ -60,28 +60,28 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(height: 25),
                 LastHoursStatistics(),
                 SizedBox(height: 15),
-                Divider(color: Color(0xffff512f)),
+                Divider(color: Color(0xffF25C54)),
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textToday.toUpperCase(), style: _header),
                 ),
                 TodayStatistics(),
                 SizedBox(height: 15),
-                Divider(color: Color(0xffff512f)),
+                Divider(color: Color(0xffF25C54)),
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textYesterday.toUpperCase(), style: _header),
                 ),
                 YesterdayStatistics(),
                 SizedBox(height: 15),
-                Divider(color: Color(0xffff512f)),
+                Divider(color: Color(0xffF25C54)),
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textLastNight.toUpperCase(), style: _header),
                 ),
                 LastNightStatistics(),
                 SizedBox(height: 15),
-                Divider(color: Color(0xffff512f)),
+                Divider(color: Color(0xffF25C54)),
                 SizedBox(height: 15),
                 ListTile(
                   title: Text(FogosLocalizations.of(context).textPreviousDays.toUpperCase(), style: _header),

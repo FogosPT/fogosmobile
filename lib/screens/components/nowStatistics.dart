@@ -12,9 +12,9 @@ class NowStatistics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, NowStats>(
+    return StoreConnector<AppState, NowStats?>(
       converter: (Store<AppState> store) => store.state.nowStats,
-      builder: (BuildContext context, NowStats stats) {
+      builder: (BuildContext context, NowStats? stats) {
         if (stats == null) {
           return Center(child: CircularProgressIndicator());
         }
@@ -25,10 +25,10 @@ class NowStatistics extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              _buildItem(imgSvgIconFire, stats.total, 35, Colors.red),
-              _buildItem(imgSvgFireman, stats.man),
-              _buildItem(imgSvgFireTruck, stats.cars),
-              _buildItem(imgSvgPlane, stats.aerial),
+              _buildItem(imgSvgIconFire, stats.total, 35, Color(0xffE15554)),
+              _buildItem(imgSvgFireman, stats.man, 50.0, const Color(0xffF25C54)),
+              _buildItem(imgSvgFireTruck, stats.cars, 50.0, const Color(0xffF25C54)),
+              _buildItem(imgSvgPlane, stats.aerial, 50.0, const Color(0xffF25C54)),
             ],
           ),
         );
@@ -37,7 +37,7 @@ class NowStatistics extends StatelessWidget {
   }
 
   Widget _buildItem(String imgPath, String text,
-      [double height = 50.0, Color color]) {
+      [double height = 50.0, Color? color]) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[

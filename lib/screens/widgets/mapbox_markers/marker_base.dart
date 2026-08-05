@@ -1,18 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 abstract class BaseMarker implements StatefulWidget{
 
-  final LatLng location;
+  final Point location;
 
   BaseMarker(this.location);
 }
 
 abstract class BaseMarkerState<T extends StatefulWidget> extends State<T> {
 
-  LatLng getCoordinates();
+  Point getCoordinates();
 
-  void updatePosition(Point<num> point);
+  void updatePosition(ScreenCoordinate point);
 }

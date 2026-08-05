@@ -1,6 +1,10 @@
 import 'package:fogosmobile/middleware/modis_middleware.dart';
+import 'package:fogosmobile/middleware/planes_middleware.dart';
 import 'package:fogosmobile/middleware/viirs_middleware.dart';
 import 'package:fogosmobile/middleware/lightnings_middleware.dart';
+import 'package:fogosmobile/middleware/other_fires_middleware.dart';
+import 'package:fogosmobile/middleware/all_incidents_middleware.dart';
+import 'package:fogosmobile/middleware/search_middleware.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/middleware/statistics_middleware.dart';
 import 'package:fogosmobile/middleware/contributors_middleware.dart';
@@ -10,6 +14,7 @@ import 'package:fogosmobile/reducers/app_reducer.dart';
 import 'package:fogosmobile/middleware/fires_middleware.dart';
 import 'package:fogosmobile/middleware/preferences_middleware.dart';
 import 'package:fogosmobile/middleware/warnings_middleware.dart';
+import 'package:fogosmobile/middleware/ipma_middleware.dart';
 
 final store = Store<AppState>(
   appReducer,
@@ -26,9 +31,15 @@ final store = Store<AppState>(
     warningsMadeira: [],
     modis: [],
     viirs: [],
+    planes: [],
     showModis: false,
     showViirs: false,
+    showPlanes: false,
+    otherFires: [],
+    allIncidents: [],
+    searchResults: [],
     lightnings: [],
+    activeIpmaLayers: loadIpmaLayersFromPrefs(),
   ),
   middleware: firesMiddleware()
     ..addAll(preferencesMiddleware())
@@ -36,7 +47,12 @@ final store = Store<AppState>(
     ..addAll(contributorsMiddleware())
     ..addAll(viirsMiddleware())
     ..addAll(modisMiddleware())
+    ..addAll(planesMiddleware())
     ..addAll(warningsMiddleware())
     ..addAll(warningsMiddleware())
     ..addAll(lightningMiddleware())
+    ..addAll(otherFiresMiddleware())
+    ..addAll(allIncidentsMiddleware())
+    ..addAll(searchMiddleware())
+    ..addAll(ipmaMiddleware())
 );

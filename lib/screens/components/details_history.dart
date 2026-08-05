@@ -15,10 +15,10 @@ class DetailsHistoryStats extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (Store<AppState> store) => store.state,
       onInit: (Store<AppState> store) {
-        store.dispatch(LoadFireDetailsHistoryAction(store.state.selectedFire.id));
+        store.dispatch(LoadFireDetailsHistoryAction(store.state.selectedFire!.id));
       },
       builder: (BuildContext context, AppState state) {
-        DetailsHistory stats = state.fireDetailsHistory;
+        DetailsHistory? stats = state.fireDetailsHistory;
 
         if (stats == null) {
           if (state.errors != null && state.errors.contains('fireDetailsHistory')) {
@@ -50,15 +50,15 @@ class DetailsHistoryStats extends StatelessWidget {
             contentPadding: EdgeInsets.all(0),
             dense: true,
             leading: CircleAvatar(
-              backgroundColor: Colors.red,
+              backgroundColor: Color(0xffE15554),
               child: Container(
                 width: 20,
                 child: SvgPicture.asset(
-                    getCorrectStatusImage(details.statusCode, false),
+                    getCorrectStatusImage(details.statusCode, false, false),
                     semanticsLabel: 'Acme Logo'),
               ),
             ),
-            title: Text(DateFormat('dd-MM-yyyy - H:mm').format(details.label)),
+            title: Text(details.label != null ? DateFormat('dd-MM-yyyy - H:mm').format(details.label!) : ''),
             subtitle: Text(details.status),
           ),
         ),

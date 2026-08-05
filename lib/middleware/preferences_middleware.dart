@@ -1,14 +1,15 @@
 import 'dart:io';
 
 import 'package:fogosmobile/middleware/shared_preferences_manager.dart';
+import 'package:fogosmobile/services/push_registry.dart';
 import 'package:fogosmobile/utils/network_utils.dart';
 import 'package:redux/redux.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/models/fire.dart';
 import 'package:fogosmobile/actions/preferences_actions.dart';
 import 'package:fogosmobile/constants/endpoints.dart';
+import 'package:fogosmobile/services/watch_bridge_service.dart';
 
 const String preferenceSatellite = "pref-satellite";
 
@@ -31,21 +32,26 @@ Middleware<AppState> _createLoadPreferences() {
     try {
       String url = Endpoints.getLocations;
       final response = await get(url);
-      final locations = response.data['rows'];
+      final locations = response!.data['rows'];
 
       Map data = {};
       final prefs = SharedPreferencesManager.preferences;
 
       for (Map location in locations) {
         data['pref-${location['key']}'] = prefs.getInt(location['key']) ?? 0;
+        // Also load "all incidents" preference for each concelho
+        data['pref-all-${location['key']}'] = prefs.getInt('all-${location['key']}') ?? 0;
       }
 
       List<String> subbedFires = prefs.getStringList('subscribedFires') ?? [];
-      List<Fire> fires = store.state.fires;
+      List<Fire> allKnownIncidents = [
+        ...store.state.fires,
+        ...store.state.otherFires,
+      ];
 
-      if (fires.length > 0) {
+      if (allKnownIncidents.length > 0) {
         data['subscribedFires'] =
-            fires.where((f) => subbedFires.contains(f.id)).toList();
+            allKnownIncidents.where((f) => subbedFires.contains(f.id)).toList();
       } else {
         data['subscribedFires'] = [];
       }
@@ -62,19 +68,42 @@ Middleware<AppState> _createLoadPreferences() {
   };
 }
 
+/// Map a preference key to its unified FCM topic name.
+/// Must match the topics used by fogosapi NotificationTool.
+String _unifiedTopic(String key) {
+  // "all incidents" subscriptions: "all-010100" → "district-all-010100"
+  if (key.startsWith('all-') && RegExp(r'^\d{6}$').hasMatch(key.substring(4))) {
+    return 'district-$key';
+  }
+  // Numeric DICO codes (e.g. "010100") → "district-010100"
+  if (RegExp(r'^\d{6}$').hasMatch(key)) {
+    return 'district-$key';
+  }
+  // "important" → "incident-important" (matches buildImportantTopic)
+  if (key == 'important') {
+    return 'incident-important';
+  }
+  // "warnings", "planes", etc. → same name (matches buildWarningsTopic / buildPlanesTopic)
+  return key;
+}
+
 Middleware<AppState> _createSetPreference() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-    String topic = Platform.isIOS
+    // Unified topic (new) — matches fogosapi NotificationTool
+    String unifiedTopic = _unifiedTopic(action.key);
+    // Legacy topic (platform-specific)
+    String legacyTopic = Platform.isIOS
         ? 'mobile-ios-${action.key}'
         : 'mobile-android-${action.key}';
 
     if (action.value == 1) {
-      _firebaseMessaging.subscribeToTopic(topic);
+      await PushRegistry.subscribe(unifiedTopic);
+      await PushRegistry.subscribe(legacyTopic);
     } else {
-      _firebaseMessaging.unsubscribeFromTopic(topic);
+      await PushRegistry.unsubscribe(unifiedTopic);
+      await PushRegistry.unsubscribe(legacyTopic);
     }
 
     try {
@@ -87,9 +116,11 @@ Middleware<AppState> _createSetPreference() {
 Middleware<AppState> _createSetNotification() {
   return (Store store, action, NextDispatcher next) async {
     next(action);
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-    String topic = Platform.isIOS
+    // Unified topic (new) — "incident-<id>"
+    String unifiedTopic = 'incident-${action.key}';
+    // Legacy topic (platform-specific)
+    String legacyTopic = Platform.isIOS
         ? 'mobile-ios-${action.key}'
         : 'mobile-android-${action.key}';
 
@@ -99,12 +130,15 @@ Middleware<AppState> _createSetNotification() {
           prefs.getStringList('subscribedFires') ?? [];
       if (action.value == 1 && subscribedFires.contains(action.key) == false) {
         subscribedFires.add(action.key);
-        _firebaseMessaging.subscribeToTopic(topic);
+        await PushRegistry.subscribe(unifiedTopic);
+        await PushRegistry.subscribe(legacyTopic);
       } else {
         subscribedFires.remove(action.key);
-        _firebaseMessaging.unsubscribeFromTopic(topic);
+        await PushRegistry.unsubscribe(unifiedTopic);
+        await PushRegistry.unsubscribe(legacyTopic);
       }
       prefs.save('subscribedFires', subscribedFires);
+      await WatchBridgeService.sendSubscribedFires(subscribedFires);
       store.dispatch(LoadAllPreferencesAction());
     } catch (e) {
       print(e);

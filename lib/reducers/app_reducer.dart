@@ -1,4 +1,5 @@
 import 'package:fogosmobile/actions/modis_actions.dart';
+import 'package:fogosmobile/actions/planes_actions.dart';
 import 'package:fogosmobile/actions/lightning_actions.dart';
 import 'package:fogosmobile/actions/statistics_actions.dart';
 import 'package:fogosmobile/actions/contributors_actions.dart';
@@ -7,6 +8,7 @@ import 'package:fogosmobile/models/app_state.dart';
 import 'package:fogosmobile/reducers/contributors_reducer.dart';
 import 'package:fogosmobile/reducers/fires_reducer.dart';
 import 'package:fogosmobile/reducers/modis_reducer.dart';
+import 'package:fogosmobile/reducers/planes_reducer.dart';
 import 'package:fogosmobile/reducers/lightning_reducer.dart';
 import 'package:fogosmobile/reducers/preferences_reducer.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -16,16 +18,24 @@ import 'package:fogosmobile/reducers/errors_reducer.dart';
 import 'package:fogosmobile/actions/warnings_actions.dart';
 import 'package:fogosmobile/reducers/viirs_reducer.dart';
 import 'package:fogosmobile/reducers/warnings_reducer.dart';
+import 'package:fogosmobile/actions/other_fires_actions.dart';
+import 'package:fogosmobile/reducers/other_fires_reducer.dart';
+import 'package:fogosmobile/actions/all_incidents_actions.dart';
+import 'package:fogosmobile/reducers/all_incidents_reducer.dart';
+import 'package:fogosmobile/actions/search_actions.dart';
+import 'package:fogosmobile/reducers/search_reducer.dart';
+import 'package:fogosmobile/reducers/ipma_reducer.dart';
+import 'package:fogosmobile/actions/ipma_actions.dart';
 
 AppState appReducer(AppState state, action) {
-  bool isLoading;
-  bool hasFirstLoad;
-  bool hasPreferences;
-  bool hasContributors;
-  bool showViirs;
-  bool showModis;
-
-  // print('action is action $action');
+  bool isLoading = state.isLoading;
+  bool hasFirstLoad = state.hasFirstLoad;
+  bool hasPreferences = state.hasPreferences;
+  bool hasContributors = state.hasContributors;
+  bool showViirs = state.showViirs;
+  bool showModis = state.showModis;
+  bool showPlanes = state.showPlanes;
+  bool showNatureCodes = state.showNatureCodes;
 
   if (action is LoadFiresAction) {
     isLoading = true;
@@ -97,11 +107,38 @@ AppState appReducer(AppState state, action) {
     isLoading = true;
   } else if (action is ModisLoadedAction) {
     isLoading = false;
+  } else if (action is SearchIncidentsAction) {
+    isLoading = true;
+  } else if (action is SearchIncidentsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadAllIncidentsAction) {
+    isLoading = true;
+  } else if (action is AllIncidentsLoadedAction) {
+    isLoading = false;
+  } else if (action is LoadOtherFiresAction) {
+    isLoading = true;
+  } else if (action is OtherFiresLoadedAction) {
+    isLoading = false;
   } else if (action is ShowViirsAction) {
-    showViirs = !(state.showViirs ?? false);
+    showViirs = !state.showViirs;
     isLoading = state.isLoading;
   } else if (action is ShowModisAction) {
-    showModis = !(state.showModis ?? false);
+    showModis = !state.showModis;
+    isLoading = state.isLoading;
+  } else if (action is ShowPlanesAction) {
+    showPlanes = !state.showPlanes;
+    isLoading = state.isLoading;
+  } else if (action is LoadPlanesAction ||
+      action is PlanesLoadedAction) {
+    isLoading = state.isLoading;
+  } else if (action is ToggleNatureCodesAction) {
+    showNatureCodes = !state.showNatureCodes;
+    isLoading = state.isLoading;
+  } else if (action is ToggleIpmaLayerAction ||
+      action is IpmaLayersLoadedAction) {
+    isLoading = state.isLoading;
+  } else if (action is LoadIpmaReferenceTimeAction ||
+      action is IpmaReferenceTimeLoadedAction) {
     isLoading = state.isLoading;
   } else {
     isLoading = false;
@@ -120,7 +157,7 @@ AppState appReducer(AppState state, action) {
     contributors: contributorsReducer(state.contributors, action),
     hasFirstLoad: hasFirstLoad,
     hasPreferences: hasPreferences,
-    hasContributors: hasContributors ?? state.contributors.isNotEmpty,
+    hasContributors: hasContributors,
     preferences: preferencesReducer(state.preferences, action),
     activeFilters: filtersReducer(state.activeFilters, action),
     nowStats: nowStatsReducer(state.nowStats, action),
@@ -134,8 +171,21 @@ AppState appReducer(AppState state, action) {
     warningsMadeira: warningsMadeiraReducer(state.warningsMadeira, action),
     modis: modisReducer(state.modis, action),
     viirs: viirsReducer(state.viirs, action),
+    planes: planesReducer(state.planes, action),
     showModis: showModis,
     showViirs: showViirs,
+    showPlanes: showPlanes,
+    showNatureCodes: showNatureCodes,
+    otherFires: otherFiresReducer(state.otherFires, action),
+    allIncidents: allIncidentsReducer(state.allIncidents, action),
+    searchResults: searchResultsReducer(state.searchResults, action),
     lightnings: lightningsReducer(state.lightnings, action),
+    activeIpmaLayers: ipmaLayersReducer(state.activeIpmaLayers, action),
+    ipmaReferenceTime: action is IpmaReferenceTimeLoadedAction
+        ? action.referenceTime
+        : state.ipmaReferenceTime,
+    ipmaReferenceTimeLoaded: action is IpmaReferenceTimeLoadedAction
+        ? true
+        : state.ipmaReferenceTimeLoaded,
   );
 }

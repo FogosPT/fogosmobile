@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fogosmobile/actions/fires_actions.dart';
@@ -13,7 +13,7 @@ import 'package:fogosmobile/screens/components/fire_gradient_app_bar.dart';
 import 'package:fogosmobile/localization/fogos_localizations.dart';
 import 'package:redux/redux.dart';
 import 'package:fogosmobile/screens/utils/widget_utils.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:fogosmobile/screens/assets/images.dart';
 
 class FireList extends StatefulWidget {
@@ -22,9 +22,9 @@ class FireList extends StatefulWidget {
 }
 
 class _FireListState extends State<FireList> {
-  MapboxMapController mapController;
+  MapboxMap? mapController;
 
-  void _onMapCreated(MapboxMapController controller) {
+  void _onMapCreated(MapboxMap controller) {
     mapController = controller;
   }
 
@@ -85,18 +85,16 @@ class _FireListState extends State<FireList> {
               itemBuilder: (BuildContext context, int index) {
                 Fire fire = fires[index];
                 String _title = fire.town;
-                final LatLng _center = LatLng(fire.lat, fire.lng);
+                final Point _center = Point(coordinates: Position(fire.lng, fire.lat));
 
                 if (fire.town != fire.local) {
                   _title = '$_title, ${fire.local}';
                 }
 
                 bool isFireSubscribed = false;
-                if ((state.preferences['subscribedFires'] ?? []).length > 0) {
-                  var subbedFire = state.preferences['subscribedFires'].firstWhere((fs) => fs.id == fire.id, orElse: () {});
-                  if (subbedFire != null) {
-                    isFireSubscribed = true;
-                  }
+                final subscribedFires = state.preferences['subscribedFires'] ?? [];
+                if (subscribedFires.length > 0) {
+                  isFireSubscribed = subscribedFires.any((fs) => fs.id == fire.id);
                 }
 
                 final store = StoreProvider.of<AppState>(context);
@@ -108,15 +106,23 @@ class _FireListState extends State<FireList> {
                     children: <Widget>[
                       Container(
                         height: 200.0,
-                        child: MapboxMap(
-                        initialCameraPosition: CameraPosition(target: _center, zoom: 14.0,),
-                        tiltGesturesEnabled: false,
-                        myLocationEnabled: true,
-                        myLocationRenderMode: MyLocationRenderMode.GPS,
-                        rotateGesturesEnabled: false,
-                        scrollGesturesEnabled: false,
-                        zoomGesturesEnabled: false,
-                        styleString: MAPBOX_URL_SATTELITE_TEMPLATE,
+                        child: MapWidget(
+                        cameraOptions: CameraOptions(center: _center, zoom: 14.0,),
+                        styleUri: MAPBOX_URL_SATTELITE_TEMPLATE,
+                        onMapCreated: (mapboxMap) {
+                          mapboxMap.gestures.updateSettings(GesturesSettings(
+                            pitchEnabled: false,
+                            rotateEnabled: false,
+                            scrollEnabled: false,
+                            pinchToZoomEnabled: false,
+                            doubleTapToZoomInEnabled: false,
+                            doubleTouchToZoomOutEnabled: false,
+                          ));
+                          mapboxMap.location.updateSettings(LocationComponentSettings(
+                            enabled: true,
+                            puckBearingEnabled: true,
+                          ));
+                        },
                         ),
                       ),
                       Container(
@@ -173,6 +179,7 @@ class _FireListState extends State<FireList> {
                                           getCorrectStatusImage(
                                             fire.statusCode,
                                             fire.important,
+                                            fire.isFire,
                                           ),
                                           width: 25.0,
                                           height: 25.0,
@@ -268,16 +275,86 @@ class _FireListState extends State<FireList> {
                                     padding: EdgeInsets.only(top: 20.0),
                                   ),
                                   ImportantFireExtra(fire),
+                                  if (fire.weather != null) ...[
+                                    Container(
+                                      padding: EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xffF25C54).withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(Icons.location_on, color: Color(0xffF25C54), size: 16),
+                                              SizedBox(width: 4),
+                                              Expanded(
+                                                child: Text(
+                                                  fire.weather!.stationLocation,
+                                                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xffF25C54)),
+                                                ),
+                                              ),
+                                              Text(
+                                                (() {
+                                                  try {
+                                                    final dt = DateTime.parse(fire.weather!.date);
+                                                    return '${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+                                                  } catch (_) {
+                                                    return fire.weather!.date;
+                                                  }
+                                                })(),
+                                                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Row(children: [
+                                                Icon(Icons.thermostat, size: 16, color: Color(0xffF25C54)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.temperatura.toStringAsFixed(1)}°C', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                              Row(children: [
+                                                Icon(Icons.water_drop, size: 16, color: Color(0xffF25C54)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.humidade.toStringAsFixed(0)}%', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                              Row(children: [
+                                                Icon(Icons.air, size: 16, color: Color(0xffF25C54)),
+                                                SizedBox(width: 4),
+                                                Text('${fire.weather!.intensidadeVentoKM.toStringAsFixed(0)} km/h ${fire.weather!.direccVento}', style: TextStyle(fontSize: 13)),
+                                              ]),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20.0),
+                                    ),
+                                  ],
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(Icons.share),
-                                        onPressed: () {
-                                          Share.share(FogosLocalizations.of(context).textShare(fire.city, fire.id));
-                                        },
+                                      Builder(
+                                        builder: (ctx) => IconButton(
+                                          icon: Icon(Icons.share),
+                                          onPressed: () {
+                                            final box = ctx.findRenderObject() as RenderBox?;
+                                            final shareText = fire.isFire
+                                                ? FogosLocalizations.of(context).textShare(fire.city, fire.id)
+                                                : 'Incidente em ${fire.city} https://fogos.pt/fogo/${fire.id}';
+                                            Share.share(
+                                              shareText,
+                                              sharePositionOrigin: box == null ? null : box.localToGlobal(Offset.zero) & box.size,
+                                            );
+                                          },
+                                        ),
                                       ),
                                       SizedBox(width: 8),
                                       state.isLoading

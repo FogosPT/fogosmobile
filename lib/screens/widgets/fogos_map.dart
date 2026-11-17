@@ -323,6 +323,9 @@ class _FogosMapState extends State<FogosMap> {
           styleUri: _currentStyle,
           onMapCreated: _onMapCreated,
           onStyleLoadedListener: _onStyleLoaded,
+          onTapListener: (context) {
+            _satelliteManager?.handleTap(context.touchPosition);
+          },
           onCameraChangeListener: (_) {
             _mapController?.getCameraState().then((state) {
               if (!mounted) return;

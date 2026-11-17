@@ -25,8 +25,10 @@ class SatelliteAnnotationManager {
 
   bool _modisSourceAdded = false;
   bool _viirsSourceAdded = false;
-  int _modisSyncGen = 0;
-  int _viirsSyncGen = 0;
+  String? _pendingModisGeoJson;
+  String? _pendingViirsGeoJson;
+  Future<void> _modisSyncChain = Future.value();
+  Future<void> _viirsSyncChain = Future.value();
 
   SatelliteAnnotationManager({
     required this.mapboxMap,
@@ -39,79 +41,79 @@ class SatelliteAnnotationManager {
   }
 
   Future<void> syncModis(List<Modis> modisList) async {
-    final gen = ++_modisSyncGen;
     final filtered = modisList.where((m) => !m.skip([])).toList();
     _modisById
       ..clear()
       ..addEntries(filtered.asMap().entries.map((e) => MapEntry('m${e.key}', e.value)));
-    await _syncLayer(
-      gen: gen,
-      currentGen: () => _modisSyncGen,
-      sourceAdded: _modisSourceAdded,
-      markAdded: () => _modisSourceAdded = true,
-      resetAdded: () => _modisSourceAdded = false,
-      sourceId: 'fogos-modis-source',
-      clusterLayerId: 'fogos-modis-clusters',
-      countLayerId: 'fogos-modis-cluster-count',
-      pointLayerId: 'fogos-modis-points',
-      color: _modisColor,
-      features: [
-        for (final entry in _modisById.entries)
-          _pointFeature(entry.key, entry.value.longitude, entry.value.latitude),
-      ],
-    );
+    _pendingModisGeoJson = _featureCollection([
+      for (final entry in _modisById.entries)
+        _pointFeature(entry.key, entry.value.longitude, entry.value.latitude),
+    ]);
+    await _runModis(() => _flushLayer(
+          sourceAdded: () => _modisSourceAdded,
+          markAdded: () => _modisSourceAdded = true,
+          resetAdded: () => _modisSourceAdded = false,
+          pendingData: () => _pendingModisGeoJson,
+          sourceId: 'fogos-modis-source',
+          clusterLayerId: 'fogos-modis-clusters',
+          countLayerId: 'fogos-modis-cluster-count',
+          pointLayerId: 'fogos-modis-points',
+          color: _modisColor,
+        ));
   }
 
   Future<void> syncViirs(List<Viirs> viirsList) async {
-    final gen = ++_viirsSyncGen;
     final filtered = viirsList.where((v) => !v.skip([])).toList();
     _viirsById
       ..clear()
       ..addEntries(filtered.asMap().entries.map((e) => MapEntry('v${e.key}', e.value)));
-    await _syncLayer(
-      gen: gen,
-      currentGen: () => _viirsSyncGen,
-      sourceAdded: _viirsSourceAdded,
-      markAdded: () => _viirsSourceAdded = true,
-      resetAdded: () => _viirsSourceAdded = false,
-      sourceId: 'fogos-viirs-source',
-      clusterLayerId: 'fogos-viirs-clusters',
-      countLayerId: 'fogos-viirs-cluster-count',
-      pointLayerId: 'fogos-viirs-points',
-      color: _viirsColor,
-      features: [
-        for (final entry in _viirsById.entries)
-          _pointFeature(entry.key, entry.value.longitude, entry.value.latitude),
-      ],
-    );
+    _pendingViirsGeoJson = _featureCollection([
+      for (final entry in _viirsById.entries)
+        _pointFeature(entry.key, entry.value.longitude, entry.value.latitude),
+    ]);
+    await _runViirs(() => _flushLayer(
+          sourceAdded: () => _viirsSourceAdded,
+          markAdded: () => _viirsSourceAdded = true,
+          resetAdded: () => _viirsSourceAdded = false,
+          pendingData: () => _pendingViirsGeoJson,
+          sourceId: 'fogos-viirs-source',
+          clusterLayerId: 'fogos-viirs-clusters',
+          countLayerId: 'fogos-viirs-cluster-count',
+          pointLayerId: 'fogos-viirs-points',
+          color: _viirsColor,
+        ));
   }
 
   Future<void> clearModis() async {
-    _modisSyncGen++;
     _modisById.clear();
-    await _removeLayerSet(
-      sourceId: 'fogos-modis-source',
-      layerIds: const [
-        'fogos-modis-cluster-count',
-        'fogos-modis-clusters',
-        'fogos-modis-points',
-      ],
-    );
-    _modisSourceAdded = false;
+    _pendingModisGeoJson = null;
+    await _runModis(() async {
+      await _removeLayerSet(
+        sourceId: 'fogos-modis-source',
+        layerIds: const [
+          'fogos-modis-cluster-count',
+          'fogos-modis-clusters',
+          'fogos-modis-points',
+        ],
+      );
+      _modisSourceAdded = false;
+    });
   }
 
   Future<void> clearViirs() async {
-    _viirsSyncGen++;
     _viirsById.clear();
-    await _removeLayerSet(
-      sourceId: 'fogos-viirs-source',
-      layerIds: const [
-        'fogos-viirs-cluster-count',
-        'fogos-viirs-clusters',
-        'fogos-viirs-points',
-      ],
-    );
-    _viirsSourceAdded = false;
+    _pendingViirsGeoJson = null;
+    await _runViirs(() async {
+      await _removeLayerSet(
+        sourceId: 'fogos-viirs-source',
+        layerIds: const [
+          'fogos-viirs-cluster-count',
+          'fogos-viirs-clusters',
+          'fogos-viirs-points',
+        ],
+      );
+      _viirsSourceAdded = false;
+    });
   }
 
   /// Handles a map tap. Returns true if a hotspot or cluster was hit, so the
@@ -171,34 +173,107 @@ class SatelliteAnnotationManager {
     };
   }
 
-  Future<void> _syncLayer({
-    required int gen,
-    required int Function() currentGen,
-    required bool sourceAdded,
+  String _featureCollection(List<Map<String, dynamic>> features) {
+    return jsonEncode({
+      'type': 'FeatureCollection',
+      'features': features,
+    });
+  }
+
+  /// Serialize source creation and updates for one feed so overlapping
+  /// syncs cannot both observe `sourceAdded == false`. A failed step does
+  /// not poison later work on the same source.
+  Future<void> _runModis(Future<void> Function() action) {
+    final run = _modisSyncChain.then((_) => action(), onError: (_) => action());
+    _modisSyncChain = run.then((_) {}, onError: (_) {});
+    return run;
+  }
+
+  Future<void> _runViirs(Future<void> Function() action) {
+    final run = _viirsSyncChain.then((_) => action(), onError: (_) => action());
+    _viirsSyncChain = run.then((_) {}, onError: (_) {});
+    return run;
+  }
+
+  Future<void> _flushLayer({
+    required bool Function() sourceAdded,
     required VoidCallback markAdded,
     required VoidCallback resetAdded,
+    required String? Function() pendingData,
     required String sourceId,
     required String clusterLayerId,
     required String countLayerId,
     required String pointLayerId,
     required int color,
-    required List<Map<String, dynamic>> features,
   }) async {
-    final geoJson = jsonEncode({
-      'type': 'FeatureCollection',
-      'features': features,
-    });
+    final geoJson = pendingData();
+    if (geoJson == null) {
+      return;
+    }
 
     try {
-      if (!sourceAdded) {
-        await mapboxMap.style.addSource(GeoJsonSource(
+      if (!sourceAdded()) {
+        await _ensureSourceAndLayers(
+          sourceId: sourceId,
+          clusterLayerId: clusterLayerId,
+          countLayerId: countLayerId,
+          pointLayerId: pointLayerId,
+          color: color,
+          geoJson: geoJson,
+        );
+        markAdded();
+      }
+
+      // Apply the latest pending data, not the snapshot we started with —
+      // a newer sync may have arrived while the source was being created.
+      final latest = pendingData();
+      if (latest == null) {
+        return;
+      }
+      final source =
+          await mapboxMap.style.getSource(sourceId) as GeoJsonSource?;
+      if (source == null) {
+        resetAdded();
+        return;
+      }
+      await source.updateGeoJSON(latest);
+      markAdded();
+    } catch (error) {
+      if (isAlreadyExistsError(error)) {
+        // The source (or a layer) already exists, so keep the flag set and
+        // still try to push the latest data.
+        markAdded();
+        final latest = pendingData();
+        if (latest != null) {
+          try {
+            final source =
+                await mapboxMap.style.getSource(sourceId) as GeoJsonSource?;
+            await source?.updateGeoJSON(latest);
+          } catch (_) {}
+        }
+        return;
+      }
+      // Style may have been swapped out — recreate on the next sync.
+      resetAdded();
+    }
+  }
+
+  Future<void> _ensureSourceAndLayers({
+    required String sourceId,
+    required String clusterLayerId,
+    required String countLayerId,
+    required String pointLayerId,
+    required int color,
+    required String geoJson,
+  }) async {
+    await _addIgnoringExisting(() => mapboxMap.style.addSource(GeoJsonSource(
           id: sourceId,
           data: geoJson,
           cluster: true,
           clusterRadius: 50,
           clusterMaxZoom: 12,
-        ));
-        await mapboxMap.style.addLayer(CircleLayer(
+        )));
+    await _addIgnoringExisting(() => mapboxMap.style.addLayer(CircleLayer(
           id: clusterLayerId,
           sourceId: sourceId,
           filter: const ['has', 'point_count'],
@@ -214,8 +289,8 @@ class SatelliteAnnotationManager {
           ],
           circleStrokeColor: Colors.white.value,
           circleStrokeWidth: 1.5,
-        ));
-        await mapboxMap.style.addLayer(SymbolLayer(
+        )));
+    await _addIgnoringExisting(() => mapboxMap.style.addLayer(SymbolLayer(
           id: countLayerId,
           sourceId: sourceId,
           filter: const ['has', 'point_count'],
@@ -223,8 +298,8 @@ class SatelliteAnnotationManager {
           textSize: 12,
           textColor: Colors.white.value,
           textAllowOverlap: true,
-        ));
-        await mapboxMap.style.addLayer(CircleLayer(
+        )));
+    await _addIgnoringExisting(() => mapboxMap.style.addLayer(CircleLayer(
           id: pointLayerId,
           sourceId: sourceId,
           filter: const [
@@ -235,18 +310,33 @@ class SatelliteAnnotationManager {
           circleColor: color,
           circleStrokeColor: Colors.white.value,
           circleStrokeWidth: 1.5,
-        ));
-        if (currentGen() != gen) return;
-        markAdded();
-      } else {
-        final source =
-            await mapboxMap.style.getSource(sourceId) as GeoJsonSource?;
-        await source?.updateGeoJSON(geoJson);
+        )));
+  }
+
+  Future<void> _addIgnoringExisting(Future<void> Function() add) async {
+    try {
+      await add();
+    } catch (error) {
+      if (!isAlreadyExistsError(error)) {
+        rethrow;
       }
-    } catch (_) {
-      // Style may have been swapped out — recreate on the next sync.
-      resetAdded();
     }
+  }
+
+  /// Mapbox style operations reject a second add of the same source or
+  /// layer ID with an "already exists" / duplicate-ID error.
+  static bool isAlreadyExistsError(Object error) {
+    final msg = error.toString().toLowerCase();
+    if (msg.contains('alreadyexists') ||
+        msg.contains('already_exists') ||
+        msg.contains('already exists') ||
+        msg.contains('already added')) {
+      return true;
+    }
+    return msg.contains('duplicate') &&
+        (msg.contains('id') ||
+            msg.contains('source') ||
+            msg.contains('layer'));
   }
 
   Future<void> _removeLayerSet({
